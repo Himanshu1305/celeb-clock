@@ -14,6 +14,8 @@
  * Contents: name (optional), birth details, D1 + D9 charts in the visitor's chosen style,
  * planet table (sign, degree, nakshatra-pada, house, retrograde), Lagna/Rashi/Nakshatra,
  * current Mahadasha/Antardasha with dates, Manglik summary, birth-time edge notes, and a
+ * Batch 10: one extra page — Yogini Dasha (current period + the main periods of life) and the
+ * Ashtakavarga table (7 planets × 12 houses + Sarvashtakavarga) with a plain summary. Plus a
  * one-line plain-language explanation per section (taken from the shared term list,
  * src/lib/vedic/termDefinitions.ts, so the PDF and the TermTips say the same thing).
  *
@@ -27,6 +29,9 @@ import { getTermDef } from '../vedic/termDefinitions';
 import { kundaliChartSvg } from '../vedic/chartSvg';
 import { signLabel } from '../vedic/signLabel';
 import { TEXT_VS } from './printHtml';
+import { currentYoginiPeriod, yoginiAntardashas } from '../vedic/engine/yoginiDasha';
+import { AV_PLANETS, byHouse } from '../vedic/engine/ashtakavarga';
+import { YOGINI_META, HOUSE_THEMES, SAV_STRONG, SAV_WEAK } from '../../data/yoginiAshtakavarga';
 export { signLabel, TEXT_VS };
 
 type VargaChart = { lagnaSignIndex: number; planets: Array<{ name: string; signIndex: number; house: number }> };
@@ -50,6 +55,9 @@ export interface KundaliPdfData {
   divisionalCharts?: { d9?: VargaChart | null; d10?: VargaChart | null };
   shodashvarga?: Array<{ key: string } & VargaChart> | null;
   birthTimeEdges?: BirthTimeEdge[] | null;
+  /** Batch 10: Yogini Dasha + Ashtakavarga (one extra page). */
+  yoginiDasha?: { nakshatraNumber?: number; startYogini?: string; balanceYears?: number; mahadashas: Array<{ yogini: string; lord: string; years: number; start: string; end: string }> } | null;
+  ashtakavarga?: { bav: Record<string, number[]>; sav: number[]; lagnaSignIndex: number } | null;
   requires_birth_time?: boolean;
   warnings?: Array<{ code: string }>;
 }
@@ -139,6 +147,58 @@ export function manglikSummary(data: KundaliPdfData): string | null {
     ? ` Classical cancellation in your chart: ${md.cancellations.join('; ')} — many traditions treat the dosha as neutralised.`
     : '';
   return `Manglik${level}.${where ? ` ${where}.` : ''}${cancel}`;
+}
+
+const SIGN_SHORT = ['Ar', 'Ta', 'Ge', 'Cn', 'Le', 'Vi', 'Li', 'Sc', 'Sg', 'Cp', 'Aq', 'Pi'];
+const ordinal = (n: number) => `${n}${n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th'}`;
+
+/** Batch 10 — the extra page: Yogini Dasha + Ashtakavarga. '' when neither is in the data. */
+export function yoginiAvPageHtml(data: KundaliPdfData, now: Date = new Date()): string {
+  const yd = data.yoginiDasha;
+  const av = data.ashtakavarga;
+  if (!(yd?.mahadashas?.length) && !av) return '';
+  let yHtml = '';
+  if (yd?.mahadashas?.length) {
+    const cur = currentYoginiPeriod({ mahadashas: yd.mahadashas }, now);
+    const meta = cur ? YOGINI_META[cur.maha.yogini] : null;
+    const first = Date.parse(yd.mahadashas[0].start);
+    const list = yd.mahadashas.filter(m => Date.parse(m.start) < first + 100 * 365.25 * 86400000);
+    const antars = cur ? yoginiAntardashas(cur.maha) : [];
+    yHtml = `
+    <div class="section" data-testid="pdf-yogini">
+      <h2>Yogini Dasha</h2>
+      <p class="ex">${esc(explain('yoginiDasha'))} Yours began with ${esc(yd.startYogini)} (birth nakshatra no. ${esc(yd.nakshatraNumber)}). Dates use 365.25-day years, as for the Vimshottari Dasha.</p>
+      ${cur ? `<table class="grid"><thead><tr><th>Level</th><th>Yogini (planet)</th><th>From – to</th></tr></thead><tbody>
+        <tr><td>Mahadasha</td><td><strong>${esc(cur.maha.yogini)}</strong> (${esc(cur.maha.lord)})</td><td class="num">${esc(fmtDate(cur.maha.start))} – ${esc(fmtDate(cur.maha.end))}</td></tr>
+        ${cur.antar ? `<tr><td>Antardasha</td><td><strong>${esc(cur.antar.yogini)}</strong> (${esc(cur.antar.lord)})</td><td class="num">${esc(fmtDate(cur.antar.start))} – ${esc(fmtDate(cur.antar.end))}</td></tr>` : ''}
+      </tbody></table>
+      ${meta ? `<p style="margin-top:6px">${esc(meta.name)}: ${esc(meta.meaning)} ${esc(meta.guidance)}</p>` : ''}
+      <p class="note">Sub-periods of ${esc(cur.maha.yogini)}: ${antars.map(a => `${esc(a.yogini)} ${esc(fmtDate(a.start))}`).join(' · ')}</p>` : ''}
+      <p class="note" style="margin-top:6px"><strong>Main periods of life:</strong></p>
+      <div class="ylist">${list.map(m => `<span${cur && cur.maha.start === m.start ? ' class="cur"' : ''}>${esc(m.yogini)} ${esc(fmtDate(m.start).replace(/^\d+ /, ''))} – ${esc(fmtDate(m.end).replace(/^\d+ /, ''))}</span>`).join('')}</div>
+    </div>`;
+  }
+  let aHtml = '';
+  if (av) {
+    const houses = Array.from({ length: 12 }, (_, i) => i + 1);
+    const savH = houses.map(h => byHouse(av.sav, av.lagnaSignIndex, h));
+    const ranked = houses.map((h, i) => ({ h, v: savH[i] }));
+    const top = [...ranked].sort((a, b) => b.v - a.v || a.h - b.h).slice(0, 3);
+    const low = [...ranked].sort((a, b) => a.v - b.v || a.h - b.h).slice(0, 3);
+    const d = (xs: typeof top) => xs.map(x => `${ordinal(x.h)} (${HOUSE_THEMES[x.h - 1]}, ${x.v})`).join(', ');
+    aHtml = `
+    <div class="section" data-testid="pdf-ashtakavarga">
+      <h2>Ashtakavarga</h2>
+      <p class="ex">${esc(explain('ashtakavarga'))} Tables: Brihat Parashara Hora Shastra ch. 66. Houses counted from your Lagna.</p>
+      <table class="av"><thead><tr><th>House</th>${houses.map(h => `<th>${h}<br>${SIGN_SHORT[(av.lagnaSignIndex + h - 1) % 12]}</th>`).join('')}<th>Total</th></tr></thead><tbody>
+      ${AV_PLANETS.map(p => { const row = av.bav[p] || []; return `<tr data-av="${p}"><td>${p}</td>${houses.map(h => { const v = byHouse(row, av.lagnaSignIndex, h); return `<td${v >= 4 ? ' class="hi"' : ''}>${v}</td>`; }).join('')}<td>${row.reduce((s, x) => s + x, 0)}</td></tr>`; }).join('')}
+      <tr class="sav" data-av="SAV"><td>All (SAV)</td>${savH.map(v => `<td class="${v >= SAV_STRONG ? 'strong' : v < SAV_WEAK ? 'light' : ''}">${v}</td>`).join('')}<td>${av.sav.reduce((s, x) => s + x, 0)}</td></tr>
+      </tbody></table>
+      <p style="margin-top:6px"><strong>What it means:</strong> your best-supported areas are the ${esc(d(top))}. The ${esc(d(low))} have fewer points — they simply reward steadier, more patient effort.</p>
+      <p class="note">Green = ${SAV_STRONG}+ points (well supported); amber = below ${SAV_WEAK}. Bold = 4+ of a planet’s 8 points: when that planet passes through that sign, things tend to go smoother. Every planet’s total is fixed (Sun 48, Moon 49, Mars 39, Mercury 54, Jupiter 56, Venus 52, Saturn 39; all 337).</p>
+    </div>`;
+  }
+  return `<div class="newpage" data-testid="pdf-extra-page">${yHtml}${aHtml}</div>`;
 }
 
 export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta = {}): string {
@@ -232,6 +292,8 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta =
       ${notes.map(n => `<p>${esc(n)}</p>`).join('')}
     </div>` : '';
 
+  const extraHtml = yoginiAvPageHtml(data, meta.generatedAt ?? new Date());
+
   const title = name ? `${name}’s Kundali` : 'Janam Kundali';
   const star = `\u2726${TEXT_VS}`; // ✦ as a text glyph, never a colour emoji
 
@@ -278,6 +340,17 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta =
   .closing { margin-top: 16px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 10px; color: var(--soft); break-inside: avoid; }
   .closing a { color: var(--navy); }
   .brand { font-weight: 700; color: var(--navy); font-size: 12px; }
+  .newpage { break-before: page; page-break-before: always; }
+  table.av { width: 100%; border-collapse: collapse; font-size: 10px; }
+  table.av th, table.av td { border-bottom: 1px solid var(--line); padding: 3px 2px; text-align: center; }
+  table.av th:first-child, table.av td:first-child { text-align: left; }
+  table.av th { font-size: 9px; color: var(--muted); }
+  table.av td.hi { font-weight: 700; }
+  table.av tr.sav td { font-weight: 700; border-top: 1.5px solid var(--navy); }
+  table.av td.strong { background: #E6F4EA; }
+  table.av td.light { background: #FFF3E0; }
+  .ylist { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 10px; }
+  .ylist span.cur { font-weight: 700; color: var(--navy); }
 </style></head><body>
 <table class="pt">
   <thead><tr><td class="pc"><div class="rh"><span><b>${star} BornClock</b> · Kundali</span><span>bornclock.com/kundali</span></div></td></tr></thead>
@@ -310,6 +383,7 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta =
 
   ${dashaHtml}
   ${manglikHtml}
+  ${extraHtml}
 
   <div class="closing" data-testid="pdf-closing">
     <p class="brand">${star} BornClock — <a href="${SITE_URL}/kundali">bornclock.com/kundali</a></p>

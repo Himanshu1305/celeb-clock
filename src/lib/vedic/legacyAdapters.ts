@@ -85,6 +85,9 @@ export function toKundaliLegacy(r: BirthChartResult) {
     shodashvarga: r.shodashvarga ?? null,
     // Batch 8: Lagna / Moon birth-time edge notes (±5 / ±15 minutes).
     birthTimeEdges: r.birthTimeEdges ?? [],
+    // Batch 10: Yogini Dasha (Mahadasha list) and Ashtakavarga (BAV by sign + SAV).
+    yoginiDasha: r.yoginiDasha ?? null,
+    ashtakavarga: r.ashtakavarga ?? null,
     // Doshas the engine already computes — /manglik reads doshas.mangalDosha and
     // /kaal-sarp-dosha reads doshas.kaalSarp from this response. Previously dropped,
     // which made both standalone tools fail every real submission.

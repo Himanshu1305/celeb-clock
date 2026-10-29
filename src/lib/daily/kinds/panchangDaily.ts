@@ -6,9 +6,10 @@
  */
 import type { DailyEntry } from '../types';
 import { addDaysISO } from '../dates';
-import { computeDayPanchang, dayWindowsLite, panchangCityBySlug, sunriseSunset, type DayPanchang, type TimeWindow } from '../../vedic/panchangDay';
+import { computeDayPanchang, dayWindowsLite, moonSpans, panchangCityBySlug, sunriseSunset, type DayPanchang, type TimeWindow } from '../../vedic/panchangDay';
 import { PANCHANG_TABLES } from '../../vedic/panchang';
 import type { PanchangPageKind } from '../../vedic/panchangText';
+import { vratsOnDate } from '../../vedic/vrats/next';
 import { renderPanchangEntry, renderPanchangHiEntry, PANCHANG_INDEX_SLUG, type PanchangDayData } from './panchangTemplate';
 
 export { PANCHANG_INDEX_SLUG };
@@ -65,6 +66,15 @@ export function computePanchangDayData(place: PanchangPlaceInput, date: string):
     delhi = [toMin(clockIST(r.rise)), toMin(clockIST(r.set))];
   }
   const d = encodePanchangDay(p, week, delhi);
+  // Batch 10: Nakshatra and Moon-sign spans sunrise → next sunrise (Tarabalam / Chandrabalam).
+  const sun = sunriseSunset(new Date(date + 'T12:00:00Z'), place.lat, place.lon, place.tz);
+  const [yy, mm, dd] = date.split('-').map(Number);
+  const midnight = Date.UTC(yy, mm - 1, dd) - place.tz * 3600e3;
+  const rel = (t: Date) => Math.round((t.getTime() - midnight) / 60000);
+  d.ns = moonSpans(sun.rise, sun.nextRise, 'nak').flatMap(x => [x.idx, rel(x.end)]);
+  d.ms = moonSpans(sun.rise, sun.nextRise, 'rashi').flatMap(x => [x.idx, rel(x.end)]);
+  const vr = vratsOnDate(date);
+  if (vr.length) d.vr = vr;
   if (memo.size > 400) memo.clear();
   memo.set(key, d);
   return d;

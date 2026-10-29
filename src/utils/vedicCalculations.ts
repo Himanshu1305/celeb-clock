@@ -109,7 +109,7 @@ export async function calculateVedicProfile(
 
   let index = 1;
   let pada = 1;
-  let panchName = NAKSHATRA_NAMES[0];
+  let panchName: string = NAKSHATRA_NAMES[0];
   let moonLon: number | null = null;
   let ayan: number | null = null;
   let isBoundary = false;

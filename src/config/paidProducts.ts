@@ -30,5 +30,8 @@ export type PaidProductKey = keyof typeof PAID_PRODUCTS;
 
 /** True only when the owner has switched this product ON (never by default). */
 export function isPaidProductEnabled(key: PaidProductKey): boolean {
-  return PAID_PRODUCTS[key].enabled === true;
+  // Widen to the declared flag type: the `as const` literals are all `false` today, which
+  // made `=== true` a TS2367 "no overlap" error even though the check is what we want.
+  const flag: PaidProductFlag = PAID_PRODUCTS[key];
+  return flag.enabled === true;
 }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { Link } from 'react-router-dom';
 import { ReportLayout } from '@/components/central';
 import { Button } from '@/components/ui/button';
@@ -428,7 +429,7 @@ const CountryComparison = () => {
                     💡 {COUNTRY_INSIGHTS[selectedRow.country]}
                   </p>
                 )}
-                <div className="overflow-x-auto">
+                <ScrollTable>
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-border">
@@ -456,7 +457,7 @@ const CountryComparison = () => {
                       </tr>
                     </tbody>
                   </table>
-                </div>
+                </ScrollTable>
               </CardContent>
             </Card>
           </div>
@@ -843,7 +844,7 @@ const CountryComparison = () => {
             <span className="text-sm text-muted-foreground">{rows.length} countries</span>
           </div>
 
-          <div className="rounded-xl border border-border overflow-hidden">
+          <ScrollTable boxClassName="rounded-xl border border-border" label="Countries compared">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/30">
@@ -923,7 +924,7 @@ const CountryComparison = () => {
                 })}
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
           <p className="text-xs text-muted-foreground mt-3">
             Source: UN World Population Prospects 2024. Conditional (age-adjusted) baseline applied for ages 40+. Click any row for details. Tier based on forecast value. ℹ️ = country insight available.
           </p>

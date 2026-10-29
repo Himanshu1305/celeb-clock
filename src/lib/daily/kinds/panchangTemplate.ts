@@ -16,6 +16,8 @@ import { karanaName, PANCHANG_TABLES } from '../../vedic/panchang';
 import { pageAnswer, pageMeta, indexMeta, windowText, windowsText, cityContrast, goodDaySlots, type PanchangPageKind } from '../../vedic/panchangText';
 import { TITHI_HI, PAKSHA_HI, NAKSHATRA_HI, YOGA_HI, KARANA_HI, CHOGH_HI, WEEKDAY_HI, cityHi, hiEnd } from '../../vedic/panchangHindi';
 import panchangCities from '../../../data/panchangCities.json';
+import { gowriSlots, goodTarabalam, goodChandrabalam, ashtamaChandraSign, GOWRI_MEANING, GOWRI_TAMIL, RASHI_NAMES, type GowriSlot } from '../../vedic/gowriTara';
+import { VRAT_NAMES, VRAT_SLUG_SET, vratPath, type VratSlug } from '../../vedic/vrats/meta';
 
 export const PANCHANG_INDEX_SLUG = 'index';
 export interface PlaceRef { name: string; slug?: string }
@@ -44,6 +46,12 @@ export interface PanchangDayData {
   wk: number[];
   /** Delhi's sunrise / sunset that day (for the city comparison line; not on Delhi itself) */
   dz?: [number, number];
+  /** Batch 10: Nakshatra spans sunrise → next sunrise, flat [index, end, …] (Tarabalam). */
+  ns?: number[];
+  /** Batch 10: Moon-sign spans sunrise → next sunrise, flat [sign 0..11, end, …] (Chandrabalam). */
+  ms?: number[];
+  /** Batch 10: vrat pages for this date (src/lib/vedic/vrats — New Delhi festival dates + weekday vrats) */
+  vr?: string[];
 }
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -161,6 +169,72 @@ function sunSection(place: PlaceRef, p: DayPanchang, delhi: { sunrise: string; s
   };
 }
 
+
+// ── Batch 10: Gowri Panchangam (Tamil Nalla Neram), Tarabalam, Chandrabalam ────────
+const gowriItems = (list: GowriSlot[]): DailyItem[] =>
+  list.map(g => item(`${g.name} (${GOWRI_TAMIL[g.name]})`, `${hhmm(g.start)}–${hhmm(g.end)}${g.end >= 1440 ? ' (next day)' : ''}`, GOWRI_MEANING[g.name]));
+
+/** Good Gowri parts of the day, e.g. "Dhanam 06:31–07:54, Sugam 07:54–09:18, …". */
+export function gowriGoodText(d: PanchangDayData, date: string): string {
+  const g = gowriSlots(weekdayOf(date), d.c);
+  return g.day.filter(x => x.good).map(x => `${x.name} ${hhmm(x.start)}–${hhmm(x.end)}`).join(', ');
+}
+
+function gowriSections(d: PanchangDayData, date: string, p: DayPanchang): DailySection[] {
+  const g = gowriSlots(weekdayOf(date), d.c);
+  return [
+    {
+      id: 'gowri-day', heading: `Gowri Panchangam — day (sunrise ${p.sunrise} → sunset ${p.sunset})`,
+      text: 'The Tamil Gowri Panchangam splits daylight into eight equal parts, named in a fixed order for each weekday. Amirdha, Dhanam, Uthi, Laabam and Sugam are good — these are the Gowri Nalla Neram; Soram, Visham and Rogam are avoided for new starts.',
+      items: gowriItems(g.day),
+    },
+    { id: 'gowri-night', heading: 'Gowri Panchangam — night (sunset → next sunrise)', items: gowriItems(g.night) },
+  ];
+}
+
+/** "till 07:50" / "till next sunrise" for a span end (minutes since local midnight). */
+function spanEnd(end: number, nextRise: number): string {
+  return end >= nextRise ? 'next sunrise' : endText(end);
+}
+function spans(flat: number[] | undefined): Array<[number, number]> {
+  const out: Array<[number, number]> = [];
+  if (!flat) return out;
+  for (let i = 0; i + 1 < flat.length; i += 2) out.push([flat[i], flat[i + 1]]);
+  return out;
+}
+
+function taraSection(d: PanchangDayData): DailySection | null {
+  const list = spans(d.ns);
+  if (!list.length) return null;
+  const nextRise = d.c[16];
+  let from = '';
+  return {
+    id: 'tarabalam', heading: 'Tarabalam — is today’s star good for you?',
+    text: 'Look for your birth Nakshatra (the Moon’s star when you were born). If it is listed, today’s Nakshatra stands in a supportive count from yours — a good day for your plans. If it is not listed, nothing is wrong: keep to routine work and leave big starts for a listed day.',
+    items: list.map(([nak, end]) => {
+      const label = `${from ? `From ${from} till` : 'Till'} ${spanEnd(end, nextRise)} (Moon in ${T.NAKSHATRAS[nak]})`;
+      from = endText(end);
+      return item(label, goodTarabalam(nak).map(n => T.NAKSHATRAS[n]).join(', '));
+    }),
+  };
+}
+
+function chandraSection(d: PanchangDayData): DailySection | null {
+  const list = spans(d.ms);
+  if (!list.length) return null;
+  const nextRise = d.c[16];
+  let from = '';
+  return {
+    id: 'chandrabalam', heading: 'Chandrabalam — is today’s Moon good for your sign?',
+    text: 'Look for your Moon sign (Rashi). If it is listed, the Moon is in a supportive house from it (the 1st, 3rd, 6th, 7th, 10th or 11th). Ashtama Chandra — the Moon in the 8th from your sign — is a day to go gently and keep plans simple, not a day of harm.',
+    items: list.map(([sign, end]) => {
+      const label = `${from ? `From ${from} till` : 'Till'} ${spanEnd(end, nextRise)} (Moon in ${RASHI_NAMES[sign]})`;
+      from = endText(end);
+      return item(label, goodChandrabalam(sign).map(s => RASHI_NAMES[s]).join(', '), `Ashtama Chandra for ${RASHI_NAMES[ashtamaChandraSign(sign)]} Moon sign`);
+    }),
+  };
+}
+
 function whyItems(kind: PanchangPageKind, place: PlaceRef, p: DayPanchang) {
   const day = PANCHANG_TABLES.RAHU_PART[['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].indexOf(p.weekday)];
   const sun = { label: `Sunrise ${p.sunrise}, sunset ${p.sunset} in ${place.name}`, text: 'Every window here is a share of the real local daylight or night, so the clock times are this city’s own.' };
@@ -223,7 +297,8 @@ export function renderPanchangEntry(kind: PanchangPageKind, place: PlaceRef, dat
       { id: 'also-today', heading: 'Also today', items: [item('Rahu Kaal', w(p.rahuKaal)), item('Abhijit Muhurta', p.abhijitApplies ? w(p.abhijit) : 'not used on Wednesday')] },
     ];
   } else {
-    sections = [limbsSection(p), sunSection(place, p, delhi), goodSection(p), avoidSection(p), ...choghSections(p)];
+    const vrat = vratTodaySection(data.vr, 'en');
+    sections = [limbsSection(p), ...(vrat ? [vrat] : []), sunSection(place, p, delhi), goodSection(p), avoidSection(p), ...choghSections(p)];
   }
   return {
     date, lang: 'en',
@@ -233,11 +308,42 @@ export function renderPanchangEntry(kind: PanchangPageKind, place: PlaceRef, dat
     dateLabel: formatLongDateEn(date),
     answer: pageAnswer(kind, p, place.name),
     why: whyItems(kind, place, p),
-    sections,
-    faq: faqFor(kind, place, p),
+    sections: kind === 'panchang' ? [...sections, ...panchangExtras(data, date, p)] : sections,
+    faq: kind === 'panchang' ? [...faqFor(kind, place, p), gowriFaq(place, p, data)] : faqFor(kind, place, p),
   };
 }
 
+/** Batch 10 sections appended to the full Panchang page: Gowri (day + night), Tarabalam, Chandrabalam. */
+function panchangExtras(d: PanchangDayData, date: string, p: DayPanchang): DailySection[] {
+  return [...gowriSections(d, date, p), taraSection(d), chandraSection(d)].filter((x): x is DailySection => !!x);
+}
+
+function gowriFaq(place: PlaceRef, p: DayPanchang, d: PanchangDayData): DailyFaq {
+  return {
+    q: `What is the Gowri Nalla Neram in ${place.name} on ${formatDateEn(p.date)}?`,
+    a: `By the Tamil Gowri Panchangam, the good daytime parts in ${place.name} on ${formatLongDateEn(p.date)} are ${gowriGoodText(d, p.date)} (local time, from sunrise ${p.sunrise} to sunset ${p.sunset}).`,
+  };
+}
+
+
+/**
+ * Batch 10: "Vrat today" — links to the vrat katha + puja vidhi pages for the vrats that fall
+ * on this date (festival dates are for New Delhi, as on /festivals; Monday / Tuesday vrats
+ * every week).
+ */
+export function vratTodaySection(vr: string[] | undefined, lang: 'en' | 'hi'): DailySection | null {
+  const list = (vr ?? []).filter(s => VRAT_SLUG_SET.has(s)) as VratSlug[];
+  if (!list.length) return null;
+  const hi = lang === 'hi';
+  return {
+    id: 'vrat-today',
+    heading: hi ? 'आज का व्रत — कथा और पूजा विधि' : 'Vrat today — katha and puja vidhi',
+    text: hi
+      ? 'आज पड़ने वाले व्रत (त्योहार की तिथियाँ नई दिल्ली के अनुसार; दूसरे शहर में कभी-कभी एक दिन का अंतर हो सकता है)।'
+      : 'Vrats that fall today (festival dates are for New Delhi; another city can occasionally differ by a day).',
+    links: list.map(s => ({ label: VRAT_NAMES[s][hi ? 'hi' : 'en'], href: vratPath(s, lang) })),
+  };
+}
 
 /** Template for the registered English kinds: (date, page slug, data) → entry. */
 export const panchangTemplate = (kind: PanchangPageKind) => (date: string, slug: string, data: unknown): DailyEntry =>
@@ -280,6 +386,7 @@ export function renderPanchangHiEntry(slug: string, date: string, data: Panchang
   const abh = p.abhijitApplies ? `अभिजित मुहूर्त ${winHi(p.abhijit)} है।` : 'बुधवार को अभिजित मुहूर्त नहीं लिया जाता।';
   const kar = KARANA_HI[karanaName(p.karana)] || karanaName(p.karana);
   const meta = custom ? { h1: `पंचांग — ${city}` } : hindiPanchangMeta(slug);
+  const vratHi = vratTodaySection(data.vr, 'hi');
   return {
     date, lang: 'hi',
     title: index ? `आज का पंचांग (${dHi}) — तिथि, नक्षत्र, राहु काल | BornClock` : `${city} का पंचांग (${dHi}) — तिथि, राहु काल | BornClock`,
@@ -301,6 +408,7 @@ export function renderPanchangHiEntry(slug: string, date: string, data: Panchang
         { label: 'करण (तिथि का आधा भाग)', value: kar, note: `${hiEnd(p.karanaEnd)} तक` },
         { label: 'वार', value: WEEKDAY_HI[p.weekday] || p.weekday },
       ] },
+      ...(vratHi ? [vratHi] : []),
       { id: 'sun', heading: `${city} में सूर्य`, items: [{ label: 'सूर्योदय', value: p.sunrise }, { label: 'सूर्यास्त', value: p.sunset }] },
       { id: 'good-times', heading: 'शुभ समय', tone: 'good', items: [
         { label: 'ब्रह्म मुहूर्त', value: winHi(p.brahmaMuhurta), note: 'भोर से पहले का शांत समय — पूजा, ध्यान और पढ़ाई के लिए' },

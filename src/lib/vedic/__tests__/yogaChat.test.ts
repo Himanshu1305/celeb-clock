@@ -42,7 +42,7 @@ describe('buildChatReply — Yoga accuracy guard in the retry loop', () => {
     const f = await refFacts();
     const gen = async () => 'Your strong Raj Yoga, formed by your Yogakaraka Venus, supports your standing.';
     const out = await buildChatReply(f, [], 'what yogas do i have', gen);
-    expect(out.yogaChecked).toBe(true);
+    expect((out as { yogaChecked?: boolean }).yogaChecked).toBe(true);
     expect(out.sanitized).toBeFalsy();
     expect(out.reply).toMatch(/Raj Yoga/);
   });

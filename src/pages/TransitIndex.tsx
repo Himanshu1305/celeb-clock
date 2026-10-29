@@ -53,6 +53,12 @@ export default function TransitIndex() {
             ))}
           </div>
 
+          <div className="rounded-xl border border-border p-5 mt-4" data-testid="transit-today-card">
+            <div className="font-semibold text-foreground mb-1">Planets today</div>
+            <p className="text-sm text-muted-foreground leading-relaxed">Where all nine grahas are right now — sign, degree, Nakshatra, retrograde and combust status, and when each next changes sign. Updated every day.</p>
+            <Link to="/planets-today" className="text-xs text-primary mt-2 inline-block">Today’s planet positions →</Link>
+          </div>
+
           <div className="rounded-xl border border-border p-5 mt-4" data-testid="transit-mercury-card">
             <div className="font-semibold text-foreground mb-1">Mercury retrograde {year}</div>
             <p className="text-sm text-muted-foreground leading-relaxed">The dates Mercury appears to move backward — read in the Vedic tradition as a time to review, re-check and re-do rather than launch. Computed from real apparent motion.</p>

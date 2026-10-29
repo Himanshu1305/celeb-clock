@@ -201,6 +201,7 @@ const TransitIndex = lazyWithReload(() => import('@/pages/TransitIndex'));
 const TransitYearPage = lazyWithReload(() => import('@/pages/TransitYearPage'));
 const MercuryRetrograde = lazyWithReload(() => import('@/pages/MercuryRetrograde'));
 const FestivalsPage = lazyWithReload(() => import('@/pages/FestivalsPage'));
+const VratPage = lazyWithReload(() => import('@/pages/VratPage'));
 const PlanetInSignPage = lazyWithReload(() => import('@/pages/PlanetInSignPage'));
 const PlanetInHousePage = lazyWithReload(() => import('@/pages/PlanetInHousePage'));
 const YogaPage = lazyWithReload(() => import('@/pages/YogaPage'));
@@ -211,6 +212,13 @@ const ChaldeanNumerologyPage = lazyWithReload(() => import('@/pages/ChaldeanNume
 const NameCorrectionPage = lazyWithReload(() => import('@/pages/NameCorrectionPage'));
 const BusinessNameNumerologyPage = lazyWithReload(() => import('@/pages/BusinessNameNumerologyPage'));
 const MobileNumberNumerologyPage = lazyWithReload(() => import('@/pages/MobileNumberNumerologyPage'));
+// Batch 10 tools
+const VehicleNumberNumerologyPage = lazyWithReload(() => import('@/pages/VehicleNumberNumerologyPage'));
+const LoShuGridPage = lazyWithReload(() => import('@/pages/LoShuGridPage'));
+const KuaNumberPage = lazyWithReload(() => import('@/pages/KuaNumberPage'));
+const LoveCalculatorPage = lazyWithReload(() => import('@/pages/LoveCalculatorPage'));
+const JanmaTithiPage = lazyWithReload(() => import('@/pages/JanmaTithiPage'));
+const MarriageBiodataPage = lazyWithReload(() => import('@/pages/MarriageBiodataPage'));
 const HouseNumberNumerologyPage = lazyWithReload(() => import('@/pages/HouseNumberNumerologyPage'));
 const DoshaCheckPage = lazyWithReload(() => import('@/pages/DoshaCheckPage'));
 const LifeReportPage = lazyWithReload(() => import('@/pages/LifeReportPage'));
@@ -218,6 +226,11 @@ const ChildKundliPage = lazyWithReload(() => import('@/pages/ChildKundliPage'));
 const BlueZonesIndex = lazyWithReload(() => import('@/pages/BlueZonesIndex'));
 const BlueZonesFactor = lazyWithReload(() => import('@/pages/BlueZonesFactor'));
 const PanchangPage = lazyWithReload(() => import('@/pages/PanchangPage'));
+// Batch 10: monthly Panchang calendar, planets today, Moon phase, eclipses 2026–2030.
+const PanchangCalendarPage = lazyWithReload(() => import('@/pages/PanchangCalendarPage'));
+const PlanetsTodayPage = lazyWithReload(() => import('@/pages/PlanetsTodayPage'));
+const MoonPhasePage = lazyWithReload(() => import('@/pages/MoonPhasePage'));
+const EclipsesPage = lazyWithReload(() => import('@/pages/EclipsesPage'));
 const RahuKaalPage = lazyWithReload(() => import('@/pages/RahuKaalPage'));
 const ChoghadiyaPage = lazyWithReload(() => import('@/pages/ChoghadiyaPage'));
 const GlossaryPage = lazyWithReload(() => import('@/pages/GlossaryPage'));
@@ -232,6 +245,7 @@ const BornOnIndiaIndex = lazyWithReload(() => import('@/pages/BornOnIndiaIndex')
 const AnswersIndex = lazyWithReload(() => import('@/pages/AnswersIndex'));
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { HtmlLang } from "@/components/HtmlLang";
 import { CurrencyAdminToggle } from "@/components/CurrencyAdminToggle";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
 import { MissingStateModal } from "@/components/MissingStateModal";
@@ -254,6 +268,7 @@ const App = () => (
         <BirthDateProvider>
           <BrowserRouter>
             <ScrollToTop />
+            <HtmlLang />
             <CurrencyAdminToggle />
             <BirthdayDiscountBanner />
             {/* One-time GST place-of-supply capture. Self-gates: renders only for a
@@ -307,6 +322,7 @@ const App = () => (
               <Route path="/zodiac" element={<Zodiac />} />
               <Route path="/zodiac/:sign" element={<ZodiacSign />} />
               <Route path="/zodiac/:sign/today" element={<ZodiacToday />} />
+              <Route path="/zodiac/:sign/tomorrow" element={<ZodiacToday when="tomorrow" />} />
               <Route path="/birthstone" element={<Birthstone />} />
               <Route path="/birthstone/:month" element={<BirthstonePage />} />
               <Route path="/life-expectancy" element={<LifeExpectancy />} />
@@ -483,6 +499,11 @@ const App = () => (
               <Route path="/mercury-retrograde/:year" element={<MercuryRetrograde />} />
               <Route path="/festivals" element={<FestivalsPage />} />
               <Route path="/festivals/:year" element={<FestivalsPage />} />
+              {/* Batch 10: vrat katha + puja vidhi (English + Hindi) */}
+              <Route path="/vrat" element={<VratPage />} />
+              <Route path="/vrat/:slug" element={<VratPage />} />
+              <Route path="/hi/vrat" element={<VratPage lang="hi" />} />
+              <Route path="/hi/vrat/:slug" element={<VratPage lang="hi" />} />
               <Route path="/planet-in-sign" element={<PlanetInSignPage />} />
               <Route path="/planet-in-sign/:planet/:sign" element={<PlanetInSignPage />} />
               <Route path="/planet-in-house" element={<PlanetInHousePage />} />
@@ -502,6 +523,13 @@ const App = () => (
               <Route path="/name-correction" element={<NameCorrectionPage />} />
               <Route path="/business-name-numerology" element={<BusinessNameNumerologyPage />} />
               <Route path="/mobile-number-numerology" element={<MobileNumberNumerologyPage />} />
+              {/* Batch 10 tools */}
+              <Route path="/vehicle-number-numerology" element={<VehicleNumberNumerologyPage />} />
+              <Route path="/lo-shu-grid-calculator" element={<LoShuGridPage />} />
+              <Route path="/kua-number-calculator" element={<KuaNumberPage />} />
+              <Route path="/love-calculator" element={<LoveCalculatorPage />} />
+              <Route path="/janma-tithi-calculator" element={<JanmaTithiPage />} />
+              <Route path="/marriage-biodata-maker" element={<MarriageBiodataPage />} />
               <Route path="/house-number-numerology" element={<HouseNumberNumerologyPage />} />
               <Route path="/pitra-dosha" element={<DoshaCheckPage kind="pitra" />} />
               <Route path="/mool-dosha" element={<DoshaCheckPage kind="mool" />} />
@@ -514,6 +542,11 @@ const App = () => (
               <Route path="/glossary" element={<GlossaryPage />} />
               <Route path="/panchang" element={<PanchangPage />} />
               <Route path="/panchang/:city" element={<PanchangPage />} />
+              <Route path="/panchang-calendar" element={<PanchangCalendarPage />} />
+              <Route path="/planets-today" element={<PlanetsTodayPage />} />
+              <Route path="/moon-phase" element={<MoonPhasePage />} />
+              <Route path="/eclipses" element={<EclipsesPage />} />
+              <Route path="/eclipses/:year" element={<EclipsesPage />} />
               <Route path="/rahu-kaal" element={<RahuKaalPage />} />
               <Route path="/rahu-kaal/:city" element={<RahuKaalPage />} />
               <Route path="/choghadiya" element={<ChoghadiyaPage />} />

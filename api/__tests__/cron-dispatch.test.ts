@@ -31,7 +31,7 @@ describe('cron-dispatch auth gate', () => {
   });
 
   it('rejects non GET/POST', async () => {
-    // @ts-expect-error exercising the method guard
+    // exercising the method guard
     const res = await GET(new Request('https://x/api/cron-dispatch', { method: 'DELETE' }));
     expect(res.status).toBe(405);
   });

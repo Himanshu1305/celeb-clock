@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { ScrollTable } from '@/components/ScrollTable';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { le, leYears, LE_CITATION } from '@/data/lifeExpectancyFacts';
@@ -296,13 +297,7 @@ export function HowLongWillILivePage() {
             <p className="text-gray-600 mb-4">{HLWIL_COPY.countryTable.intro}</p>
 
             {/* Scroll wrapper prevents mobile overflow */}
-            <div
-              data-testid="country-table-wrapper"
-              tabIndex={0}
-              role="region"
-              aria-label="Life expectancy by country table (scrollable)"
-              className="overflow-x-auto rounded-xl border border-gray-200 max-w-full"
-            >
+            <ScrollTable testId="country-table-wrapper" label="Life expectancy by country table" boxClassName="rounded-xl border border-gray-200">
               <table className="w-full text-sm min-w-[480px]">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-200">
@@ -334,7 +329,7 @@ export function HowLongWillILivePage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </ScrollTable>
 
             <p className="text-xs text-gray-400 mt-2 italic">
               {HLWIL_COPY.countryTable.source}

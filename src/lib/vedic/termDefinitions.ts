@@ -23,6 +23,7 @@
  * for the daily limbs and windows; the Ashtakoota and 10-Porutham tables as used by
  * AstroSage and South Indian practice) and match how BornClock's own engine computes them.
  */
+import { ADVANCED_TERMS } from './termDefinitionsAdvanced';
 
 export type TermCategory =
   | 'basics' | 'dasha' | 'matching' | 'porutham' | 'panchang' | 'dosha' | 'strength'
@@ -72,6 +73,8 @@ export interface TermDef {
 }
 
 export const VEDIC_TERMS: Record<string, TermDef> = {
+  // Batch 10: Bhava Chalit / KP / Jaimini terms (own file, see termDefinitionsAdvanced.ts).
+  ...ADVANCED_TERMS,
   // ─────────────────────────── Birth chart basics ───────────────────────────
   kundali: {
     term: 'Kundali (birth chart)', category: 'basics', hiTerm: 'कुंडली / जन्म पत्री',
@@ -277,6 +280,49 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     inline: 'the sub-period within the main period',
     hi: 'हर महादशा के अंदर नौ छोटी अवधियाँ होती हैं जिन्हें अंतर्दशा कहते हैं — कुछ महीनों से कुछ वर्षों तक।',
     aliases: ['Bhukti'],
+  },
+  // Batch 10 — Yogini Dasha. Rule + Yogini list: vedicmarga.com/yogini-dasha, satyori.com/jyotish/dasha/yogini
+  // (opened 29 Oct 2026).
+  yoginiDasha: {
+    term: 'Yogini Dasha', category: 'dasha', hiTerm: 'योगिनी दशा',
+    impact: 'A second, shorter timing system — a useful cross-check on your Vimshottari Dasha.',
+    why: 'Eight Yoginis, each linked to a planet, take turns in a fixed 36-year cycle: Mangala (Moon) 1 year, Pingala (Sun) 2, Dhanya (Jupiter) 3, Bhramari (Mars) 4, Bhadrika (Mercury) 5, Ulka (Saturn) 6, Siddha (Venus) 7 and Sankata (Rahu) 8. The first one is set by your birth nakshatra (its number + 3, divided by 8 — the remainder names the Yogini) and the Moon’s place in that nakshatra sets how much of it was left at birth.',
+    guidance: 'Astrologers trust a theme more when Vimshottari and Yogini point the same way at the same time.',
+    hi: 'योगिनी दशा आठ योगिनियों का 36 वर्ष का चक्र है। पहली योगिनी जन्म नक्षत्र से तय होती है। इसे विंशोत्तरी दशा के साथ मिलाकर देखा जाता है।',
+    aliases: ['Yogini'], link: '/dasha-calculator',
+  },
+  // Batch 10 — Ashtakavarga. BPHS ch. 66 tables; guidance: dekhopanchang.com/en/learn/ashtakavarga,
+  // onlinejyotish.com lesson 113 (opened 29 Oct 2026).
+  ashtakavarga: {
+    term: 'Ashtakavarga (points chart)', category: 'strength', hiTerm: 'अष्टकवर्ग',
+    impact: 'A score for every sign of your chart showing how much support each life area gets.',
+    why: 'For each of the seven planets, eight contributors (the seven planets and the Lagna) each give a point (bindu) to certain signs counted from where they sit, as listed in Brihat Parashara Hora Shastra ch. 66. A planet’s table always adds up to the same total, and all seven together always make 337.',
+    guidance: 'It is used most for transits: a planet passing through a sign where it has many points tends to go smoother.',
+    hi: 'अष्टकवर्ग हर राशि को अंक (बिंदु) देता है — जितने अधिक अंक, उतना अधिक सहयोग। गोचर देखने में यह बहुत उपयोगी है।',
+    aliases: ['Ashtakvarga', 'Ashtaka varga'],
+  },
+  bindu: {
+    term: 'Bindu (benefic point)', category: 'strength', hiTerm: 'बिंदु',
+    impact: 'One point of support in the Ashtakavarga — more points, more support.',
+    why: 'Each contributor either gives a sign a point (bindu) or not. A planet can get 0 to 8 points in a sign in its own table.',
+    hi: 'बिंदु अष्टकवर्ग का एक शुभ अंक है। किसी राशि में जितने अधिक बिंदु, उतना अधिक सहयोग।',
+    aliases: ['bindus', 'rekha'],
+  },
+  bhinnashtakavarga: {
+    term: 'Bhinnashtakavarga (one planet’s points)', category: 'strength', hiTerm: 'भिन्नाष्टकवर्ग',
+    impact: 'Shows, for one planet, the signs where it has the most support when it passes through them.',
+    why: 'Each planet has its own table of 0–8 points per sign. The totals are fixed by the rules: Sun 48, Moon 49, Mars 39, Mercury 54, Jupiter 56, Venus 52, Saturn 39.',
+    guidance: 'A planet moving through a sign where it has 4 or more of its 8 points usually gives easier results there; fewer points ask for more patience.',
+    hi: 'भिन्नाष्टकवर्ग किसी एक ग्रह के बिंदु दिखाता है। जिस राशि में उसके 4 या अधिक बिंदु हों, वहाँ उसका गोचर प्रायः सहज रहता है।',
+    aliases: ['BAV'],
+  },
+  sarvashtakavarga: {
+    term: 'Sarvashtakavarga (total points)', category: 'strength', hiTerm: 'सर्वाष्टकवर्ग',
+    impact: 'The total support each house of your chart receives — 28 or more is well supported.',
+    why: 'Add the seven planets’ points for each sign and you get the Sarvashtakavarga; the twelve totals always add up to 337, an average of about 28 per sign. Sources commonly treat 28 or more as strong and below 25 as weaker.',
+    guidance: 'Houses with high totals are areas where effort tends to pay off more easily; low totals simply ask for steadier, more patient effort.',
+    hi: 'सर्वाष्टकवर्ग हर भाव के कुल बिंदु है। 28 या अधिक बिंदु वाला भाव मज़बूत माना जाता है; कुल योग हमेशा 337 होता है।',
+    aliases: ['SAV', 'Sarva Ashtakavarga'],
   },
   pratyantardasha: {
     term: 'Pratyantardasha (sub-sub-period)', category: 'dasha', hiTerm: 'प्रत्यंतर दशा',
@@ -572,6 +618,66 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'जब गुरु या शुक्र सूर्य के बहुत पास होकर दिखाई नहीं देते (अस्त), तब विवाह और गृह प्रवेश नहीं किए जाते; अस्त से पहले और उदय के बाद के कुछ दिन भी टाले जाते हैं।',
     aliases: ['Guru Asta', 'Shukra Asta', 'combustion', 'Tara Asta'],
   },
+  // Batch 10 — Janma Tithi (Hindu birthday) calculator.
+  janmaTithi: {
+    term: 'Janma Tithi (lunar birthday)', category: 'panchang', hiTerm: 'जन्म तिथि (तिथि अनुसार जन्मदिन)',
+    impact: 'Your birthday by the Hindu lunar calendar — the same tithi in the same lunar month each year, so its Gregorian date moves by up to a few weeks.',
+    why: 'It is the tithi (lunar day) running when you were born, in your birth lunar month. Each year the birthday is the day that tithi is running at sunrise in the month of the same name.',
+    guidance: 'It is traditionally marked with puja, a temple visit or daan (giving), alongside the English-calendar birthday.',
+    hi: 'हिंदू चंद्र पंचांग के अनुसार आपका जन्मदिन — हर साल उसी चंद्र मास की वही तिथि, इसलिए अंग्रेज़ी तारीख़ बदलती रहती है।',
+    aliases: ['tithi birthday', 'Hindu birthday', 'Janmadin tithi', 'Vedic birthday'], link: '/janma-tithi-calculator',
+  },
+  amanta: {
+    term: 'Amanta month', category: 'panchang', hiTerm: 'अमांत मास',
+    impact: 'The way much of South and West India counts lunar months: a month runs from one new moon to the next.',
+    why: 'The month ends on Amavasya (amanta = "ending at the new moon"). Shukla paksha comes first, then Krishna paksha.',
+    hi: 'अमावस्या से अमावस्या तक का चंद्र मास — दक्षिण और पश्चिम भारत में यही गणना चलती है।',
+    aliases: ['amavasyant', 'new-moon month'],
+  },
+  purnimanta: {
+    term: 'Purnimanta month', category: 'panchang', hiTerm: 'पूर्णिमांत मास',
+    impact: 'The way North India counts lunar months: a month runs from the day after one full moon to the next full moon.',
+    why: 'Shukla paksha has the same month name as in the amanta system, but Krishna paksha is named after the NEXT month — amanta Ashwina Krishna is purnimanta Kartika Krishna. Same day, two names.',
+    hi: 'पूर्णिमा के बाद से अगली पूर्णिमा तक का चंद्र मास — उत्तर भारत की गणना। कृष्ण पक्ष का नाम अमांत से एक महीना आगे होता है।',
+    aliases: ['purnimant', 'full-moon month'],
+  },
+  kshayaTithi: {
+    term: 'Kshaya and Vriddhi tithi', category: 'panchang', hiTerm: 'क्षय और वृद्धि तिथि',
+    impact: 'Why a tithi sometimes seems to skip a day, or fall on two days: tithis are not exactly one day long.',
+    why: 'A day takes the tithi running at sunrise. A short tithi that starts after one sunrise and ends before the next names no day (kshaya, "lost"); a long one running at two sunrises names two days (vriddhi, "extra").',
+    hi: 'दिन की तिथि सूर्योदय से तय होती है। जो छोटी तिथि दो सूर्योदयों के बीच शुरू होकर ख़त्म हो जाए वह क्षय तिथि है; जो दो सूर्योदयों पर रहे वह वृद्धि तिथि।',
+    aliases: ['kshay tithi', 'tithi skipped', 'vriddhi tithi', 'tithi kshaya'],
+  },
+  // Batch 10 — vrat pages (/vrat). Plain meanings, from the same sources the pages cite
+  // (Drik Panchang's Ekadashi parana, Pradosh and Shivaratri pages; Wikipedia "Pradosha").
+  parana: {
+    term: 'Parana', category: 'panchang', hiTerm: 'पारण',
+    impact: 'The time to break a fast — for Ekadashi, the next morning after sunrise, within Dwadashi.',
+    why: 'Each vrat has a rule for when it ends; Ekadashi’s parana avoids the first quarter of Dwadashi (Hari Vasara).',
+    hi: 'व्रत खोलने का समय — एकादशी में अगले दिन सूर्योदय के बाद, द्वादशी के भीतर।',
+    aliases: ['Paran', 'Parana time'],
+  },
+  pradoshKaal: {
+    term: 'Pradosh Kaal', category: 'panchang', hiTerm: 'प्रदोष काल',
+    impact: 'The evening twilight after sunset — the time for Shiva worship on Pradosh Vrat.',
+    why: '“Pradosha” means the early part of the night; panchangs count it from sunset.',
+    hi: 'सूर्यास्त के बाद की संध्या — प्रदोष व्रत में शिव पूजा का समय।',
+    aliases: ['Pradosh', 'Pradosham', 'Pradosha'],
+  },
+  nishitaKaal: {
+    term: 'Nishita Kaal', category: 'panchang', hiTerm: 'निशीथ काल',
+    impact: 'The midnight muhurta (about 48 minutes around the middle of the night) — the main puja time on Mahashivratri and Janmashtami.',
+    why: 'The night from sunset to sunrise is split into 15 muhurtas; the one at its centre is Nishita.',
+    hi: 'मध्यरात्रि का मुहूर्त (रात के बीच के लगभग 48 मिनट) — महाशिवरात्रि और जन्माष्टमी की मुख्य पूजा का समय।',
+    aliases: ['Nishita', 'Nishith Kaal'],
+  },
+  sankalpa: {
+    term: 'Sankalpa', category: 'panchang', hiTerm: 'संकल्प',
+    impact: 'The short vow you make at the start of a vrat or puja — what you will do and why.',
+    why: 'It is usually said after the morning bath, in front of the deity.',
+    hi: 'व्रत या पूजा की शुरुआत में लिया जाने वाला छोटा संकल्प — आप क्या करेंगे और क्यों।',
+    aliases: ['Sankalp'],
+  },
   adhikMaas: {
     term: 'Adhik Maas (leap month)', category: 'panchang', hiTerm: 'अधिक मास',
     impact: 'An extra lunar month that comes about once in three years; new beginnings like weddings and house-warmings are not done in it.',
@@ -592,6 +698,30 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'Sunday–Sun, Monday–Moon, Tuesday–Mars, Wednesday–Mercury, Thursday–Jupiter, Friday–Venus, Saturday–Saturn. In the Panchang a day runs from sunrise to sunrise.',
     hi: 'सप्ताह का दिन; हर वार का एक स्वामी ग्रह है (रविवार–सूर्य … शनिवार–शनि)। पंचांग में दिन सूर्योदय से सूर्योदय तक माना जाता है।',
     aliases: ['weekday', 'Var'],
+  },
+  gowriPanchangam: {
+    term: 'Gowri Panchangam', category: 'panchang', hiTerm: 'गौरी पंचांगम्',
+    impact: 'The Tamil way of picking a good hour: it tells you which stretches of today are good to begin something and which to leave out.',
+    why: 'Daylight (sunrise to sunset) and night (sunset to next sunrise) are each split into eight equal parts, named in a fixed order for each weekday. Amirdha, Dhanam, Uthi, Laabam and Sugam are good; Soram, Visham and Rogam are avoided for new starts.',
+    guidance: 'Pick a good part for a new start; work already under way can carry on.',
+    hi: 'तमिल परंपरा का शुभ समय: दिन और रात को आठ-आठ बराबर भागों में बाँटकर वार के अनुसार नाम दिए जाते हैं। अमिर्दा, धनम, उत्ति, लाभम, सुगम शुभ; सोरम, विषम, रोगम में नया कार्य टाला जाता है।',
+    aliases: ['Gowri Panchang', 'Gauri Panchangam', 'Gowri'],
+  },
+  nallaNeram: {
+    term: 'Nalla Neram', category: 'panchang', hiTerm: 'नल्ल नेरम्',
+    impact: '"Good time" in Tamil — the stretches of the day considered good for starting something important.',
+    why: 'On BornClock, as on Drik Panchang, the Gowri Nalla Neram is the good parts of the Gowri Panchangam (Amirdha, Dhanam, Uthi, Laabam, Sugam).',
+    hi: 'तमिल में "अच्छा समय" — गौरी पंचांगम् के शुभ भाग (अमिर्दा, धनम, उत्ति, लाभम, सुगम)।',
+    aliases: ['Gowri Nalla Neram', 'good time'],
+  },
+  // Tarabalam / Chandrabalam / Ashtama Chandra: one glossary entry each — see tarabala,
+  // chandrabala and chandrashtama below (batch 10 review: the panchang branch had added duplicates).
+  sankranti: {
+    term: 'Sankranti', category: 'panchang', hiTerm: 'संक्रांति',
+    impact: 'The day the Sun moves into a new sign — twelve a year; Makar Sankranti is the best known.',
+    why: 'Counted in the sidereal (Lahiri) zodiac, the Sun enters each sign about a month apart.',
+    hi: 'जिस दिन सूर्य नई राशि में प्रवेश करता है — साल में बारह; मकर संक्रांति सबसे प्रसिद्ध है।',
+    aliases: ['Sankranthi'],
   },
   rahuKalam: {
     term: 'Rahu Kaal', category: 'panchang', hiTerm: 'राहु काल',
@@ -716,6 +846,8 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'Chandrashtama is when the moving Moon is in the 8th sign from your birth Moon — a personal, chart-specific caution (needs your birth details).',
     inline: 'personal days when the Moon sits 8th from your birth Moon',
     hi: 'हर महीने लगभग दो दिन जब गोचर का चंद्रमा आपकी जन्म राशि से 8वीं राशि में होता है — व्यक्तिगत सावधानी के दिन।',
+
+    aliases: ['Ashtama Chandra', 'Chandrashtamam'],
   },
 
   // ─────────────────────────── Doshas ───────────────────────────
@@ -1059,6 +1191,29 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'आज ग्रह कहाँ हैं और आपकी कुंडली पर उनका क्या असर है — हर राशिफल का आधार।',
     aliases: ['transit', 'transits'], link: '/transit',
   },
+  combust: {
+    term: 'Combust (Asta)', category: 'transit', hiTerm: 'अस्त',
+    impact: 'A planet so close to the Sun that it is lost in its glare; tradition reads its themes as quieter for a while.',
+    why: 'Classical texts give a distance from the Sun for each planet (Surya Siddhanta: Mars 17°, Mercury 14° or 12° when retrograde, Jupiter 11°, Venus 10° or 8° when retrograde, Saturn 15°). Inside it, the planet is "combust".',
+    guidance: 'Nothing to fear: it simply passes in a few days or weeks. Guru or Shukra being combust pauses weddings and house-warmings.',
+    hi: 'जब कोई ग्रह सूर्य के बहुत पास होकर उसकी चमक में छिप जाता है, तो उसे अस्त कहते हैं; कुछ समय बाद यह अपने आप समाप्त हो जाता है।',
+    aliases: ['Asta', 'combustion', 'combust planet'],
+  },
+  moonPhase: {
+    term: 'Moon phase', category: 'panchang', hiTerm: 'चंद्र कला',
+    impact: 'How much of the Moon is lit — it tells you where you are in the lunar month and which Tithi it is.',
+    why: 'The Moon shines by sunlight. As it moves around the Earth we see more of its lit side (waxing, Shukla Paksha) up to the full Moon, then less (waning, Krishna Paksha) down to the new Moon, about every 29.5 days.',
+    hi: 'चंद्रमा का कितना भाग प्रकाशित है — इससे पता चलता है कि चंद्र मास में कौन-सी तिथि और पक्ष चल रहा है।',
+    aliases: ['phase of the Moon', 'illumination', 'Chandra kala'],
+  },
+  eclipse: {
+    term: 'Eclipse (Grahan)', category: 'transit', hiTerm: 'ग्रहण',
+    impact: 'A natural, predictable alignment of the Sun, Moon and Earth — nothing to fear; for any observance, follow your family’s practice.',
+    why: 'A solar eclipse (Surya Grahan) happens at a new Moon when the Moon passes in front of the Sun; a lunar eclipse (Chandra Grahan) happens at a full Moon when the Moon passes through the Earth’s shadow. Both happen near Rahu or Ketu, the Moon’s nodes.',
+    guidance: 'Never look at the Sun directly during a partial or annular solar eclipse — use certified solar viewers (ISO 12312-2); ordinary sunglasses are not safe.',
+    hi: 'सूर्य, चंद्रमा और पृथ्वी की एक सीध — सूर्य ग्रहण अमावस्या पर और चंद्र ग्रहण पूर्णिमा पर होता है। सूर्य को कभी सीधे न देखें।',
+    aliases: ['Grahan', 'Surya Grahan', 'Chandra Grahan', 'solar eclipse', 'lunar eclipse'], link: '/eclipses',
+  },
   ingress: {
     term: 'Ingress (sign change)', category: 'transit', hiTerm: 'राशि परिवर्तन',
     impact: 'The date a planet moves into a new sign — when its effect on you changes.',
@@ -1084,14 +1239,14 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     impact: 'Whether today\'s Moon supports you personally — the main reason one rashi\'s day reads better than another\'s.',
     why: 'It is judged from the house the moving Moon occupies counted from your Moon sign: the 1st, 3rd, 6th, 7th, 10th and 11th are classically supportive; the 4th, 8th and 12th call for care.',
     hi: 'आज का चंद्रमा आपका कितना साथ देता है — आपकी चंद्र राशि से चंद्रमा किस भाव में है, इससे देखा जाता है। 1, 3, 6, 7, 10, 11 भाव शुभ माने जाते हैं।',
-    aliases: ['Chandra bala', 'Moon strength'],
+    aliases: ['Chandrabalam', 'Chandra bala', 'Moon strength'],
   },
   tarabala: {
     term: 'Tarabala (star strength for the day)', category: 'transit', hiTerm: 'तारा बल',
     impact: 'How today\'s nakshatra (the Moon\'s star) sits with your birth nakshatra — a quick daily good-day / go-gently check.',
     why: 'Count from your birth nakshatra to today\'s in groups of nine: Janma, Sampat, Vipat, Kshema, Pratyari, Sadhaka, Vadha, Mitra, Parama Mitra. Vipat, Pratyari and Vadha are the classical "go gently" taras.',
     hi: 'आपके जन्म नक्षत्र से आज के नक्षत्र की गिनती नौ-नौ के क्रम में — विपत, प्रत्यरि और वध तारा में सावधानी रखी जाती है, बाक़ी शुभ माने जाते हैं।',
-    aliases: ['Tara bala', 'Tara balam'],
+    aliases: ['Tarabalam', 'Tara bala', 'Tara balam'],
   },
   solarHouse: {
     term: 'Solar houses (Western horoscopes)', category: 'transit', hiTerm: 'सूर्य राशि से भाव',
@@ -1205,6 +1360,37 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'It is simply your birth day (1–31) reduced to one digit; in the Western convention 11 and 22 are kept as master numbers. The Indian Mulank is the same day reduced all the way to 1–9 (29 → 11 → 2).',
     hi: 'जन्म की तारीख़ (1–31) को एक अंक में घटाकर बनता है (Western पद्धति में 11 और 22 वैसे ही रहते हैं)।',
     aliases: ['psychic number (Western)'],
+  },
+  // Batch 10 — Lo Shu grid, Kua number, vehicle number.
+  loShuGrid: {
+    term: 'Lo Shu grid', category: 'numerology', hiTerm: 'लो शू ग्रिड',
+    impact: 'A 3×3 picture of the digits in your date of birth: which numbers you have (strengths that come easily) and which are missing (qualities to build on purpose).',
+    why: 'It is the ancient Chinese 3×3 "magic square" (4 9 2 / 3 5 7 / 8 1 6 — every line adds to 15). Each digit of your birth date, zeros left out, is placed in its own cell.',
+    guidance: 'A missing number is a pointer, not a defect — treat it as something to practise.',
+    hi: 'जन्म तिथि के अंकों का 3×3 चित्र — कौन-से अंक हैं (स्वाभाविक ताक़त) और कौन-से नहीं (जिन पर मेहनत करनी है)। शून्य नहीं गिना जाता।',
+    aliases: ['Loshu grid', 'Lo-Shu square', 'magic square numerology'], link: '/lo-shu-grid-calculator',
+  },
+  loShuPlane: {
+    term: 'Lo Shu plane (line)', category: 'numerology', hiTerm: 'लो शू प्लेन',
+    impact: 'A full row, column or diagonal in your grid is read as a ready-made strength in that area — thinking, feeling, doing, willpower and so on.',
+    why: 'The rows are the Mind (4-9-2), Emotional (3-5-7) and Practical (8-1-6) planes; the columns are Thought (4-3-8), Will (9-5-1) and Action (2-7-6); the diagonals are 4-5-6 and 2-5-8.',
+    hi: 'ग्रिड की पूरी पंक्ति, स्तंभ या विकर्ण उस क्षेत्र (सोच, भावना, कर्म, इच्छाशक्ति) में स्वाभाविक ताक़त मानी जाती है।',
+    aliases: ['plane', 'arrow', 'Lo Shu arrow'],
+  },
+  kuaNumber: {
+    term: 'Kua number', category: 'numerology', hiTerm: 'कुआ नंबर',
+    impact: 'A Feng Shui number from your birth year and gender that lists your four best directions to face or sleep towards — for work, health, love and personal growth.',
+    why: 'It comes from the digits of your birth year counted from the Chinese solar new year (Lichun, about 4 February). Kua 1, 3, 4 and 9 are the East group; 2, 5, 6, 7 and 8 the West group.',
+    guidance: 'Use it lightly — e.g. which way your desk faces — never as a reason for costly changes.',
+    hi: 'जन्म वर्ष और लिंग से बनने वाला फेंग शुई अंक, जो काम, सेहत, प्रेम और व्यक्तिगत विकास के लिए आपकी चार अच्छी दिशाएँ बताता है।',
+    aliases: ['Gua number', 'Ming Gua', 'Feng Shui number', 'kua'], link: '/kua-number-calculator',
+  },
+  gotra: {
+    term: 'Gotra', category: 'basics', hiTerm: 'गोत्र',
+    impact: 'Your family lineage name, traced to an ancient rishi; many families check that bride and groom are not of the same gotra.',
+    why: 'It is passed down the father’s line and is a family record, not something calculated from the stars — so it is a free-text field you fill in.',
+    hi: 'पिता की वंश परंपरा से आने वाला कुल-नाम (किसी ऋषि के नाम पर); कई परिवार विवाह में एक ही गोत्र से बचते हैं। यह कुंडली से नहीं निकलता।',
+    aliases: ['gothra', 'gotram'],
   },
   mulank: {
     term: 'Mulank (Moolank)', category: 'numerology', hiTerm: 'मूलांक',
@@ -1415,6 +1601,9 @@ export const PANCHANG_PAGE_TERM: Record<string, string> = {
   Karana: 'karana', Vara: 'vara', 'Brahma Muhurta': 'brahmaMuhurta', 'Abhijit Muhurta': 'abhijit', 'Amrit Kalam': 'amritKalam',
   'Rahu Kaal': 'rahuKalam', 'Gulika Kaal': 'gulikaKaal', Yamaganda: 'yamaganda', 'Dur Muhurtam': 'durMuhurtam',
   Varjyam: 'varjyam', Choghadiya: 'choghadiya',
+  // Batch 10
+  'Gowri Panchangam': 'gowriPanchangam', 'Nalla Neram': 'nallaNeram', Tarabalam: 'tarabala', Chandrabalam: 'chandrabala',
+  'Ashtama Chandra': 'chandrashtama', Purnima: 'purnima', Amavasya: 'amavasya', Ekadashi: 'ekadashi', Sankranti: 'sankranti',
 };
 
 export const CHOGHADIYA_TERM: Record<string, string> = {

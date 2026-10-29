@@ -1,4 +1,5 @@
 import React from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { CHINESE_ZODIAC_PROFILES } from '@/data/astrologicalData';
@@ -237,7 +238,7 @@ export function ChineseZodiacArticle() {
             BaZi) start the animal year at Lichun, around 4 February, instead — this table uses Chinese New Year, the
             usual convention.
           </p>
-          <div className="overflow-x-auto mb-10 rounded-xl border border-gray-200">
+          <ScrollTable className="mb-10" boxClassName="rounded-xl border border-gray-200">
             <table className="w-full text-sm" data-testid="chinese-year-table">
               <thead className="bg-red-50 text-red-900">
                 <tr>
@@ -264,7 +265,7 @@ export function ChineseZodiacArticle() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">All 12 Chinese Zodiac Animals</h2>
           {ZODIAC_ORDER.map(name => {

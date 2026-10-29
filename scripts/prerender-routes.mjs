@@ -8,6 +8,9 @@ import { fileURLToPath } from 'url';
 // Batch 9b: year muhurat lists (/muhurat/:type/:year) — slugs/years shared with the page.
 import { muhuratYearRoutes } from '../src/lib/muhuratYearMeta.js';
 
+/** Batch 10 vrat page slugs (mirror of VRAT_SLUGS, src/lib/vedic/vrats/meta.ts). */
+export const VRAT_SLUGS_MJS = ['ekadashi', 'satyanarayan-katha', 'pradosh-vrat', 'sankashti-chaturthi', 'karwa-chauth', 'somvar-vrat', 'mangalvar-vrat', 'navratri', 'mahashivratri', 'janmashtami'];
+
 // Batch 7 (W7): the 50 Panchang city slugs — one source shared with the app.
 const PANCHANG_CITY_SLUGS = JSON.parse(
   readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/panchangCities.json'), 'utf-8')
@@ -242,6 +245,8 @@ export const STATIC_ROUTES = [
   ...ZODIAC_SIGNS.map(s => `/zodiac/${s}`),
   // Batch 7 (W2): daily Western horoscope — content injected daily by the Worker (src/lib/daily).
   ...ZODIAC_SIGNS.map(s => `/zodiac/${s}/today`),
+  // Batch 10: tomorrow's Western horoscope (daily kind 'horoscope-tomorrow').
+  ...ZODIAC_SIGNS.map(s => `/zodiac/${s}/tomorrow`),
   '/birthstone',
   ...BIRTHSTONE_MONTHS.map(m => `/birthstone/${m}`),
   '/life-expectancy',
@@ -322,7 +327,8 @@ export const STATIC_ROUTES = [
   ...VEDIC_RASHIS.map(r => `/vedic-zodiac/${r}`),
   '/western-birth-chart',
   '/rashifal',
-  ...VEDIC_RASHIS.flatMap(r => ['today', 'week', 'month', 'year'].map(p => `/rashifal/${r}/${p}`)),
+  // Batch 10 adds 'tomorrow' (daily kind 'rashifal-tomorrow').
+  ...VEDIC_RASHIS.flatMap(r => ['today', 'tomorrow', 'week', 'month', 'year'].map(p => `/rashifal/${r}/${p}`)),
   '/nakshatra',
   ...['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati'].map(n => `/nakshatra/${n}`),
   '/transit',
@@ -331,6 +337,9 @@ export const STATIC_ROUTES = [
   ...[2025, 2026, 2027].map(y => `/mercury-retrograde/${y}`),
   '/festivals',
   ...[2025, 2026, 2027].map(y => `/festivals/${y}`),
+  // Batch 10: vrat katha + puja vidhi, English + Hindi (= VRAT_SLUGS in src/lib/vedic/vrats/meta.ts,
+  // guarded by src/lib/vedic/vrats/__tests__/vrats.test.ts).
+  ...['', ...VRAT_SLUGS_MJS.map(v => `/${v}`)].flatMap(x => [`/vrat${x}`, `/hi/vrat${x}`]),
   '/planet-in-sign',
   ...['sun','moon','mars','mercury','jupiter','venus','saturn','rahu','ketu'].flatMap(p =>
     ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'].map(s => `/planet-in-sign/${p}/${s}`)),
@@ -354,6 +363,13 @@ export const STATIC_ROUTES = [
   '/name-correction',
   '/business-name-numerology',
   '/mobile-number-numerology',
+  // Batch 10 tools
+  '/vehicle-number-numerology',
+  '/lo-shu-grid-calculator',
+  '/kua-number-calculator',
+  '/love-calculator',
+  '/janma-tithi-calculator',
+  '/marriage-biodata-maker',
   '/house-number-numerology',
   '/pitra-dosha',
   '/mool-dosha',
@@ -368,6 +384,13 @@ export const STATIC_ROUTES = [
   // cities (src/data/panchangCities.json). Dated views use ?date= and are NOT listed.
   '/panchang',
   ...PANCHANG_CITY_SLUGS.map(c => `/panchang/${c}`),
+  // Batch 10: monthly Panchang calendar (New Delhi; other months / places are ?month= and
+  // ?city= views, not listed), planets today, Moon phase, eclipses 2026–2030.
+  '/panchang-calendar',
+  '/planets-today',
+  '/moon-phase',
+  '/eclipses',
+  ...[2026, 2027, 2028, 2029, 2030].map(y => `/eclipses/${y}`),
   '/rahu-kaal',
   ...PANCHANG_CITY_SLUGS.map(c => `/rahu-kaal/${c}`),
   '/choghadiya',

@@ -14,6 +14,8 @@ export interface DailyItem {
   value: string;
   /** Optional one-line plain-language note shown under the value. */
   note?: string;
+  /** Batch 10: optional short badge (e.g. "Purnima", "Today") — calendar cells. */
+  tag?: string;
 }
 
 export interface DailySection {
@@ -24,7 +26,19 @@ export interface DailySection {
   text?: string;
   /** Optional label/value list (lucky items, timings, planets on the move …). */
   items?: DailyItem[];
+  /** Optional internal links (batch 10: e.g. today's vrat pages from the Panchang). */
+  links?: Array<{ label: string; href: string }>;
   tone?: DailyTone;
+  /**
+   * Batch 10: how `items` / `rows` are laid out. 'calendar' = a month grid (7 columns
+   * from the `sm` breakpoint, a plain list on phones) whose first item sits in column
+   * `startCol` (1 = the first of `columns`, the weekday headings); 'table' = `columns` +
+   * `rows` as a table that scrolls sideways inside its own box on narrow screens.
+   */
+  layout?: 'calendar' | 'table';
+  columns?: string[];
+  rows?: string[][];
+  startCol?: number;
 }
 
 export interface DailyWhy {

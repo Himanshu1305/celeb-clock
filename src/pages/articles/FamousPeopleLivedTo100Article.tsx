@@ -1,4 +1,5 @@
 import React from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
@@ -156,7 +157,7 @@ export function FamousPeopleLivedTo100Article() {
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Real Centenarians Who Lived to 100 and Beyond</h2>
-          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Centenarians table (scrollable)">
+          <ScrollTable className="mb-8" label="Centenarians table">
             <table className="w-full text-left border-collapse text-sm">
               <thead>
                 <tr className="border-b-2 border-gray-300">
@@ -179,7 +180,7 @@ export function FamousPeopleLivedTo100Article() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">The Indian Centenarian Story</h2>
           <p className="text-gray-700 leading-relaxed mb-6">

@@ -12,6 +12,9 @@ import { westernSky } from './kinds/westernDaily';
 import { DAILY_PAGES } from './registry';
 import { DAILY_TEMPLATES } from './templates';
 import { rashifalSky, type RashifalPeriod } from '../vedic/rashifal';
+import { computePanchangMonthDataForCity } from './kinds/panchangMonth';
+import { computePlanetDayData, computeMoonDayData } from './kinds/skyDaily';
+import { computeVratNextData } from '../vedic/vrats/next';
 
 export type DailyComputer = (dateIST: string, slug: string) => DailyEntry;
 export type DailyDataComputer = (dateIST: string, dataSlug: string) => unknown;
@@ -30,6 +33,13 @@ export const DAILY_DATA_COMPUTERS: Record<string, DailyDataComputer> = {
   // Batch 8: the sky for the week (Mon–Sun) / month / year containing the India date;
   // the data slug is the period. 06:00 UTC = 11:30 IST, so the UTC date is the India date.
   'rashifal-period': (date, period) => viaJson(rashifalSky(period as RashifalPeriod, new Date(`${date}T06:00:00Z`))),
+  // Batch 10: monthly Panchang calendar (data slug = city; any date in the month), planets
+  // at 12:00 IST, Moon phase at 12:00 IST.
+  'panchang-month': (date, city) => viaJson(computePanchangMonthDataForCity(date, city)),
+  'planet-day': date => viaJson(computePlanetDayData(date)),
+  'moon-day': date => viaJson(computeMoonDayData(date)),
+  // Batch 10: next date + New Delhi timings of every vrat (one shared file for all vrat pages).
+  'vrat-next': date => viaJson(computeVratNextData(date)),
 };
 
 /** Original "finished entry" computers (kept for kinds without a data variant). */

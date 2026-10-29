@@ -40,6 +40,13 @@ export interface KundaliData {
   }> | null;
   /** Batch 8: Lagna / Moon birth-time edges (see src/lib/vedic/engine/birthTimeEdge.ts). */
   birthTimeEdges?: BirthTimeEdge[] | null;
+  /** Batch 10: Yogini Dasha (src/lib/vedic/engine/yoginiDasha.ts) — Mahadashas; Antardashas derived client-side. */
+  yoginiDasha?: {
+    nakshatraNumber: number; startYogini: string; fractionElapsed?: number; balanceYears: number; yearDays: number;
+    mahadashas: Array<{ yogini: string; lord: string; years: number; start: string; end: string }>;
+  } | null;
+  /** Batch 10: Ashtakavarga — BAV per planet and SAV, both indexed by sign (0 = Aries). */
+  ashtakavarga?: { bav: Record<string, number[]>; sav: number[]; lagnaSignIndex: number } | null;
 }
 
 export const hasProkeralaKey = (): boolean =>

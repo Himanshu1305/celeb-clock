@@ -12,9 +12,13 @@
 //      and at most one top-level Organization, WebSite and WebPage JSON-LD block
 //   V9 (Batch 9b): at most one top-level Article (Article/BlogPosting/NewsArticle counted
 //      together) and at most one FAQPage JSON-LD block per page
+//   V10 (Batch 10): on EVERY prerendered page, each FAQPage question is visible in the
+//      body (outside scripts) and each answer is in the HTML (collapsed/hidden is fine) —
+//      Google requires FAQ structured data to match visible content. scripts/lib/faqVisible.mjs
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, join } from 'path';
 import { headStats } from './lib/headDedupe.mjs';
+import { faqVisibilityProblems } from './lib/faqVisible.mjs';
 
 const DIST = 'dist';
 const ROUTES = [
@@ -73,6 +77,7 @@ for (const route of ROUTES) {
 
 // V7 — sweep every prerendered index.html under dist/.
 const headProblems = [];
+const faqProblems = [];
 let swept = 0;
 const walk = (dir) => {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
@@ -80,7 +85,10 @@ const walk = (dir) => {
     if (e.isDirectory()) { if (!['assets', 'og', 'daily'].includes(e.name) || dir !== DIST) walk(p); }
     else if (e.name === 'index.html') {
       swept++;
-      const s = headStats(readFileSync(p, 'utf8'));
+      const html = readFileSync(p, 'utf8');
+      const s = headStats(html);
+      const fp = faqVisibilityProblems(html);
+      if (fp.length) faqProblems.push(`${p.slice(DIST.length) || '/'}: ${fp.length} (${fp.slice(0, 2).map(x => `${x.kind} "${x.text.slice(0, 50)}"`).join('; ')})`);
       const bad = [];
       if (s.canonicals !== 1) bad.push(`${s.canonicals} canonicals`);
       if (s.ogUrls > 1) bad.push(`${s.ogUrls} og:url`);
@@ -99,6 +107,13 @@ if (headProblems.length) {
   results.push(`  ❌ head check: ${headProblems.length} of ${swept} pages — ${headProblems.slice(0, 15).join(' | ')}`);
 } else {
   results.push(`  ✅ head check: ${swept} prerendered pages — one canonical each, no duplicate JSON-LD, ≤1 BreadcrumbList, one description/og/twitter title+description, one Organization/WebSite/WebPage/Article/FAQPage`);
+}
+
+if (faqProblems.length) {
+  fail++;
+  results.push(`  ❌ FAQ visibility: ${faqProblems.length} of ${swept} pages have FAQPage Q&As not shown on the page — ${faqProblems.slice(0, 15).join(' | ')}`);
+} else {
+  results.push(`  ✅ FAQ visibility: every FAQPage question is visible and every answer is in the HTML on all ${swept} pages`);
 }
 
 console.log(results.join('\n'));

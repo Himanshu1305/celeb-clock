@@ -1,13 +1,10 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ],
+  // Batch 10: this used to be a "solution" file with `"files": []` + references, so
+  // `npx tsc --noEmit -p .` type-checked NOTHING. It now extends the app config and
+  // includes the client (src), the API handlers (api) and the Worker (functions), so the
+  // standard `npx tsc --noEmit -p .` (and CI's "Type check" step) is a real check.
+  // vite.config.ts is checked separately with tsconfig.node.json (see `npm run typecheck`).
+  "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "paths": {
       "@/*": [
@@ -21,5 +18,10 @@
     "noUnusedLocals": false,
     "strictNullChecks": false,
     "resolveJsonModule": true
-  }
+  },
+  "include": [
+    "src",
+    "api",
+    "functions"
+  ]
 }

@@ -10,6 +10,7 @@
  * what we compared with — never as being wrong.
  */
 import { Link } from 'react-router-dom';
+import { ScrollTable } from '@/components/ScrollTable';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
@@ -74,7 +75,7 @@ export default function AccuracyPage() {
           </p>
 
           <h2 className="text-2xl font-bold text-foreground mb-3">What we checked</h2>
-          <div className="overflow-x-auto rounded-lg border border-border mb-3">
+          <ScrollTable className="mb-3" boxClassName="rounded-lg border border-border">
             <table className="w-full text-sm" data-testid="accuracy-table">
               <thead className="bg-muted text-foreground">
                 <tr>
@@ -97,7 +98,7 @@ export default function AccuracyPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
           <p className="text-xs mb-8">
             Dates are when the reference values were recorded or the comparison was run. AstroSage values were entered by
             hand on astrosage.com; Drik Panchang and NASA values were copied from their published pages; Swiss Ephemeris

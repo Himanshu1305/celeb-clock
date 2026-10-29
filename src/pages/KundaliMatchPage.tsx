@@ -159,6 +159,7 @@ export default function KundaliMatchPage() {
           { label: 'Kundali', to: '/kundali' },
           { label: 'Sade Sati', to: '/sade-sati' },
           { label: 'Muhurat', to: '/muhurat' },
+          { label: 'Marriage biodata', to: '/marriage-biodata-maker' },
           { label: 'Privacy', to: '/privacy' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',

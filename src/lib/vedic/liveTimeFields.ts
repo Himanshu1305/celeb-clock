@@ -17,12 +17,15 @@ export interface LiveTimeFields {
   sadeSati: { active: boolean; phase: string | null; houseOfSaturnFromMoon: number };
   /** Natal, but recomputed here so cached charts saved before batch 8 also carry it. */
   birthTimeEdges: BirthChartResult['birthTimeEdges'];
+  /** Batch 10 — natal, recomputed here so charts cached before batch 10 carry them too. */
+  yoginiDasha: BirthChartResult['yoginiDasha'] | null;
+  ashtakavarga: BirthChartResult['ashtakavarga'] | null;
 }
 
 export async function computeLiveTimeFields(input: BirthChartInput, now: Date = new Date()): Promise<LiveTimeFields | null> {
   try {
     const r = await calculateBirthChart(input, { refDate: now });
-    return { dasha: r.currentDasha, sadeSati: r.doshas.sadeSati, birthTimeEdges: r.birthTimeEdges ?? [] };
+    return { dasha: r.currentDasha, sadeSati: r.doshas.sadeSati, birthTimeEdges: r.birthTimeEdges ?? [], yoginiDasha: r.yoginiDasha ?? null, ashtakavarga: r.ashtakavarga ?? null };
   } catch {
     return null;
   }
@@ -37,6 +40,8 @@ export async function withLiveKundaliFields<T extends Record<string, any>>(cache
     ...cached,
     dasha: live ? live.dasha : null,
     birthTimeEdges: live ? live.birthTimeEdges : (cached.birthTimeEdges ?? []),
+    yoginiDasha: live ? live.yoginiDasha : (cached.yoginiDasha ?? null),
+    ashtakavarga: live ? live.ashtakavarga : (cached.ashtakavarga ?? null),
     doshas: cached.doshas ? { ...cached.doshas, sadeSati: live ? live.sadeSati : null } : cached.doshas,
   };
 }

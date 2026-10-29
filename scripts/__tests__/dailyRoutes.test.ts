@@ -90,6 +90,25 @@ describe('functions/_worker.ts serves daily pages with today’s text (fixed dat
     }
   }, 60_000);
 
+  it('Batch 10: /rashifal/:rashi/tomorrow and /zodiac/:sign/tomorrow get TOMORROW’s entry injected', async () => {
+    const worker = (await import('../../functions/_worker')).default;
+    for (const path of ['/rashifal/mesh/tomorrow/', '/zodiac/leo/tomorrow/']) {
+      const m = matchDailyRoute(path)!;
+      const res = await worker.fetch(new Request(`https://bornclock.com${path}`), env('2026-10-26') as never, {});
+      expect(res.status, path).toBe(200);
+      expect(res.headers.get('X-Daily-Date')).toBe('2026-10-27');
+      const html = await res.text();
+      const e = computeDaily(m.def.kind, '2026-10-27', m.slug);
+      expect(e.title).toMatch(/Tomorrow, 27 October 2026/);
+      expect(html).toContain(`<title>${e.title.replace(/&/g, '&amp;')}</title>`);
+      expect(html).toContain(e.h1);
+      expect(html).toContain('"dateModified":"2026-10-27"');
+      expect(html).not.toMatch(/noindex/i);
+    }
+    const bad = await worker.fetch(new Request('https://bornclock.com/zodiac/notasign/tomorrow/'), env('2026-10-26') as never, {});
+    expect(bad.status).toBe(404);
+  }, 60_000);
+
   it('an invalid sign under /zodiac/:sign/today is a real 404', async () => {
     const worker = (await import('../../functions/_worker')).default;
     const res = await worker.fetch(new Request('https://bornclock.com/zodiac/notasign/today/'), env('2026-10-26') as never, {});

@@ -466,6 +466,20 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /zodiac/:sign/tomorrow — tomorrow's Western horoscope (Batch 10). Like /today, the
+  // Worker replaces this with the dated title ("Leo Horoscope Tomorrow, <date> — …").
+  {
+    const zm = route.match(/^\/zodiac\/([a-z]+)\/tomorrow$/);
+    if (zm) {
+      if (!ZODIAC[zm[1]]) return null;
+      const name = zm[1].charAt(0).toUpperCase() + zm[1].slice(1);
+      return {
+        title: `${name} Horoscope Tomorrow — Western Astrology | BornClock`,
+        description: `Tomorrow's ${name} horoscope (Western, tropical) from where the Moon, Sun, Mercury, Venus and Mars will be tomorrow — love, work and wellbeing, with why.`,
+      };
+    }
+  }
+
   // /zodiac/:sign/today — daily Western horoscope (Batch 7). The Worker replaces this with
   // the dated title/description each India day (src/lib/daily); this is the build-time base.
   {
@@ -560,10 +574,19 @@ export function getTitleForRoute(route) {
     };
   }
   {
-    const m = route.match(/^\/rashifal\/([a-z]+)(?:\/(today|week|month|year))?$/);
+    const m = route.match(/^\/rashifal\/([a-z]+)(?:\/(today|tomorrow|week|month|year))?$/);
     if (m) {
       const v = VEDIC[m[1]];
       if (!v) return null;
+      // Batch 10: /rashifal/:rashi/tomorrow — mirrors RashifalDailyView's static title (the
+      // Worker injects the dated "Mesh Rashifal Tomorrow, <date> — …" each India day).
+      if (m[2] === 'tomorrow') {
+        const n = m[1].charAt(0).toUpperCase() + m[1].slice(1);
+        return {
+          title: `${n} Rashifal Tomorrow — ${v.english} Horoscope | BornClock`,
+          description: `Tomorrow's rashifal for ${v.name} (${v.english}), computed from tomorrow's real sidereal planetary positions — love, career, health and the good time of day.`,
+        };
+      }
       const period = m[2] || 'today';
       const word = { today: 'Daily', week: 'Weekly', month: 'Monthly', year: 'Yearly' }[period];
       return {
@@ -623,6 +646,33 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // Batch 10 — static titles mirror PANCHANG_CALENDAR_STATIC / PLANETS_TODAY_STATIC /
+  // MOON_PHASE_STATIC (src/lib/daily/kinds/*Template.ts) and eclipsesMeta (src/lib/vedic/eclipses.ts);
+  // the Worker swaps in the dated title each day on the three daily pages.
+  if (route === '/panchang-calendar') return {
+    title: 'Panchang Calendar — Monthly Tithi, Nakshatra & Festivals | BornClock',
+    description: 'Monthly Hindu Panchang calendar: the Tithi and Nakshatra at sunrise for every day, sunrise and sunset, and the festivals, Ekadashi, Purnima and Amavasya dates — for any city and any month.',
+  };
+  if (route === '/planets-today') return {
+    title: 'Planets Today — Sidereal Positions, Retrograde & Combust | BornClock',
+    description: "Where all nine grahas are today in the sidereal (Lahiri) zodiac — sign, degree, Nakshatra and pada, retrograde and combust status, and when each next changes sign. Updated every day.",
+  };
+  if (route === '/moon-phase') return {
+    title: 'Moon Phase Today — Illumination, Tithi & Next Full Moon | BornClock',
+    description: "Today's Moon phase: its name, how much of the disc is lit, the Moon's age, the Tithi, and the exact time of the next full Moon (Purnima) and new Moon (Amavasya) in IST — for any date.",
+  };
+  if (route === '/eclipses') return {
+    title: 'Eclipses 2026–2030 — Surya & Chandra Grahan in India | BornClock',
+    description: 'Every solar and lunar eclipse from 2026 to 2030 — date, time of greatest eclipse in IST, type, how long it lasts, where it is seen, and which ones are visible from India and Delhi.',
+  };
+  {
+    const m = route.match(/^\/eclipses\/(20(?:2[6-9]|30))$/);
+    if (m) return {
+      title: `Eclipses ${m[1]} — Surya & Chandra Grahan, IST Times | BornClock`,
+      description: `Every solar (Surya Grahan) and lunar (Chandra Grahan) eclipse of ${m[1]}: date, time of greatest eclipse in IST, type, duration, where it is seen, and whether it is visible from India.`,
+    };
+  }
+
   // /transit, /transit/:planet/:year, /mercury-retrograde[/:year]
   if (route === '/transit') return {
     title: 'Planetary Transits — Saturn, Jupiter, Rahu & Ketu by Year | BornClock',
@@ -668,6 +718,27 @@ export function getTitleForRoute(route) {
       title: `Hindu Festival & Vrat Calendar ${m[1]} — Dates | BornClock`,
       description: `Computed Hindu festival and vrat calendar for ${m[1]}: Diwali, Holi, Navratri, Janmashtami, every Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and the 12 Sankrantis.`,
     };
+  }
+
+  // /vrat[/:slug] and /hi/vrat[/:slug] — Batch 10 (mirrors vratMeta in src/lib/vedic/vrats/meta.ts;
+  // vrats.test.ts checks they are identical). The Worker keeps these titles (static).
+  {
+    const VN = {
+      'ekadashi': ['Ekadashi', 'एकादशी'], 'satyanarayan-katha': ['Satyanarayan Katha (Purnima)', 'सत्यनारायण कथा (पूर्णिमा)'],
+      'pradosh-vrat': ['Pradosh Vrat', 'प्रदोष व्रत'], 'sankashti-chaturthi': ['Sankashti Chaturthi', 'संकष्टी चतुर्थी'],
+      'karwa-chauth': ['Karwa Chauth', 'करवा चौथ'], 'somvar-vrat': ['Somvar (Monday) Vrat', 'सोमवार व्रत'],
+      'mangalvar-vrat': ['Mangalvar (Tuesday) Hanuman Vrat', 'मंगलवार हनुमान व्रत'], 'navratri': ['Navratri', 'नवरात्रि'],
+      'mahashivratri': ['Mahashivratri', 'महाशिवरात्रि'], 'janmashtami': ['Janmashtami', 'जन्माष्टमी'],
+    };
+    if (route === '/vrat') return { title: 'Vrat Katha & Puja Vidhi — 10 Hindu Fasts with Next Dates | BornClock', description: 'Ekadashi, Satyanarayan, Pradosh, Sankashti, Karwa Chauth, Somvar, Mangalvar, Navratri, Mahashivratri and Janmashtami — sourced katha, a simple puja vidhi and the next date from our Panchang.' };
+    if (route === '/hi/vrat') return { title: 'व्रत कथा और पूजा विधि — 10 प्रमुख व्रत, अगली तिथि सहित | BornClock', description: 'एकादशी, सत्यनारायण, प्रदोष, संकष्टी, करवा चौथ, सोमवार, मंगलवार, नवरात्रि, महाशिवरात्रि और जन्माष्टमी — स्रोत-सहित कथा, सरल पूजा विधि और हमारे पंचांग से अगली तिथि।' };
+    const m = route.match(/^\/(hi\/)?vrat\/([a-z-]+)$/);
+    if (m && VN[m[2]]) {
+      const [en, hi] = VN[m[2]];
+      return m[1]
+        ? { title: `${hi} — व्रत कथा, पूजा विधि और अगली तिथि | BornClock`, description: `${hi}: स्रोत-सहित व्रत कथा सरल भाषा में, पूजा सामग्री और विधि के आसान चरण, क्षेत्रीय परंपराएँ, और हमारे पंचांग से अगली तिथि व समय।` }
+        : { title: `${en} — Vrat Katha, Puja Vidhi & Next Date | BornClock`, description: `${en}: the vrat katha in plain words with sources, puja samagri and simple steps, regional customs, and the next date and timings from our Panchang.` };
+    }
   }
 
   // /planet-in-sign[/:planet/:sign] and /planet-in-house[/:planet/:house]
@@ -839,6 +910,32 @@ export function getTitleForRoute(route) {
   if (route === '/mobile-number-numerology') return {
     title: "Mobile Number Numerology — Your Phone Number's Number | BornClock",
     description: 'Free mobile-number numerology: reduce your phone number to its single digit, with ruling planet and plain-language meaning. Honest, reflection-first.',
+  };
+  // Batch 10 tools — mirror the *_META constants in the page files (checked by
+  // src/pages/__tests__/Batch10Tools.test.tsx).
+  if (route === '/vehicle-number-numerology') return {
+    title: 'Vehicle Number Numerology — Car & Bike Number Plate | BornClock',
+    description: 'Vehicle number numerology calculator: reduce your car or bike number plate to one digit three ways (all digits, last four, full plate with Chaldean letters) and see how it sits with your birth number.',
+  };
+  if (route === '/lo-shu-grid-calculator') return {
+    title: 'Lo Shu Grid Calculator — Missing Numbers & Planes | BornClock',
+    description: 'Make your Lo Shu grid from your date of birth: which numbers you have, which are missing, repeated numbers and the complete planes (Mind, Emotional, Practical, Thought, Will, Action).',
+  };
+  if (route === '/kua-number-calculator') return {
+    title: 'Kua Number Calculator — Feng Shui Lucky Directions | BornClock',
+    description: 'Find your Kua (Gua) number from your birth date and gender, counted from the exact Chinese solar new year (Lichun), with your East or West group and four best directions.',
+  };
+  if (route === '/love-calculator') return {
+    title: 'Love Calculator by Name — Just for Fun, No Random | BornClock',
+    description: 'A love calculator by name that is honest: each name’s Chaldean number and how the two numbers get along, the same result every time. For fun — use Kundali matching for real matching.',
+  };
+  if (route === '/janma-tithi-calculator') return {
+    title: 'Janma Tithi Calculator — Hindu Birthday by Tithi | BornClock',
+    description: 'Find your Janma Tithi (birth tithi) and lunar month — amanta and purnimanta — and the dates of your Hindu tithi birthday for the next 10 years, with Adhik Maas and kshaya tithi handled.',
+  };
+  if (route === '/marriage-biodata-maker') return {
+    title: 'Marriage Biodata Maker — Printable PDF, Hindi/English | BornClock',
+    description: 'Make a marriage biodata in minutes: personal, family, education and horoscope details (rashi, nakshatra, Manglik from your birth chart), three clean templates, Hindi or English, saved as an A4 PDF.',
   };
   if (route === '/house-number-numerology') return {
     title: "House Number Numerology — Your Home's Number & Meaning | BornClock",

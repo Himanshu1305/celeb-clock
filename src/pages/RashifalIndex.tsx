@@ -53,13 +53,14 @@ export default function RashifalIndex() {
               >
                 <div className="font-semibold text-foreground">{r.sanskrit} <span className="text-muted-foreground font-normal">({r.english})</span></div>
                 <div className="text-xs text-muted-foreground mt-1">{r.hindi} · {r.element} · ruled by {r.lord}</div>
-                <div className="text-xs text-primary mt-2">Today · week · month · year →</div>
+                <div className="text-xs text-primary mt-2">Today · tomorrow · week · month · year →</div>
               </Link>
             ))}
           </div>
 
           <p className="text-sm text-muted-foreground mt-6">
             <Link to="/hi/rashifal" lang="hi" className="underline">आज का राशिफल हिंदी में →</Link>
+            {' · '}Planning ahead? <Link to="/rashifal/mesh/tomorrow" className="underline">Tomorrow’s rashifal →</Link>
             {' · '}Looking for the Western (Sun sign) daily horoscope? <Link to="/zodiac/aries/today" className="underline">Western horoscope today →</Link>
           </p>
           <p className="text-xs text-muted-foreground mt-4 mb-10">

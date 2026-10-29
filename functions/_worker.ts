@@ -1,3 +1,5 @@
+// Cloudflare Workers runtime global (no @cloudflare/workers-types installed); type-only, emits nothing.
+declare const HTMLRewriter: any;
 import { POST as createOrder }        from '../api/create-order.js';
 import { POST as createSubscription }  from '../api/create-subscription.js';
 import { GET  as getCredits }          from '../api/get-credits.js';
@@ -45,6 +47,8 @@ import { INDIA_BORNON_SLUGS } from '../src/lib/seo/indiaBornOnSlugs.js';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../src/lib/seo/panchangSlugs.js';
 import { MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
 import { matchDailyRoute } from '../src/lib/daily/registry.js';
+import { VRAT_SLUG_SET } from '../src/lib/vedic/vrats/meta.js';
+import { pageLangForPath, withHtmlLang } from '../src/lib/seo/pageLang.js';
 import { applyDailyContent } from './daily.js';
 
 type Env = {
@@ -263,10 +267,11 @@ const worker = {
       if ((m = pathname.match(/^\/compatibility\/([a-z]+)\/([a-z]+)\/?$/)))             return !(Z.has(m[1]) && Z.has(m[2]));
       if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/?$/)))          return !Z.has(m[1]);
       if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/today\/?$/)))   return !Z.has(m[1]);
+      if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/tomorrow\/?$/))) return !Z.has(m[1]); // Batch 10
       if ((m = pathname.match(/^\/chinese-zodiac\/([a-z-]+)\/?$/)))  return !A.has(m[1]);
       if ((m = pathname.match(/^\/chinese-horoscope\/([a-z-]+)\/?$/)))  return !A.has(m[1]);
       if ((m = pathname.match(/^\/vedic-zodiac\/([a-z-]+)\/?$/)))    return !R.has(m[1]);
-      const RP = new Set(['today','week','month','year']);
+      const RP = new Set(['today','tomorrow','week','month','year']);
       if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/([a-z]+)\/?$/))) return !(R.has(m[1]) && RP.has(m[2]));
       if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/?$/)))          return !R.has(m[1]);
       // Batch 7 review: Hindi daily rashifal pages use the legacy slugs (= RASHI_SLUGS_HI in
@@ -304,6 +309,8 @@ const worker = {
       // Batch 7 (W7): 50 Panchang cities (Panchang / Rahu Kaal / Choghadiya); Hindi pages for 10.
       if ((m = pathname.match(/^\/(?:panchang|rahu-kaal|choghadiya)\/([a-z-]+)\/?$/))) return !PANCHANG_CITY_SLUGS.has(m[1]);
       if ((m = pathname.match(/^\/hi\/panchang\/([a-z-]+)\/?$/)))     return !HINDI_PANCHANG_SLUGS.has(m[1]);
+      // Batch 10: vrat katha pages exist only for the ten vrats (src/lib/vedic/vrats/meta.ts).
+      if ((m = pathname.match(/^\/(?:hi\/)?vrat\/([a-z-]+)\/?$/)))  return !VRAT_SLUG_SET.has(m[1]);
       // Batch 7 / W5: the 78 tarot cards — 22 named trumps + "<rank>-of-<suit>" (mirrors src/data/tarotCards).
       const TAROT_MAJOR = new Set(['the-fool','the-magician','the-high-priestess','the-empress','the-emperor','the-hierophant','the-lovers','the-chariot','strength','the-hermit','wheel-of-fortune','justice','the-hanged-man','death','temperance','the-devil','the-tower','the-star','the-moon','the-sun','judgement','the-world']);
       if ((m = pathname.match(/^\/tarot\/cards\/([a-z-]+)\/?$/)))   return !(TAROT_MAJOR.has(m[1]) || /^(ace|two|three|four|five|six|seven|eight|nine|ten|page|knight|queen|king)-of-(wands|cups|swords|pentacles)$/.test(m[1]));
@@ -365,6 +372,15 @@ const worker = {
           headers.delete('Content-Length');
           headers.delete('ETag');
           if (daily) headers.set('X-Daily-Date', daily.date);
+        }
+        // Batch 10: Hindi pages (/hi/*, *-hindi) declare <html lang="hi">. Prerendered pages
+        // already carry it; this also covers the SPA shell served for any Hindi URL that has
+        // no prerendered file (and daily-injected shells). Same byte length → no
+        // Content-Length change, but drop it anyway in case the source tag differed.
+        if (htmlBody !== null && pageLangForPath(pathname) === 'hi') {
+          const text = typeof htmlBody === 'string' ? htmlBody : await new Response(htmlBody).text();
+          htmlBody = withHtmlLang(text, 'hi');
+          headers.delete('Content-Length');
         }
         // Fix 3: a validated-invalid address returns a real 404 (noindex — a genuine
         // not-found state, allowed by Rule 6) while still serving the styled page body.

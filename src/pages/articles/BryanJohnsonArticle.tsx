@@ -1,4 +1,5 @@
 import React from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
@@ -179,7 +180,7 @@ export function BryanJohnsonArticle() {
             Here is a plain comparison of two free tools against the full Blueprint protocol,
             across the things that matter most.
           </p>
-          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Comparison table (scrollable)">
+          <ScrollTable className="mb-8" label="Comparison table">
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-gray-100 text-gray-900">
@@ -214,7 +215,7 @@ export function BryanJohnsonArticle() {
                 </tr>
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
           <p className="text-gray-700 leading-relaxed mb-6">
             The takeaway is simple: Blueprint&apos;s biggest advantage is the depth of its
             measurement, not the habits themselves — and the habits are what actually move

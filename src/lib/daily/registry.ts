@@ -7,8 +7,9 @@
  * same `kind` key in ./compute.ts. See ./index.ts for the full API.
  */
 import type { DailyLang } from './types';
-import { monthKey, periodKeyOf, type DailyPeriod } from './dates';
+import { addDaysISO, istDateISO, monthKey, periodKeyOf, type DailyPeriod } from './dates';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../seo/panchangSlugs';
+import { VRAT_PAGE_SLUGS, vratPath } from '../vedic/vrats/meta';
 
 export interface DailyPageDef {
   /** Folder name under /daily/ (and the key in DAILY_COMPUTERS). */
@@ -37,6 +38,13 @@ export interface DailyPageDef {
      */
     period?: DailyPeriod;
   };
+  /**
+   * Batch 10 — a "tomorrow" view: the page shows the entry for the India date this many
+   * days AFTER today (1 = tomorrow). The Worker, the browser and the tests all resolve the
+   * page's date through dailyPageDate(), so the injected text is always tomorrow's.
+   * Omit (0) for normal "today" pages.
+   */
+  offsetDays?: number;
 }
 
 /** Vedic rashi slugs (English pages) — same set the Worker validates for /rashifal/:rashi. */
@@ -70,14 +78,28 @@ export const DAILY_PAGES: DailyPageDef[] = [
   { kind: 'rashifal-week', lang: 'en', slugs: RASHI_SLUGS, path: s => `/rashifal/${s}/week`, data: PERIOD('week') },
   { kind: 'rashifal-month', lang: 'en', slugs: RASHI_SLUGS, path: s => `/rashifal/${s}/month`, data: PERIOD('month') },
   { kind: 'rashifal-year', lang: 'en', slugs: RASHI_SLUGS, path: s => `/rashifal/${s}/year`, data: PERIOD('year') },
+  // Batch 10 — tomorrow's Vedic rashifal: the SAME day data as /today, read for the next
+  // India date, with its own dated titles ("Mesh Rashifal Tomorrow, <date>") and canonical.
+  { kind: 'rashifal-tomorrow', lang: 'en', slugs: RASHI_SLUGS, path: s => `/rashifal/${s}/tomorrow`, data: { kind: 'vedic-sky', slug: ALL }, offsetDays: 1 },
   // W2 — Western (tropical) daily horoscope, extending /zodiac/:sign with /today.
   { kind: 'horoscope', lang: 'en', slugs: SUN_SIGN_SLUGS, path: s => `/zodiac/${s}/today`, data: { kind: 'western-sky', slug: ALL } },
+  // Batch 10 — tomorrow's Western horoscope (same western-sky data, next India date).
+  { kind: 'horoscope-tomorrow', lang: 'en', slugs: SUN_SIGN_SLUGS, path: s => `/zodiac/${s}/tomorrow`, data: { kind: 'western-sky', slug: ALL }, offsetDays: 1 },
   // W7 — Panchang / Rahu Kaal / Choghadiya by city (50 cities + the index page, which shows Delhi).
   { kind: 'panchang', lang: 'en', slugs: PANCHANG_DAILY_SLUGS, path: panchangPath('panchang'), data: { kind: 'panchang-day', slug: CITY } },
   { kind: 'rahu-kaal', lang: 'en', slugs: PANCHANG_DAILY_SLUGS, path: panchangPath('rahu-kaal'), data: { kind: 'panchang-day', slug: CITY } },
   { kind: 'choghadiya', lang: 'en', slugs: PANCHANG_DAILY_SLUGS, path: panchangPath('choghadiya'), data: { kind: 'panchang-day', slug: CITY } },
   // W7 — Hindi Panchang (/hi/panchang + 10 cities), same per-city data as the English pages.
   { kind: 'panchang-hi', lang: 'hi', slugs: PANCHANG_HI_DAILY_SLUGS, path: s => (s === 'index' ? '/hi/panchang' : `/hi/panchang/${s}`), data: { kind: 'panchang-day', slug: CITY } },
+  // Batch 10 — monthly Panchang calendar (New Delhi; other cities / months are computed in
+  // the browser), "Planets today" and "Moon phase today": one small shared file per month.
+  { kind: 'panchang-calendar', lang: 'en', slugs: ['index'], path: () => '/panchang-calendar', data: { kind: 'panchang-month', slug: () => 'delhi', period: 'month' } },
+  { kind: 'planets-today', lang: 'en', slugs: ['index'], path: () => '/planets-today', data: { kind: 'planet-day', slug: ALL } },
+  { kind: 'moon-phase', lang: 'en', slugs: ['index'], path: () => '/moon-phase', data: { kind: 'moon-day', slug: ALL } },
+  // Batch 10 — vrat katha + puja vidhi pages: the "next date + timings" block, from one shared
+  // per-day file (data kind 'vrat-next') computed by our festival engine. The title stays static.
+  { kind: 'vrat', lang: 'en', slugs: VRAT_PAGE_SLUGS, path: s => vratPath(s, 'en'), data: { kind: 'vrat-next', slug: ALL } },
+  { kind: 'vrat-hi', lang: 'hi', slugs: VRAT_PAGE_SLUGS, path: s => vratPath(s, 'hi'), data: { kind: 'vrat-next', slug: ALL } },
 ];
 
 let routeMap: Map<string, { def: DailyPageDef; slug: string }> | null = null;
@@ -120,6 +142,12 @@ export function dailyFileKey(def: DailyPageDef, date: string): string {
 /** Key of a date's value inside that file's `data`: the date, or the period key. */
 export function dailyDataKey(def: DailyPageDef, date: string): string {
   return def.data?.period ? periodKeyOf(def.data.period, date) : date;
+}
+
+/** India date a page shows at `now`: today, or today + offsetDays for a "tomorrow" view. */
+export function dailyPageDate(def: Pick<DailyPageDef, 'offsetDays'> | undefined, now: Date): string {
+  const today = istDateISO(now);
+  return def?.offsetDays ? addDaysISO(today, def.offsetDays) : today;
 }
 
 /** Test/extension hook: forget the cached route map after DAILY_PAGES changes. */

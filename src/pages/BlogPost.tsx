@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { useAuth } from '@/hooks/useAuth';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArticleLayout } from '@/components/central';
@@ -296,7 +297,11 @@ const BlogPostPage = () => {
                   the single <h1>, so a leading "# Title" in the markdown would create a duplicate. */}
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
-                components={{ h1: ({ node, ...props }) => <h2 {...props} /> }}
+                components={{
+                  h1: ({ node, ...props }) => <h2 {...props} />,
+                  // Batch 10: wide markdown tables scroll in their own box on phones (no page sideways scroll).
+                  table: ({ node, ...props }) => <ScrollTable className="my-4"><table {...props} /></ScrollTable>,
+                }}
               >{post.content}</ReactMarkdown>
             </div>
           </div>

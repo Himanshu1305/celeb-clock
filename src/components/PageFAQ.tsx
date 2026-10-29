@@ -14,9 +14,12 @@ interface PageFAQProps {
   title?: string;
   /** Inline FAQ items (e.g. computed per date/sign). Takes precedence over slug. */
   items?: FAQ[];
+  /** 'card' (default): accordion in a glass card. 'plain' (Batch 10): an editorial
+   *  section of <details> rows for PajPage pages — answers stay in the HTML either way. */
+  variant?: 'card' | 'plain';
 }
 
-export const PageFAQ = ({ slug, title = 'Frequently Asked Questions', items }: PageFAQProps) => {
+export const PageFAQ = ({ slug, title = 'Frequently Asked Questions', items, variant = 'card' }: PageFAQProps) => {
   const faqs = items ?? (slug ? pageFaqs[slug] : undefined);
   if (!faqs || faqs.length === 0) return null;
 
@@ -29,6 +32,23 @@ export const PageFAQ = ({ slug, title = 'Frequently Asked Questions', items }: P
       acceptedAnswer: { '@type': 'Answer', text: f.answer },
     })),
   };
+
+  if (variant === 'plain') {
+    return (
+      <section className="section" data-testid="page-faq">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <h2>{title}</h2>
+        <div className="space-y-3 mt-3">
+          {faqs.map((faq, i) => (
+            <details key={i} className="rounded-xl border border-border p-4">
+              <summary className="font-semibold text-foreground cursor-pointer">{faq.question}</summary>
+              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{faq.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="max-w-3xl mx-auto mb-16">

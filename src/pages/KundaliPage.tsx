@@ -39,6 +39,11 @@ import { RemediesForFindings } from '@/components/vedic/Remedies';
 // Batch 9b: share-image card — only after a chart exists, its own chunk.
 const KundaliShareCard = lazy(() => import('@/components/vedic/KundaliShareCard'));
 const ShodashvargaCharts = lazy(() => import('@/components/vedic/ShodashvargaCharts').then(m => ({ default: m.ShodashvargaCharts })));
+// Batch 10: Yogini Dasha + Ashtakavarga — after a chart exists only, each in its own chunk.
+const YoginiDashaSection = lazy(() => import('@/components/vedic/YoginiDashaSection'));
+const AshtakavargaSection = lazy(() => import('@/components/vedic/AshtakavargaSection'));
+// Batch 10: Bhava Chalit, KP and Jaimini — computed in the browser, own lazy chunk.
+const AdvancedSystems = lazy(() => import('@/components/vedic/advanced/AdvancedSystems'));
 import { findingsFromKundali, type KundaliLike } from '@/lib/vedic/remedies';
 
 export default function KundaliPage() {
@@ -57,6 +62,7 @@ export default function KundaliPage() {
   const [readingDob, setReadingDob] = useState('');
   const [readingTime, setReadingTime] = useState('');
   const [usedPlace, setUsedPlace] = useState('');
+  const [usedCoords, setUsedCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [displayName, setDisplayName] = useState('');
   const [historyKey, setHistoryKey] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -116,6 +122,7 @@ export default function KundaliPage() {
     setDisplayName(details.name ?? '');
     const loc = details.city;
     setUsedPlace(details.city.name);
+    setUsedCoords({ lat: details.city.lat, lon: details.city.lon });
     try {
       const k = await fetchKundali(details.dob, details.time, loc);
       setData(k);
@@ -360,6 +367,12 @@ export default function KundaliPage() {
                   <ShodashvargaCharts charts={data.shodashvarga} chartStyle={chartStyle} birthTimeKnown={!data.requires_birth_time} />
                 </Suspense>
               )}
+              {/* Batch 10: Bhava Chalit (Sripati), KP tables and Jaimini (karakas, Karakamsha, Chara Dasha). */}
+              {data.birthTimezone?.utcISO && usedCoords && !data.requires_birth_time && (
+                <Suspense fallback={null}>
+                  <AdvancedSystems birthUtcISO={data.birthTimezone.utcISO} lat={usedCoords.lat} lon={usedCoords.lon} chartStyle={chartStyle} mahadasha={data.dasha?.mahadasha} />
+                </Suspense>
+              )}
               {/* K13: D9/D10 only — kept as the fallback when a response has no 16-varga set. */}
               {!data.shodashvarga?.length && (data.divisionalCharts?.d9 || data.divisionalCharts?.d10) && (
                 <div data-testid="kundali-divisional" style={{ marginTop: 20 }}>
@@ -430,6 +443,12 @@ export default function KundaliPage() {
               {data.dashaTimeline && data.dashaTimeline.length > 0 && (
                 <PeriodForecast dashaTimeline={data.dashaTimeline} lagnaSignIndex={data.lagna.signIndex} planets={data.planets} />
               )}
+
+              {/* Batch 10: second timing system + points chart (collapsed on phones). */}
+              <Suspense fallback={null}>
+                {data.yoginiDasha && data.yoginiDasha.mahadashas?.length > 0 && <YoginiDashaSection data={data.yoginiDasha} />}
+                {data.ashtakavarga && <AshtakavargaSection data={data.ashtakavarga} />}
+              </Suspense>
 
               <div className="inline-actions" style={{ marginTop: 18 }}>
                 <a data-testid="kundali-whatsapp-share" href={whatsappHref} target="_blank" rel="noopener noreferrer"
