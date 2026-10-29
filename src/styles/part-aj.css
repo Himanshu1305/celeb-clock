@@ -656,3 +656,4 @@
    "(Chaturvimshamsha / Siddhamsha)") may break instead of pushing the page sideways.
    Only applies when a word cannot fit its line, so normal headings are unchanged. */
 .paj h1,.paj .eyebrow{overflow-wrap:break-word}
+.paj .section-head>div{min-width:0;max-width:100%}
