@@ -230,10 +230,14 @@ export default function CompatibilityPage() {
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
         provider: { '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com' },
       }} />
-      <JsonLd id="faq" data={{
-        '@context': 'https://schema.org', '@type': 'FAQPage',
-        mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
-      }} />
+      {/* One FAQPage per page (validate-dist V9): pair pages carry the pair FAQ's block
+          from <PageFAQ> below, so the general FAQ block is only emitted on the hub. */}
+      {!(paramSign1 && paramSign2) && (
+        <JsonLd id="faq" data={{
+          '@context': 'https://schema.org', '@type': 'FAQPage',
+          mainEntity: faqItems.map(f => ({ '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } })),
+        }} />
+      )}
 
         <div className="max-w-2xl mx-auto px-4 py-10">
           <PageTagline />

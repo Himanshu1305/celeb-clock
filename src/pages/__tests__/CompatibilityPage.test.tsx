@@ -114,3 +114,27 @@ describe('Compatibility Calculator — TC-COMPAT', () => {
     expect(zodiacText).toMatch(/challenging|difficult|not/);
   });
 });
+
+// Batch 9b review: validate-dist V9 allows at most ONE FAQPage block per page.
+import { Routes, Route } from 'react-router-dom';
+const faqPageCount = () => [...document.querySelectorAll('script[type="application/ld+json"]')]
+  .map(s => { try { return JSON.parse(s.textContent || ''); } catch { return null; } })
+  .filter(d => d && d['@type'] === 'FAQPage').length;
+describe('CompatibilityPage — one FAQPage per page', () => {
+  afterEach(() => cleanup());
+  it('hub: one FAQPage', () => {
+    renderCompat();
+    expect(faqPageCount()).toBe(1);
+  });
+  it('pair page (/compatibility/aries/leo): one FAQPage (the pair FAQ)', async () => {
+    render(
+      <HelmetProvider>
+        <MemoryRouter initialEntries={['/compatibility/aries/leo']}>
+          <Routes><Route path="/compatibility/:sign1/:sign2" element={<CompatibilityPage />} /></Routes>
+        </MemoryRouter>
+      </HelmetProvider>,
+    );
+    await waitFor(() => expect(document.body.textContent).toContain('Compatibility FAQ'));
+    expect(faqPageCount()).toBe(1);
+  });
+});
