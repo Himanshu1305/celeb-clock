@@ -43,6 +43,7 @@ import { isProductionHost, DISALLOW_ALL_ROBOTS } from './host.js';
 import { duplicateRedirect } from '../src/lib/seo/duplicateRedirects.js';
 import { INDIA_BORNON_SLUGS } from '../src/lib/seo/indiaBornOnSlugs.js';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../src/lib/seo/panchangSlugs.js';
+import { MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
 import { matchDailyRoute } from '../src/lib/daily/registry.js';
 import { applyDailyContent } from './daily.js';
 
@@ -281,6 +282,8 @@ const worker = {
       if ((m = pathname.match(/^\/transit\/([a-z]+)\/(\d+)\/?$/)))    return !(TRP.has(m[1]) && validTY(parseInt(m[2], 10)));
       if ((m = pathname.match(/^\/mercury-retrograde\/(\d+)\/?$/)))   return !validTY(parseInt(m[1], 10));
       if ((m = pathname.match(/^\/festivals\/(\d+)\/?$/)))            return !validTY(parseInt(m[1], 10));
+      // Batch 9b: year muhurat lists exist only for the precomputed occasions and years.
+      if ((m = pathname.match(/^\/muhurat\/([a-z-]+)\/(\d+)\/?$/)))  return !(Object.prototype.hasOwnProperty.call(MUHURAT_YEAR_SLUGS, m[1]) && MUHURAT_YEAR_YEARS.includes(parseInt(m[2], 10)));
       // Planet-in-sign / planet-in-house: 9 planets × 12 signs / 12 houses.
       const PLN = new Set(['sun','moon','mars','mercury','jupiter','venus','saturn','rahu','ketu']);
       const SGN = new Set(['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces']);

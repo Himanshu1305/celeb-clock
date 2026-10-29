@@ -16,6 +16,8 @@ import {
   currentChineseYear, chineseHoroscopeIndexTitle, chineseHoroscopeAnimalTitle, chineseHoroscopeIndexDescription, chineseSignDescription,
   CHINESE_BY_YEAR_TITLE, CHINESE_BY_YEAR_DESC,
 } from '../src/lib/chineseCalendar.js';
+// Batch 9b: year muhurat pages — titles/descriptions shared with MuhuratYearPage.
+import { MUHURAT_YEAR_META, MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
 
 // Indian born-on facet data (slug → {top3, count}) for /born-on/:slug/india titles.
 const INDIA_BORNON_MAP = new Map(
@@ -644,6 +646,15 @@ export function getTitleForRoute(route) {
       title: `Mercury Retrograde ${m[1]} — Exact Dates & Meaning | BornClock`,
       description: `Every Mercury retrograde in ${m[1]} with exact start and end dates, computed from Mercury's real apparent motion, plus its meaning and how to use the time.`,
     };
+  }
+
+  // /muhurat/:type/:year
+  {
+    const m = route.match(/^\/muhurat\/([a-z-]+)\/(\d{4})$/);
+    if (m && MUHURAT_YEAR_SLUGS[m[1]] && MUHURAT_YEAR_YEARS.includes(Number(m[2]))) {
+      const meta = MUHURAT_YEAR_META[m[1]];
+      return { title: meta.title(Number(m[2])), description: meta.description(Number(m[2])) };
+    }
   }
 
   // /festivals[/:year]
