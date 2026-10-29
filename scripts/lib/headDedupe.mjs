@@ -202,10 +202,17 @@ export function keepOneMeta(html, re) {
 }
 
 /** Top-level JSON-LD types that must appear once per page (merged when repeated). */
-const MERGE_TYPES = new Set(['Organization', 'WebSite', 'WebPage']);
+const MERGE_TYPES = new Set(['Organization', 'WebSite', 'WebPage', 'Article', 'BlogPosting', 'NewsArticle']);
+/**
+ * Batch 9b: Article / BlogPosting / NewsArticle are one family — a page is ONE article,
+ * so a generic <SEO ogType="article"> block and the page's own Article block are merged
+ * (the richer block's @type wins).
+ */
+const ARTICLE_FAMILY = new Set(['Article', 'BlogPosting', 'NewsArticle']);
+const familyOf = t => (ARTICLE_FAMILY.has(t) ? 'Article' : t);
 
 /**
- * Merge repeated top-level Organization / WebSite / WebPage blocks into ONE complete
+ * Merge repeated top-level Organization / WebSite / WebPage / Article blocks into ONE complete
  * block each. Blocks of a type are merged when they describe the same URL (normalised;
  * a block without a url joins any other). Base = the richer block (more content); every
  * field only another block has is added. The merged block replaces the first one of its
@@ -224,15 +231,18 @@ export function mergeSameEntityJsonLd(html) {
   const groups = [];
   for (const b of blocks) {
     const url = typeof b.data.url === 'string' ? normalizeSiteUrl(b.data.url) : null;
-    const g = groups.find(x => x.type === b.data['@type'] && (url === null || x.url === null || x.url === url));
-    if (g) { g.items.push(b); if (g.url === null) g.url = url; } else groups.push({ type: b.data['@type'], url, items: [b] });
+    const fam = familyOf(b.data['@type']);
+    // An article is one per page whatever its url field says (the generic block uses the
+    // canonical, the page's own often only mainEntityOfPage), so articles always group.
+    const g = groups.find(x => x.type === fam && (fam === 'Article' || url === null || x.url === null || x.url === url));
+    if (g) { g.items.push(b); if (g.url === null) g.url = url; } else groups.push({ type: fam, url, items: [b] });
   }
   let out = html;
   for (const g of groups) {
     if (g.items.length < 2) continue;
     const size = b => stableKey(normalizeLd(b.data)).length;
     const base = g.items.reduce((a, b) => (size(b) > size(a) ? b : a));
-    const merged = { '@context': base.data['@context'] ?? 'https://schema.org', '@type': g.type, ...normalizeLd(base.data) };
+    const merged = { '@context': base.data['@context'] ?? 'https://schema.org', '@type': base.data['@type'], ...normalizeLd(base.data) };
     for (const b of g.items) {
       if (b === base) continue;
       for (const [k, v] of Object.entries(normalizeLd(b.data))) if (!(k in merged)) merged[k] = v;
@@ -290,7 +300,10 @@ export function headStats(html) {
   html.replace(LD_RE, (full, body) => {
     try {
       const d = JSON.parse(body);
-      if (d && typeof d['@type'] === 'string' && MERGE_TYPES.has(d['@type'])) typeCount[d['@type']] = (typeCount[d['@type']] || 0) + 1;
+      if (d && typeof d['@type'] === 'string' && (MERGE_TYPES.has(d['@type']) || d['@type'] === 'FAQPage')) {
+        const k = familyOf(d['@type']);
+        typeCount[k] = (typeCount[k] || 0) + 1;
+      }
     } catch { /* skip */ }
     return full;
   });
@@ -306,7 +319,7 @@ export function headStats(html) {
     breadcrumbLists: breadcrumbs,
     /** Count per one-per-page meta (description, title, ogTitle, ogDescription, twitterTitle, twitterDescription). */
     meta: metaCounts,
-    /** Top-level Organization / WebSite / WebPage block counts. */
+    /** Top-level Organization / WebSite / WebPage / Article (incl. BlogPosting, NewsArticle) / FAQPage block counts. */
     entityBlocks: typeCount,
   };
 }

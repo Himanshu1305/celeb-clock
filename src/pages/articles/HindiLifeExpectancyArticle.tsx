@@ -83,6 +83,7 @@ export function HindiLifeExpectancyArticle() {
           description="UN WPP 2024 डेटा पर आधारित मुफ्त जीवन प्रत्याशा कैलकुलेटर। धूम्रपान, व्यायाम, आहार, नींद और तनाव जैसे 5 कारक जानें और स्वस्थ लंबा जीवन जिएं।"
           canonicalUrl="/hi/life-expectancy-calculator"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'जीवन प्रत्याशा कैलकुलेटर' }}

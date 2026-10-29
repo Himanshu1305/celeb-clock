@@ -86,7 +86,7 @@ export const LC_SCHEMA = {
         name: 'Can I improve my longevity score?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes. Unlike chronological age, your longevity score reflects modifiable lifestyle factors. Research shows consistent lifestyle changes produce measurable epigenetic improvements within 8-12 weeks. BornClock generates a personalised 90-day action plan based on your top improvement opportunities. The most impactful changes are increasing exercise to 150+ minutes per week, improving sleep to 7-8 hours, and managing chronic conditions.',
+          text: 'Yes. Unlike chronological age, your longevity score reflects modifiable lifestyle factors. Your score updates as your answers change; one small 2021 pilot trial also found a lower epigenetic-age estimate after 8 weeks of lifestyle change, though larger trials have yet to confirm it. BornClock generates a personalised 90-day action plan based on your top improvement opportunities. The most impactful changes are increasing exercise to 150+ minutes per week, improving sleep to 7-8 hours, and managing chronic conditions.',
         },
       },
       {
@@ -185,8 +185,8 @@ export const LC_FACTORS = [
     emoji: '😤',
     impact: 'High stress increases cardiovascular disease risk by 40%',
     impactColor: 'orange' as const,
-    summary: 'Chronic high stress elevates cortisol and produces systemic inflammation, directly accelerating epigenetic ageing measurable through DNA methylation markers.',
-    detail: 'The AHA found high daily stress increases cardiovascular disease risk by 40%. Even 8 weeks of mindfulness practice produces measurable reductions in cortisol and epigenetic ageing markers, making stress one of the most reversible longevity factors.',
+    summary: 'Chronic high stress elevates cortisol and produces systemic inflammation, and is associated with faster epigenetic ageing in observational studies.',
+    detail: 'The AHA found high daily stress increases cardiovascular disease risk by 40%. Stress is also one of the factors you can most directly work on, through sleep, movement, social contact and relaxation practice.',
     source: 'Horvath, Nature Genetics, 2013; AHA Scientific Statement, 2021',
   },
   {
@@ -266,10 +266,10 @@ export const LC_COPY = {
     paras: [
       'Your longevity score is not fixed. It reflects current lifestyle choices, and research consistently shows that lifestyle changes produce measurable biological improvements within weeks to months.',
       'Start with your highest-impact factor. BornClock identifies your top improvement opportunities ranked by potential years gained. Address the highest-ranked factor first rather than trying to change everything simultaneously. Research shows that focused behaviour change is more sustainable than broad lifestyle overhauls.',
-      'The 90-day timeline is real. Epigenetic research demonstrates that DNA methylation patterns — which reflect biological ageing — respond to lifestyle interventions within 8-12 weeks. You are not waiting years to see results.',
+      'The 90-day timeline is about habits. Habits take weeks to settle, and early research — a small 2021 pilot trial (43 men, 8 weeks) found a 3.23-year lower epigenetic-age estimate than controls, which larger trials have yet to confirm — suggests the body may respond on a similar timescale.',
       'Retake the quiz every 90 days. BornClock generates a new personalised 90-day plan each time based on your updated inputs. As you improve one factor, the next highest-impact opportunity becomes your new priority. This creates a compound effect over time.',
       'Expect the gains to stack rather than arrive all at once. Adding regular exercise might improve your sleep, which lowers your stress, which in turn makes it easier to maintain the exercise. Longevity factors are interconnected, so a single well-chosen change often pulls several others along with it. This is why starting with your weakest high-impact factor tends to produce outsized results.',
-      'Be patient with the biology and impatient with the habit. The measurable epigenetic improvements take 8-12 weeks, but the behaviour that drives them has to start today and repeat. The people who add the most years are rarely those who attempt a dramatic overhaul; they are the ones who change one thing, let it become automatic, and only then reach for the next.',
+      'Be patient with the biology and impatient with the habit. Any change in the body takes weeks or months, but the behaviour that drives them has to start today and repeat. The people who add the most years are rarely those who attempt a dramatic overhaul; they are the ones who change one thing, let it become automatic, and only then reach for the next.',
     ],
   },
   whoShouldUse: {
@@ -295,7 +295,8 @@ export const LC_COPY = {
       { source: 'Harvard Study of Adult Development (85 years)', text: 'Social connection research. The longest-running study of adult life, tracking participants from adolescence through old age across two generations.' },
       { source: 'Karolinska Institute Swedish Twin Registry (2018)', text: 'Genetic vs lifestyle split. Analysis of 44,000 Swedish twins establishing that genetics accounts for 25-30% of longevity variance.' },
       { source: 'WHO Physical Activity Guidelines (2022)', text: 'Exercise mortality impact. Meta-analysis of 196 studies covering 30 million person-years of follow-up.' },
-      { source: 'Horvath S., Nature Genetics (2013)', text: 'Epigenetic clock research. Established DNA methylation as the most accurate biological age predictor, and demonstrated lifestyle interventions can shift the epigenetic clock.' },
+      { source: 'Horvath S., Genome Biology (2013)', text: 'Epigenetic clock research. Introduced a DNA methylation clock that estimates age across many human tissues.' },
+      { source: 'Fitzgerald KN et al., Aging (2021)', text: 'Small pilot randomized trial (43 men aged 50–72, 8 weeks): diet and lifestyle programme associated with a 3.23-year lower Horvath epigenetic age than controls. Larger, longer trials are needed.' },
       { source: 'Global BMI Mortality Collaboration, Lancet (2016)', text: 'BMI impact quantification. Analysis of 10.6 million people across 239 prospective studies in 4 continents.' },
     ],
   },

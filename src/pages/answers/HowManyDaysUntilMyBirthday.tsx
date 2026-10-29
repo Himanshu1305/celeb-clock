@@ -27,6 +27,7 @@ export default function HowManyDaysUntilMyBirthday() {
             description="Work out exactly how many days until your next birthday, why the number changes each year, and how leap years shift the count. Weeks, hours and half-birthday math too."
             canonicalUrl="/answers/how-many-days-until-my-birthday"
             ogType="article"
+          articleSchema={false}
           />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />

@@ -28,6 +28,7 @@ export default function HowOldAmIOnMars() {
             description="Calculate your age on Mars, Jupiter, Saturn and all 8 planets using real NASA orbital data. A 30-year-old on Earth is only 15.9 on Mars."
             canonicalUrl="/answers/how-old-am-i-on-mars"
             ogType="article"
+          articleSchema={false}
           />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />

@@ -1,0 +1,33 @@
+{
+ "_source": "pyswisseph 2.10.03, SIDM_LAHIRI, Moon at the start and end of the birth day (celebrity nationality window) \u2014 generated 29 Oct 2026 by scratchpad b9b/ancient.py. Only dates where the engine differs by more than 60 arc-seconds are listed.",
+ "rows": [
+  {
+   "slug": "aryabhata",
+   "date": "0476-04-13",
+   "swissStart": 43.91097467607998,
+   "swissEnd": 58.433011233554936,
+   "diffArcsec": 524.8
+  },
+  {
+   "slug": "chanakya",
+   "date": "0371-01-01",
+   "swissStart": 234.4277137450432,
+   "swissEnd": 246.48895887448012,
+   "diffArcsec": 477.4
+  },
+  {
+   "slug": "prithviraj-chauhan",
+   "date": "1166-06-01",
+   "swissStart": 335.0408147436535,
+   "swissEnd": 349.30850610474374,
+   "diffArcsec": 84.6
+  },
+  {
+   "slug": "rumi",
+   "date": "1207-09-30",
+   "swissStart": 163.67671684493473,
+   "swissEnd": 178.56503920672588,
+   "diffArcsec": 69.3
+  }
+ ]
+}

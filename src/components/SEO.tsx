@@ -19,6 +19,11 @@ interface SEOProps {
    * blog tag-archive views so the real articles they link to stay fully indexable. */
   noindexFollow?: boolean;
   hreflang?: Array<{ lang: string; url: string }>;
+  /** Batch 9b: false when the page renders its OWN Article JSON-LD (richer: real dates,
+   * author, headline). SEO then emits no main Article/WebPage block, so the page carries
+   * exactly one Article. scripts/lib/headDedupe.mjs merges any leftover pair at prerender
+   * and scripts/validate-dist.mjs fails the build on >1 Article. */
+  articleSchema?: boolean;
 }
 
 const SITE_NAME = 'BornClock - Age & Birthday Calculator';
@@ -42,7 +47,8 @@ export const SEO = ({
   tags = [],
   noindex = false,
   noindexFollow = false,
-  hreflang
+  hreflang,
+  articleSchema = true,
 }: SEOProps) => {
   // Brand exactly once. Most page titles already end with "… | BornClock"; appending
   // SITE_NAME again produced the doubled tab title "… | BornClock | BornClock - Age &
@@ -200,9 +206,11 @@ export const SEO = ({
       <meta name="application-name" content={SITE_NAME} />
       
       {/* Structured Data - JSON-LD */}
-      <script type="application/ld+json">
-        {generateStructuredData()}
-      </script>
+      {articleSchema && (
+        <script type="application/ld+json">
+          {generateStructuredData()}
+        </script>
+      )}
       
       {/* Breadcrumb Structured Data */}
       {canonicalUrl && (

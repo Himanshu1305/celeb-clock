@@ -263,3 +263,40 @@ describe('JSON-LD — one Organization / WebSite / WebPage', () => {
     expect(mergeSameEntityJsonLd(a + g)).toBe(a + g);
   });
 });
+
+describe('Batch 9b — one Article and one FAQPage per page', () => {
+  // Shape of the real /answers/what-is-bmi/ prerender (local prerender 29 Oct 2026):
+  // <SEO ogType="article"> block (data-rh) + the page's own richer Article block.
+  const seoArticle = '<script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Article","headline":"What Is BMI and What Does Your Number Actually Mean? | BornClock","description":"BMI explained.","url":"https://bornclock.com/answers/what-is-bmi/","image":"https://bornclock.com/og/default.png","publisher":{"@type":"Organization","name":"BornClock - Age & Birthday Calculator"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://bornclock.com/answers/what-is-bmi/"},"author":{"@type":"Person","name":"BornClock Team"}}</script>';
+  const ownArticle = '<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"What Is BMI and What Does Your Number Actually Mean?","description":"BMI (Body Mass Index) explained: how to calculate it, what the ranges mean, and why waist-to-height ratio is actually a better predictor of health.","author":{"@type":"Organization","name":"BornClock"},"publisher":{"@type":"Organization","name":"BornClock","logo":{"@type":"ImageObject","url":"https://bornclock.com/bornclock-logo.png"}},"datePublished":"2026-06-17","dateModified":"2026-06-17","mainEntityOfPage":"https://bornclock.com/answers/what-is-bmi/"}</script>';
+  const blocks = (h: string) => [...h.matchAll(/<script[^>]*ld\+json[^>]*>([\s\S]*?)<\/script>/g)].map(m => JSON.parse(m[1]));
+
+  it('two Article blocks (generic + page-own) merge into one, keeping the richer one and adding missing fields', () => {
+    const html = `<html><head>${seoArticle}</head><body>${ownArticle}</body></html>`;
+    expect(headStats(html).entityBlocks.Article).toBe(2);
+    const out = finalizeHead(html, '/answers/what-is-bmi').html;
+    expect(headStats(out).entityBlocks.Article).toBe(1);
+    const a = blocks(out).find(b => b['@type'] === 'Article');
+    expect(a.datePublished).toBe('2026-06-17');                       // page-own (richer) wins
+    expect(a.headline).toBe('What Is BMI and What Does Your Number Actually Mean?');
+    expect(a.image).toBe('https://bornclock.com/og/default.png');     // only the generic copy had it
+    expect(a.url).toBe('https://bornclock.com/answers/what-is-bmi/');
+    expect(finalizeHead(out, '/answers/what-is-bmi').html).toBe(out);
+  });
+
+  it('Article and BlogPosting count as one family; the richer @type is kept', () => {
+    const bp = ownArticle.replace('"@type":"Article"', '"@type":"BlogPosting"');
+    const out = mergeSameEntityJsonLd(`${seoArticle}${bp}`);
+    const all = blocks(out);
+    expect(all).toHaveLength(1);
+    expect(all[0]['@type']).toBe('BlogPosting');
+  });
+
+  it('headStats counts FAQPage blocks so validate-dist can fail on two', () => {
+    const faq = (q: string) => `<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"${q}","acceptedAnswer":{"@type":"Answer","text":"A."}}]}</script>`;
+    expect(headStats(faq('One?')).entityBlocks.FAQPage).toBe(1);
+    expect(headStats(faq('One?') + faq('Two?')).entityBlocks.FAQPage).toBe(2);
+    // FAQPage blocks are NOT merged by finalizeHead (visibility is a page decision).
+    expect(headStats(finalizeHead(`<html><head></head><body>${faq('One?')}${faq('Two?')}</body></html>`, '/x').html).entityBlocks.FAQPage).toBe(2);
+  });
+});

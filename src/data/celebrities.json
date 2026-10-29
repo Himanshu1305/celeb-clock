@@ -1,7 +1,7 @@
 {
   "generated_at": "2026-09-06T18:38:49.187Z",
-  "total": 3044,
-  "indian_count": 2532,
+  "total": 3043,
+  "indian_count": 2531,
   "celebrities": [
     {
       "name": "Mahatma Gandhi",
@@ -2390,15 +2390,18 @@
     {
       "name": "S.P. Balasubrahmanyam",
       "slug": "sp-balasubrahmanyam",
-      "birth_date": "1946-01-04",
-      "birth_month_day": "01-04",
+      "birth_date": "1946-06-04",
+      "birth_month_day": "06-04",
       "birth_year": 1946,
       "death_year": 2020,
-      "death_date": null,
+      "death_date": "2020-09-25",
       "category": "Singer",
       "known_for": "SPB, legendary South Indian playback singer, Guinness record holder, 40,000+ songs",
       "nationality_code": "IN",
-      "source": "static"
+      "source": "static",
+      "id": 21353,
+      "occupation": "Indian playback singer (1946–2020)",
+      "sitelinks": 34
     },
     {
       "name": "Anil Ambani",
@@ -9984,22 +9987,6 @@
       "category": "Indian actress, television host, beauty queen and the winner of Miss World 1997",
       "known_for": "",
       "occupation": "Indian actress, television host, beauty queen and the winner of Miss World 1997",
-      "nationality_code": "IN",
-      "sitelinks": 34,
-      "source": "db"
-    },
-    {
-      "id": 21353,
-      "name": "S. P. Balasubrahmanyam",
-      "slug": "s-p-balasubrahmanyam",
-      "birth_date": "1946-06-04",
-      "birth_month_day": "06-04",
-      "birth_year": 1946,
-      "death_year": 2020,
-      "death_date": "2020-09-25",
-      "category": "Indian playback singer (1946–2020)",
-      "known_for": "",
-      "occupation": "Indian playback singer (1946–2020)",
       "nationality_code": "IN",
       "sitelinks": 34,
       "source": "db"

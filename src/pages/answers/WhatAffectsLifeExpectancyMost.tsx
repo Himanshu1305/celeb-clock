@@ -44,6 +44,7 @@ export default function WhatAffectsLifeExpectancyMost() {
           description="A Harvard study of 123,000 people found 5 habits that add up to 14 extra years of life. Genetics matters less than you think. Here's what the evidence actually shows."
           canonicalUrl="/answers/what-affects-life-expectancy-most"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What affects life expectancy most?' }}

@@ -113,7 +113,7 @@ Ready to discover your exact age? [Click here to use our free Age Calculator](/)
 ## Frequently Asked Questions
 
 **Q: How accurate is the age calculator?**
-A: Our calculator is accurate to the second and accounts for leap years, time zones, and daylight saving time.
+A: The years, months and days are exact, with leap years counted. You enter a date of birth, not a time, so the live hours, minutes and seconds are counted from midnight (00:00 on your device's clock) on the day you were born — your true count can differ by up to a day depending on the hour you were born.
 
 **Q: Can I calculate someone else's age?**
 A: Absolutely! Just enter any birth date to calculate anyone's exact age.

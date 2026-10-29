@@ -97,6 +97,7 @@ export function DeathClockAlternativeArticle() {
             description={DESC}
             canonicalUrl="/articles/death-clock-alternative"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />

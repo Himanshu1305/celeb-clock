@@ -89,8 +89,8 @@ export function buildActionPlanPhases(
       title: '🧘 Deepen — Mind & Metabolic Health',
       items: [
         isHighStress
-          ? `🧘 Your stress level (${quiz?.stress}/10) is accelerating epigenetic ageing via cortisol elevation. Begin 10-minute daily mindfulness — Headspace, Calm, or simply sit quietly and focus on breathing. Even 8 weeks measurably alters stress biomarkers.`
-          : `🧘 Add 10-minute daily mindfulness or breathing practice. Research (NIH, 2021) shows even low-stress individuals benefit — it directly reverses epigenetic clock advancement.`,
+          ? `🧘 Your stress level (${quiz?.stress}/10) is high; long-term stress is associated with faster biological ageing. Begin 10-minute daily mindfulness — Headspace, Calm, or simply sit quietly and focus on breathing. Many people find it helps them feel calmer within a few weeks.`
+          : `🧘 Add 10-minute daily mindfulness or breathing practice. It is a simple habit that supports calm and better sleep; research on whether it changes epigenetic ageing is still early.`,
 
         isLowSocial
           ? `🤝 Limited social connection is reducing your forecast significantly. Commit to one weekly recurring social activity this month — a fitness class, community group, or regular meal with a close friend.`
@@ -114,7 +114,7 @@ export function buildActionPlanPhases(
           ? `🩺 Schedule a specialist review for your health conditions (${conditionList}). Bring your Month 2 blood test results. Controlled conditions have dramatically less longevity impact than uncontrolled ones.`
           : `🩺 Complete a full preventive health check: blood pressure, fasting glucose, HbA1c, lipid panel, BMI measurement. Compare against your Month 2 baseline — you should see measurable improvement.`,
 
-        `📱 Retake the BornClock Life Expectancy quiz this week. Research shows measurable epigenetic improvements within 8-12 weeks of consistent lifestyle change. Your Longevity Score should increase.`,
+        `📱 Retake the BornClock Life Expectancy quiz this week. Retaking shows how your answers — and your score — change as your habits change.`,
 
         `📋 Review your 90-day success honestly. For every dropped habit: change the TRIGGER, not the intention. A different time, place, or cue is more effective than more willpower.`,
 

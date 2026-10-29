@@ -66,7 +66,8 @@ export function RetirementAgeIndiaArticle() {
       testId="retirement-age-india-article"
       seo={(
         <>
-          <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
+          <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article"
+          articleSchema={false} />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />
         </>

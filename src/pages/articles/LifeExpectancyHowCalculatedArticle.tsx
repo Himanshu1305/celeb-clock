@@ -88,7 +88,8 @@ export function LifeExpectancyHowCalculatedArticle() {
       testId="le-how-calculated-article"
       seo={(
         <>
-          <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article" />
+          <SEO title={TITLE} description={DESC} canonicalUrl={`/articles/${SLUG}`} ogType="article"
+          articleSchema={false} />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />
         </>

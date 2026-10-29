@@ -70,6 +70,7 @@ export const CELEBRITY_ALIASES: Readonly<Record<string, string>> = {
   'keerthy-suresh': 'keerti-suresh',                            // Q17403476, 1992-10-17
   'dr-puneeth-rajkumar': 'puneeth-rajkumar',                    // Q3351697, 1975-03-17 – 2021-10-29
   'baldev-raj-chopra': 'br-chopra',                             // Q804792, 1914-04-22 – 2008-11-05
+  's-p-balasubrahmanyam': 'sp-balasubrahmanyam',                // Q2049688, 1946-06-04 – 2020-09-25 (read-only query 29 Oct 2026)
 };
 
 type Rec = Record<string, unknown>;

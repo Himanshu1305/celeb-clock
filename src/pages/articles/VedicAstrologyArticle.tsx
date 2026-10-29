@@ -185,6 +185,7 @@ export function VedicAstrologyArticle() {
           description="Vedic astrology birth chart explained — your Moon Rashi, Nakshatra, and Lagna from date of birth. Free calculator with all 12 Rashis and 27 Nakshatras."
           canonicalUrl="/articles/vedic-astrology-birth-chart"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Vedic Astrology Birth Chart' }}

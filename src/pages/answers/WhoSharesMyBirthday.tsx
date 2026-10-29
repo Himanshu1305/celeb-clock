@@ -26,6 +26,7 @@ export default function WhoSharesMyBirthday() {
             description="Discover which celebrities, athletes, scientists and world leaders share your exact birthday. BornClock searches 50,000+ celebrities by date of birth."
             canonicalUrl="/answers/who-shares-my-birthday"
             ogType="article"
+          articleSchema={false}
           />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />

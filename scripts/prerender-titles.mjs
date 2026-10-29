@@ -13,7 +13,7 @@ import { fileURLToPath } from 'url';
 // Batch 9: one shared Chinese-year helper (app + prerender) — the year rolls over at
 // Chinese New Year, computed at build time so a rebuild picks up the new year.
 import {
-  currentChineseYear, chineseHoroscopeIndexTitle, chineseHoroscopeIndexDescription, chineseSignDescription,
+  currentChineseYear, chineseHoroscopeIndexTitle, chineseHoroscopeAnimalTitle, chineseHoroscopeIndexDescription, chineseSignDescription,
   CHINESE_BY_YEAR_TITLE, CHINESE_BY_YEAR_DESC,
 } from '../src/lib/chineseCalendar.js';
 
@@ -251,7 +251,7 @@ const STATIC = {
   '/articles/numerology-by-date-of-birth': { title: 'Mulank vs Bhagyank vs Life Path — India Numerology Guide | BornClock', desc: 'Numerology by date of birth, explained for India: what Mulank, Bhagyank and the Western Life Path are, how each is worked out, and why 11 can become 2.' },
   '/articles/life-expectancy-by-country-2026': { title: 'Life Expectancy by Country 2026 — Global Rankings | BornClock', desc: 'Life expectancy by country in 2026 — UN World Population Prospects 2024 data. See rankings, what drives the differences, and how to improve your own.' },
   '/articles/how-long-will-i-live-in-india': { title: 'How Long Will I Live in India? Life Expectancy Guide | BornClock', desc: `Life expectancy in India by state — SRS data. Kerala 75.1 leads; national average ${LEY('India')} (UN WPP 2024). See your state and how to beat the average.` },
-  '/biological-age-vs-chronological-age': { title: 'Biological Age vs Chronological Age — The Science | BornClock', desc: 'Biological age vs chronological age explained — Horvath epigenetic clock, 5 proven ways to lower your biological age, and how to measure it.' },
+  '/biological-age-vs-chronological-age': { title: 'Biological Age vs Chronological Age — The Science | BornClock', desc: 'Biological age vs chronological age explained — Horvath epigenetic clock, 5 well-studied ways to support a younger biological age, and how to measure it.' },
   '/articles/vedic-astrology-birth-chart': { title: 'Vedic Astrology Birth Chart — Rashi & Nakshatra Guide | BornClock', desc: 'Vedic astrology birth chart explained — your Moon Rashi, Nakshatra, and Lagna from date of birth. Free calculator with all 12 Rashis and 27 Nakshatras.' },
   '/articles/longevity-quiz': { title: 'Longevity Quiz — How Long Will You Live? 8 Factors | BornClock', desc: 'Take the longevity quiz — 8 science-backed factors (WHO, Harvard) that determine how long you will live. Free, 3 minutes, with worked example.' },
   '/articles/bryan-johnson-blueprint-alternative': { title: 'Bryan Johnson Blueprint — Free Alternative | BornClock', desc: 'Bryan Johnson Blueprint costs millions a year. Here is a free, science-backed longevity alternative — the habits that actually matter, no budget needed.' },
@@ -268,7 +268,7 @@ const STATIC = {
   '/articles/tarot-card-by-date-of-birth': { title: 'Tarot Card by Date of Birth — Find Your Card | BornClock', desc: 'Find your tarot card by date of birth — your zodiac Major Arcana card and your Life Path tarot card, with meanings. Free tarot-by-birthday guide.' },
   '/articles/chinese-zodiac-by-year': { title: CHINESE_BY_YEAR_TITLE, desc: CHINESE_BY_YEAR_DESC },
   '/articles/birth-month-personality': { title: 'Birth Month Personality — What Your Month Says | BornClock', desc: 'Birth month personality guide — the zodiac sign and traits linked to each of the 12 months, plus the science of seasonal birth effects.' },
-  '/articles/epigenetics-and-longevity': { title: 'Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock', desc: 'Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 proven interventions.' },
+  '/articles/epigenetics-and-longevity': { title: 'Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock', desc: 'Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 well-studied habits.' },
   '/articles/longevity-supplements': { title: 'Longevity Supplements — What Works, What is Hype (India) | BornClock', desc: 'Longevity supplements ranked by evidence — Vitamin D, omega-3, magnesium, ashwagandha, NMN and more. India availability, real science, food-first.' },
   '/articles/how-indian-celebrities-stay-fit': { title: 'How Indian Celebrities Stay Fit — Habits & Life Paths | BornClock', desc: 'How Indian celebrities stay fit — Virat Kohli, Milind Soman, Amitabh Bachchan and more. Verified habits, their Life Path numbers, and lessons for you.' },
   '/articles/famous-people-lived-to-100': { title: 'Famous People Who Lived to 100 — Centenarian Secrets | BornClock', desc: 'Famous people who lived to 100+ — Kane Tanaka, Bob Hope, Olivia de Havilland and more. What the world centenarians had in common, and how to apply it.' },
@@ -496,7 +496,8 @@ export function getTitleForRoute(route) {
 
   // /chinese-horoscope is THE yearly page: its title names the current Chinese year and its
   // exact dates, computed at build time (same helper as the live <SEO>, so they match).
-  // /chinese-horoscope/:animal titles stay year-free.
+  // /chinese-horoscope/:animal titles name the current and next Chinese year (same helper as
+  // the live <SEO>, Batch 9b).
   if (route === '/chinese-horoscope') {
     const cy = currentChineseYear();
     return {
@@ -508,7 +509,7 @@ export function getTitleForRoute(route) {
     const slug = route.slice(19);
     const capitalised = slug.charAt(0).toUpperCase() + slug.slice(1);
     return {
-      title: `${capitalised} Horoscope — Career, Love, Money & Health | BornClock`,
+      title: chineseHoroscopeAnimalTitle(capitalised, currentChineseYear()),
       description: `${capitalised} Chinese zodiac yearly forecast: career, finance, love and health, graded strong/moderate/mild from the ${capitalised}'s relationship to the year's ruling animal.`,
     };
   }

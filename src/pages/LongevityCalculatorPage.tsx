@@ -49,7 +49,7 @@ const LC_FAQ_SCHEMA = {
       name: 'Can I improve my longevity score?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. Unlike chronological age, your longevity score reflects modifiable lifestyle factors. Research shows consistent lifestyle changes produce measurable epigenetic improvements within 8-12 weeks. BornClock generates a personalised 90-day action plan based on your top improvement opportunities. The most impactful changes are increasing exercise to 150+ minutes per week, improving sleep to 7-8 hours, and managing chronic conditions.',
+        text: 'Yes. Unlike chronological age, your longevity score reflects modifiable lifestyle factors. Your score updates as your answers change; one small 2021 pilot trial also found a lower epigenetic-age estimate after 8 weeks of lifestyle change, though larger trials have yet to confirm it. BornClock generates a personalised 90-day action plan based on your top improvement opportunities. The most impactful changes are increasing exercise to 150+ minutes per week, improving sleep to 7-8 hours, and managing chronic conditions.',
       },
     },
     {

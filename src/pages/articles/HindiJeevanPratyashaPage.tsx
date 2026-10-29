@@ -68,6 +68,7 @@ export function HindiJeevanPratyashaPage() {
           description="जानें आपकी जीवन प्रत्याशा क्या है। UN WPP 2024 डेटा और धूम्रपान, व्यायाम, आहार जैसे 5 कारकों के साथ अपनी अनुमानित आयु की मुफ्त गणना करें।"
           canonicalUrl="/hi/meri-jeevan-pratyasha"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'मेरी जीवन प्रत्याशा क्या है?' }}

@@ -25,6 +25,7 @@ export default function WhatIsMyLifePathNumber() {
           description="Your Life Path number is calculated from your full date of birth and reveals your core purpose. Calculate yours free and get your 2026 Personal Year forecast."
           canonicalUrl="/answers/what-is-my-life-path-number"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'What is my Life Path number?' }}

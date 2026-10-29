@@ -25,6 +25,7 @@ export default function WhatIsMyZodiacSign() {
           description="Find your Western sun sign, Vedic Rashi, and Chinese zodiac animal from your birthday. Most people have a different sign in Vedic astrology than Western."
           canonicalUrl="/answers/what-is-my-zodiac-sign"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'What is my zodiac sign?' }}

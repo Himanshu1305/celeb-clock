@@ -34,6 +34,7 @@ export default function WhatIsVedicAstrology() {
           description="Vedic astrology uses a different zodiac than Western — which is why your Vedic sign is usually one sign behind. Plus what Vedic astrology actually emphasizes that Western doesn't."
           canonicalUrl="/answers/what-is-vedic-astrology"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'What is Vedic astrology?' }}

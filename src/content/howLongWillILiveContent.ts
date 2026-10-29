@@ -192,7 +192,7 @@ export const HLWIL_FACTORS = [
     name: 'Stress Level',
     impact: '40% higher cardiovascular disease risk',
     direction: 'negative' as const,
-    detail: 'Chronic high stress elevates cortisol and accelerates epigenetic ageing. High daily stress increases cardiovascular disease risk by 40% (AHA, 2021).',
+    detail: 'Chronic high stress elevates cortisol and is associated with faster epigenetic ageing. High daily stress increases cardiovascular disease risk by 40% (AHA, 2021).',
     source: 'AHA Scientific Statement, 2021',
   },
   {
@@ -298,7 +298,7 @@ export const HLWIL_COPY = {
       { step: 1, action: 'Take the BornClock quiz', detail: 'Get your personalised life expectancy estimate and see exactly which factors are helping and hurting your forecast.' },
       { step: 2, action: 'Identify your top opportunity', detail: 'BornClock ranks your improvement opportunities by potential years gained. Focus on your single highest-impact factor first.' },
       { step: 3, action: 'Follow your 90-day plan', detail: 'Your personalised action plan gives specific weekly steps based on your quiz answers — not generic advice.' },
-      { step: 4, action: 'Retake in 90 days', detail: 'Research shows measurable epigenetic improvements within 8-12 weeks of consistent lifestyle change. Track your progress.' },
+      { step: 4, action: 'Retake in 90 days', detail: 'Habits take weeks to settle; retaking shows how your answers and score change. Track your progress.' },
     ] as const,
   },
   honestLimits: {
@@ -315,7 +315,7 @@ export const HLWIL_COPY = {
       { source: 'Harvard Study of Adult Development (85+ years)', text: 'The world\'s longest-running study of adult life. Key finding: relationship quality at 50 predicts healthy ageing at 80 more reliably than cholesterol, income, or IQ.' },
       { source: 'Karolinska Institute Twin Registry (2018)', text: 'Analysis of 44,000 Swedish twins establishing that genetics accounts for only 25-30% of longevity variance. 70-75% is determined by lifestyle.' },
       { source: 'WHO Physical Activity Guidelines (2022)', text: 'Meta-analysis of 196 studies: 150-300 minutes moderate exercise per week reduces all-cause mortality by 31%.' },
-      { source: 'Horvath S., Nature Genetics (2013)', text: 'Epigenetic clock research establishing that lifestyle behaviours directly alter DNA methylation patterns and biological age.' },
+      { source: 'Horvath S., Genome Biology (2013)', text: 'Introduced a DNA methylation "epigenetic clock" that estimates age across many human tissues.' },
       { source: 'Blue Zones Research, Buettner (2023)', text: 'Longitudinal study of five centenarian populations identifying nine shared lifestyle principles that explain exceptional longevity.' },
     ] as const,
   },

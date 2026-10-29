@@ -34,7 +34,9 @@
  *    of the birth day. Run: scratchpad b8acc/celeb_dump.mts + celeb_cmp_signs.py
  *    (copies of b6moon/*): 3,044/3,044 same sign(s). Only four dates differ by more than
  *    60″, all before 1210 CE (largest 525″, Aryabhata 476 CE). Nakshatra lists differed
- *    on 7 boundary days, so the page claims Moon SIGNS only.
+ *    on 7 boundary days, so the page claims Moon SIGNS only. Re-run 29 Oct 2026 (scratchpad
+ *    b9b/celeb_dump.mts + cmp.py) after the SPB duplicate merge: 3,043/3,043 same sign(s),
+ *    largest difference still 524.8″ (Aryabhata).
  *  - SADE SATI: goldenCharts.json sadeSatiAtRef (Saturn ingresses from Swiss Ephemeris),
  *    status at 24 Oct 2026: 22/22 in the same run.
  *  - WEEKLY CHECK: .github/workflows/weekly-drift.yml (Mondays ~03:00 IST; 20 births +
@@ -78,8 +80,19 @@ export const COUNTS = {
   vargas: 16,
   vargaPlacements: 772,
   vargaSkipped: 28,
-  celebrities: 3044,
+  celebrities: 3043, // Batch 9b: 3,044 → 3,043 after the S. P. Balasubrahmanyam duplicate merged; re-run 29 Oct 2026, 3,043/3,043 same sign(s)
+  // Batch 9b: the "very old dates" caveat on /accuracy, moved here from the page text.
+  // Re-checked by accuracyEvidence.test.ts against __tests__/ancientMoonSwiss.json
+  // (pyswisseph 2.10.03, SIDM_LAHIRI, regenerated 29 Oct 2026): the only celebrity dates
+  // whose date-only Moon range differs from the Swiss Ephemeris by more than 60″.
+  kaalSarpCharts: 2,
+  ancientMoonDates: 4,
+  ancientMoonBeforeYear: 1210,
+  ancientMoonMaxArcsec: 525, // Aryabhata, 476 CE (524.8″ ≈ 8.7 arc-minutes)
 } as const;
+
+/** "about N arc-minutes" for the very-old-dates caveat, derived from COUNTS. */
+export const ANCIENT_MOON_MAX_ARCMIN = Math.round(COUNTS.ancientMoonMaxArcsec / 60);
 
 export const EVIDENCE: EvidenceRow[] = [
   {
@@ -123,6 +136,18 @@ export const EVIDENCE: EvidenceRow[] = [
     date: '17 Oct 2026',
   },
   {
+    // Batch 9b: backs the Kaal Sarp row on /how-it-works. Source: manglikKaalSarp.test.ts
+    // (added 23 Oct 2026, commit af6b16e): chart P3 (Delhi, 15 Jan 1990) — Drik Panchang
+    // shows no Kaal Sarp; chart P9 — all 7 planets inside the Ketu→Rahu arc by degree
+    // (Swiss Ephemeris, Lahiri, mean node). Re-run by accuracyEvidence.test.ts.
+    id: 'kaal-sarp',
+    what: 'Kaal Sarp (reported only when the pattern is full, by exact degree)',
+    reference: 'Drik Panchang (1 chart); Swiss Ephemeris planet and node degrees (1 chart)',
+    howMany: `${COUNTS.kaalSarpCharts} test charts`,
+    result: 'Same as Drik Panchang on the checked chart (no Kaal Sarp); the full-pattern chart has all 7 planets inside the Rahu–Ketu arc by degree',
+    date: '23 Oct 2026',
+  },
+  {
     id: 'panchang',
     what: 'Panchang: Tithi and Nakshatra names, sunrise, Rahu Kaal and other times',
     reference: 'Drik Panchang day pages',
@@ -160,7 +185,7 @@ export const EVIDENCE: EvidenceRow[] = [
     reference: 'Swiss Ephemeris',
     howMany: `${COUNTS.celebrities.toLocaleString('en-IN')} people`,
     result: `${COUNTS.celebrities.toLocaleString('en-IN')} of ${COUNTS.celebrities.toLocaleString('en-IN')} same sign (or same two signs on change days)`,
-    date: '26 Oct 2026',
+    date: '29 Oct 2026',
   },
   {
     id: 'sade-sati',

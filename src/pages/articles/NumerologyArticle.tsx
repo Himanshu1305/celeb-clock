@@ -82,6 +82,7 @@ export function NumerologyArticle() {
           description="Numerology by date of birth, explained for India: what Mulank, Bhagyank and the Western Life Path are, how each is worked out, and why 11 can become 2."
           canonicalUrl="/articles/numerology-by-date-of-birth"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Numerology by Date of Birth' }}

@@ -27,6 +27,7 @@ export default function WhatIsBMI() {
             description="BMI (Body Mass Index) explained: how to calculate it, what the ranges mean, and why waist-to-height ratio is actually a better predictor of health. Calculate yours free."
             canonicalUrl="/answers/what-is-bmi"
             ogType="article"
+          articleSchema={false}
           />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />

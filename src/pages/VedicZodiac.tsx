@@ -37,7 +37,7 @@ const FAQ_ITEMS = [
   },
   {
     question: 'Which system is more accurate — Western or Vedic?',
-    answer: 'Neither is objectively "more accurate" — they are different philosophical frameworks. Western astrology (tropical) aligns signs with seasons, which has cultural and psychological depth. Vedic astrology (sidereal) aligns signs with fixed stars, which is more astronomically precise. Many people find value in both systems.',
+    answer: 'Neither is objectively "more accurate" — they are different philosophical frameworks. Western astrology (tropical) aligns signs with seasons, which has cultural and psychological depth. Vedic astrology (sidereal) aligns signs with the fixed stars. Both are calculated precisely — they simply measure from different reference points (the equinox versus the stars). Many people find value in both systems.',
   },
 ];
 
@@ -92,7 +92,7 @@ export default function VedicZodiac() {
               <p className="text-xs text-orange-800 leading-relaxed">
                 Jyotish (ज्योतिष) is one of the Vedangas — the six auxiliary disciplines of the Vedas.
                 It uses the <strong>sidereal zodiac</strong> corrected for the precession of equinoxes
-                (Lahiri ayanamsa ≈ {AYANAMSA_NOW}° today), making it more astronomically precise than the Western tropical zodiac.
+                (Lahiri ayanamsa ≈ {AYANAMSA_NOW}° today). The Western tropical zodiac is just as precise — it measures from the spring equinox instead of the stars, so the two use different reference points.
                 Your Vedic (sidereal) Sun sign is typically one sign earlier than your Western sun sign;
                 your Rashi is the Moon's sign, shown separately below.
               </p>

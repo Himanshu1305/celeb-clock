@@ -129,8 +129,8 @@ export function buildLongevityBlueprintHtml(
     };
 
     const stressNote = !quiz?.stress ? 'Stress level not recorded.' :
-      quiz.stress >= 8 ? `Your stress level of ${quiz.stress}/10 is very high. Chronic stress elevates cortisol, accelerating epigenetic ageing. Stress management is one of the most impactful interventions available to you.`
-      : quiz.stress >= 5 ? `Your stress level of ${quiz.stress}/10 is moderate to high. Regular mindfulness practice can reverse measurable epigenetic ageing.`
+      quiz.stress >= 8 ? `Your stress level of ${quiz.stress}/10 is very high. Long-term stress raises cortisol and is associated with faster biological ageing. Stress management is one of the most impactful interventions available to you.`
+      : quiz.stress >= 5 ? `Your stress level of ${quiz.stress}/10 is moderate to high. Regular mindfulness practice can help you manage it; whether it changes epigenetic ageing is still being studied.`
       : quiz.stress >= 3 ? `Your stress level of ${quiz.stress}/10 is moderate. You are managing stress reasonably well — maintaining this protects your epigenetic profile.`
       : `Your low stress level (${quiz.stress}/10) is a significant longevity asset. Sustained low stress is associated with slower epigenetic ageing.`;
 
@@ -1195,7 +1195,7 @@ export function buildLongevityBlueprintHtml(
       </div>`).join('')}
     <div style="padding:6px 0;border-bottom:1px solid #f3f4f6;font-size:11px;color:#4b5563;"><span style="color:var(--navy);">●</span> Ruby et al., Science (2018): Genetic heritability of longevity — 25–30% genetic, 70–75% lifestyle.</div>
     <div style="padding:6px 0;border-bottom:1px solid var(--hairline);font-size:11px;color:var(--ink-soft);"><span style="color:var(--navy);">●</span> Harvard Study of Adult Development (85 years): Social relationships as strongest predictor of healthy ageing.</div>
-    <div style="padding:6px 0;border-bottom:1px solid var(--hairline);font-size:11px;color:var(--ink-soft);"><span style="color:var(--navy);">●</span> Horvath S., NIH (2013): DNA methylation age — lifestyle factors alter epigenetic clocks.</div>
+    <div style="padding:6px 0;border-bottom:1px solid var(--hairline);font-size:11px;color:var(--ink-soft);"><span style="color:var(--navy);">●</span> Horvath S., Genome Biology (2013): DNA methylation age of human tissues — the first multi-tissue epigenetic clock.</div>
     <div style="padding:6px 0;font-size:11px;color:var(--ink-soft);"><span style="color:var(--navy);">●</span> Buettner D., Blue Zones (2023): Power 9 lifestyle principles from centenarian populations.</div>
   </div>
 

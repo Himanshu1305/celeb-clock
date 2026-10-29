@@ -7,7 +7,7 @@ function JsonLd({ data }: { data: object }) {
 }
 
 const TITLE = 'Biological Age vs Chronological Age — The Science | BornClock';
-const DESC = 'Biological age vs chronological age explained — Horvath epigenetic clock, 5 proven ways to lower your biological age, and how to measure it.';
+const DESC = 'Biological age vs chronological age explained — Horvath epigenetic clock, 5 well-studied ways to support a younger biological age, and how to measure it.';
 
 const FAQS = [
   {
@@ -20,7 +20,7 @@ const FAQS = [
   },
   {
     q: 'Can you actually lower your biological age?',
-    a: 'Evidence suggests you can slow, and in some cases modestly reverse, biological age through lifestyle. Sleep optimisation, caloric restriction, high-intensity exercise, stress reduction, and a plant-heavy diet are the five best-supported levers. These changes influence DNA methylation, inflammation, and metabolic health. Results are gradual and individual — think of it as bending the trajectory of ageing rather than turning back a clock overnight.',
+    a: 'Evidence suggests lifestyle can slow biological ageing; whether it can reverse it is still early — a small 2021 pilot trial (43 men, 8 weeks) found a 3.23-year lower epigenetic-age estimate than controls, and its authors call for larger trials. Sleep optimisation, caloric restriction, high-intensity exercise, stress reduction, and a plant-heavy diet are the five best-supported levers. These changes influence DNA methylation, inflammation, and metabolic health. Results are gradual and individual — think of it as bending the trajectory of ageing rather than turning back a clock overnight.',
   },
   {
     q: 'Did Bryan Johnson really reverse his biological age?',
@@ -198,6 +198,7 @@ export function BiologicalAgeArticle() {
             description={DESC}
             canonicalUrl="/biological-age-vs-chronological-age"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />
@@ -285,7 +286,7 @@ export function BiologicalAgeArticle() {
           <BioAgeCalculator />
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">
-            5 Proven Ways to Lower Your Biological Age
+            5 Well-Studied Ways to Support a Younger Biological Age
           </h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             You cannot change your chronological age, but the evidence suggests you can bend your

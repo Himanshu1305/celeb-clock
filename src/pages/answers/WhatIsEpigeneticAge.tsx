@@ -18,17 +18,25 @@ const RELATED = [
   { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
 ];
 
+// Batch 9b honesty pass — sources opened via PubMed (29 Oct 2026):
+//  - Fitzgerald KN et al. Aging (Albany NY) 2021;13(7):9419-9432, doi:10.18632/aging.202913 —
+//    pilot RCT, 43 healthy men aged 50-72, 8 weeks, 3.23-year lower Horvath DNAmAge vs controls;
+//    "Larger-scale and longer duration clinical trials are needed to confirm these findings."
+//  - Chen BH et al. Aging (Albany NY) 2016;8(9):1844-1865, doi:10.18632/aging.101020 — meta-analysis,
+//    13 cohorts, 13,089 people; epigenetic age acceleration predicted all-cause mortality independent
+//    of chronological age and traditional risk factors. (The old "more accurate than 14 biomarkers
+//    combined" claim is NOT in that paper and was removed, as was an unsourced 2020 caregiver study.)
 export default function WhatIsEpigeneticAge() {
   const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What is epigenetic age?", "item": CANONICAL } ] };
-  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Is Epigenetic Age — and Why It's the Most Honest Number About How You're Aging", "description": "Epigenetic age measures biological aging at the DNA level — and it can be reduced. Here's how it works, what it predicts, and what the latest research shows.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-08-06", "dateModified": "2026-08-06", "mainEntityOfPage": CANONICAL };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Is Epigenetic Age — and Why It's the Most Honest Number About How You're Aging", "description": "Epigenetic age estimates biological aging from DNA methylation. Here's how it works, what it predicts, and what early research says about changing it.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-08-06", "dateModified": "2026-08-06", "mainEntityOfPage": CANONICAL };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "How is epigenetic age different from biological age?", "acceptedAnswer": { "@type": "Answer", "text": "Epigenetic age is one specific method of measuring biological age — currently the most scientifically accurate one available. Biological age is the broader concept; epigenetic age is the DNA methylation-based measurement of that concept." } },
+      { "@type": "Question", "name": "How is epigenetic age different from biological age?", "acceptedAnswer": { "@type": "Answer", "text": "Epigenetic age is one specific laboratory method of estimating biological age — one of the most studied. Biological age is the broader concept; epigenetic age is the DNA methylation-based measurement of that concept." } },
       { "@type": "Question", "name": "How do I find out my epigenetic age?", "acceptedAnswer": { "@type": "Answer", "text": "Epigenetic age needs a laboratory test of a blood or saliva sample, sold by some private companies. BornClock's free biological age calculator is different: it gives a lifestyle- and fitness-based estimate from 15 questions and does not measure epigenetic age." } },
-      { "@type": "Question", "name": "Is epigenetic aging reversible?", "acceptedAnswer": { "@type": "Answer", "text": "The evidence increasingly suggests yes — to a meaningful degree. Multiple intervention studies have found 2–5 year reductions in epigenetic age within weeks to months of lifestyle changes. The DunedinPACE clock can show whether your current pace of aging is actually slowing in response to what you're doing." } },
-      { "@type": "Question", "name": "Can stress change your epigenetic age?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — significantly. Chronic psychological stress is one of the most consistent drivers of epigenetic age acceleration. Long-term caregiving stress, in particular, has been associated with measurably faster biological aging in multiple studies." } }
+      { "@type": "Question", "name": "Is epigenetic aging reversible?", "acceptedAnswer": { "@type": "Answer", "text": "Possibly, but the evidence is still early. A small 2021 pilot randomized trial (Fitzgerald et al., Aging; 43 healthy men aged 50–72) found an 8-week diet and lifestyle programme was associated with a 3.23-year lower Horvath epigenetic age than the control group. The authors say larger and longer trials are needed to confirm it, so treat it as a promising early result, not proof." } },
+      { "@type": "Question", "name": "Can stress change your epigenetic age?", "acceptedAnswer": { "@type": "Answer", "text": "Chronic psychological stress has been associated with faster epigenetic ageing in observational studies. That is an association, not proof that stress causes it or that reducing stress lowers your epigenetic age." } }
     ]
   };
 
@@ -39,9 +47,10 @@ export default function WhatIsEpigeneticAge() {
       seo={(
         <SEO
           title="What Is Epigenetic Age? The Science of Biological Aging | BornClock"
-          description="Epigenetic age measures biological aging at the DNA level — and it can be reduced. Here's how it works, what it predicts, and what the latest research shows."
+          description="Epigenetic age estimates biological aging from DNA methylation. Here's how it works, what it predicts, and what early research says about changing it."
           canonicalUrl="/answers/what-is-epigenetic-age"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What is epigenetic age?' }}
@@ -55,7 +64,7 @@ export default function WhatIsEpigeneticAge() {
         <div className="max-w-2xl mx-auto px-4 py-12">
           <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
-              Epigenetic age is a measure of biological aging based on DNA methylation — chemical changes to your DNA that accumulate in predictable patterns as you age. It was pioneered by UCLA geneticist Steve Horvath in 2013 and is currently the most scientifically validated way to measure how fast your body is aging at a cellular level. Unlike your chronological age, which only moves forward, epigenetic age can — with the right interventions — actually go down.
+              Epigenetic age is a measure of biological aging based on DNA methylation — chemical changes to your DNA that accumulate in predictable patterns as you age. It was pioneered by UCLA geneticist Steve Horvath in 2013 and is one of the most studied laboratory ways to estimate biological aging at a cellular level. Your chronological age only moves forward; small early trials suggest an epigenetic age estimate may move down as well, but larger trials have not yet confirmed this.
             </p>
           </div>
 
@@ -72,12 +81,12 @@ export default function WhatIsEpigeneticAge() {
 
             <h2 className="text-xl font-bold text-gray-900">What epigenetic age predicts</h2>
             <p>Epigenetic age acceleration — when your biological age runs ahead of your chronological age — is associated with: higher all-cause mortality independently of chronological age, increased cardiovascular disease risk, higher cancer risk, faster cognitive decline and earlier dementia onset, and reduced physical capacity and earlier frailty.</p>
-            <p>A 2016 study in Aging found that epigenetic age acceleration predicted time to death more accurately than 14 other established biomarkers combined. That's not a small finding.</p>
+            <p>A 2016 meta-analysis in Aging (Chen et al.; 13 cohorts, 13,089 people) found that epigenetic age acceleration predicted all-cause mortality independently of chronological age, even after adjusting for traditional risk factors. That is an association across groups of people; it does not tell any one person how long they will live.</p>
 
             <h2 className="text-xl font-bold text-gray-900">Can epigenetic age actually go down?</h2>
-            <p>Yes — and this is where the research gets genuinely exciting.</p>
+            <p>Possibly — but the evidence is still early and small.</p>
             <p>A small 2021 pilot randomized trial by Kara Fitzgerald and colleagues (Aging, 2021; 43 healthy men aged 50–72) found that an 8-week programme — diet, sleep, exercise and relaxation guidance plus supplements — was associated with a 3.23-year lower Horvath epigenetic age compared with the control group. The authors say larger and longer trials are needed to confirm the finding.</p>
-            <p>Factors consistently associated with lower epigenetic age in large studies: regular vigorous exercise, plant-rich diet, not smoking, quality sleep, and maintaining social connections. Factors associated with higher epigenetic age: smoking, obesity, chronic stress, heavy alcohol use, social isolation, and caregiving stress. A 2020 study found that people caring for chronically ill spouses showed significantly accelerated epigenetic aging compared to age-matched controls.</p>
+            <p>Factors consistently associated with lower epigenetic age in large studies: regular vigorous exercise, plant-rich diet, not smoking, quality sleep, and maintaining social connections. Factors associated with higher epigenetic age: smoking, obesity, chronic stress, heavy alcohol use, social isolation, and caregiving stress.</p>
           </div>
 
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">

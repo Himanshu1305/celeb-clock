@@ -184,6 +184,7 @@ export function LongevityFoodsIndiaArticle() {
             description="15 Indian longevity foods backed by evidence — turmeric, dal, amla, ghee, millets and more. What to eat for a longer, healthier life, the Indian way."
             canonicalUrl="/articles/longevity-foods-india"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />

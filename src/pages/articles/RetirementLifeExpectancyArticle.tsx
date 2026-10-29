@@ -142,7 +142,8 @@ export function RetirementLifeExpectancyArticle() {
       testId="retirement-life-expectancy-article"
       seo={(
         <>
-          <SEO title={TITLE} description={DESC} canonicalUrl={SLUG} ogType="article" />
+          <SEO title={TITLE} description={DESC} canonicalUrl={SLUG} ogType="article"
+          articleSchema={false} />
           <JsonLd data={articleSchema} />
           <JsonLd data={softwareSchema} />
           <JsonLd data={faqSchema} />

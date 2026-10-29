@@ -32,7 +32,7 @@ const FAQS = [
   },
   {
     q: 'Can lifestyle really change how my genes work?',
-    a: 'Yes. While you cannot change your DNA sequence, you can influence which genes are switched on or off through epigenetic marks. Proven interventions such as a Mediterranean diet, high-intensity interval training, and consistent 7–9 hours of sleep are all associated with measurable shifts in gene expression linked to slower biological ageing.',
+    a: 'Yes. While you cannot change your DNA sequence, you can influence which genes are switched on or off through epigenetic marks. Well-studied habits such as a Mediterranean diet, high-intensity interval training, and consistent 7–9 hours of sleep are all associated with measurable shifts in gene expression linked to slower biological ageing.',
   },
   {
     q: 'What are telomeres and can telomere shortening be reversed?',
@@ -49,7 +49,7 @@ export function EpigeneticsArticle() {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: 'Epigenetics and Longevity — How Lifestyle Rewrites Your Genes',
-    description: 'Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 proven interventions.',
+    description: 'Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 well-studied habits.',
     author: { '@type': 'Organization', name: 'BornClock' },
     publisher: { '@type': 'Organization', name: 'BornClock' },
     mainEntityOfPage: 'https://bornclock.com/articles/epigenetics-and-longevity/',
@@ -72,9 +72,10 @@ export function EpigeneticsArticle() {
         <>
           <SEO
             title="Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock"
-            description="Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 proven interventions."
+            description="Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 well-studied habits."
             canonicalUrl="/articles/epigenetics-and-longevity"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />
@@ -121,7 +122,7 @@ export function EpigeneticsArticle() {
             reduction to a slower rate of telomere loss.
           </p>
 
-          <h2 className="text-2xl font-black text-gray-900 mb-4">3 Proven Interventions That Rewrite Gene Expression</h2>
+          <h2 className="text-2xl font-black text-gray-900 mb-4">3 Well-Studied Habits Linked to Gene Expression</h2>
           {INTERVENTIONS.map((it, i) => (
             <section key={it.title} className="mb-6">
               <h3 className="text-xl font-black text-gray-900 mb-2">{i + 1}. {it.title}</h3>

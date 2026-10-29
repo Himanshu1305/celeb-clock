@@ -297,6 +297,7 @@ export function MonthlyBirthdayArticle({ month }: { month: number }) {
         description={meta.description}
         canonicalUrl={`/articles/${slug}`}
         ogType="article"
+          articleSchema={false}
       />
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />

@@ -98,7 +98,8 @@ export function BlueZonesDietArticle() {
       testId="blue-zones-diet-article"
       seo={(
         <>
-          <SEO title={TITLE} description={DESC} canonicalUrl="/articles/blue-zones-diet" ogType="article" />
+          <SEO title={TITLE} description={DESC} canonicalUrl="/articles/blue-zones-diet" ogType="article"
+          articleSchema={false} />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />
         </>

@@ -155,6 +155,7 @@ export function MoonSignArticle() {
           description="Find your Vedic Rashi (moon sign) by date of birth. All 12 Rashis with lucky stone, mantra, personality, Devanagari names, and free Rashi calculator."
           canonicalUrl="/articles/moon-sign-by-date-of-birth"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Moon Sign by Date of Birth' }}

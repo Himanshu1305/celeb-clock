@@ -27,6 +27,7 @@ export default function HowToCalculateAge() {
             description="Calculate your exact age right now — in years, months, days, hours, minutes and seconds. Updated live every second. Also find your generation and birthday twin."
             canonicalUrl="/answers/how-to-calculate-age"
             ogType="article"
+          articleSchema={false}
           />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />

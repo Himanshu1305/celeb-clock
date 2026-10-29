@@ -32,6 +32,7 @@ export default function WhatIsLifeExpectancy() {
           description={`Life expectancy explained: what it means, how it's calculated, why India's is ${leYears('India')} years, and how your personal forecast differs from the national average.`}
           canonicalUrl="/answers/what-is-life-expectancy"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What is life expectancy?' }}

@@ -163,6 +163,7 @@ export function ZodiacCompatibilityArticle() {
           description="Zodiac compatibility guide — how all 12 signs match in love and friendship. Free compatibility checker plus the best and worst matches for every sign."
           canonicalUrl="/articles/zodiac-compatibility"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Zodiac Compatibility' }}

@@ -26,6 +26,7 @@ export default function WhatGenerationAmI() {
           description="Find out which generation you belong to based on your birth year. Gen Z, Millennials, Gen X, Baby Boomers, Silent Generation and Gen Alpha — years and traits explained."
           canonicalUrl="/answers/what-generation-am-i"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What generation am I?' }}

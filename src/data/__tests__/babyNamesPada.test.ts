@@ -86,7 +86,12 @@ describe('N6 — names indexed by first Devanagari akshara', () => {
   };
 
   it('Dev is De (Revati 1), not Da', () => expect(where('Dev')).toEqual(['Revati 1']));
-  it('Sohan is So (Purva Bhadrapada 2), not Sa', () => expect(where('Sohan')).toEqual(['Purva Bhadrapada 2']));
+  // Batch 9b: Sohan was removed from the list (no source gives the name's gender); the
+  // So-not-Sa rule is still checked on its spelling.
+  it('सोहन (Sohan) is So (Purva Bhadrapada 2), not Sa', () => {
+    expect(padasForName({ name: 'Sohan', hi: 'सोहन', gender: 'unisex', meaning: '', source: '' }).map(p => `${p.nakshatra} ${p.pada}`)).toEqual(['Purva Bhadrapada 2']);
+    expect(BABY_NAMES.some(n => n.name === 'Sohan')).toBe(false);
+  });
   it('Prem is Pe (Chitra 1): a conjunct takes the vowel after it', () => expect(where('Prem')).toEqual(['Chitra 1']));
   it('Deepak is Di (Purva Bhadrapada 4), not De', () => expect(where('Deepak')).toEqual(['Purva Bhadrapada 4']));
   it('Ardra pada 4 lists Chha names', () => {
