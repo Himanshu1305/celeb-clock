@@ -4,6 +4,8 @@
  * around already-validated data, matching the other Vedic tool pages.
  */
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { RASHIS } from '@/lib/vedic/rashifal';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
@@ -167,6 +169,17 @@ export default function SadeSatiPage() {
           <div className="form-band" style={{ marginTop: 16 }}>
             <div><h3>Your birth details</h3><p className="small muted">We use your Moon sign to locate Saturn’s transit.</p></div>
             <BirthDetailsForm initial={initial} submitLabel="Check my Sade Sati" loadingLabel="Calculating…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="sadesati" />
+          </div>
+          {/* Batch 9b: per-Moon-sign Sade Sati & Dhaiya dates, 1950–2060. */}
+          <div data-testid="sadesati-by-rashi" style={{ marginTop: 16 }}>
+            <h2 className="text-base font-semibold text-foreground mb-2">Sade Sati start and end dates by Moon sign</h2>
+            <div className="flex flex-wrap gap-2">
+              {RASHIS.map(r => (
+                <Link key={r.slug} to={`/sade-sati/${r.slug}`} className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-primary/5">
+                  {r.sanskrit} <span className="text-muted-foreground">({r.english})</span>
+                </Link>
+              ))}
+            </div>
           </div>
         {failed && <p className="subtle" style={{ marginTop: 12 }}>The service is temporarily unavailable. Please try again shortly.</p>}
 

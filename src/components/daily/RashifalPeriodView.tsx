@@ -82,6 +82,10 @@ export function RashifalPeriodView({ rashi, period }: { rashi: RashiMeta; period
             ))}
           </div>
 
+          <p className="text-sm text-muted-foreground mb-6" data-testid="rashifal-sadesati-link">
+            Saturn periods for {rashi.sanskrit}: <Link to={`/sade-sati/${rashi.slug}`} className="underline">{rashi.sanskrit} Sade Sati &amp; Dhaiya start and end dates →</Link>
+          </p>
+
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Not sure of your Moon sign? Generate your free Kundli to find it — then your rashifal is read from the right sign.</p>
             <div className="flex flex-wrap gap-3 justify-center">
