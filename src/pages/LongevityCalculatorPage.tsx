@@ -21,55 +21,11 @@ function JsonLd({ data }: { data: object }) {
 }
 
 // ── Additional structured-data schemas (SEO batch) ───────────
-// FAQPage (exactly 5), SoftwareApplication, and WebPage+speakable.
+// SoftwareApplication and WebPage+speakable.
 // These are self-contained JSON-LD objects rendered alongside the existing
 // LC_SCHEMA blocks so search engines get rich FAQ/app/speakable coverage.
-const LC_FAQ_SCHEMA = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'How accurate is a longevity calculator?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Longevity calculators provide statistical estimates based on population research, not individual predictions. BornClock uses WHO Global Health Observatory data as the baseline and adjusts for 8 lifestyle factors using peer-reviewed research from Harvard, NIH, and the Karolinska Institute. Research shows these 8 factors account for 70-75% of longevity variance. Genetics accounts for the remaining 25-30%.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'What factors affect life expectancy the most?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'The most impactful modifiable factors are: smoking (costs up to 10 years), physical exercise (150 min/week reduces all-cause mortality by 31%, WHO 2022), BMI (each 5-unit increase above 25 reduces life expectancy by 0.9 years, Lancet 2016), sleep (under 6 hours linked to 12% higher mortality), and social connections (loneliness has mortality impact equal to smoking 15 cigarettes per day). Genetics accounts for only 25-30% of longevity variance.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Can I improve my longevity score?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. Unlike chronological age, your longevity score reflects modifiable lifestyle factors. Your score updates as your answers change; one small 2021 pilot trial also found a lower epigenetic-age estimate after 8 weeks of lifestyle change, though larger trials have yet to confirm it. BornClock generates a personalised 90-day action plan based on your top improvement opportunities. The most impactful changes are increasing exercise to 150+ minutes per week, improving sleep to 7-8 hours, and managing chronic conditions.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'How is BornClock different from other life expectancy calculators?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Most life expectancy calculators ask 2-3 questions. BornClock asks 8 questions covering smoking, BMI, chronic conditions, diet, sleep, exercise, stress, social connections, and family history. We use WHO Global Health Observatory baselines specific to your country and gender, adjusted using research from Harvard, NIH, and Karolinska Institute. You also receive a personalised 90-day action plan, biological age estimate, and downloadable 11-page PDF report.',
-      },
-    },
-    {
-      '@type': 'Question',
-      name: 'Is the longevity calculator free?',
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: 'Yes. The full longevity calculator quiz and your personalised results are completely free. This includes your life expectancy estimate, longevity score, factor breakdown, biological age estimate, and 90-day action plan. A premium option downloads a detailed 11-page PDF Longevity Blueprint.',
-      },
-    },
-  ],
-} as const;
+// (The old second FAQPage block, LC_FAQ_SCHEMA, was removed in the batch 9b review: a
+// page carries ONE FAQPage — LC_SCHEMA.faq, the same list the visible FAQ renders.)
 
 const LC_SOFTWARE_APP_SCHEMA = {
   '@context': 'https://schema.org',
@@ -118,8 +74,7 @@ export function LongevityCalculatorPage() {
           <JsonLd data={LC_SCHEMA.faq} />
           <JsonLd data={LC_SCHEMA.breadcrumb} />
 
-          {/* Additional structured data: FAQPage (5), SoftwareApplication, speakable WebPage */}
-          <JsonLd data={LC_FAQ_SCHEMA} />
+          {/* Additional structured data: SoftwareApplication, speakable WebPage */}
           <JsonLd data={LC_SOFTWARE_APP_SCHEMA} />
           <JsonLd data={LC_WEBPAGE_SCHEMA} />
         </>
