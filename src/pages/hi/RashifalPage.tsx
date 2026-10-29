@@ -92,6 +92,10 @@ export default function RashifalPage() {
             <Link to={`/rashifal/${meta.slug}/today`} className="underline">अंग्रेज़ी राशिफल</Link> देखें।
           </p>
 
+          <p className="text-sm text-muted-foreground mt-4" data-testid="rashifal-sadesati-link">
+            शनि की अवधि: <Link to={`/hi/sade-sati/${rashi}`} className="underline">{meta.hindi} राशि साढ़ेसाती और ढैया — शुरू और खत्म होने की तारीख →</Link>
+          </p>
+
           <h2 className="font-semibold text-foreground mt-8 mb-2">दूसरी राशियों का आज का राशिफल</h2>
           <div className="flex flex-wrap gap-2">
             {HI_SLUGS.filter(s => s !== rashi).map(s => (

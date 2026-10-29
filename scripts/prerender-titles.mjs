@@ -429,6 +429,30 @@ export function getTitleForRoute(route) {
   };
   if (FITNESS[route]) return FITNESS[route];
 
+  // Batch 9b: /sade-sati/:rashi and /hi/sade-sati/:rashi — mirrors ssPageMeta() in
+  // src/lib/vedic/sadeSatiRashiText.ts (checked by src/lib/vedic/__tests__/sadeSatiRashi.test.ts).
+  {
+    const se = route.match(/^\/sade-sati\/([a-z]+)$/);
+    if (se) {
+      const v = VEDIC[se[1]];
+      if (!v) return null;
+      return {
+        title: `${v.name} Rashi Sade Sati Start and End Dates | BornClock`,
+        description: `When does Sade Sati start and end for ${v.name} (${v.english}) Moon sign? Every Sade Sati and Shani Dhaiya period 1950–2060 with exact Saturn transit dates, retrograde re-entries, the three phases and simple remedies.`,
+      };
+    }
+    const sh = route.match(/^\/hi\/sade-sati\/([a-z]+)$/);
+    if (sh) {
+      const HI = { mesha: ['मेष', 'Aries'], vrisha: ['वृषभ', 'Taurus'], mithuna: ['मिथुन', 'Gemini'], karka: ['कर्क', 'Cancer'], simha: ['सिंह', 'Leo'], kanya: ['कन्या', 'Virgo'], tula: ['तुला', 'Libra'], vrischika: ['वृश्चिक', 'Scorpio'], dhanu: ['धनु', 'Sagittarius'], makara: ['मकर', 'Capricorn'], kumbha: ['कुंभ', 'Aquarius'], meena: ['मीन', 'Pisces'] };
+      const h = HI[sh[1]];
+      if (!h) return null;
+      return {
+        title: `${h[0]} राशि साढ़ेसाती — शुरू और खत्म होने की तारीख | BornClock`,
+        description: `${h[0]} राशि (${h[1]}) की साढ़ेसाती और शनि ढैया कब शुरू और कब खत्म होती है? 1950–2060 की हर अवधि, शनि के राशि-परिवर्तन की सटीक तारीखें, वक्री वापसी, तीनों चरण और सरल उपाय।`,
+      };
+    }
+  }
+
   // /hi/rashifal/:rashi — Hindi daily horoscope (Task 16)
   const rf = route.match(/^\/hi\/rashifal\/([a-z]+)$/);
   if (rf) {

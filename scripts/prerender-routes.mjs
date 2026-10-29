@@ -402,6 +402,9 @@ export const STATIC_ROUTES = [
   // Part AL Step 7: prerender the redesigned Vedic tool pages so crawlers see real content
   // on first load (previously served a bare SPA shell before React hydrated).
   '/sade-sati',
+  // Batch 9b: Sade Sati & Dhaiya dates per Moon sign (src/pages/SadeSatiRashiPage.tsx).
+  ...VEDIC_RASHIS.map(r => `/sade-sati/${r}`),
+  ...['mesha','vrisha','mithuna','karka','simha','kanya','tula','vrischika','dhanu','makara','kumbha','meena'].map(r => `/hi/sade-sati/${r}`),
   '/dasha-calculator',
   '/manglik',
   '/kaal-sarp-dosha',

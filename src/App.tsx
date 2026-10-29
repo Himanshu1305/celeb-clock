@@ -175,6 +175,7 @@ const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
 const AstrologerPage = lazyWithReload(() => import('@/pages/AstrologerPage'));
 const SadeSatiPage = lazyWithReload(() => import('@/pages/SadeSatiPage'));
+const SadeSatiRashiPage = lazyWithReload(() => import('@/pages/SadeSatiRashiPage'));
 const ManglikPage = lazyWithReload(() => import('@/pages/ManglikPage'));
 const KaalSarpDoshaPage = lazyWithReload(() => import('@/pages/KaalSarpDoshaPage'));
 const PersonalYearNumberPage = lazyWithReload(() => import('@/pages/PersonalYearNumberPage'));
@@ -454,6 +455,8 @@ const App = () => (
               <Route path="/hi/naam-se-kundli-milan" element={<KundliMilanByNamePage lang="hi" />} />
               <Route path="/astrologer" element={<AstrologerPage />} />
               <Route path="/sade-sati" element={<SadeSatiPage />} />
+              <Route path="/sade-sati/:rashi" element={<SadeSatiRashiPage />} />
+              <Route path="/hi/sade-sati/:rashi" element={<SadeSatiRashiPage lang="hi" />} />
               <Route path="/manglik" element={<ManglikPage />} />
               <Route path="/kaal-sarp-dosha" element={<KaalSarpDoshaPage />} />
               <Route path="/personal-year-number" element={<PersonalYearNumberPage />} />
