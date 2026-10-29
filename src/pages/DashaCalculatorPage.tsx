@@ -4,6 +4,8 @@
  * Distinct from the full Kundali page; reuses existing building blocks only.
  */
 import { useState } from 'react';
+import { PageFAQ } from '@/components/PageFAQ';
+import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { Link } from 'react-router-dom';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -15,7 +17,6 @@ import { TrustStrip } from '@/components/paj/TrustStrip';
 import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
 import { WhatsAhead } from '@/components/vedic/WhatsAhead';
 import { fetchKundali, type KundaliData } from '@/services/kundaliService';
-import { JsonLd } from '@/components/JsonLd';
 import { Remedies } from '@/components/vedic/Remedies';
 import { planetRemedyKey } from '@/lib/vedic/remedies';
 
@@ -118,7 +119,6 @@ export default function DashaCalculatorPage() {
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
     >
-      <JsonLd data={FAQ_LD} id="dasha-faq" />
 
       <section className="section">
         <div className="section-head">
@@ -295,6 +295,8 @@ export default function DashaCalculatorPage() {
           </ul>
         </nav>
       </section>
+      {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
+      <PageFAQ variant="plain" title="Common questions" items={faqItemsFromSchema(FAQ_LD)} />
     </PajPage>
   );
 }

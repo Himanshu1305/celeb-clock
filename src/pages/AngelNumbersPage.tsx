@@ -7,9 +7,9 @@
  * and NOT scientifically validated. Presented honestly, per Rule 6.
  */
 import { Link, useNavigate } from 'react-router-dom';
+import { PageFAQ } from '@/components/PageFAQ';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { JsonLd } from '@/components/JsonLd';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { ANGEL_NUMBERS } from '@/data/angelNumbers';
 
@@ -193,21 +193,9 @@ export default function AngelNumbersPage() {
             <li><Link to="/how-it-works" className="text-[#6E5AA6] hover:underline">How it works</Link> — our methodology and data sources</li>
           </ul>
         </div>
-
-        {/* JSON-LD — FAQPage only (BreadcrumbList is emitted automatically by <SEO/>) */}
-        <JsonLd
-          id="faq"
-          data={{
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: FAQ_ITEMS.map(f => ({
-              '@type': 'Question',
-              name: f.question,
-              acceptedAnswer: { '@type': 'Answer', text: f.answer },
-            })),
-          }}
-        />
       </section>
+      {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
+      <PageFAQ variant="plain" title="Common questions" items={FAQ_ITEMS} />
     </PajPage>
   );
 }

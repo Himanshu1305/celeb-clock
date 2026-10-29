@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { PageFAQ } from '@/components/PageFAQ';
+import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
 import { le, leYears, LE_CITATION } from '@/data/lifeExpectancyFacts';
 
@@ -42,7 +44,6 @@ export default function WhatIsLifeExpectancy() {
     >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         <div className="max-w-2xl mx-auto px-4 py-12">
           <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
@@ -110,6 +111,10 @@ export default function WhatIsLifeExpectancy() {
             </div>
           </div>
         </div>
+      {/* Batch 10: the FAQPage Q&As are shown on the page (PageFAQ also emits the JSON-LD). */}
+      <div className="max-w-2xl mx-auto px-4">
+        <PageFAQ title="Common questions" items={faqItemsFromSchema(faqSchema)} />
+      </div>
     </ArticleLayout>
   );
 }

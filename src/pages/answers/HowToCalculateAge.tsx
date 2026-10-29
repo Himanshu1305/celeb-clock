@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { PageFAQ } from '@/components/PageFAQ';
+import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
 import { ArticleLayout } from '@/components/central';
 
@@ -31,7 +33,6 @@ export default function HowToCalculateAge() {
           />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
         </>
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How to calculate age' }}
@@ -96,6 +97,10 @@ export default function HowToCalculateAge() {
             </div>
           </div>
         </div>
+      {/* Batch 10: the FAQPage Q&As are shown on the page (PageFAQ also emits the JSON-LD). */}
+      <div className="max-w-2xl mx-auto px-4">
+        <PageFAQ title="Common questions" items={faqItemsFromSchema(faqSchema)} />
+      </div>
     </ArticleLayout>
   );
 }

@@ -7,10 +7,10 @@
  * year numbers fill only after the user submits the form.
  */
 import { useState } from 'react';
+import { PageFAQ } from '@/components/PageFAQ';
 import { Link } from 'react-router-dom';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { JsonLd } from '@/components/JsonLd';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import {
   computePersonalYear,
@@ -287,21 +287,9 @@ export default function PersonalYearNumberPage() {
             </ul>
           </div>
         </div>
-
-        {/* JSON-LD — FAQPage only (BreadcrumbList is emitted automatically by <SEO/>) */}
-        <JsonLd
-          id="faq"
-          data={{
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: FAQ_ITEMS.map(f => ({
-              '@type': 'Question',
-              name: f.question,
-              acceptedAnswer: { '@type': 'Answer', text: f.answer },
-            })),
-          }}
-        />
       </section>
+      {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
+      <PageFAQ variant="plain" title="Common questions" items={FAQ_ITEMS} />
     </PajPage>
   );
 }
