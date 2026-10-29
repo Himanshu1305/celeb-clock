@@ -8,6 +8,9 @@ import { fileURLToPath } from 'url';
 // Batch 9b: year muhurat lists (/muhurat/:type/:year) — slugs/years shared with the page.
 import { muhuratYearRoutes } from '../src/lib/muhuratYearMeta.js';
 
+/** Batch 10 vrat page slugs (mirror of VRAT_SLUGS, src/lib/vedic/vrats/meta.ts). */
+export const VRAT_SLUGS_MJS = ['ekadashi', 'satyanarayan-katha', 'pradosh-vrat', 'sankashti-chaturthi', 'karwa-chauth', 'somvar-vrat', 'mangalvar-vrat', 'navratri', 'mahashivratri', 'janmashtami'];
+
 // Batch 7 (W7): the 50 Panchang city slugs — one source shared with the app.
 const PANCHANG_CITY_SLUGS = JSON.parse(
   readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/panchangCities.json'), 'utf-8')
@@ -331,6 +334,9 @@ export const STATIC_ROUTES = [
   ...[2025, 2026, 2027].map(y => `/mercury-retrograde/${y}`),
   '/festivals',
   ...[2025, 2026, 2027].map(y => `/festivals/${y}`),
+  // Batch 10: vrat katha + puja vidhi, English + Hindi (= VRAT_SLUGS in src/lib/vedic/vrats/meta.ts,
+  // guarded by src/lib/vedic/vrats/__tests__/vrats.test.ts).
+  ...['', ...VRAT_SLUGS_MJS.map(v => `/${v}`)].flatMap(x => [`/vrat${x}`, `/hi/vrat${x}`]),
   '/planet-in-sign',
   ...['sun','moon','mars','mercury','jupiter','venus','saturn','rahu','ketu'].flatMap(p =>
     ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'].map(s => `/planet-in-sign/${p}/${s}`)),

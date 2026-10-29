@@ -6,6 +6,7 @@ import { PageFAQ } from '@/components/PageFAQ';
 import { TermTip } from '@/components/vedic/TermTip';
 import { computeFestivalCalendar, type Festival, type FestivalType } from '@/lib/vedic/festivals';
 import { MUHURAT_YEAR_META, MUHURAT_YEAR_YEARS } from '@/lib/muhuratYearMeta.js';
+import { VRAT_NAMES, VRAT_SLUGS, vratPath, vratSlugForFestival } from '@/lib/vedic/vrats/meta';
 
 const MIN_YEAR = 2020;
 const MAX_YEAR = 2039;
@@ -100,13 +101,23 @@ export default function FestivalsPage() {
             {major.map((f, i) => (
               <div key={i} className="rounded-xl border border-border p-4">
                 <div className="flex items-center justify-between gap-2 mb-1">
-                  <h3 className="font-semibold text-foreground">{f.name}</h3>
+                  <h3 className="font-semibold text-foreground">{vratSlugForFestival(f) ? <Link to={vratPath(vratSlugForFestival(f)!)} className="hover:underline" data-testid="festival-vrat-link">{f.name}</Link> : f.name}</h3>
                   <span className={`shrink-0 text-xs px-2 py-0.5 rounded-full border ${TYPE_STYLE[f.type]}`}>{TYPE_LABEL[f.type]}</span>
                 </div>
                 <div className="text-sm text-primary font-medium">{nice(f.dateISO)}</div>
                 {f.note && <p className="text-xs text-muted-foreground mt-1">{f.note}</p>}
               </div>
             ))}
+          </div>
+
+          {/* Batch 10: vrat katha + puja vidhi pages (names above link to them too). */}
+          <div className="rounded-xl border border-border p-4 mb-8 text-sm" data-testid="festival-vrat-pages">
+            <h2 className="font-semibold text-foreground mb-1">Vrat katha &amp; puja vidhi</h2>
+            <p className="text-muted-foreground mb-2">The katha, a simple step-by-step puja vidhi and the next date for the most-kept vrats — each with its sources.</p>
+            <ul className="flex flex-wrap gap-2">
+              {VRAT_SLUGS.map(v => <li key={v}><Link to={vratPath(v)} className="inline-block px-3 py-1.5 rounded-lg border border-border hover:bg-primary/5 text-foreground">{VRAT_NAMES[v].en}</Link></li>)}
+              <li><Link to="/vrat" className="inline-block px-3 py-1.5 rounded-lg border border-border hover:bg-primary/5 text-primary">All vrats →</Link></li>
+            </ul>
           </div>
 
           {/* Sankranti strip */}
@@ -131,7 +142,7 @@ export default function FestivalsPage() {
                     <li key={i} className="flex items-start gap-3 text-sm">
                       <span className="shrink-0 w-24 text-muted-foreground tabular-nums">{nice(f.dateISO)}</span>
                       <span className={`shrink-0 text-[10px] px-1.5 py-0.5 rounded-full border ${TYPE_STYLE[f.type]}`}>{TYPE_LABEL[f.type]}</span>
-                      <span className="text-foreground">{f.name}</span>
+                      <span className="text-foreground">{vratSlugForFestival(f) ? <Link to={vratPath(vratSlugForFestival(f)!)} className="hover:underline text-primary">{f.name}</Link> : f.name}</span>
                     </li>
                   ))}
                 </ul>

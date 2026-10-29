@@ -11,6 +11,7 @@ import { rashifalPeriodTemplate } from './kinds/rashifalPeriod';
 import { rashifalFromSky, rashifalHiFromSky } from './kinds/rashifalDaily';
 import { horoscopeFromSky } from './kinds/westernDaily';
 import { panchangTemplate, renderPanchangHiEntry, type PanchangDayData } from './kinds/panchangTemplate';
+import { vratTemplate } from './kinds/vratTemplate';
 
 export type DailyTemplate = (dateIST: string, slug: string, data: unknown) => DailyEntry;
 
@@ -25,6 +26,8 @@ export const DAILY_TEMPLATES: Record<string, DailyTemplate> = {
   'rahu-kaal': panchangTemplate('rahu-kaal'),
   'choghadiya': panchangTemplate('choghadiya'),
   'panchang-hi': (date, slug, data) => renderPanchangHiEntry(slug, date, data as PanchangDayData),
+  'vrat': vratTemplate('en'),
+  'vrat-hi': vratTemplate('hi'),
 };
 
 /** The page's entry for `date` from a loaded month file (either format), else null. */

@@ -67,6 +67,11 @@ export function renderDailyBodyHtml(e: DailyEntry): string {
           `</li>`).join('') +
         `</ul>`;
     }
+    if (s.links && s.links.length) {
+      inner += `<ul class="mt-2 flex flex-wrap gap-2 text-sm">` +
+        s.links.map(l => `<li><a href="${escapeHtml(l.href)}" class="inline-block px-3 py-1.5 rounded-lg border border-border text-primary hover:bg-primary/5">${escapeHtml(l.label)} →</a></li>`).join('') +
+        `</ul>`;
+    }
     out.push(`<section id="daily-${escapeHtml(s.id)}" class="daily-section rounded-xl border border-border p-4 mb-4" data-daily-part="${escapeHtml(s.id)}">${inner}</section>`);
   }
 

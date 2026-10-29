@@ -572,6 +572,43 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'जब गुरु या शुक्र सूर्य के बहुत पास होकर दिखाई नहीं देते (अस्त), तब विवाह और गृह प्रवेश नहीं किए जाते; अस्त से पहले और उदय के बाद के कुछ दिन भी टाले जाते हैं।',
     aliases: ['Guru Asta', 'Shukra Asta', 'combustion', 'Tara Asta'],
   },
+  // Batch 10 — vrat pages (/vrat). Plain meanings, from the same sources the pages cite
+  // (Drik Panchang's Ekadashi parana, Pradosh and Shivaratri pages; Wikipedia "Pradosha").
+  parana: {
+    term: 'Parana', category: 'panchang', hiTerm: 'पारण',
+    impact: 'The time to break a fast — for Ekadashi, the next morning after sunrise, within Dwadashi.',
+    why: 'Each vrat has a rule for when it ends; Ekadashi’s parana avoids the first quarter of Dwadashi (Hari Vasara).',
+    hi: 'व्रत खोलने का समय — एकादशी में अगले दिन सूर्योदय के बाद, द्वादशी के भीतर।',
+    aliases: ['Paran', 'Parana time'],
+  },
+  pradoshKaal: {
+    term: 'Pradosh Kaal', category: 'panchang', hiTerm: 'प्रदोष काल',
+    impact: 'The evening twilight after sunset — the time for Shiva worship on Pradosh Vrat.',
+    why: '“Pradosha” means the early part of the night; panchangs count it from sunset.',
+    hi: 'सूर्यास्त के बाद की संध्या — प्रदोष व्रत में शिव पूजा का समय।',
+    aliases: ['Pradosh', 'Pradosham', 'Pradosha'],
+  },
+  nishitaKaal: {
+    term: 'Nishita Kaal', category: 'panchang', hiTerm: 'निशीथ काल',
+    impact: 'The midnight muhurta (about 48 minutes around the middle of the night) — the main puja time on Mahashivratri and Janmashtami.',
+    why: 'The night from sunset to sunrise is split into 15 muhurtas; the one at its centre is Nishita.',
+    hi: 'मध्यरात्रि का मुहूर्त (रात के बीच के लगभग 48 मिनट) — महाशिवरात्रि और जन्माष्टमी की मुख्य पूजा का समय।',
+    aliases: ['Nishita', 'Nishith Kaal'],
+  },
+  sankalpa: {
+    term: 'Sankalpa', category: 'panchang', hiTerm: 'संकल्प',
+    impact: 'The short vow you make at the start of a vrat or puja — what you will do and why.',
+    why: 'It is usually said after the morning bath, in front of the deity.',
+    hi: 'व्रत या पूजा की शुरुआत में लिया जाने वाला छोटा संकल्प — आप क्या करेंगे और क्यों।',
+    aliases: ['Sankalp'],
+  },
+  amantaPurnimanta: {
+    term: 'Amanta / Purnimanta', category: 'panchang', hiTerm: 'अमांत / पूर्णिमांत',
+    impact: 'Two ways of naming lunar months — so the same day can be “Kartika Krishna” in one calendar and “Ashwina Krishna” in another.',
+    why: 'Amanta months end at the new moon (Gujarat, Maharashtra, the South); purnimanta months end at the full moon (most of North India). The dark half is named one month ahead in purnimanta.',
+    hi: 'चंद्र मास के नाम रखने के दो तरीके — इसलिए एक ही दिन एक पंचांग में “कार्तिक कृष्ण” और दूसरे में “आश्विन कृष्ण” हो सकता है।',
+    aliases: ['Amanta', 'Purnimanta'],
+  },
   adhikMaas: {
     term: 'Adhik Maas (leap month)', category: 'panchang', hiTerm: 'अधिक मास',
     impact: 'An extra lunar month that comes about once in three years; new beginnings like weddings and house-warmings are not done in it.',

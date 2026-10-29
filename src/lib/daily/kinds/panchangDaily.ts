@@ -9,6 +9,7 @@ import { addDaysISO } from '../dates';
 import { computeDayPanchang, dayWindowsLite, panchangCityBySlug, sunriseSunset, type DayPanchang, type TimeWindow } from '../../vedic/panchangDay';
 import { PANCHANG_TABLES } from '../../vedic/panchang';
 import type { PanchangPageKind } from '../../vedic/panchangText';
+import { vratsOnDate } from '../../vedic/vrats/next';
 import { renderPanchangEntry, renderPanchangHiEntry, PANCHANG_INDEX_SLUG, type PanchangDayData } from './panchangTemplate';
 
 export { PANCHANG_INDEX_SLUG };
@@ -65,6 +66,8 @@ export function computePanchangDayData(place: PanchangPlaceInput, date: string):
     delhi = [toMin(clockIST(r.rise)), toMin(clockIST(r.set))];
   }
   const d = encodePanchangDay(p, week, delhi);
+  const vr = vratsOnDate(date);
+  if (vr.length) d.vr = vr;
   if (memo.size > 400) memo.clear();
   memo.set(key, d);
   return d;

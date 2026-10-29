@@ -16,6 +16,7 @@ import { karanaName, PANCHANG_TABLES } from '../../vedic/panchang';
 import { pageAnswer, pageMeta, indexMeta, windowText, windowsText, cityContrast, goodDaySlots, type PanchangPageKind } from '../../vedic/panchangText';
 import { TITHI_HI, PAKSHA_HI, NAKSHATRA_HI, YOGA_HI, KARANA_HI, CHOGH_HI, WEEKDAY_HI, cityHi, hiEnd } from '../../vedic/panchangHindi';
 import panchangCities from '../../../data/panchangCities.json';
+import { VRAT_NAMES, VRAT_SLUG_SET, vratPath, type VratSlug } from '../../vedic/vrats/meta';
 
 export const PANCHANG_INDEX_SLUG = 'index';
 export interface PlaceRef { name: string; slug?: string }
@@ -44,6 +45,8 @@ export interface PanchangDayData {
   wk: number[];
   /** Delhi's sunrise / sunset that day (for the city comparison line; not on Delhi itself) */
   dz?: [number, number];
+  /** Batch 10: vrat pages for this date (src/lib/vedic/vrats — New Delhi festival dates + weekday vrats) */
+  vr?: string[];
 }
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -223,7 +226,8 @@ export function renderPanchangEntry(kind: PanchangPageKind, place: PlaceRef, dat
       { id: 'also-today', heading: 'Also today', items: [item('Rahu Kaal', w(p.rahuKaal)), item('Abhijit Muhurta', p.abhijitApplies ? w(p.abhijit) : 'not used on Wednesday')] },
     ];
   } else {
-    sections = [limbsSection(p), sunSection(place, p, delhi), goodSection(p), avoidSection(p), ...choghSections(p)];
+    const vrat = vratTodaySection(data.vr, 'en');
+    sections = [limbsSection(p), ...(vrat ? [vrat] : []), sunSection(place, p, delhi), goodSection(p), avoidSection(p), ...choghSections(p)];
   }
   return {
     date, lang: 'en',
@@ -238,6 +242,25 @@ export function renderPanchangEntry(kind: PanchangPageKind, place: PlaceRef, dat
   };
 }
 
+
+/**
+ * Batch 10: "Vrat today" — links to the vrat katha + puja vidhi pages for the vrats that fall
+ * on this date (festival dates are for New Delhi, as on /festivals; Monday / Tuesday vrats
+ * every week).
+ */
+export function vratTodaySection(vr: string[] | undefined, lang: 'en' | 'hi'): DailySection | null {
+  const list = (vr ?? []).filter(s => VRAT_SLUG_SET.has(s)) as VratSlug[];
+  if (!list.length) return null;
+  const hi = lang === 'hi';
+  return {
+    id: 'vrat-today',
+    heading: hi ? 'आज का व्रत — कथा और पूजा विधि' : 'Vrat today — katha and puja vidhi',
+    text: hi
+      ? 'आज पड़ने वाले व्रत (त्योहार की तिथियाँ नई दिल्ली के अनुसार; दूसरे शहर में कभी-कभी एक दिन का अंतर हो सकता है)।'
+      : 'Vrats that fall today (festival dates are for New Delhi; another city can occasionally differ by a day).',
+    links: list.map(s => ({ label: VRAT_NAMES[s][hi ? 'hi' : 'en'], href: vratPath(s, lang) })),
+  };
+}
 
 /** Template for the registered English kinds: (date, page slug, data) → entry. */
 export const panchangTemplate = (kind: PanchangPageKind) => (date: string, slug: string, data: unknown): DailyEntry =>
@@ -280,6 +303,7 @@ export function renderPanchangHiEntry(slug: string, date: string, data: Panchang
   const abh = p.abhijitApplies ? `अभिजित मुहूर्त ${winHi(p.abhijit)} है।` : 'बुधवार को अभिजित मुहूर्त नहीं लिया जाता।';
   const kar = KARANA_HI[karanaName(p.karana)] || karanaName(p.karana);
   const meta = custom ? { h1: `पंचांग — ${city}` } : hindiPanchangMeta(slug);
+  const vratHi = vratTodaySection(data.vr, 'hi');
   return {
     date, lang: 'hi',
     title: index ? `आज का पंचांग (${dHi}) — तिथि, नक्षत्र, राहु काल | BornClock` : `${city} का पंचांग (${dHi}) — तिथि, राहु काल | BornClock`,
@@ -301,6 +325,7 @@ export function renderPanchangHiEntry(slug: string, date: string, data: Panchang
         { label: 'करण (तिथि का आधा भाग)', value: kar, note: `${hiEnd(p.karanaEnd)} तक` },
         { label: 'वार', value: WEEKDAY_HI[p.weekday] || p.weekday },
       ] },
+      ...(vratHi ? [vratHi] : []),
       { id: 'sun', heading: `${city} में सूर्य`, items: [{ label: 'सूर्योदय', value: p.sunrise }, { label: 'सूर्यास्त', value: p.sunset }] },
       { id: 'good-times', heading: 'शुभ समय', tone: 'good', items: [
         { label: 'ब्रह्म मुहूर्त', value: winHi(p.brahmaMuhurta), note: 'भोर से पहले का शांत समय — पूजा, ध्यान और पढ़ाई के लिए' },
