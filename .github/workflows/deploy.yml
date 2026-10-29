@@ -247,6 +247,11 @@ jobs:
       - name: Generate sitemap
         run: node scripts/generate-sitemap.mjs
 
+      # Blocks the deploy on SEO regressions: one canonical/description per page, ≤1 Article /
+      # FAQPage, every FAQ question visible on the page, sitemap/title checks (scripts/validate-dist.mjs).
+      - name: Validate prerendered pages (blocks deploy on failure)
+        run: node scripts/validate-dist.mjs
+
       - name: Deploy to Cloudflare PRODUCTION
         uses: cloudflare/wrangler-action@v3
         with:
