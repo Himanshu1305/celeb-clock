@@ -201,6 +201,7 @@ const TransitIndex = lazyWithReload(() => import('@/pages/TransitIndex'));
 const TransitYearPage = lazyWithReload(() => import('@/pages/TransitYearPage'));
 const MercuryRetrograde = lazyWithReload(() => import('@/pages/MercuryRetrograde'));
 const FestivalsPage = lazyWithReload(() => import('@/pages/FestivalsPage'));
+const VratPage = lazyWithReload(() => import('@/pages/VratPage'));
 const PlanetInSignPage = lazyWithReload(() => import('@/pages/PlanetInSignPage'));
 const PlanetInHousePage = lazyWithReload(() => import('@/pages/PlanetInHousePage'));
 const YogaPage = lazyWithReload(() => import('@/pages/YogaPage'));
@@ -496,6 +497,11 @@ const App = () => (
               <Route path="/mercury-retrograde/:year" element={<MercuryRetrograde />} />
               <Route path="/festivals" element={<FestivalsPage />} />
               <Route path="/festivals/:year" element={<FestivalsPage />} />
+              {/* Batch 10: vrat katha + puja vidhi (English + Hindi) */}
+              <Route path="/vrat" element={<VratPage />} />
+              <Route path="/vrat/:slug" element={<VratPage />} />
+              <Route path="/hi/vrat" element={<VratPage lang="hi" />} />
+              <Route path="/hi/vrat/:slug" element={<VratPage lang="hi" />} />
               <Route path="/planet-in-sign" element={<PlanetInSignPage />} />
               <Route path="/planet-in-sign/:planet/:sign" element={<PlanetInSignPage />} />
               <Route path="/planet-in-house" element={<PlanetInHousePage />} />

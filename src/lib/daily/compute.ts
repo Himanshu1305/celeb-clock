@@ -14,6 +14,7 @@ import { DAILY_TEMPLATES } from './templates';
 import { rashifalSky, type RashifalPeriod } from '../vedic/rashifal';
 import { computePanchangMonthDataForCity } from './kinds/panchangMonth';
 import { computePlanetDayData, computeMoonDayData } from './kinds/skyDaily';
+import { computeVratNextData } from '../vedic/vrats/next';
 
 export type DailyComputer = (dateIST: string, slug: string) => DailyEntry;
 export type DailyDataComputer = (dateIST: string, dataSlug: string) => unknown;
@@ -37,6 +38,8 @@ export const DAILY_DATA_COMPUTERS: Record<string, DailyDataComputer> = {
   'panchang-month': (date, city) => viaJson(computePanchangMonthDataForCity(date, city)),
   'planet-day': date => viaJson(computePlanetDayData(date)),
   'moon-day': date => viaJson(computeMoonDayData(date)),
+  // Batch 10: next date + New Delhi timings of every vrat (one shared file for all vrat pages).
+  'vrat-next': date => viaJson(computeVratNextData(date)),
 };
 
 /** Original "finished entry" computers (kept for kinds without a data variant). */

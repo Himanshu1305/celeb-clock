@@ -26,6 +26,8 @@ export interface DailySection {
   text?: string;
   /** Optional label/value list (lucky items, timings, planets on the move …). */
   items?: DailyItem[];
+  /** Optional internal links (batch 10: e.g. today's vrat pages from the Panchang). */
+  links?: Array<{ label: string; href: string }>;
   tone?: DailyTone;
   /**
    * Batch 10: how `items` / `rows` are laid out. 'calendar' = a month grid (7 columns

@@ -9,6 +9,7 @@
 import type { DailyLang } from './types';
 import { addDaysISO, istDateISO, monthKey, periodKeyOf, type DailyPeriod } from './dates';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../seo/panchangSlugs';
+import { VRAT_PAGE_SLUGS, vratPath } from '../vedic/vrats/meta';
 
 export interface DailyPageDef {
   /** Folder name under /daily/ (and the key in DAILY_COMPUTERS). */
@@ -95,6 +96,10 @@ export const DAILY_PAGES: DailyPageDef[] = [
   { kind: 'panchang-calendar', lang: 'en', slugs: ['index'], path: () => '/panchang-calendar', data: { kind: 'panchang-month', slug: () => 'delhi', period: 'month' } },
   { kind: 'planets-today', lang: 'en', slugs: ['index'], path: () => '/planets-today', data: { kind: 'planet-day', slug: ALL } },
   { kind: 'moon-phase', lang: 'en', slugs: ['index'], path: () => '/moon-phase', data: { kind: 'moon-day', slug: ALL } },
+  // Batch 10 — vrat katha + puja vidhi pages: the "next date + timings" block, from one shared
+  // per-day file (data kind 'vrat-next') computed by our festival engine. The title stays static.
+  { kind: 'vrat', lang: 'en', slugs: VRAT_PAGE_SLUGS, path: s => vratPath(s, 'en'), data: { kind: 'vrat-next', slug: ALL } },
+  { kind: 'vrat-hi', lang: 'hi', slugs: VRAT_PAGE_SLUGS, path: s => vratPath(s, 'hi'), data: { kind: 'vrat-next', slug: ALL } },
 ];
 
 let routeMap: Map<string, { def: DailyPageDef; slug: string }> | null = null;

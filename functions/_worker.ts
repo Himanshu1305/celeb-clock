@@ -45,6 +45,7 @@ import { INDIA_BORNON_SLUGS } from '../src/lib/seo/indiaBornOnSlugs.js';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../src/lib/seo/panchangSlugs.js';
 import { MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
 import { matchDailyRoute } from '../src/lib/daily/registry.js';
+import { VRAT_SLUG_SET } from '../src/lib/vedic/vrats/meta.js';
 import { applyDailyContent } from './daily.js';
 
 type Env = {
@@ -305,6 +306,8 @@ const worker = {
       // Batch 7 (W7): 50 Panchang cities (Panchang / Rahu Kaal / Choghadiya); Hindi pages for 10.
       if ((m = pathname.match(/^\/(?:panchang|rahu-kaal|choghadiya)\/([a-z-]+)\/?$/))) return !PANCHANG_CITY_SLUGS.has(m[1]);
       if ((m = pathname.match(/^\/hi\/panchang\/([a-z-]+)\/?$/)))     return !HINDI_PANCHANG_SLUGS.has(m[1]);
+      // Batch 10: vrat katha pages exist only for the ten vrats (src/lib/vedic/vrats/meta.ts).
+      if ((m = pathname.match(/^\/(?:hi\/)?vrat\/([a-z-]+)\/?$/)))  return !VRAT_SLUG_SET.has(m[1]);
       // Batch 7 / W5: the 78 tarot cards — 22 named trumps + "<rank>-of-<suit>" (mirrors src/data/tarotCards).
       const TAROT_MAJOR = new Set(['the-fool','the-magician','the-high-priestess','the-empress','the-emperor','the-hierophant','the-lovers','the-chariot','strength','the-hermit','wheel-of-fortune','justice','the-hanged-man','death','temperance','the-devil','the-tower','the-star','the-moon','the-sun','judgement','the-world']);
       if ((m = pathname.match(/^\/tarot\/cards\/([a-z-]+)\/?$/)))   return !(TAROT_MAJOR.has(m[1]) || /^(ace|two|three|four|five|six|seven|eight|nine|ten|page|knight|queen|king)-of-(wands|cups|swords|pentacles)$/.test(m[1]));

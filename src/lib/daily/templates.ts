@@ -14,6 +14,7 @@ import { panchangTemplate, renderPanchangHiEntry, type PanchangDayData } from '.
 import { tomorrowOf } from './kinds/tomorrow';
 import { renderPanchangMonth, type PanchangMonthData } from './kinds/panchangMonthTemplate';
 import { renderPlanetsToday, renderMoonPhase, type PlanetDayData, type MoonDayData } from './kinds/skyTemplate';
+import { vratTemplate } from './kinds/vratTemplate';
 
 export type DailyTemplate = (dateIST: string, slug: string, data: unknown) => DailyEntry;
 
@@ -34,6 +35,8 @@ export const DAILY_TEMPLATES: Record<string, DailyTemplate> = {
   'panchang-calendar': (date, _slug, data) => renderPanchangMonth(date, { name: 'Delhi' }, data as PanchangMonthData, { today: true }),
   'planets-today': (date, _slug, data) => renderPlanetsToday(date, data as PlanetDayData),
   'moon-phase': (date, _slug, data) => renderMoonPhase(date, data as MoonDayData),
+  'vrat': vratTemplate('en'),
+  'vrat-hi': vratTemplate('hi'),
 };
 
 /** The page's entry for `date` from a loaded month file (either format), else null. */

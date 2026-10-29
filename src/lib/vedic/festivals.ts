@@ -224,6 +224,18 @@ function kalaWindow(iso: string, kala: Kala): [number, number] {
   }
 }
 
+/**
+ * Batch 10 (vrat pages): the New Delhi window (UTC ms) of a kala on civil day `iso` —
+ * the same window the festival rules above use (sunrise/sunset from the engine, moonrise
+ * after sunset, Nishita = the midnight muhurta). Point kalas return start === end.
+ */
+export function kalaWindowDelhi(iso: string, kala: Kala): [number, number] { return kalaWindow(iso, kala); }
+/** New Delhi sunrise, sunset and next sunrise (UTC ms) for civil day `iso` (IST). */
+export function delhiSunTimes(iso: string): { rise: number; set: number; nextRise: number } {
+  const d = dayTimes(iso);
+  return { rise: d.rise, set: d.set, nextRise: d.nextRise };
+}
+
 /** Unwrapped Moon−Sun elongation inside a lunation (0 at its opening new moon → 360 at the closing one). */
 function lunationElong(month: AmantaMonth, t: number): number {
   let e = elong(new Date(t));

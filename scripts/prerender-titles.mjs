@@ -720,6 +720,27 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // /vrat[/:slug] and /hi/vrat[/:slug] — Batch 10 (mirrors vratMeta in src/lib/vedic/vrats/meta.ts;
+  // vrats.test.ts checks they are identical). The Worker keeps these titles (static).
+  {
+    const VN = {
+      'ekadashi': ['Ekadashi', 'एकादशी'], 'satyanarayan-katha': ['Satyanarayan Katha (Purnima)', 'सत्यनारायण कथा (पूर्णिमा)'],
+      'pradosh-vrat': ['Pradosh Vrat', 'प्रदोष व्रत'], 'sankashti-chaturthi': ['Sankashti Chaturthi', 'संकष्टी चतुर्थी'],
+      'karwa-chauth': ['Karwa Chauth', 'करवा चौथ'], 'somvar-vrat': ['Somvar (Monday) Vrat', 'सोमवार व्रत'],
+      'mangalvar-vrat': ['Mangalvar (Tuesday) Hanuman Vrat', 'मंगलवार हनुमान व्रत'], 'navratri': ['Navratri', 'नवरात्रि'],
+      'mahashivratri': ['Mahashivratri', 'महाशिवरात्रि'], 'janmashtami': ['Janmashtami', 'जन्माष्टमी'],
+    };
+    if (route === '/vrat') return { title: 'Vrat Katha & Puja Vidhi — 10 Hindu Fasts with Next Dates | BornClock', description: 'Ekadashi, Satyanarayan, Pradosh, Sankashti, Karwa Chauth, Somvar, Mangalvar, Navratri, Mahashivratri and Janmashtami — sourced katha, a simple puja vidhi and the next date from our Panchang.' };
+    if (route === '/hi/vrat') return { title: 'व्रत कथा और पूजा विधि — 10 प्रमुख व्रत, अगली तिथि सहित | BornClock', description: 'एकादशी, सत्यनारायण, प्रदोष, संकष्टी, करवा चौथ, सोमवार, मंगलवार, नवरात्रि, महाशिवरात्रि और जन्माष्टमी — स्रोत-सहित कथा, सरल पूजा विधि और हमारे पंचांग से अगली तिथि।' };
+    const m = route.match(/^\/(hi\/)?vrat\/([a-z-]+)$/);
+    if (m && VN[m[2]]) {
+      const [en, hi] = VN[m[2]];
+      return m[1]
+        ? { title: `${hi} — व्रत कथा, पूजा विधि और अगली तिथि | BornClock`, description: `${hi}: स्रोत-सहित व्रत कथा सरल भाषा में, पूजा सामग्री और विधि के आसान चरण, क्षेत्रीय परंपराएँ, और हमारे पंचांग से अगली तिथि व समय।` }
+        : { title: `${en} — Vrat Katha, Puja Vidhi & Next Date | BornClock`, description: `${en}: the vrat katha in plain words with sources, puja samagri and simple steps, regional customs, and the next date and timings from our Panchang.` };
+    }
+  }
+
   // /planet-in-sign[/:planet/:sign] and /planet-in-house[/:planet/:house]
   {
     const PL = { sun: 'Sun', moon: 'Moon', mars: 'Mars', mercury: 'Mercury', jupiter: 'Jupiter', venus: 'Venus', saturn: 'Saturn', rahu: 'Rahu', ketu: 'Ketu' };
