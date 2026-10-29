@@ -191,7 +191,7 @@ export default function Privacy() {
                   <li><strong className="text-foreground">Card numbers, CVVs, or bank details</strong> — payments go directly through Razorpay's PCI-DSS compliant infrastructure.</li>
                   <li><strong className="text-foreground">Data sold to third parties</strong> — we do not sell, rent, or trade your personal information. Ever.</li>
                   <li><strong className="text-foreground">Advertising</strong> — BornClock may display advertising to support the free tier. We do not sell your health data — including your life expectancy inputs, biological age results, or any health-related information — to advertisers or any third parties.</li>
-                  <li><strong className="text-foreground">Precise location data</strong> — we never collect GPS location. We detect your approximate country from your IP address (via ipapi.co) solely to display correct pricing and currency; this lookup is not stored and is never linked to your account.</li>
+                  <li><strong className="text-foreground">Precise location data</strong> — we never collect GPS location. We detect your approximate country from your IP address — our hosting provider, Cloudflare, supplies the country with each request, so no outside lookup service is used — solely to display correct pricing and currency; it is not stored and is never linked to your account.</li>
                 </ul>
               </section>
 
@@ -270,11 +270,6 @@ export default function Privacy() {
                         <td className="px-4 py-3 font-medium text-foreground">Anthropic</td>
                         <td className="px-4 py-3">AI coach responses</td>
                         <td className="px-4 py-3">Your coach message + computed longevity summary (transient, never stored)</td>
-                      </tr>
-                      <tr className="bg-muted/30">
-                        <td className="px-4 py-3 font-medium text-foreground">ipapi.co</td>
-                        <td className="px-4 py-3">Country detection for pricing</td>
-                        <td className="px-4 py-3">IP address (transient lookup, not stored by us)</td>
                       </tr>
                       <tr>
                         <td className="px-4 py-3 font-medium text-foreground">Internal analytics</td>

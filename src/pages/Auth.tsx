@@ -40,7 +40,7 @@ export default function Auth() {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('https://ipapi.co/json/');
+        const res = await fetch('/api/geo');
         const json = await res.json();
         if (!cancelled && json.country_name && countries.includes(json.country_name)) {
           setDetectedCountry(json.country_name);

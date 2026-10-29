@@ -17,6 +17,7 @@ import { GET  as dailyCronGet,
 import { GET  as cronDispatchGet,
          POST as cronDispatchPost }    from '../api/cron-dispatch.js';
 import { POST as opsMonitor }          from '../api/ops-monitor.js';
+import { GET  as geo }                 from '../api/geo.js';
 import { POST as opsDigest }           from '../api/ops-digest.js';
 import { POST as invoiceSweep }        from '../api/invoice-sweep.js';
 import { GET  as invoicePdf }          from '../api/invoice-pdf.js';
@@ -92,6 +93,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/report':             reportBySlug,
   '/api/redeem-promo':       redeemPromo,
   '/api/ops-monitor':        opsMonitor,
+  '/api/geo':                geo,
   '/api/ops-digest':         opsDigest,
   '/api/invoice-sweep':      invoiceSweep,
   '/api/invoice-pdf':        invoicePdf,
@@ -114,9 +116,13 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/born-today-photo':   bornTodayPhoto,
 };
 
-export default {
+const worker = {
   async fetch(request: Request, env: Env, ctx: any): Promise<Response> {
     bridgeEnv(env);
+    // Ops self-checks (api/ops-monitor.ts) call the Worker's own routes in-process.
+    // A Worker can't reach itself over HTTP: its *.workers.dev URL returns 522 and a
+    // fetch to its own custom domain skips the Worker. See opsSelfFetch().
+    (globalThis as any).__bcSelfFetch = (req: Request) => worker.fetch(req, env, ctx);
 
     const _url = new URL(request.url);
     const { pathname } = _url;
@@ -420,3 +426,4 @@ export default {
     console.log(`[scheduled] ignored cron "${event?.cron}" — jobs run via /api/cron-dispatch`);
   },
 };
+export default worker;

@@ -2,7 +2,13 @@
 // Batch 8: the static "<City> — local guide" section on the Panchang / Rahu Kaal /
 // Choghadiya city pages and the Hindi city pages, and the any-place search + date
 // controls on the Hindi Panchang (/hi/panchang, /hi/panchang/:city).
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, beforeAll, afterAll, vi } from 'vitest';
+
+// Freeze only the clock (Oct 2026 CI failure): these tests open fixed ?date= days, and a
+// page whose ?date= equals the real today waits for the precomputed daily entry instead of
+// rendering synchronously — so each fixture date broke the suite on that calendar day.
+beforeAll(() => { vi.useFakeTimers({ toFake: ['Date'] }); vi.setSystemTime(new Date('2026-06-15T06:30:00Z')); });
+afterAll(() => { vi.useRealTimers(); });
 import { render, cleanup, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
