@@ -141,6 +141,7 @@ export function AgeDaysHoursMinutesArticle() {
         description={DESC}
         canonicalUrl="/articles/age-in-days-hours-minutes"
         ogType="article"
+          articleSchema={false}
       />
       <JsonLd data={articleSchema} />
       <JsonLd data={softwareSchema} />

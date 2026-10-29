@@ -1,6 +1,9 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from 'vitest';
-import { render, cleanup } from '@testing-library/react';
+import { render, cleanup, waitFor } from '@testing-library/react';
+// @ts-expect-error — plain ESM build script, no type declarations
+import { getTitleForRoute } from '../../../scripts/prerender-titles.mjs';
+import { chineseHoroscopeAnimalTitle, currentChineseYear } from '@/lib/chineseCalendar.js';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import ChineseZodiac from '../ChineseZodiac';
@@ -87,5 +90,47 @@ describe('/chinese-horoscope (the yearly page)', () => {
     expect(document.querySelector('[data-testid="cz-forecast-2026"]')).toBeTruthy();
     expect(document.querySelector('[data-testid="cz-forecast-2027"]')).toBeTruthy();
     expect(document.querySelector('[data-testid="cz-forecast-2028"]')).toBeNull();
+  });
+});
+
+describe('Batch 9b — /chinese-horoscope FAQ is visible; animal titles carry the year', () => {
+  const ldFaqQuestions = () => {
+    const qs: string[] = [];
+    document.querySelectorAll('script[type="application/ld+json"]').forEach((el) => {
+      try {
+        const d = JSON.parse(el.textContent || '');
+        if (d['@type'] === 'FAQPage') d.mainEntity.forEach((q: { name: string }) => qs.push(q.name));
+      } catch { /* ignore */ }
+    });
+    return qs;
+  };
+  it('index page shows every FAQ question and answer on the page', async () => {
+    at('2027-01-20T06:00:00Z');
+    renderAt('/chinese-horoscope');
+    const faq = document.querySelector('[data-testid="cz-index-faq"]')?.textContent || '';
+    expect(faq).toContain('What Chinese zodiac year is 2026?');
+    expect(faq).toContain('When does the Year of the Fire Horse end?');
+    expect(faq).toContain('What is the Chinese zodiac animal for 2027?');
+    expect(faq).toContain('2027 is the Year of the Fire Goat');
+    await waitFor(() => expect(ldFaqQuestions().length).toBe(3));
+    for (const q of ldFaqQuestions()) expect(faq).toContain(q);
+  });
+  it('animal page shows every FAQ question and answer on the page', async () => {
+    at('2027-01-20T06:00:00Z');
+    renderAt('/chinese-horoscope/rat');
+    const faq = document.querySelector('[data-testid="cz-animal-faq"]')?.textContent || '';
+    expect(faq).toContain("What is the Rat's forecast for 2026?");
+    expect(faq).toContain("What is the Rat's outlook for 2027?");
+    expect(faq).toContain('How is this forecast calculated?');
+    await waitFor(() => expect(ldFaqQuestions().length).toBe(3));
+    for (const q of ldFaqQuestions()) expect(faq).toContain(q);
+  });
+  it('live title = prerender title, both from the shared helper (Jan 2027 is still 2026)', async () => {
+    at('2027-01-20T06:00:00Z');
+    expect(chineseHoroscopeAnimalTitle('Horse', 2026)).toBe('Horse Horoscope 2026 & 2027 — Career, Love, Money, Health | BornClock');
+    renderAt('/chinese-horoscope/horse');
+    await waitFor(() => expect(document.title).toBe('Horse Horoscope 2026 & 2027 — Career, Love, Money, Health | BornClock'));
+    expect(getTitleForRoute('/chinese-horoscope/horse').title).toBe(chineseHoroscopeAnimalTitle('Horse', currentChineseYear()));
+    expect(getTitleForRoute('/chinese-horoscope/horse').title).toBe(document.title);
   });
 });

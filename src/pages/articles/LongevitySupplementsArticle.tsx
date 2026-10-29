@@ -146,7 +146,8 @@ export function LongevitySupplementsArticle() {
       testId="longevity-supplements-article"
       seo={(
         <>
-          <SEO title={TITLE} description={DESC} canonicalUrl="/articles/longevity-supplements" ogType="article" />
+          <SEO title={TITLE} description={DESC} canonicalUrl="/articles/longevity-supplements" ogType="article"
+          articleSchema={false} />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />
         </>

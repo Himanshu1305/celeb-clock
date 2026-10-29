@@ -185,6 +185,7 @@ export function LifeExpectancyByCountryArticle() {
             description="Life expectancy by country in 2026 — UN World Population Prospects 2024 data. See rankings, what drives the differences, and how to improve your own."
             canonicalUrl="/articles/life-expectancy-by-country-2026"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />

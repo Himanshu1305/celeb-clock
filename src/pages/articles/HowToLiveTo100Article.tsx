@@ -103,6 +103,7 @@ export function HowToLiveTo100Article() {
             description={DESC}
             canonicalUrl="/articles/how-to-live-to-100"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />

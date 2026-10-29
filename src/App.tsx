@@ -175,6 +175,7 @@ const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
 const AstrologerPage = lazyWithReload(() => import('@/pages/AstrologerPage'));
 const SadeSatiPage = lazyWithReload(() => import('@/pages/SadeSatiPage'));
+const SadeSatiRashiPage = lazyWithReload(() => import('@/pages/SadeSatiRashiPage'));
 const ManglikPage = lazyWithReload(() => import('@/pages/ManglikPage'));
 const KaalSarpDoshaPage = lazyWithReload(() => import('@/pages/KaalSarpDoshaPage'));
 const PersonalYearNumberPage = lazyWithReload(() => import('@/pages/PersonalYearNumberPage'));
@@ -182,12 +183,16 @@ const AngelNumbersPage = lazyWithReload(() => import('@/pages/AngelNumbersPage')
 const AngelNumberPage = lazyWithReload(() => import('@/pages/AngelNumberPage'));
 const DashaCalculatorPage = lazyWithReload(() => import('@/pages/DashaCalculatorPage'));
 const MuhuratPage = lazyWithReload(() => import('@/pages/MuhuratPage'));
+const MuhuratYearPage = lazyWithReload(() => import('@/pages/MuhuratYearPage'));
 const CareerReportPage = lazyWithReload(() => import('@/pages/CareerReportPage'));
 const GemstonePage = lazyWithReload(() => import('@/pages/GemstonePage'));
 const BabyNamesPage = lazyWithReload(() => import('@/pages/BabyNamesPage'));
 const BabyNamesNakshatraPage = lazyWithReload(() => import('@/pages/BabyNamesNakshatraPage'));
 const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
 const HindiPanchangPage = lazyWithReload(() => import('@/pages/hi/PanchangPage'));
+// Batch 9b: Hindi Kundli milan + Kundli milan by name (English + Hindi).
+const HindiKundliMilanPage = lazyWithReload(() => import('@/pages/hi/KundliMilanPage'));
+const KundliMilanByNamePage = lazyWithReload(() => import('@/pages/KundliMilanByNamePage'));
 const RashifalIndex = lazyWithReload(() => import('@/pages/RashifalIndex'));
 const RashifalSign = lazyWithReload(() => import('@/pages/RashifalSign'));
 const NakshatraIndex = lazyWithReload(() => import('@/pages/NakshatraIndex'));
@@ -446,8 +451,13 @@ const App = () => (
               <Route path="/for-business" element={<ForBusinessPage />} />
               <Route path="/kundali" element={<KundaliPage />} />
               <Route path="/kundali-match" element={<KundaliMatchPage />} />
+              <Route path="/kundli-milan-by-name" element={<KundliMilanByNamePage lang="en" />} />
+              <Route path="/hi/kundli-milan" element={<HindiKundliMilanPage />} />
+              <Route path="/hi/naam-se-kundli-milan" element={<KundliMilanByNamePage lang="hi" />} />
               <Route path="/astrologer" element={<AstrologerPage />} />
               <Route path="/sade-sati" element={<SadeSatiPage />} />
+              <Route path="/sade-sati/:rashi" element={<SadeSatiRashiPage />} />
+              <Route path="/hi/sade-sati/:rashi" element={<SadeSatiRashiPage lang="hi" />} />
               <Route path="/manglik" element={<ManglikPage />} />
               <Route path="/kaal-sarp-dosha" element={<KaalSarpDoshaPage />} />
               <Route path="/personal-year-number" element={<PersonalYearNumberPage />} />
@@ -455,6 +465,7 @@ const App = () => (
               <Route path="/angel-numbers/:number" element={<AngelNumberPage />} />
               <Route path="/dasha-calculator" element={<DashaCalculatorPage />} />
               <Route path="/muhurat" element={<MuhuratPage />} />
+              <Route path="/muhurat/:type/:year" element={<MuhuratYearPage />} />
               <Route path="/career-report" element={<CareerReportPage />} />
               <Route path="/gemstones" element={<GemstonePage />} />
               <Route path="/baby-names" element={<BabyNamesPage />} />

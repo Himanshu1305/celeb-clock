@@ -73,6 +73,7 @@ export function BirthMonthPersonalityArticle() {
         description="Birth month personality guide — the zodiac sign and traits linked to each of the 12 months, plus the science of seasonal birth effects."
         canonicalUrl="/articles/birth-month-personality"
         ogType="article"
+          articleSchema={false}
       />
       <JsonLd data={articleSchema} />
       <JsonLd data={faqSchema} />

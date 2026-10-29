@@ -79,6 +79,10 @@ export function RashifalDailyView({ rashi }: { rashi: RashiMeta }) {
             ))}
           </div>
 
+          <p className="text-sm text-muted-foreground mb-6" data-testid="rashifal-sadesati-link">
+            Saturn periods for {rashi.sanskrit}: <Link to={`/sade-sati/${rashi.slug}`} className="underline">{rashi.sanskrit} Sade Sati &amp; Dhaiya start and end dates →</Link>
+          </p>
+
           <p className="text-sm text-muted-foreground mb-8">
             Looking for the Western (Sun sign) horoscope instead? It uses a different zodiac, so your sign there may differ:{' '}
             <Link to={`/zodiac/${SUN_SIGN_SLUGS[idx]}/today`} className="underline">{rashi.english} horoscope today (Western) →</Link>

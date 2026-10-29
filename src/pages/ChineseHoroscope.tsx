@@ -18,6 +18,7 @@ import {
 } from '@/services/chineseYearlyForecast';
 import {
   chineseYearInfo,
+  chineseHoroscopeAnimalTitle,
   chineseHoroscopeIndexTitle,
   chineseHoroscopeIndexDescription,
 } from '@/lib/chineseCalendar.js';
@@ -65,6 +66,28 @@ function YearBlock({ cap, f }: { cap: string; f: YearForecast }) {
         </div>
         <div className="mt-4 rounded-lg bg-muted/40 p-4 text-sm text-muted-foreground">
           <strong className="text-foreground">What to do:</strong> {f.advice}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+/**
+ * Batch 9b: the FAQ answers that go into FAQPage JSON-LD are also SHOWN on the page
+ * (Google only allows FAQ markup for questions visible to the reader).
+ */
+function VisibleFaq({ items, testId }: { items: { question: string; answer: string }[]; testId: string }) {
+  return (
+    <Card className="glass-card" data-testid={testId}>
+      <CardContent className="p-6 md:p-8">
+        <h2 className="text-xl font-bold mb-4 text-foreground">Frequently asked questions</h2>
+        <div className="space-y-5">
+          {items.map((f) => (
+            <div key={f.question}>
+              <h3 className="font-semibold text-foreground mb-1">{f.question}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{f.answer}</p>
+            </div>
+          ))}
         </div>
       </CardContent>
     </Card>
@@ -146,6 +169,11 @@ export default function ChineseHoroscope() {
             ))}
           </div>
         </section>
+        <section className="section container mx-auto px-4 pb-8">
+          <div className="max-w-3xl mx-auto">
+            <VisibleFaq items={indexFaq} testId="cz-index-faq" />
+          </div>
+        </section>
       </CollectionLayout>
     );
   }
@@ -168,7 +196,7 @@ export default function ChineseHoroscope() {
       testId="chinese-horoscope-animal"
       seo={(
         <SEO
-          title={`${cap} Horoscope ${thisYear} & ${nextYear} — Career, Love, Money, Health | BornClock`}
+          title={chineseHoroscopeAnimalTitle(cap, thisYear)}
           description={`${cap} Chinese zodiac yearly forecast: career, finance, love and health for ${thisYear} and ${nextYear}, based on the ${cap}'s relationship to each year's ruling animal. Graded, honest, free.`}
           keywords={`${slug} horoscope ${thisYear}, ${slug} chinese zodiac forecast, ${slug} ${nextYear}, year of the ${slug}`}
           canonicalUrl={`/chinese-horoscope/${slug}`}
@@ -200,6 +228,8 @@ export default function ChineseHoroscope() {
             Want the full {cap} personality, compatibility and lucky elements?{' '}
             <Link to={`/chinese-zodiac/${slug}`} className="underline text-foreground">See the {cap} sign guide →</Link>
           </div>
+
+          <VisibleFaq items={faqItems} testId="cz-animal-faq" />
 
           <Card className="glass-card">
             <CardContent className="p-6 md:p-8">

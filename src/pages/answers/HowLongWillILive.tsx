@@ -27,6 +27,7 @@ export default function HowLongWillILive() {
           description="How long will I live? Science shows life expectancy depends on genetics (25%), lifestyle (75%), country, and habits. Calculate your personal forecast free."
           canonicalUrl="/answers/how-long-will-i-live"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How long will I live?' }}

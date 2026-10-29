@@ -14,7 +14,7 @@ import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
 import { TermTip } from '@/components/vedic/TermTip';
-import { EVIDENCE, ACCURACY_FAQ, COUNTS, TESTED_MONTH, PAGE_UPDATED, PAGE_UPDATED_ISO } from '@/lib/accuracy/evidence';
+import { EVIDENCE, ACCURACY_FAQ, COUNTS, ANCIENT_MOON_MAX_ARCMIN, TESTED_MONTH, PAGE_UPDATED, PAGE_UPDATED_ISO } from '@/lib/accuracy/evidence';
 
 const link = 'text-primary underline hover:opacity-80';
 
@@ -182,8 +182,8 @@ export default function AccuracyPage() {
               year length or ayanamsa will show different dates.
             </li>
             <li>
-              <strong className="text-foreground">Very old dates.</strong> For a few births before 1210 CE, the Moon position
-              differed from the Swiss Ephemeris by up to about 9 arc-minutes (the sign was still the same). Ancient birth dates
+              <strong className="text-foreground">Very old dates.</strong> For {COUNTS.ancientMoonDates} births before {COUNTS.ancientMoonBeforeYear} CE, the Moon position
+              differed from the Swiss Ephemeris by up to about {ANCIENT_MOON_MAX_ARCMIN} arc-minutes (the sign was still the same). Ancient birth dates
               are often uncertain anyway.
             </li>
             <li>

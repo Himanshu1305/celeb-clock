@@ -93,3 +93,24 @@ export function biorhythmNote(value: number): string {
 export function limbEndNote(): string {
   return 'Each limb changes at the time shown; the next one then applies. A Panchang day runs sunrise to sunrise.';
 }
+
+/** Hindi version of kootaScoreNote (Batch 9b, /hi/kundli-milan). Same bands. */
+export function kootaScoreNoteHi(key: string, score: number, max: number): string {
+  if (!(max > 0)) return '';
+  if (score >= max) return `पूरे ${max} में से ${max} — मिलान का यह हिस्सा पूरी तरह मेल खाता है।`;
+  if (score <= 0) {
+    if (key === 'nadi') return `${max} में से 0 — दोनों की नाड़ी एक है (नाड़ी दोष)। ऊपर परिहार की जानकारी देखें; ऐसे कई रिश्ते फिर भी स्वीकार किए जाते हैं।`;
+    if (key === 'bhakoot') return `${max} में से 0 — दोनों चंद्र राशियाँ 2/12, 5/9 या 6/8 की स्थिति में हैं (भकूट दोष)। राशि-स्वामी मित्र हों तो इसका असर कम माना जाता है।`;
+    return `${max} में से 0 — यह हिस्सा मेल नहीं खाता। यह आठ में से एक हिस्सा है; बाकी हिस्से इसे संतुलित कर सकते हैं।`;
+  }
+  if (score / max >= 0.5) return `${max} में से ${score} — इस हिस्से में ठीक-ठाक मेल।`;
+  return `${max} में से ${score} — इस हिस्से में आंशिक मेल; ध्यान रखने योग्य, पर अकेले यह रिश्ता तय नहीं करता।`;
+}
+
+/** Hindi version of gunaTotalNote — bands 18 / 24 / 28 as matchmaking.ts. */
+export function gunaTotalNoteHi(total: number): string {
+  if (total >= 28) return `36 में से ${total} — उत्तम स्कोर; पारंपरिक न्यूनतम 18 से काफ़ी ऊपर।`;
+  if (total >= 24) return `36 में से ${total} — अच्छा स्कोर; पारंपरिक न्यूनतम 18 से आराम से ऊपर।`;
+  if (total >= 18) return `36 में से ${total} — पारंपरिक न्यूनतम 18 से ऊपर, इसलिए गुण मिलान के हिसाब से रिश्ता स्वीकार्य है।`;
+  return `36 में से ${total} — पारंपरिक न्यूनतम 18 से कम। ऐसे में परिवार आम तौर पर दोष, उनके परिहार और पूरी कुंडली देखकर ही निर्णय लेते हैं।`;
+}

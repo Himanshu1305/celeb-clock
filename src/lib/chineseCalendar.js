@@ -182,6 +182,17 @@ export function chineseHoroscopeIndexDescription(chineseYear) {
   return `The Year of the ${i.element} ${i.animal} runs ${i.rangeLabel}. Free yearly forecast for all 12 Chinese zodiac animals — career, money, love and health for ${chineseYear} and the ${n.element} ${n.animal} year ${chineseYear + 1}.`;
 }
 
+/**
+ * Title for /chinese-horoscope/:animal — shared by the live <SEO> and the prerender (Batch 9b:
+ * the prerender title used to be year-free while the live one named both years).
+ * e.g. "Horse Horoscope 2026 & 2027 — Career, Love, Money, Health | BornClock"
+ * @param {string} cap capitalised animal name
+ * @param {number} chineseYear the Chinese year in force (currentChineseYear())
+ */
+export function chineseHoroscopeAnimalTitle(cap, chineseYear) {
+  return `${cap} Horoscope ${chineseYear} & ${chineseYear + 1} — Career, Love, Money, Health | BornClock`;
+}
+
 /** Year range of the public table on /articles/chinese-zodiac-by-year (each row sourced). */
 export const CHINESE_YEAR_TABLE_FIRST = 1924;
 export const CHINESE_YEAR_TABLE_LAST = 2031;

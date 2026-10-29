@@ -84,3 +84,16 @@ describe('panchangCityLocal.json', () => {
     }
   });
 });
+
+// Batch 9b: the Gwalior "world's very first written zero" claim is disputed. The line now
+// says what the cited page says, with attribution — Wikipedia "Chaturbhuj Temple, Gwalior"
+// (opened 29 Oct 2026): "this temple has the earliest known epigraphical evidence inscribed
+// in stone"; "the earlier Bakhshali manuscript is regarded as the earliest existent use of zero".
+describe('Gwalior zero line (Batch 9b)', () => {
+  it('is attributed, sourced to the temple page, and does not claim the first zero', () => {
+    const json = JSON.stringify(local);
+    expect(json).not.toMatch(/very first occurrence of zero/);
+    expect(json).toContain('Wikipedia notes its inscription has one of the earliest known zeros carved in stone');
+    expect(json).toContain('https://en.wikipedia.org/wiki/Chaturbhuj_Temple,_Gwalior');
+  });
+});

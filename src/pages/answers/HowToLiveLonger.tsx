@@ -26,6 +26,7 @@ export default function HowToLiveLonger() {
           description="The science of longevity in plain language. 7 evidence-based habits that add years to your life — backed by Blue Zone research, Harvard studies, and WHO data."
           canonicalUrl="/answers/how-to-live-longer"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How to live longer' }}

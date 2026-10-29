@@ -14,6 +14,8 @@ import { MUHURAT_OCCASIONS, type MuhuratPurpose } from '@/lib/vedic/panchang';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import { formatUtcOffset } from '@/lib/timezone/birthTimezone';
 import { TrustStrip } from '@/components/paj/TrustStrip';
+import { Link } from 'react-router-dom';
+import { MUHURAT_YEAR_META, MUHURAT_YEAR_YEARS } from '@/lib/muhuratYearMeta.js';
 
 interface Day { date: string; weekday: string; nakshatra: string; tithiName: string; paksha: string; yoga: string; rahuKalam: { start: string; end: string }; score: number; reasons: string[]; auspicious: boolean }
 
@@ -83,6 +85,21 @@ export default function MuhuratPage() {
             <div><span className="eyebrow">Panchang</span><h1>Muhurat Finder.</h1></div>
             <p>Auspicious dates for a specific occasion, chosen by the Panchang (<TermTip id="tithi">Tithi</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip>, <TermTip id="panchangYoga">Yoga</TermTip> and weekday) for your location — each day shows the <TermTip id="rahuKalam">Rahu Kalam</TermTip> window to avoid.</p>
           </div>
+
+        {/* Batch 9b: ready-made year lists (precomputed) for the most-searched occasions. */}
+        <nav aria-label="Muhurat dates by year" data-testid="muhurat-year-links" className="rounded-xl border border-border p-4 mb-4 text-sm">
+          <h2 className="font-semibold text-foreground mb-2">Muhurat dates by year</h2>
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {Object.keys(MUHURAT_YEAR_META).map(slug => ({ slug, m: MUHURAT_YEAR_META[slug] })).map(({ slug, m }) => (
+              <li key={slug} className="text-foreground">
+                {m.short}:{' '}
+                {MUHURAT_YEAR_YEARS.map((y, i) => (
+                  <span key={y}>{i > 0 && ' · '}<Link to={`/muhurat/${slug}/${y}`} className="text-primary underline">{m.short} muhurat {y}</Link></span>
+                ))}
+              </li>
+            ))}
+          </ul>
+        </nav>
 
         <TrustStrip claim="Your Panchang is computed for your exact location — the right timings shift from city to city, so we never guess." href="/how-it-works#vedic" />
         <div className="rounded-xl border border-border bg-card/60 p-5 space-y-4" style={{ marginTop: 16 }}>

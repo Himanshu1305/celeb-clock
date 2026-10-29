@@ -51,6 +51,7 @@ export default function WhatIsMyMoonSign() {
           description="Your moon sign is where the Moon was when you were born — and it changes every 2.5 days, making it far more personal than your sun sign. Find yours free on BornClock."
           canonicalUrl="/answers/what-is-my-moon-sign"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'What is my moon sign?' }}

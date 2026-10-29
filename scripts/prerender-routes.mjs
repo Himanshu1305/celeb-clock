@@ -5,6 +5,8 @@
 import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+// Batch 9b: year muhurat lists (/muhurat/:type/:year) — slugs/years shared with the page.
+import { muhuratYearRoutes } from '../src/lib/muhuratYearMeta.js';
 
 // Batch 7 (W7): the 50 Panchang city slugs — one source shared with the app.
 const PANCHANG_CITY_SLUGS = JSON.parse(
@@ -395,9 +397,16 @@ export const STATIC_ROUTES = [
   '/mystic-corner',
   '/kundali',
   '/kundali-match',
+  // Batch 9b: Hindi Kundli milan + Kundli milan by name (English + Hindi).
+  '/kundli-milan-by-name',
+  '/hi/kundli-milan',
+  '/hi/naam-se-kundli-milan',
   // Part AL Step 7: prerender the redesigned Vedic tool pages so crawlers see real content
   // on first load (previously served a bare SPA shell before React hydrated).
   '/sade-sati',
+  // Batch 9b: Sade Sati & Dhaiya dates per Moon sign (src/pages/SadeSatiRashiPage.tsx).
+  ...VEDIC_RASHIS.map(r => `/sade-sati/${r}`),
+  ...['mesha','vrisha','mithuna','karka','simha','kanya','tula','vrischika','dhanu','makara','kumbha','meena'].map(r => `/hi/sade-sati/${r}`),
   '/dasha-calculator',
   '/manglik',
   '/kaal-sarp-dosha',
@@ -405,6 +414,7 @@ export const STATIC_ROUTES = [
   '/angel-numbers',
   ...ANGEL_NUMBER_SEQUENCES.map(n => `/angel-numbers/${n}`),
   '/muhurat',
+  ...muhuratYearRoutes(),
   '/gemstones',
   '/career-report',
   '/astrologer',

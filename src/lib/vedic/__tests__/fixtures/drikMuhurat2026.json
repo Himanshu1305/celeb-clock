@@ -1,0 +1,1697 @@
+{
+ "_source": "Drik Panchang year lists opened with WebFetch on 29 Oct 2026. The fetched pages are truncated by the site/fetcher partway through the year, so only the covered span is recorded; Drik geolocates by IP, so the Griha Pravesh list came back for Dubai (UTC+4) rather than New Delhi and is compared for Dubai.",
+ "marriage": {
+  "url": "https://www.drikpanchang.com/shubh-dates/shubh-marriage-dates-with-muhurat.html",
+  "city": "New Delhi",
+  "lat": 28.6139,
+  "lon": 77.209,
+  "tz": 5.5,
+  "coveredFrom": "2026-01-01",
+  "coveredTo": "2026-07-18",
+  "entries": [
+   {
+    "date": "2026-02-05",
+    "start": "07:07",
+    "startNextDay": false,
+    "end": "07:06",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Phalguni",
+     "Hasta"
+    ],
+    "tithis": [
+     "Chaturthi",
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-02-06",
+    "start": "07:06",
+    "startNextDay": false,
+    "end": "23:37",
+    "endNextDay": false,
+    "nakshatras": [
+     "Hasta"
+    ],
+    "tithis": [
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-02-08",
+    "start": "00:08",
+    "startNextDay": true,
+    "end": "05:02",
+    "endNextDay": true,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Saptami"
+    ]
+   },
+   {
+    "date": "2026-02-10",
+    "start": "07:55",
+    "startNextDay": false,
+    "end": "01:42",
+    "endNextDay": true,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Navami"
+    ]
+   },
+   {
+    "date": "2026-02-12",
+    "start": "20:20",
+    "startNextDay": false,
+    "end": "03:06",
+    "endNextDay": true,
+    "nakshatras": [
+     "Mula"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-02-14",
+    "start": "18:16",
+    "startNextDay": false,
+    "end": "03:18",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Ashadha"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-02-19",
+    "start": "20:52",
+    "startNextDay": false,
+    "end": "06:55",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Bhadrapada"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-02-20",
+    "start": "06:55",
+    "startNextDay": false,
+    "end": "01:51",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Bhadrapada",
+     "Revati"
+    ],
+    "tithis": [
+     "Tritiya",
+     "Chaturthi"
+    ]
+   },
+   {
+    "date": "2026-02-21",
+    "start": "13:00",
+    "startNextDay": false,
+    "end": "13:22",
+    "endNextDay": false,
+    "nakshatras": [
+     "Revati"
+    ],
+    "tithis": [
+     "Panchami",
+     "Chaturthi"
+    ]
+   },
+   {
+    "date": "2026-02-24",
+    "start": "04:26",
+    "startNextDay": true,
+    "end": "06:50",
+    "endNextDay": true,
+    "nakshatras": [
+     "Rohini"
+    ],
+    "tithis": [
+     "Navami"
+    ]
+   },
+   {
+    "date": "2026-02-25",
+    "start": "01:28",
+    "startNextDay": true,
+    "end": "06:49",
+    "endNextDay": true,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Navami",
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-02-26",
+    "start": "06:49",
+    "startNextDay": false,
+    "end": "12:11",
+    "endNextDay": false,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-03-02",
+    "start": "13:46",
+    "startNextDay": false,
+    "end": "17:55",
+    "endNextDay": false,
+    "nakshatras": [
+     "Magha"
+    ],
+    "tithis": [
+     "Chaturdashi"
+    ]
+   },
+   {
+    "date": "2026-03-02",
+    "start": "05:28",
+    "startNextDay": true,
+    "end": "06:44",
+    "endNextDay": true,
+    "nakshatras": [
+     "Magha"
+    ],
+    "tithis": [
+     "Purnima"
+    ]
+   },
+   {
+    "date": "2026-03-03",
+    "start": "06:44",
+    "startNextDay": false,
+    "end": "07:31",
+    "endNextDay": false,
+    "nakshatras": [
+     "Purva Phalguni",
+     "Magha"
+    ],
+    "tithis": [
+     "Purnima"
+    ]
+   },
+   {
+    "date": "2026-03-04",
+    "start": "07:39",
+    "startNextDay": false,
+    "end": "08:52",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Phalguni"
+    ],
+    "tithis": [
+     "Pratipada"
+    ]
+   },
+   {
+    "date": "2026-03-07",
+    "start": "11:15",
+    "startNextDay": false,
+    "end": "06:39",
+    "endNextDay": true,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Chaturthi",
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-03-08",
+    "start": "06:39",
+    "startNextDay": false,
+    "end": "07:04",
+    "endNextDay": false,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-03-09",
+    "start": "16:11",
+    "startNextDay": false,
+    "end": "23:27",
+    "endNextDay": false,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Shashthi"
+    ]
+   },
+   {
+    "date": "2026-03-11",
+    "start": "04:41",
+    "startNextDay": true,
+    "end": "06:34",
+    "endNextDay": true,
+    "nakshatras": [
+     "Mula"
+    ],
+    "tithis": [
+     "Navami"
+    ]
+   },
+   {
+    "date": "2026-03-12",
+    "start": "06:34",
+    "startNextDay": false,
+    "end": "09:59",
+    "endNextDay": false,
+    "nakshatras": [
+     "Mula"
+    ],
+    "tithis": [
+     "Navami"
+    ]
+   },
+   {
+    "date": "2026-04-15",
+    "start": "15:22",
+    "startNextDay": false,
+    "end": "22:31",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Bhadrapada"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-04-20",
+    "start": "05:51",
+    "startNextDay": false,
+    "end": "17:49",
+    "endNextDay": false,
+    "nakshatras": [
+     "Rohini"
+    ],
+    "tithis": [
+     "Tritiya",
+     "Chaturthi"
+    ]
+   },
+   {
+    "date": "2026-04-20",
+    "start": "04:14",
+    "startNextDay": true,
+    "end": "05:50",
+    "endNextDay": true,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-04-21",
+    "start": "05:50",
+    "startNextDay": false,
+    "end": "12:31",
+    "endNextDay": false,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-04-25",
+    "start": "02:10",
+    "startNextDay": true,
+    "end": "05:45",
+    "endNextDay": true,
+    "nakshatras": [
+     "Magha"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-04-26",
+    "start": "05:45",
+    "startNextDay": false,
+    "end": "20:27",
+    "endNextDay": false,
+    "nakshatras": [
+     "Magha"
+    ],
+    "tithis": [
+     "Dashami",
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-04-27",
+    "start": "21:18",
+    "startNextDay": false,
+    "end": "21:36",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Phalguni",
+     "Purva Phalguni"
+    ],
+    "tithis": [
+     "Dwadashi"
+    ]
+   },
+   {
+    "date": "2026-04-28",
+    "start": "21:04",
+    "startNextDay": false,
+    "end": "05:42",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Phalguni",
+     "Hasta"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-04-29",
+    "start": "05:42",
+    "startNextDay": false,
+    "end": "20:52",
+    "endNextDay": false,
+    "nakshatras": [
+     "Hasta"
+    ],
+    "tithis": [
+     "Trayodashi",
+     "Chaturdashi"
+    ]
+   },
+   {
+    "date": "2026-05-01",
+    "start": "10:00",
+    "startNextDay": false,
+    "end": "21:13",
+    "endNextDay": false,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Purnima"
+    ]
+   },
+   {
+    "date": "2026-05-03",
+    "start": "07:10",
+    "startNextDay": false,
+    "end": "22:28",
+    "endNextDay": false,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Dwitiya"
+    ]
+   },
+   {
+    "date": "2026-05-05",
+    "start": "19:39",
+    "startNextDay": false,
+    "end": "05:37",
+    "endNextDay": true,
+    "nakshatras": [
+     "Mula"
+    ],
+    "tithis": [
+     "Chaturthi"
+    ]
+   },
+   {
+    "date": "2026-05-06",
+    "start": "05:37",
+    "startNextDay": false,
+    "end": "15:54",
+    "endNextDay": false,
+    "nakshatras": [
+     "Mula"
+    ],
+    "tithis": [
+     "Chaturthi",
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-05-07",
+    "start": "18:46",
+    "startNextDay": false,
+    "end": "05:35",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Ashadha"
+    ],
+    "tithis": [
+     "Shashthi"
+    ]
+   },
+   {
+    "date": "2026-05-08",
+    "start": "05:35",
+    "startNextDay": false,
+    "end": "12:21",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Ashadha"
+    ],
+    "tithis": [
+     "Shashthi"
+    ]
+   },
+   {
+    "date": "2026-05-13",
+    "start": "20:55",
+    "startNextDay": false,
+    "end": "05:31",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Bhadrapada",
+     "Revati"
+    ],
+    "tithis": [
+     "Dwadashi"
+    ]
+   },
+   {
+    "date": "2026-05-14",
+    "start": "05:31",
+    "startNextDay": false,
+    "end": "16:59",
+    "endNextDay": false,
+    "nakshatras": [
+     "Revati"
+    ],
+    "tithis": [
+     "Dwadashi",
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-06-21",
+    "start": "09:31",
+    "startNextDay": false,
+    "end": "11:21",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Phalguni"
+    ],
+    "tithis": [
+     "Saptami"
+    ]
+   },
+   {
+    "date": "2026-06-22",
+    "start": "10:31",
+    "startNextDay": false,
+    "end": "05:24",
+    "endNextDay": true,
+    "nakshatras": [
+     "Hasta"
+    ],
+    "tithis": [
+     "Ashtami",
+     "Navami"
+    ]
+   },
+   {
+    "date": "2026-06-23",
+    "start": "05:24",
+    "startNextDay": false,
+    "end": "10:13",
+    "endNextDay": false,
+    "nakshatras": [
+     "Hasta"
+    ],
+    "tithis": [
+     "Navami"
+    ]
+   },
+   {
+    "date": "2026-06-24",
+    "start": "13:59",
+    "startNextDay": false,
+    "end": "05:25",
+    "endNextDay": true,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Dashami",
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-06-25",
+    "start": "05:25",
+    "startNextDay": false,
+    "end": "07:08",
+    "endNextDay": false,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-06-26",
+    "start": "19:16",
+    "startNextDay": false,
+    "end": "05:25",
+    "endNextDay": true,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Dwadashi",
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-06-27",
+    "start": "05:25",
+    "startNextDay": false,
+    "end": "22:11",
+    "endNextDay": false,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-06-29",
+    "start": "16:16",
+    "startNextDay": false,
+    "end": "04:03",
+    "endNextDay": true,
+    "nakshatras": [
+     "Mula"
+    ],
+    "tithis": [
+     "Purnima"
+    ]
+   },
+   {
+    "date": "2026-07-01",
+    "start": "06:51",
+    "startNextDay": false,
+    "end": "16:04",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Ashadha"
+    ],
+    "tithis": [
+     "Dwitiya"
+    ]
+   },
+   {
+    "date": "2026-07-06",
+    "start": "01:41",
+    "startNextDay": true,
+    "end": "05:29",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Bhadrapada"
+    ],
+    "tithis": [
+     "Saptami"
+    ]
+   },
+   {
+    "date": "2026-07-07",
+    "start": "05:29",
+    "startNextDay": false,
+    "end": "14:31",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Bhadrapada"
+    ],
+    "tithis": [
+     "Saptami",
+     "Ashtami"
+    ]
+   },
+   {
+    "date": "2026-07-11",
+    "start": "00:05",
+    "startNextDay": true,
+    "end": "05:32",
+    "endNextDay": true,
+    "nakshatras": [
+     "Rohini"
+    ],
+    "tithis": [
+     "Dwadashi",
+     "Trayodashi"
+    ]
+   }
+  ]
+ },
+ "vehicle": {
+  "url": "https://www.drikpanchang.com/shubh-dates/vehicle-buying-auspicious-dates-with-muhurat.html",
+  "city": "New Delhi",
+  "lat": 28.6139,
+  "lon": 77.209,
+  "tz": 5.5,
+  "coveredFrom": "2026-01-01",
+  "coveredTo": "2026-08-02",
+  "entries": [
+   {
+    "date": "2026-01-01",
+    "start": "07:14",
+    "startNextDay": false,
+    "end": "22:22",
+    "endNextDay": false,
+    "nakshatras": [
+     "Rohini"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-01-02",
+    "start": "18:53",
+    "startNextDay": false,
+    "end": "20:04",
+    "endNextDay": false,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Purnima"
+    ]
+   },
+   {
+    "date": "2026-01-04",
+    "start": "07:15",
+    "startNextDay": false,
+    "end": "12:29",
+    "endNextDay": false,
+    "nakshatras": [
+     "Punarvasu"
+    ],
+    "tithis": [
+     "Pratipada"
+    ]
+   },
+   {
+    "date": "2026-01-05",
+    "start": "09:56",
+    "startNextDay": false,
+    "end": "13:25",
+    "endNextDay": false,
+    "nakshatras": [
+     "Pushya"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-01-11",
+    "start": "07:15",
+    "startNextDay": false,
+    "end": "10:20",
+    "endNextDay": false,
+    "nakshatras": [
+     "Chitra"
+    ],
+    "tithis": [
+     "Ashtami"
+    ]
+   },
+   {
+    "date": "2026-01-12",
+    "start": "12:42",
+    "startNextDay": false,
+    "end": "21:05",
+    "endNextDay": false,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-01-14",
+    "start": "07:15",
+    "startNextDay": false,
+    "end": "17:52",
+    "endNextDay": false,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-01-21",
+    "start": "07:14",
+    "startNextDay": false,
+    "end": "02:47",
+    "endNextDay": true,
+    "nakshatras": [
+     "Dhanishtha",
+     "Shatabhisha"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-01-28",
+    "start": "09:26",
+    "startNextDay": false,
+    "end": "07:11",
+    "endNextDay": true,
+    "nakshatras": [
+     "Rohini"
+    ],
+    "tithis": [
+     "Dashami",
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-01-29",
+    "start": "07:11",
+    "startNextDay": false,
+    "end": "13:55",
+    "endNextDay": false,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-02-01",
+    "start": "07:09",
+    "startNextDay": false,
+    "end": "23:58",
+    "endNextDay": false,
+    "nakshatras": [
+     "Pushya"
+    ],
+    "tithis": [
+     "Purnima"
+    ]
+   },
+   {
+    "date": "2026-02-06",
+    "start": "07:06",
+    "startNextDay": false,
+    "end": "07:06",
+    "endNextDay": true,
+    "nakshatras": [
+     "Hasta",
+     "Chitra"
+    ],
+    "tithis": [
+     "Panchami",
+     "Shashthi"
+    ]
+   },
+   {
+    "date": "2026-02-11",
+    "start": "09:58",
+    "startNextDay": false,
+    "end": "10:53",
+    "endNextDay": false,
+    "nakshatras": [
+     "Jyeshtha",
+     "Anuradha"
+    ],
+    "tithis": [
+     "Dashami",
+     "Navami"
+    ]
+   },
+   {
+    "date": "2026-02-26",
+    "start": "06:49",
+    "startNextDay": false,
+    "end": "12:11",
+    "endNextDay": false,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-02-27",
+    "start": "10:48",
+    "startNextDay": false,
+    "end": "22:32",
+    "endNextDay": false,
+    "nakshatras": [
+     "Punarvasu"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-03-01",
+    "start": "06:46",
+    "startNextDay": false,
+    "end": "08:34",
+    "endNextDay": false,
+    "nakshatras": [
+     "Pushya"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-03-05",
+    "start": "17:03",
+    "startNextDay": false,
+    "end": "06:41",
+    "endNextDay": true,
+    "nakshatras": [
+     "Hasta"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-03-06",
+    "start": "06:41",
+    "startNextDay": false,
+    "end": "17:53",
+    "endNextDay": false,
+    "nakshatras": [
+     "Hasta",
+     "Chitra"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-03-08",
+    "start": "06:39",
+    "startNextDay": false,
+    "end": "13:31",
+    "endNextDay": false,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-03-09",
+    "start": "16:11",
+    "startNextDay": false,
+    "end": "23:27",
+    "endNextDay": false,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Shashthi"
+    ]
+   },
+   {
+    "date": "2026-03-15",
+    "start": "06:31",
+    "startNextDay": false,
+    "end": "09:16",
+    "endNextDay": false,
+    "nakshatras": [
+     "Shravana"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-03-16",
+    "start": "09:40",
+    "startNextDay": false,
+    "end": "06:29",
+    "endNextDay": true,
+    "nakshatras": [
+     "Dhanishtha"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-03-23",
+    "start": "20:49",
+    "startNextDay": false,
+    "end": "06:21",
+    "endNextDay": true,
+    "nakshatras": [
+     "Rohini"
+    ],
+    "tithis": [
+     "Shashthi"
+    ]
+   },
+   {
+    "date": "2026-03-25",
+    "start": "13:50",
+    "startNextDay": false,
+    "end": "17:33",
+    "endNextDay": false,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Ashtami"
+    ]
+   },
+   {
+    "date": "2026-03-27",
+    "start": "10:06",
+    "startNextDay": false,
+    "end": "06:16",
+    "endNextDay": true,
+    "nakshatras": [
+     "Punarvasu",
+     "Pushya"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-04-01",
+    "start": "16:17",
+    "startNextDay": false,
+    "end": "06:10",
+    "endNextDay": true,
+    "nakshatras": [
+     "Hasta"
+    ],
+    "tithis": [
+     "Purnima"
+    ]
+   },
+   {
+    "date": "2026-04-02",
+    "start": "06:10",
+    "startNextDay": false,
+    "end": "06:09",
+    "endNextDay": true,
+    "nakshatras": [
+     "Hasta",
+     "Chitra"
+    ],
+    "tithis": [
+     "Purnima",
+     "Pratipada"
+    ]
+   },
+   {
+    "date": "2026-04-03",
+    "start": "06:09",
+    "startNextDay": false,
+    "end": "08:42",
+    "endNextDay": false,
+    "nakshatras": [
+     "Chitra"
+    ],
+    "tithis": [
+     "Pratipada"
+    ]
+   },
+   {
+    "date": "2026-04-06",
+    "start": "14:10",
+    "startNextDay": false,
+    "end": "02:57",
+    "endNextDay": true,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-04-12",
+    "start": "05:59",
+    "startNextDay": false,
+    "end": "05:58",
+    "endNextDay": true,
+    "nakshatras": [
+     "Shravana",
+     "Dhanishtha"
+    ],
+    "tithis": [
+     "Dashami",
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-04-13",
+    "start": "05:58",
+    "startNextDay": false,
+    "end": "01:08",
+    "endNextDay": true,
+    "nakshatras": [
+     "Dhanishtha",
+     "Shatabhisha"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-04-20",
+    "start": "05:51",
+    "startNextDay": false,
+    "end": "07:27",
+    "endNextDay": false,
+    "nakshatras": [
+     "Rohini"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-04-24",
+    "start": "05:47",
+    "startNextDay": false,
+    "end": "19:21",
+    "endNextDay": false,
+    "nakshatras": [
+     "Pushya"
+    ],
+    "tithis": [
+     "Ashtami"
+    ]
+   },
+   {
+    "date": "2026-04-29",
+    "start": "05:42",
+    "startNextDay": false,
+    "end": "19:51",
+    "endNextDay": false,
+    "nakshatras": [
+     "Hasta"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-05-01",
+    "start": "05:41",
+    "startNextDay": false,
+    "end": "04:35",
+    "endNextDay": true,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Purnima",
+     "Pratipada"
+    ]
+   },
+   {
+    "date": "2026-05-04",
+    "start": "05:38",
+    "startNextDay": false,
+    "end": "09:58",
+    "endNextDay": false,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-05-10",
+    "start": "05:34",
+    "startNextDay": false,
+    "end": "15:06",
+    "endNextDay": false,
+    "nakshatras": [
+     "Dhanishtha"
+    ],
+    "tithis": [
+     "Ashtami"
+    ]
+   },
+   {
+    "date": "2026-05-11",
+    "start": "15:24",
+    "startNextDay": false,
+    "end": "01:28",
+    "endNextDay": true,
+    "nakshatras": [
+     "Shatabhisha"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-05-14",
+    "start": "11:20",
+    "startNextDay": false,
+    "end": "22:34",
+    "endNextDay": false,
+    "nakshatras": [
+     "Revati"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-06-17",
+    "start": "05:23",
+    "startNextDay": false,
+    "end": "21:38",
+    "endNextDay": false,
+    "nakshatras": [
+     "Punarvasu",
+     "Pushya"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-06-22",
+    "start": "10:22",
+    "startNextDay": false,
+    "end": "15:39",
+    "endNextDay": false,
+    "nakshatras": [
+     "Hasta"
+    ],
+    "tithis": [
+     "Ashtami"
+    ]
+   },
+   {
+    "date": "2026-06-24",
+    "start": "05:25",
+    "startNextDay": false,
+    "end": "05:25",
+    "endNextDay": true,
+    "nakshatras": [
+     "Chitra",
+     "Swati"
+    ],
+    "tithis": [
+     "Dashami",
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-06-25",
+    "start": "05:25",
+    "startNextDay": false,
+    "end": "16:29",
+    "endNextDay": false,
+    "nakshatras": [
+     "Swati"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-07-02",
+    "start": "09:37",
+    "startNextDay": false,
+    "end": "05:28",
+    "endNextDay": true,
+    "nakshatras": [
+     "Shravana"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-07-03",
+    "start": "05:28",
+    "startNextDay": false,
+    "end": "11:20",
+    "endNextDay": false,
+    "nakshatras": [
+     "Shravana"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-07-05",
+    "start": "05:28",
+    "startNextDay": false,
+    "end": "15:12",
+    "endNextDay": false,
+    "nakshatras": [
+     "Shatabhisha"
+    ],
+    "tithis": [
+     "Panchami",
+     "Shashthi"
+    ]
+   },
+   {
+    "date": "2026-07-08",
+    "start": "05:30",
+    "startNextDay": false,
+    "end": "12:21",
+    "endNextDay": false,
+    "nakshatras": [
+     "Revati"
+    ],
+    "tithis": [
+     "Ashtami"
+    ]
+   },
+   {
+    "date": "2026-07-12",
+    "start": "05:32",
+    "startNextDay": false,
+    "end": "22:29",
+    "endNextDay": false,
+    "nakshatras": [
+     "Rohini",
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-07-19",
+    "start": "18:12",
+    "startNextDay": false,
+    "end": "03:29",
+    "endNextDay": true,
+    "nakshatras": [
+     "Hasta"
+    ],
+    "tithis": [
+     "Shashthi"
+    ]
+   },
+   {
+    "date": "2026-07-24",
+    "start": "05:38",
+    "startNextDay": false,
+    "end": "04:36",
+    "endNextDay": true,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Dashami",
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-07-29",
+    "start": "15:37",
+    "startNextDay": false,
+    "end": "05:41",
+    "endNextDay": true,
+    "nakshatras": [
+     "Shravana"
+    ],
+    "tithis": [
+     "Purnima",
+     "Pratipada"
+    ]
+   },
+   {
+    "date": "2026-07-30",
+    "start": "05:41",
+    "startNextDay": false,
+    "end": "21:30",
+    "endNextDay": false,
+    "nakshatras": [
+     "Shravana",
+     "Dhanishtha"
+    ],
+    "tithis": [
+     "Pratipada"
+    ]
+   }
+  ]
+ },
+ "griha-pravesh": {
+  "url": "https://www.drikpanchang.com/shubh-dates/griha-pravesh-dates-with-muhurat.html?geoname-id=292223",
+  "city": "Dubai",
+  "lat": 25.2048,
+  "lon": 55.2708,
+  "tz": 4,
+  "coveredFrom": "2026-01-01",
+  "coveredTo": "2026-07-31",
+  "entries": [
+   {
+    "date": "2026-02-06",
+    "start": "22:53",
+    "startNextDay": false,
+    "end": "23:48",
+    "endNextDay": false,
+    "nakshatras": [
+     "Chitra",
+     "Hasta"
+    ],
+    "tithis": [
+     "Shashthi",
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-02-11",
+    "start": "08:28",
+    "startNextDay": false,
+    "end": "09:23",
+    "endNextDay": false,
+    "nakshatras": [
+     "Jyeshtha",
+     "Anuradha"
+    ],
+    "tithis": [
+     "Dashami",
+     "Navami"
+    ]
+   },
+   {
+    "date": "2026-02-19",
+    "start": "19:22",
+    "startNextDay": false,
+    "end": "06:50",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Bhadrapada"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-02-20",
+    "start": "06:50",
+    "startNextDay": false,
+    "end": "13:08",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Bhadrapada"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-02-21",
+    "start": "11:30",
+    "startNextDay": false,
+    "end": "17:37",
+    "endNextDay": false,
+    "nakshatras": [
+     "Revati"
+    ],
+    "tithis": [
+     "Panchami"
+    ]
+   },
+   {
+    "date": "2026-02-25",
+    "start": "01:10",
+    "startNextDay": true,
+    "end": "06:45",
+    "endNextDay": true,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-02-26",
+    "start": "06:45",
+    "startNextDay": false,
+    "end": "10:41",
+    "endNextDay": false,
+    "nakshatras": [
+     "Mrigashira"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-03-04",
+    "start": "06:40",
+    "startNextDay": false,
+    "end": "06:39",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Phalguni"
+    ],
+    "tithis": [
+     "Pratipada",
+     "Dwitiya"
+    ]
+   },
+   {
+    "date": "2026-03-05",
+    "start": "06:39",
+    "startNextDay": false,
+    "end": "06:47",
+    "endNextDay": false,
+    "nakshatras": [
+     "Hasta",
+     "Uttara Phalguni"
+    ],
+    "tithis": [
+     "Dwitiya"
+    ]
+   },
+   {
+    "date": "2026-03-06",
+    "start": "07:59",
+    "startNextDay": false,
+    "end": "16:23",
+    "endNextDay": false,
+    "nakshatras": [
+     "Chitra"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-03-09",
+    "start": "21:57",
+    "startNextDay": false,
+    "end": "06:34",
+    "endNextDay": true,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Saptami"
+    ]
+   },
+   {
+    "date": "2026-03-13",
+    "start": "01:33",
+    "startNextDay": true,
+    "end": "06:30",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Ashadha"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-03-14",
+    "start": "06:30",
+    "startNextDay": false,
+    "end": "03:19",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Ashadha"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-05-04",
+    "start": "05:42",
+    "startNextDay": false,
+    "end": "08:28",
+    "endNextDay": false,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Tritiya"
+    ]
+   },
+   {
+    "date": "2026-05-08",
+    "start": "10:51",
+    "startNextDay": false,
+    "end": "19:50",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Ashadha"
+    ],
+    "tithis": [
+     "Saptami"
+    ]
+   },
+   {
+    "date": "2026-05-13",
+    "start": "05:36",
+    "startNextDay": false,
+    "end": "11:59",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Bhadrapada"
+    ],
+    "tithis": [
+     "Ekadashi"
+    ]
+   },
+   {
+    "date": "2026-06-24",
+    "start": "05:31",
+    "startNextDay": false,
+    "end": "12:29",
+    "endNextDay": false,
+    "nakshatras": [
+     "Chitra"
+    ],
+    "tithis": [
+     "Dashami"
+    ]
+   },
+   {
+    "date": "2026-06-26",
+    "start": "20:52",
+    "startNextDay": false,
+    "end": "05:32",
+    "endNextDay": true,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-06-27",
+    "start": "05:32",
+    "startNextDay": false,
+    "end": "20:41",
+    "endNextDay": false,
+    "nakshatras": [
+     "Anuradha"
+    ],
+    "tithis": [
+     "Trayodashi"
+    ]
+   },
+   {
+    "date": "2026-07-01",
+    "start": "05:33",
+    "startNextDay": false,
+    "end": "05:33",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Ashadha"
+    ],
+    "tithis": [
+     "Dwitiya"
+    ]
+   },
+   {
+    "date": "2026-07-02",
+    "start": "05:33",
+    "startNextDay": false,
+    "end": "07:57",
+    "endNextDay": false,
+    "nakshatras": [
+     "Uttara Ashadha"
+    ],
+    "tithis": [
+     "Dwitiya"
+    ]
+   },
+   {
+    "date": "2026-07-06",
+    "start": "14:37",
+    "startNextDay": false,
+    "end": "05:35",
+    "endNextDay": true,
+    "nakshatras": [
+     "Uttara Bhadrapada"
+    ],
+    "tithis": [
+     "Saptami"
+    ]
+   }
+  ]
+ }
+}

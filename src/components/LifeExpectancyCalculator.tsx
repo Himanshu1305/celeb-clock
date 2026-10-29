@@ -1186,7 +1186,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 <h3 className="text-xl font-bold flex items-center gap-2">🏘️ Your Community Anchor</h3>
                 <p className="text-sm text-muted-foreground mt-1">Pillar 3 of 3 · Your environment and community are as powerful as your biology.</p>
                 <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-                  Epigenetics proves that your daily habits and community environment can override genetic predispositions.{' '}
+                  Research on epigenetics suggests your daily habits and environment influence how your genes are used — genes are not the whole story.{' '}
                   <span className="font-medium text-foreground">WHO, 2023</span>: "Lifestyle factors account for up to 70% of longevity outcomes."
                   <TooltipProvider>
                     <Tooltip>
@@ -1287,7 +1287,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 <div className="bg-blue-50/50 dark:bg-blue-950/20 rounded-xl border border-blue-200 dark:border-blue-900 p-4 space-y-2">
                   <h4 className="text-xs font-bold text-blue-900 dark:text-blue-200">🔬 How Your Mentor's Habits Create an Epigenetic Multiplier</h4>
                   <p className="text-[11px] text-muted-foreground leading-relaxed">
-                    Epigenetics research shows that living in close proximity to someone who practices longevity-promoting habits creates measurable changes in your own biology — through shared food culture, sleep norms, stress patterns, and social activity levels.
+                    Living close to someone with healthy habits tends to shape your own — shared food culture, sleep norms, stress patterns and social activity. That is a habit effect; it is not a measured change in your genes.
                   </p>
                   <p className="text-[11px] text-muted-foreground leading-relaxed">
                     Each habit your mentor practices contributes <strong className="text-foreground">15% of its full scientific value</strong> to your forecast — reflecting the indirect environmental influence rather than your direct practice. This is based on the "social contagion" findings from the Framingham Heart Study (Christakis &amp; Fowler, NEJM 2007), which showed health behaviors spread through social networks across three degrees of separation.

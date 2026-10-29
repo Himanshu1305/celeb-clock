@@ -43,6 +43,7 @@ import { isProductionHost, DISALLOW_ALL_ROBOTS } from './host.js';
 import { duplicateRedirect } from '../src/lib/seo/duplicateRedirects.js';
 import { INDIA_BORNON_SLUGS } from '../src/lib/seo/indiaBornOnSlugs.js';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../src/lib/seo/panchangSlugs.js';
+import { MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
 import { matchDailyRoute } from '../src/lib/daily/registry.js';
 import { applyDailyContent } from './daily.js';
 
@@ -272,6 +273,10 @@ const worker = {
       // src/lib/daily/registry.ts); anything else was a soft-404 200.
       const RH = new Set(['mesha','vrisha','mithuna','karka','simha','kanya','tula','vrischika','dhanu','makara','kumbha','meena']);
       if ((m = pathname.match(/^\/hi\/rashifal\/([a-z]+)\/?$/)))      return !RH.has(m[1]);
+      // Batch 9b review: per-rashi Sade Sati pages use the same two slug sets
+      // (src/lib/vedic/sadeSatiRashiText.ts SS_EN_SLUGS / SS_HI_SLUGS).
+      if ((m = pathname.match(/^\/sade-sati\/([a-z]+)\/?$/)))       return !R.has(m[1]);
+      if ((m = pathname.match(/^\/hi\/sade-sati\/([a-z]+)\/?$/)))   return !RH.has(m[1]);
       const NAK = new Set(['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati']);
       if ((m = pathname.match(/^\/nakshatra\/([a-z-]+)\/?$/)))        return !NAK.has(m[1]);
       if ((m = pathname.match(/^\/baby-names\/nakshatra\/([a-z-]+)\/?$/))) return !NAK.has(m[1]);
@@ -281,6 +286,8 @@ const worker = {
       if ((m = pathname.match(/^\/transit\/([a-z]+)\/(\d+)\/?$/)))    return !(TRP.has(m[1]) && validTY(parseInt(m[2], 10)));
       if ((m = pathname.match(/^\/mercury-retrograde\/(\d+)\/?$/)))   return !validTY(parseInt(m[1], 10));
       if ((m = pathname.match(/^\/festivals\/(\d+)\/?$/)))            return !validTY(parseInt(m[1], 10));
+      // Batch 9b: year muhurat lists exist only for the precomputed occasions and years.
+      if ((m = pathname.match(/^\/muhurat\/([a-z-]+)\/(\d+)\/?$/)))  return !(Object.prototype.hasOwnProperty.call(MUHURAT_YEAR_SLUGS, m[1]) && MUHURAT_YEAR_YEARS.includes(parseInt(m[2], 10)));
       // Planet-in-sign / planet-in-house: 9 planets × 12 signs / 12 houses.
       const PLN = new Set(['sun','moon','mars','mercury','jupiter','venus','saturn','rahu','ketu']);
       const SGN = new Set(['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces']);

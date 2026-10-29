@@ -41,6 +41,9 @@ export default function RashifalPage() {
                 </Link>
               ))}
             </div>
+            <p data-testid="hi-rashifal-index-tools" className="text-sm text-muted-foreground mt-6">
+              और हिंदी में: <Link to="/hi/kundli-milan" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan" className="underline">नाम से कुंडली मिलान</Link> · <Link to="/hi/panchang" className="underline">पंचांग</Link> · <Link to="/hi/upay" className="underline">उपाय</Link>
+            </p>
           </div>
         </section>
       </ToolLayout>
@@ -89,6 +92,10 @@ export default function RashifalPage() {
             <Link to={`/rashifal/${meta.slug}/today`} className="underline">अंग्रेज़ी राशिफल</Link> देखें।
           </p>
 
+          <p className="text-sm text-muted-foreground mt-4" data-testid="rashifal-sadesati-link">
+            शनि की अवधि: <Link to={`/hi/sade-sati/${rashi}`} className="underline">{meta.hindi} राशि साढ़ेसाती और ढैया — शुरू और खत्म होने की तारीख →</Link>
+          </p>
+
           <h2 className="font-semibold text-foreground mt-8 mb-2">दूसरी राशियों का आज का राशिफल</h2>
           <div className="flex flex-wrap gap-2">
             {HI_SLUGS.filter(s => s !== rashi).map(s => (
@@ -103,6 +110,10 @@ export default function RashifalPage() {
             <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">
               कुंडली बनाएं →
             </Link>
+            {/* Batch 9b: Hindi matching tools from the Hindi hub. */}
+            <p data-testid="hi-rashifal-milan-links" className="text-sm text-muted-foreground mt-4">
+              विवाह के लिए: <Link to="/hi/kundli-milan" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan" className="underline">नाम से कुंडली मिलान</Link>
+            </p>
           </div>
         </div>
       </section>

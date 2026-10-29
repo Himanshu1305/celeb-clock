@@ -13,9 +13,11 @@ import { fileURLToPath } from 'url';
 // Batch 9: one shared Chinese-year helper (app + prerender) — the year rolls over at
 // Chinese New Year, computed at build time so a rebuild picks up the new year.
 import {
-  currentChineseYear, chineseHoroscopeIndexTitle, chineseHoroscopeIndexDescription, chineseSignDescription,
+  currentChineseYear, chineseHoroscopeIndexTitle, chineseHoroscopeAnimalTitle, chineseHoroscopeIndexDescription, chineseSignDescription,
   CHINESE_BY_YEAR_TITLE, CHINESE_BY_YEAR_DESC,
 } from '../src/lib/chineseCalendar.js';
+// Batch 9b: year muhurat pages — titles/descriptions shared with MuhuratYearPage.
+import { MUHURAT_YEAR_META, MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
 
 // Indian born-on facet data (slug → {top3, count}) for /born-on/:slug/india titles.
 const INDIA_BORNON_MAP = new Map(
@@ -251,7 +253,7 @@ const STATIC = {
   '/articles/numerology-by-date-of-birth': { title: 'Mulank vs Bhagyank vs Life Path — India Numerology Guide | BornClock', desc: 'Numerology by date of birth, explained for India: what Mulank, Bhagyank and the Western Life Path are, how each is worked out, and why 11 can become 2.' },
   '/articles/life-expectancy-by-country-2026': { title: 'Life Expectancy by Country 2026 — Global Rankings | BornClock', desc: 'Life expectancy by country in 2026 — UN World Population Prospects 2024 data. See rankings, what drives the differences, and how to improve your own.' },
   '/articles/how-long-will-i-live-in-india': { title: 'How Long Will I Live in India? Life Expectancy Guide | BornClock', desc: `Life expectancy in India by state — SRS data. Kerala 75.1 leads; national average ${LEY('India')} (UN WPP 2024). See your state and how to beat the average.` },
-  '/biological-age-vs-chronological-age': { title: 'Biological Age vs Chronological Age — The Science | BornClock', desc: 'Biological age vs chronological age explained — Horvath epigenetic clock, 5 proven ways to lower your biological age, and how to measure it.' },
+  '/biological-age-vs-chronological-age': { title: 'Biological Age vs Chronological Age — The Science | BornClock', desc: 'Biological age vs chronological age explained — Horvath epigenetic clock, 5 well-studied ways to support a younger biological age, and how to measure it.' },
   '/articles/vedic-astrology-birth-chart': { title: 'Vedic Astrology Birth Chart — Rashi & Nakshatra Guide | BornClock', desc: 'Vedic astrology birth chart explained — your Moon Rashi, Nakshatra, and Lagna from date of birth. Free calculator with all 12 Rashis and 27 Nakshatras.' },
   '/articles/longevity-quiz': { title: 'Longevity Quiz — How Long Will You Live? 8 Factors | BornClock', desc: 'Take the longevity quiz — 8 science-backed factors (WHO, Harvard) that determine how long you will live. Free, 3 minutes, with worked example.' },
   '/articles/bryan-johnson-blueprint-alternative': { title: 'Bryan Johnson Blueprint — Free Alternative | BornClock', desc: 'Bryan Johnson Blueprint costs millions a year. Here is a free, science-backed longevity alternative — the habits that actually matter, no budget needed.' },
@@ -268,7 +270,7 @@ const STATIC = {
   '/articles/tarot-card-by-date-of-birth': { title: 'Tarot Card by Date of Birth — Find Your Card | BornClock', desc: 'Find your tarot card by date of birth — your zodiac Major Arcana card and your Life Path tarot card, with meanings. Free tarot-by-birthday guide.' },
   '/articles/chinese-zodiac-by-year': { title: CHINESE_BY_YEAR_TITLE, desc: CHINESE_BY_YEAR_DESC },
   '/articles/birth-month-personality': { title: 'Birth Month Personality — What Your Month Says | BornClock', desc: 'Birth month personality guide — the zodiac sign and traits linked to each of the 12 months, plus the science of seasonal birth effects.' },
-  '/articles/epigenetics-and-longevity': { title: 'Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock', desc: 'Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 proven interventions.' },
+  '/articles/epigenetics-and-longevity': { title: 'Epigenetics and Longevity — How Lifestyle Rewrites Genes | BornClock', desc: 'Epigenetics and longevity — how diet, exercise and sleep change gene expression. The Horvath clock, telomeres, and 3 well-studied habits.' },
   '/articles/longevity-supplements': { title: 'Longevity Supplements — What Works, What is Hype (India) | BornClock', desc: 'Longevity supplements ranked by evidence — Vitamin D, omega-3, magnesium, ashwagandha, NMN and more. India availability, real science, food-first.' },
   '/articles/how-indian-celebrities-stay-fit': { title: 'How Indian Celebrities Stay Fit — Habits & Life Paths | BornClock', desc: 'How Indian celebrities stay fit — Virat Kohli, Milind Soman, Amitabh Bachchan and more. Verified habits, their Life Path numbers, and lessons for you.' },
   '/articles/famous-people-lived-to-100': { title: 'Famous People Who Lived to 100 — Centenarian Secrets | BornClock', desc: 'Famous people who lived to 100+ — Kane Tanaka, Bob Hope, Olivia de Havilland and more. What the world centenarians had in common, and how to apply it.' },
@@ -316,6 +318,10 @@ const STATIC = {
   '/mystic-corner':          { title: 'Mystic Corner — Numerology, Zodiac & Chinese Sign | BornClock', desc: 'The mystical side of your birth date: numerology Life Path, Western zodiac, Chinese zodiac, tarot and compatibility — each one actually computed, not a templated horoscope.' },
   '/kundali':               { title: 'Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock', desc: 'Generate your free Vedic Kundali — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, in accurate sidereal (Lahiri) astronomy.' },
   '/kundali-match':          { title: 'Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock', desc: 'Free Kundali matching by the 36-point Ashtakoota (Guna Milan) system — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi, with dosha checks.' },
+  // Batch 9b — must equal NAME_MATCH_META (src/pages/KundliMilanByNamePage.tsx) and HINDI_MILAN_META (src/pages/hi/KundliMilanPage.tsx).
+  '/kundli-milan-by-name':   { title: 'Kundli Milan by Name — Match Without Birth Details | BornClock', desc: 'Kundli milan by name: the first syllable of each name gives a nakshatra, and the 36 gunas are added up. An approximation — use birth details for an accurate match.' },
+  '/hi/kundli-milan':        { title: 'कुंडली मिलान हिंदी में — 36 गुण मिलान व मांगलिक | BornClock', desc: 'कुंडली मिलान हिंदी में: जन्म तिथि, समय और स्थान से 36 गुणों का अष्टकूट मिलान — वर्ण, वश्य, तारा, योनि, ग्रह मैत्री, गण, भकूट, नाड़ी — मांगलिक जाँच और सरल उपाय।' },
+  '/hi/naam-se-kundli-milan': { title: 'नाम से कुंडली मिलान — बिना जन्म तिथि गुण मिलान | BornClock', desc: 'नाम से कुंडली मिलान: नाम के पहले अक्षर से नक्षत्र और राशि, फिर 36 गुणों का मिलान। यह अनुमान है — सटीक मिलान के लिए जन्म तिथि, समय और स्थान डालें।' },
   // Part AM: these were added to STATIC_ROUTES (prerendered) but had no title entry, so they
   // served the generic homepage <title> and got no WebPage schema. Real per-page metadata now:
   '/sade-sati':              { title: "Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock", desc: "Free Sade Sati calculator — find whether Saturn's 7.5-year Sade Sati (or the 2.5-year Dhaiya) is active for you, which phase, and the real start and end dates of your current and next cycle." },
@@ -425,6 +431,30 @@ export function getTitleForRoute(route) {
   };
   if (FITNESS[route]) return FITNESS[route];
 
+  // Batch 9b: /sade-sati/:rashi and /hi/sade-sati/:rashi — mirrors ssPageMeta() in
+  // src/lib/vedic/sadeSatiRashiText.ts (checked by src/lib/vedic/__tests__/sadeSatiRashi.test.ts).
+  {
+    const se = route.match(/^\/sade-sati\/([a-z]+)$/);
+    if (se) {
+      const v = VEDIC[se[1]];
+      if (!v) return null;
+      return {
+        title: `${v.name} Rashi Sade Sati Start and End Dates | BornClock`,
+        description: `When does Sade Sati start and end for ${v.name} (${v.english}) Moon sign? Every Sade Sati and Shani Dhaiya period 1950–2060 with exact Saturn transit dates, retrograde re-entries, the three phases and simple remedies.`,
+      };
+    }
+    const sh = route.match(/^\/hi\/sade-sati\/([a-z]+)$/);
+    if (sh) {
+      const HI = { mesha: ['मेष', 'Aries'], vrisha: ['वृषभ', 'Taurus'], mithuna: ['मिथुन', 'Gemini'], karka: ['कर्क', 'Cancer'], simha: ['सिंह', 'Leo'], kanya: ['कन्या', 'Virgo'], tula: ['तुला', 'Libra'], vrischika: ['वृश्चिक', 'Scorpio'], dhanu: ['धनु', 'Sagittarius'], makara: ['मकर', 'Capricorn'], kumbha: ['कुंभ', 'Aquarius'], meena: ['मीन', 'Pisces'] };
+      const h = HI[sh[1]];
+      if (!h) return null;
+      return {
+        title: `${h[0]} राशि साढ़ेसाती — शुरू और खत्म होने की तारीख | BornClock`,
+        description: `${h[0]} राशि (${h[1]}) की साढ़ेसाती और शनि ढैया कब शुरू और कब खत्म होती है? 1950–2060 की हर अवधि, शनि के राशि-परिवर्तन की सटीक तारीखें, वक्री वापसी, तीनों चरण और सरल उपाय।`,
+      };
+    }
+  }
+
   // /hi/rashifal/:rashi — Hindi daily horoscope (Task 16)
   const rf = route.match(/^\/hi\/rashifal\/([a-z]+)$/);
   if (rf) {
@@ -496,7 +526,8 @@ export function getTitleForRoute(route) {
 
   // /chinese-horoscope is THE yearly page: its title names the current Chinese year and its
   // exact dates, computed at build time (same helper as the live <SEO>, so they match).
-  // /chinese-horoscope/:animal titles stay year-free.
+  // /chinese-horoscope/:animal titles name the current and next Chinese year (same helper as
+  // the live <SEO>, Batch 9b).
   if (route === '/chinese-horoscope') {
     const cy = currentChineseYear();
     return {
@@ -508,7 +539,7 @@ export function getTitleForRoute(route) {
     const slug = route.slice(19);
     const capitalised = slug.charAt(0).toUpperCase() + slug.slice(1);
     return {
-      title: `${capitalised} Horoscope — Career, Love, Money & Health | BornClock`,
+      title: chineseHoroscopeAnimalTitle(capitalised, currentChineseYear()),
       description: `${capitalised} Chinese zodiac yearly forecast: career, finance, love and health, graded strong/moderate/mild from the ${capitalised}'s relationship to the year's ruling animal.`,
     };
   }
@@ -615,6 +646,15 @@ export function getTitleForRoute(route) {
       title: `Mercury Retrograde ${m[1]} — Exact Dates & Meaning | BornClock`,
       description: `Every Mercury retrograde in ${m[1]} with exact start and end dates, computed from Mercury's real apparent motion, plus its meaning and how to use the time.`,
     };
+  }
+
+  // /muhurat/:type/:year
+  {
+    const m = route.match(/^\/muhurat\/([a-z-]+)\/(\d{4})$/);
+    if (m && MUHURAT_YEAR_SLUGS[m[1]] && MUHURAT_YEAR_YEARS.includes(Number(m[2]))) {
+      const meta = MUHURAT_YEAR_META[m[1]];
+      return { title: meta.title(Number(m[2])), description: meta.description(Number(m[2])) };
+    }
   }
 
   // /festivals[/:year]

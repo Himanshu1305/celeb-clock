@@ -156,6 +156,7 @@ export function TarotByDateOfBirthArticle() {
           description="Find your tarot birth card by date of birth with the standard month + day + year method, plus the Major Arcana card for each zodiac sign. Free tarot-by-birthday guide."
           canonicalUrl="/articles/tarot-card-by-date-of-birth"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Tarot by Date of Birth' }}

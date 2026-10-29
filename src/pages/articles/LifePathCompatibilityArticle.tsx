@@ -213,6 +213,7 @@ export function LifePathCompatibilityArticle() {
           description="Life Path number compatibility guide — how numbers 1-9 and master numbers 11, 22, 33 match in love. Free calculator plus a full compatibility matrix."
           canonicalUrl="/articles/life-path-number-compatibility"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Life Path Compatibility' }}

@@ -134,6 +134,7 @@ export function FamousPeopleLivedTo100Article() {
             description="Famous people who lived to 100+ — Kane Tanaka, Bob Hope, Olivia de Havilland and more. What the world's centenarians had in common, and how to apply it."
             canonicalUrl="/articles/famous-people-lived-to-100"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />

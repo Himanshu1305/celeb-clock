@@ -48,3 +48,15 @@ describe('LongevityCalculatorPage — Task 31 upgrade blocks', () => {
   });
 
 });
+
+describe('LongevityCalculatorPage — one FAQPage (batch 9b review; validate-dist V9)', () => {
+  it('renders exactly one FAQPage JSON-LD block, matching the visible FAQ', () => {
+    renderPage();
+    const faqs = [...document.querySelectorAll('script[type="application/ld+json"]')]
+      .map(s => { try { return JSON.parse(s.textContent || ''); } catch { return null; } })
+      .filter(d => d && d['@type'] === 'FAQPage');
+    expect(faqs).toHaveLength(1);
+    const visible = [...document.querySelectorAll('[data-testid="faq-question"]')].map(e => e.textContent?.trim());
+    expect(faqs[0].mainEntity.map((q: { name: string }) => q.name)).toEqual(visible);
+  });
+});

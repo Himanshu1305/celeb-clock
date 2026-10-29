@@ -28,6 +28,7 @@ export default function WhatIsMyBiologicalAge() {
           description={WHAT_IS_BIO_AGE_DESC}
           canonicalUrl="/answers/what-is-my-biological-age"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What is biological age?' }}

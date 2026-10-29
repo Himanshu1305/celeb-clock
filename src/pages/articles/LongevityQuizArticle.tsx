@@ -62,7 +62,7 @@ const FAQS = [
   },
   {
     q: 'Can I improve my longevity quiz score?',
-    a: 'Yes. Unlike chronological age, the score reflects modifiable habits. Epigenetic research shows measurable biological improvement within 8–12 weeks of consistent change. Start with your weakest high-impact factor — often exercise, sleep, or a managed chronic condition — then retake the quiz every 90 days to track progress.',
+    a: 'Yes. Unlike chronological age, the score reflects modifiable habits. Your score updates as your answers change, and one small 2021 pilot trial found a lower epigenetic-age estimate after 8 weeks of lifestyle change (larger trials are still needed). Start with your weakest high-impact factor — often exercise, sleep, or a managed chronic condition — then retake the quiz every 90 days to track progress.',
   },
 ];
 
@@ -107,6 +107,7 @@ export function LongevityQuizArticle() {
             description="Take the longevity quiz — 8 science-backed factors (WHO, Harvard) that determine how long you'll live. Free, 3 minutes, with worked example."
             canonicalUrl="/articles/longevity-quiz"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />

@@ -91,6 +91,7 @@ export function HindiNumerologyArticle() {
           description="जन्मतिथि से अपना मूलांक और भाग्यांक, और नाम से नामांक (कैल्डियन) मुफ्त निकालें — गणना के साथ। मूलांक 1 से 9 का अर्थ, स्वामी ग्रह सहित, हिंदी में।"
           canonicalUrl="/hi/numerology-by-date-of-birth"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'अंकज्योतिष जन्मतिथि से' }}

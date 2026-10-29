@@ -78,6 +78,7 @@ export function LifeExpectancyIndiaArticle() {
             description={`Life expectancy in India by state — SRS data. Kerala 75.1 leads; national average ${leYears('India')} (UN WPP 2024). See your state and how to beat the average.`}
             canonicalUrl="/articles/how-long-will-i-live-in-india"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />

@@ -174,6 +174,7 @@ export function IndianCelebritiesFitnessArticle() {
             description="How Indian celebrities stay fit — Virat Kohli, Milind Soman, Amitabh Bachchan and more. Verified habits, their Life Path numbers, and lessons for you."
             canonicalUrl="/articles/how-indian-celebrities-stay-fit"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />

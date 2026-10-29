@@ -20,7 +20,9 @@ import { GOLDEN, REF_DATE, birthQuery, compareSadeSati } from '../../../../scrip
 import { computeEclipses, computeFestivalCalendar } from '../../vedic/festivals';
 import varga from '../../vedic/__tests__/golden/shodashvargaSwiss.json';
 import celebrities from '../../../data/celebrities.json';
-import { COUNTS, EVIDENCE, ACCURACY_FAQ } from '../evidence';
+import { COUNTS, EVIDENCE, ACCURACY_FAQ, ANCIENT_MOON_MAX_ARCMIN } from '../evidence';
+import ancientMoon from './ancientMoonSwiss.json';
+import { moonSignsForDate, birthDayWindowForNationality } from '../../vedic/dateOnlyMoonSign';
 
 const TESTS = resolve(__dirname, '../../vedic/__tests__');
 const src = (f: string) => readFileSync(resolve(TESTS, f), 'utf8');
@@ -170,4 +172,43 @@ describe('/accuracy Dasha and Sade Sati numbers (all 22 test births, at the refe
     }
     expect(checked).toBe(COUNTS.kundaliBirths);
   }, 120_000);
+});
+
+// Batch 9b: the "very old dates" caveat (was typed into AccuracyPage.tsx) now comes from
+// COUNTS and is re-derived here from ancientMoonSwiss.json (pyswisseph, regenerated
+// 29 Oct 2026 with every celebrity date; only the >60″ rows are stored).
+describe('/accuracy very-old-dates caveat (Moon vs Swiss Ephemeris)', () => {
+  const people = (celebrities as { celebrities: Array<{ slug: string; birth_date?: string; nationality_code?: string }> }).celebrities;
+  it('the stored >60″ dates are all before the stated year, and their count matches', () => {
+    expect(ancientMoon.rows.length).toBe(COUNTS.ancientMoonDates);
+    for (const r of ancientMoon.rows) expect(Number(r.date.slice(0, 4))).toBeLessThan(COUNTS.ancientMoonBeforeYear);
+  });
+  it('the engine still differs by at most the stated amount on those dates (and the largest matches)', () => {
+    let max = 0;
+    for (const r of ancientMoon.rows) {
+      const c = people.find((p) => p.slug === r.slug)!;
+      expect(c.birth_date).toBe(r.date);
+      const m = moonSignsForDate(r.date, birthDayWindowForNationality(c.nationality_code))!;
+      const d = Math.max(arcsec(m.startLongitude, r.swissStart), arcsec(m.endLongitude, r.swissEnd));
+      max = Math.max(max, d);
+    }
+    expect(Math.round(max)).toBe(COUNTS.ancientMoonMaxArcsec);
+    expect(ANCIENT_MOON_MAX_ARCMIN).toBe(9);
+  });
+});
+
+// Batch 9b: the Kaal Sarp row (shown on /accuracy and /how-it-works) re-run on the two
+// charts from manglikKaalSarp.test.ts: P3 (Drik Panchang: none) and P9 (full by degree).
+describe('/accuracy Kaal Sarp row', () => {
+  const REF = new Date(Date.UTC(2026, 9, 17));
+  it('P3 is not Kaal Sarp (as Drik Panchang); P9 is full by degree; count matches', async () => {
+    const { calculateBirthChart } = await import('../../vedic/calculateBirthChart');
+    const p3 = await calculateBirthChart({ year: 1990, month: 1, day: 15, hour: 6, minute: 30, latitude: 28.6139, longitude: 77.2090, timezoneOffset: 5.5 }, { refDate: REF });
+    const p9 = await calculateBirthChart({ year: 1978, month: 5, day: 13, hour: 19, minute: 30, latitude: 32.7266, longitude: 74.8570, timezoneOffset: 5.5 }, { refDate: REF });
+    expect(p3.doshas.kaalSarp.present).toBe(false);
+    expect(p9.doshas.kaalSarp.present).toBe(true);
+    expect(p9.doshas.kaalSarp.isPartial).toBe(false);
+    expect(COUNTS.kaalSarpCharts).toBe(2);
+    expect(EVIDENCE.find((r) => r.id === 'kaal-sarp')?.howMany).toBe('2 test charts');
+  });
 });

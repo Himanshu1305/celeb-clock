@@ -10,6 +10,8 @@
 //   V8 Head (Batch 8): EVERY prerendered page has at most one meta description,
 //      og:description, twitter:description, og:title, twitter:title and meta title,
 //      and at most one top-level Organization, WebSite and WebPage JSON-LD block
+//   V9 (Batch 9b): at most one top-level Article (Article/BlogPosting/NewsArticle counted
+//      together) and at most one FAQPage JSON-LD block per page
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, join } from 'path';
 import { headStats } from './lib/headDedupe.mjs';
@@ -96,7 +98,7 @@ if (headProblems.length) {
   fail++;
   results.push(`  ❌ head check: ${headProblems.length} of ${swept} pages — ${headProblems.slice(0, 15).join(' | ')}`);
 } else {
-  results.push(`  ✅ head check: ${swept} prerendered pages — one canonical each, no duplicate JSON-LD, ≤1 BreadcrumbList, one description/og/twitter title+description, one Organization/WebSite/WebPage`);
+  results.push(`  ✅ head check: ${swept} prerendered pages — one canonical each, no duplicate JSON-LD, ≤1 BreadcrumbList, one description/og/twitter title+description, one Organization/WebSite/WebPage/Article/FAQPage`);
 }
 
 console.log(results.join('\n'));

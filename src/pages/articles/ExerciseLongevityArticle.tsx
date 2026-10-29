@@ -63,6 +63,7 @@ export function ExerciseLongevityArticle() {
             description={DESC}
             canonicalUrl="/articles/exercise-and-longevity"
             ogType="article"
+          articleSchema={false}
           />
           <JsonLd data={articleSchema} />
           <JsonLd data={faqSchema} />

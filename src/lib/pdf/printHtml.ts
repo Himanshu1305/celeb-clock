@@ -25,3 +25,8 @@ export function printHtmlViaIframe(html: string): void {
     console.error('printHtmlViaIframe failed:', e);
   }
 }
+
+/** U+FE0E (text-presentation selector): put after any symbol glyph in printed / shared
+ *  output so it renders as a monochrome text glyph, never a colour emoji (Birthday
+ *  Blueprint print rule). */
+export const TEXT_VS = '\uFE0E';

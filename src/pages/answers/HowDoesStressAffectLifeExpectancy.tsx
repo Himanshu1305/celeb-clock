@@ -26,6 +26,7 @@ export default function HowDoesStressAffectLifeExpectancy() {
           description="Chronic stress can reduce life expectancy by up to 2.8 years. Here's how stress damages the body at a cellular level — and 5 science-backed ways to reverse it."
           canonicalUrl="/answers/how-does-stress-affect-life-expectancy"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How stress affects life expectancy' }}

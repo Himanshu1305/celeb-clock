@@ -5,6 +5,7 @@ import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { TermTip } from '@/components/vedic/TermTip';
 import { computeFestivalCalendar, type Festival, type FestivalType } from '@/lib/vedic/festivals';
+import { MUHURAT_YEAR_META, MUHURAT_YEAR_YEARS } from '@/lib/muhuratYearMeta.js';
 
 const MIN_YEAR = 2020;
 const MAX_YEAR = 2039;
@@ -142,6 +143,18 @@ export default function FestivalsPage() {
             Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the Sun and Moon and the classical <TermTip id="paksha">paksha</TermTip>/tithi rules. Lunar months are computed amanta (new moon to new moon); Krishna-paksha days also show the purnimanta (North Indian) month name, which is one month ahead.{' '}
             <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
           </p>
+
+          {MUHURAT_YEAR_YEARS.includes(year) && (
+            <div className="rounded-xl border border-border p-4 mb-8 text-sm" data-testid="festival-muhurat-links">
+              <h2 className="font-semibold text-foreground mb-2">Muhurat dates for {year}</h2>
+              <p className="text-muted-foreground mb-2">Auspicious dates for ceremonies this year, month by month:</p>
+              <ul className="flex flex-wrap gap-2">
+                {Object.keys(MUHURAT_YEAR_META).map(slug => ({ slug, m: MUHURAT_YEAR_META[slug] })).map(({ slug, m }) => (
+                  <li key={slug}><Link to={`/muhurat/${slug}/${year}`} className="inline-block px-3 py-1.5 rounded-lg border border-border hover:bg-primary/5 text-foreground">{m.short} muhurat {year}</Link></li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <PageFAQ items={faqItems} />
 

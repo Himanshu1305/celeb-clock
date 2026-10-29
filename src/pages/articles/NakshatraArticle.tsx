@@ -176,6 +176,7 @@ export function NakshatraArticle() {
           description="Find your Nakshatra by date of birth — all 27 lunar mansions with lord, deity, gana and personality. Free calculator plus the meaning of each Nakshatra."
           canonicalUrl="/articles/nakshatra-by-date-of-birth"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Nakshatra' }}

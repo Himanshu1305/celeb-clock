@@ -5,6 +5,7 @@ import { ArticleLayout } from '@/components/central';
 import PageTagline from '@/components/PageTagline';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { ORBITAL_PERIOD_DAYS, OTHER_PLANETS, orbitalPeriodYears } from '@/lib/orbitalPeriods';
+import { EVIDENCE, TESTED_MONTH } from '@/lib/accuracy/evidence';
 
 const TOC_ITEMS = [
   { id: 'life-expectancy', label: 'Life Expectancy Calculator' },
@@ -84,6 +85,9 @@ function FormulaBlock({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** Rows of the "How the Engine Is Checked" table, in order (ids in src/lib/accuracy/evidence.ts). */
+const METHODOLOGY_EVIDENCE_IDS = ['kundali', 'nakshatra-dasha', 'matching', 'manglik', 'sade-sati', 'kaal-sarp'] as const;
+
 export default function Methodology() {
   return (
     <ArticleLayout
@@ -92,7 +96,7 @@ export default function Methodology() {
       seo={(
         <SEO
           title="How BornClock Works — Tools, Data & Source-Cited Methodology | BornClock"
-          description="How BornClock works: the Vedic Kundli engine (Lahiri sidereal, cross-checked vs ProKerala), the life expectancy calculator, numerology, celebrity matching and the Answers library — each with its data sources, formulas and citations."
+          description="How BornClock works: the Vedic Kundli engine (Lahiri sidereal, checked against the Swiss Ephemeris), the life expectancy calculator, numerology, celebrity matching and the Answers library — each with its data sources, formulas and citations."
           keywords="how BornClock works, how we calculate, vedic astrology methodology, lahiri ayanamsa, kundli accuracy, life expectancy methodology, planetary age formula, numerology method"
           canonicalUrl="/how-it-works"
         />
@@ -178,7 +182,7 @@ export default function Methodology() {
                     {[
                       { title: 'Pillar 0 — Baseline', desc: 'Age-conditional life expectancy from WHO/UN WPP 2024 tables, adjusted for current age, sex, and country.' },
                       { title: 'Pillar 1 — Genetics', desc: 'Family longevity bonus based on the age at which parents and grandparents died, drawn from twin studies and centenarian research.' },
-                      { title: 'Pillar 2 — Epigenetics', desc: 'Modifiable lifestyle factors — habits, community, and social bonds — that research shows can shift biological age independently of genetics.' },
+                      { title: 'Pillar 2 — Epigenetics', desc: 'Modifiable lifestyle factors — habits, community, and social bonds — that research links to biological ageing alongside genetics.' },
                     ].map(p => (
                       <div key={p.title} className="bg-muted/40 rounded-lg p-4">
                         <p className="font-semibold text-foreground text-sm mb-1">{p.title}</p>
@@ -490,8 +494,8 @@ export default function Methodology() {
                     <CitationBadge>Swiss Ephemeris · AstroSage · Drik Panchang</CitationBadge>
                   </h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
-                    Before going live, the engine was validated chart-by-chart against professional providers (including
-                    ProKerala). Today it is checked automatically against stored reference values. In our tests (October 2026):
+                    The engine is checked automatically against stored reference values from the Swiss Ephemeris,
+                    AstroSage and Drik Panchang. In our tests ({TESTED_MONTH}):
                   </p>
                   <div className="overflow-x-auto rounded-lg border border-border">
                     <table className="w-full text-sm text-muted-foreground">
@@ -502,15 +506,9 @@ export default function Methodology() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
-                        {[
-                          // Batch 8: dated figures from src/lib/accuracy/evidence.ts (full table on /accuracy).
-                          ['Lagna and all 9 planet positions', 'Within 1 arc-minute of the Swiss Ephemeris for all 22 test births'],
-                          ['Moon Nakshatra and pada; current Mahadasha and Antardasha', 'Same as the Swiss Ephemeris reference for all 22 test births'],
-                          ['Guna Milan total (Kundali matching)', 'Same as AstroSage for all 7 test couples (entered 17 Oct 2026)'],
-                          ['Mangal Dosha (Manglik: Mars from Lagna and Moon, houses 1/4/7/8/12)', 'Same level as AstroSage on all 10 test charts (17 Oct 2026)'],
-                          ['Sade Sati status (Saturn transit)', 'Same as Swiss Ephemeris Saturn positions for all 22 test births'],
-                          ['Kaal Sarp (reported only when full, by exact degree)', 'Agrees with Drik Panchang on the audited reference chart (Oct 2026)'],
-                        ].map(([out, acc], i) => (
+                        {/* Batch 9b: every row comes from src/lib/accuracy/evidence.ts (each backed by a
+                            test in the repo; full table on /accuracy) — nothing typed in here. */}
+                        {METHODOLOGY_EVIDENCE_IDS.map((id) => EVIDENCE.find((r) => r.id === id)!).map((r) => [r.what, `${r.result} — vs ${r.reference}, ${r.date}`]).map(([out, acc], i) => (
                           <tr key={out} className={i % 2 === 0 ? 'bg-muted/20' : ''}>
                             <td className="px-3 py-2 font-medium text-foreground">{out}</td>
                             <td className="px-3 py-2">{acc}</td>

@@ -159,6 +159,7 @@ export function ChineseZodiacArticle() {
           keywords="chinese zodiac by year, chinese zodiac year chart, what chinese zodiac is 1998, chinese new year dates, chinese zodiac years table"
           canonicalUrl="/articles/chinese-zodiac-by-year"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Chinese Zodiac by Year' }}

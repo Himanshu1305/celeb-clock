@@ -196,6 +196,7 @@ export function BiorhythmArticle() {
           description={DESC}
           canonicalUrl="/articles/biorhythm-calculator"
           ogType="article"
+          articleSchema={false}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Biorhythm Calculator' }}

@@ -301,7 +301,7 @@ const VITALITY_LABELS: Record<LongevityResult['geneticVitalityScore'], string> =
   Exceptional:     'Your family tree shows remarkable inherited longevity across multiple generations. This gives you a strong biological foundation — your genetic starting point is already working in your favor.',
   Strong:          'Your family history suggests solid inherited longevity. With supportive lifestyle choices, you have excellent potential to reach or exceed your family baseline.',
   Average:         "Your family longevity history is close to global averages — this is the norm for most people. Remember: research shows 70–75% of your outcome is controlled by lifestyle, not genetics. (Karolinska Institute, 2017)",
-  'Below Average': 'Some branches of your family tree show shorter lifespans. However, research shows lifestyle interventions can completely override genetic predispositions in many cases. Your habits matter more than your genes. (NIH Epigenetics Research, 2022)',
+  'Below Average': 'Some branches of your family tree show shorter lifespans. However, family history is only part of the picture — your own habits also shape your health, and they are the part you can change.',
 };
 
 export const EPIGENETIC_HABITS: {

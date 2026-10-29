@@ -30,6 +30,12 @@
  *   because the web-search budget ran out before a source page could be opened; such a name
  *   may come back only together with a source URL.
  *
+ * Batch 9b removal (29 Oct 2026): Sohan — rekhtadictionary.com/meaning-of-sohan gives the
+ *   Sanskrit adjective "beautiful, handsome" with no gender and does not describe it as a
+ *   personal name; behindthename.com/name/sohan and nameberry.com list only an unrelated
+ *   French name. No source states the Hindi name's gender, so it was removed (as Komal and
+ *   Samarth were).
+ *
  * N6: names are NOT filed by hand. Each name is matched to a pada by the
  * first Devanagari akshara of its spelling — consonant AND vowel (matra) — so
  * देव (Dev) is "De", not "Da"; सोहन (Sohan) is "So", not "Sa"; दीपक (Deepak) is "Di",
@@ -247,7 +253,6 @@ export const BABY_NAMES: BabyName[] = [
   // nordicnames.de Sunita: female; Sanskrit सुनीता "well conducted".
   N('Sunita', 'सुनीता', 'girl', 'well conducted', 'https://nordicnames.de/wiki/Sunita'),
   // rekhtadictionary सोहन: "beautiful, handsome; charming, pleasing" (सुंदर पुरुष).
-  N('Sohan', 'सोहन', 'boy', 'handsome, charming', 'https://rekhtadictionary.com/meaning-of-sohan'),
   // WP Sonal: "unisex name", "golden" / "precious".
   N('Sonal', 'सोनल', 'unisex', 'golden', WP('Sonal')),
 

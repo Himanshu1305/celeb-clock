@@ -6,7 +6,7 @@
  * reference the paj CSS variables (resolve inside any `.paj` page), so it looks consistent sitewide.
  *
  * `href` (RC3 Item 4) adds an optional "How we test" link to the relevant section of
- * /how-it-works, where the comparison service (ProKerala) and the full figures are named.
+ * /how-it-works, where the reference sources and the dated figures (src/lib/accuracy/evidence.ts) are named.
  */
 export function TrustStrip({
   claim,

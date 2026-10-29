@@ -23,7 +23,6 @@ import { BirthDataUsed } from '@/components/vedic/BirthDataUsed';
 import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
 import { WhatsAhead } from '@/components/vedic/WhatsAhead';
 import { PeriodForecast } from '@/components/vedic/PeriodForecast';
-import { buildKundaliPdfHtml } from '@/lib/pdf/kundaliPdfHtml';
 import { printHtmlViaIframe } from '@/lib/pdf/printHtml';
 import { fetchReading, type ReadingPayload } from '@/services/readingService';
 import { useAnalytics } from '@/hooks/useAnalytics';
@@ -37,6 +36,8 @@ import { TrustStrip } from '@/components/paj/TrustStrip';
 import { reportPrice, resolveCurrency } from '@/lib/pricing';
 import { RemediesForFindings } from '@/components/vedic/Remedies';
 // Batch 7 W3: rendered only after a chart is generated — its own chunk, like KundaliChart.
+// Batch 9b: share-image card — only after a chart exists, its own chunk.
+const KundaliShareCard = lazy(() => import('@/components/vedic/KundaliShareCard'));
 const ShodashvargaCharts = lazy(() => import('@/components/vedic/ShodashvargaCharts').then(m => ({ default: m.ShodashvargaCharts })));
 import { findingsFromKundali, type KundaliLike } from '@/lib/vedic/remedies';
 
@@ -54,6 +55,7 @@ export default function KundaliPage() {
 
   const [data, setData] = useState<KundaliData | null>(null);
   const [readingDob, setReadingDob] = useState('');
+  const [readingTime, setReadingTime] = useState('');
   const [usedPlace, setUsedPlace] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [historyKey, setHistoryKey] = useState(0);
@@ -110,6 +112,7 @@ export default function KundaliPage() {
   const generate = async (details: BirthDetails) => {
     setLoading(true); setFailed(false); setReading(null); setReadingFailed(false);
     setReadingDob(details.dob);
+    setReadingTime(details.time);
     setDisplayName(details.name ?? '');
     const loc = details.city;
     setUsedPlace(details.city.name);
@@ -187,6 +190,16 @@ export default function KundaliPage() {
     : '';
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(shareText).replace(/'/g, '%27')}`;
   const kundaliFindings = data ? findingsFromKundali(data as unknown as KundaliLike) : [];
+  const shareBirth = useMemo(() => ({ name: displayName, dob: readingDob, time: readingTime, place: usedPlace }), [displayName, readingDob, readingTime, usedPlace]);
+  // Batch 9b: the print builder (and its chart drawing) loads only when asked for.
+  const downloadPdf = async () => {
+    if (!data) return;
+    const { buildKundaliPdfHtml } = await import('@/lib/pdf/kundaliPdfHtml');
+    printHtmlViaIframe(buildKundaliPdfHtml(data, {
+      name: displayName, dob: readingDob, time: readingTime, place: usedPlace,
+      basis: kundaliBasis(data), chartStyle,
+    }));
+  };
 
   return (
     <PajPage
@@ -424,11 +437,14 @@ export default function KundaliPage() {
                   Share on WhatsApp
                 </a>
                 <button data-testid="kundali-download-pdf" type="button" className="btn secondary"
-                  onClick={() => printHtmlViaIframe(buildKundaliPdfHtml(data, { dob: readingDob, place: usedPlace, basis: kundaliBasis(data) }))}>
+                  onClick={() => void downloadPdf()}>
                   Download Kundli (PDF) — free
                 </button>
                 <Link className="btn secondary" to="/birthday-report/gift">Gift a Birthday Blueprint ({price}) →</Link>
               </div>
+              <Suspense fallback={null}>
+                <KundaliShareCard data={data} chartStyle={chartStyle} birth={shareBirth} shareText={shareText} whatsappHref={whatsappHref} />
+              </Suspense>
             </section>
 
             <section className="section">

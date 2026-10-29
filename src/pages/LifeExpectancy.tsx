@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useBirthDate } from '@/context/BirthDateContext';
-import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
+import { SEO, WebApplicationSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
@@ -383,12 +383,8 @@ const LifeExpectancy = () => {
             description="Free life expectancy calculator using WHO and CDC data across 15+ health factors to estimate your lifespan and the years you can gain."
             url="/life-expectancy"
           />
-          <FAQSchema items={[
-            { question: 'How is life expectancy calculated?', answer: 'A base life expectancy for your age, sex and country (from WHO/GBD actuarial data) is adjusted up or down by lifestyle and health factors — smoking, exercise, diet, sleep, BMI, stress and more — each weighted by published research.' },
-            { question: 'Is the life expectancy calculator accurate?', answer: 'It is an evidence-based estimate, not a prediction. It reflects population-level associations from large studies; individual outcomes vary. Use it to see which habits move your estimate most, not as a medical forecast.' },
-            { question: 'Is my health data stored?', answer: 'No. All inputs are processed entirely in your browser and are never sent to or stored on a server.' },
-            { question: 'Can I really add years to my life?', answer: 'The evidence is strong that not smoking, regular activity, good sleep, a healthy diet and managing stress are associated with longer life. The calculator shows the estimated years linked to each change so you can see the biggest levers.' },
-          ]} />
+          {/* Batch 9b: the second, hidden FAQPage block was removed — its questions were not shown
+              on the page. The single FAQPage comes from the visible <PageFAQ> below. */}
         </>
       )}
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Life Expectancy Calculator' }}
@@ -1056,7 +1052,7 @@ const LifeExpectancy = () => {
                       'UN World Population Prospects 2024 — country-level life expectancy at birth, estimate for 2023',
                       'Karolinska Institute twin study (Science, 2018) — Genetics accounts for 25–30% of longevity variance',
                       'Harvard Study of Adult Development (85 yrs) — Social relationships as strongest predictor of healthy ageing',
-                      'Horvath S., NIH (2013) — DNA methylation clock: lifestyle factors alter epigenetic ageing rate',
+                      'Horvath S., Genome Biology (2013) — DNA methylation age of human tissues (the first multi-tissue epigenetic clock)',
                       'Buettner D., Blue Zones (2023) — Power 9 lifestyle principles from centenarian populations',
                       'Liu Y. et al. (2021) — Short sleep (<6 hrs) associated with 12% higher all-cause mortality',
                       'WHO Physical Activity Guidelines (2022) — 15 min/day moderate activity adds ~3 years',
