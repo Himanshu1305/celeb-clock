@@ -69,7 +69,8 @@ export function renderPanchangMonth(date: string, place: { name: string }, data:
     const cell: DailyItem = {
       label: `${day} ${SHORT_WD[weekdayOf(iso(day))]}`,
       value: `${t.paksha === 'Shukla' ? 'Shukla' : 'Krishna'} ${t.name} · ${PANCHANG_TABLES.NAKSHATRAS[v[4]]}`,
-      note: [`Sunrise ${hhmm(v[0])} · Sunset ${hhmm(v[1])}`, ...fest.map(f => f[0])].join(' · '),
+      // Festivals on their own line (the calendar cell keeps line breaks in the note).
+      note: `Sunrise ${hhmm(v[0])} · Sunset ${hhmm(v[1])}${fest.length ? `\n${fest.map(f => f[0]).join(' · ')}` : ''}`,
     };
     if (isToday) cell.tag = 'Today';
     else if (tagType) cell.tag = TAG[tagType];

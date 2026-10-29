@@ -624,7 +624,7 @@ export function getTitleForRoute(route) {
   }
 
   // Batch 10 — static titles mirror PANCHANG_CALENDAR_STATIC / PLANETS_TODAY_STATIC /
-  // MOON_PHASE_STATIC (src/lib/daily/kinds/*Template.ts) and eclipsesMeta (src/pages/EclipsesPage.tsx);
+  // MOON_PHASE_STATIC (src/lib/daily/kinds/*Template.ts) and eclipsesMeta (src/lib/vedic/eclipses.ts);
   // the Worker swaps in the dated title each day on the three daily pages.
   if (route === '/panchang-calendar') return {
     title: 'Panchang Calendar — Monthly Tithi, Nakshatra & Festivals | BornClock',
@@ -645,7 +645,7 @@ export function getTitleForRoute(route) {
   {
     const m = route.match(/^\/eclipses\/(20(?:2[6-9]|30))$/);
     if (m) return {
-      title: `Eclipses ${m[1]} — Surya & Chandra Grahan Dates, IST Times | BornClock`,
+      title: `Eclipses ${m[1]} — Surya & Chandra Grahan, IST Times | BornClock`,
       description: `Every solar (Surya Grahan) and lunar (Chandra Grahan) eclipse of ${m[1]}: date, time of greatest eclipse in IST, type, duration, where it is seen, and whether it is visible from India.`,
     };
   }

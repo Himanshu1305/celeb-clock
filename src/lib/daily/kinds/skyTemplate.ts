@@ -165,14 +165,16 @@ export function renderMoonPhase(date: string, d: MoonDayData, opts: { today?: bo
   const t = tithiFromElongation(d.e);
   const dl = formatDateEn(date);
   const waxing = d.e < 180;
-  const principal = d.pt ? `The exact ${PRINCIPAL[d.pt[0]].toLowerCase()} is at ${istClock(new Date(d.pt[1] * 60000))} IST that day. ` : '';
+  const principal = d.pt ? `The exact ${['new Moon', 'first quarter', 'full Moon', 'last quarter'][d.pt[0]]} is at ${istClock(new Date(d.pt[1] * 60000))} IST that day. ` : '';
+  // On a new- or full-Moon day "growing / shrinking" would read oddly next to the name.
+  const trend = d.pt && (d.pt[0] === 0 || d.pt[0] === 2) ? '' : ` — it is ${waxing ? 'growing (waxing, Shukla Paksha)' : 'shrinking (waning, Krishna Paksha)'}`;
   return {
     date, lang: 'en',
     title: `Moon Phase ${dl} — ${name}, ${pct}% Lit | BornClock`,
     description: `Moon phase on ${dl}: ${name}, ${pct}% of the disc lit, ${d.a.toFixed(1)} days old, ${t.paksha} ${t.name}. Next full Moon (Purnima) ${atText(d.nf)}; next new Moon (Amavasya) ${atText(d.nn)}.`,
     h1: today ? MOON_PHASE_STATIC.h1 : `Moon phase on ${dl}`,
     dateLabel: formatLongDateEn(date),
-    answer: `On ${formatLongDateEn(date)} (12:00 noon IST) the Moon is ${/^[AEIOU]/.test(name) ? 'an' : 'a'} ${name}, ${pct}% lit and ${d.a.toFixed(1)} days old — it is ${waxing ? 'growing (waxing, Shukla Paksha)' : 'shrinking (waning, Krishna Paksha)'}. ${principal}`
+    answer: `On ${formatLongDateEn(date)} (12:00 noon IST) the Moon is ${/^[AEIOU]/.test(name) ? 'an' : 'a'} ${name}, ${pct}% lit and ${d.a.toFixed(1)} days old${trend}. ${principal}`
       + `The next full Moon (Purnima) is on ${atText(d.nf)} and the next new Moon (Amavasya) on ${atText(d.nn)}.`,
     why: [
       { label: `${pct}% lit`, text: 'The share of the Moon’s disc lit by the Sun as seen from Earth — 0% at new Moon, 100% at full Moon. It is nearly the same everywhere on Earth at the same moment.' },

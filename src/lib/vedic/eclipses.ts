@@ -127,6 +127,20 @@ export function eclipsesOfYear(year: number): EclipseInfo[] {
   return out;
 }
 
+/** Page title / description / H1 (mirrored in scripts/prerender-titles.mjs). */
+export function eclipsesMeta(year?: number) {
+  if (!year) return {
+    title: 'Eclipses 2026–2030 — Surya & Chandra Grahan in India | BornClock',
+    description: 'Every solar and lunar eclipse from 2026 to 2030 — date, time of greatest eclipse in IST, type, how long it lasts, where it is seen, and which ones are visible from India and Delhi.',
+    h1: 'Solar and lunar eclipses 2026–2030',
+  };
+  return {
+    title: `Eclipses ${year} — Surya & Chandra Grahan, IST Times | BornClock`,
+    description: `Every solar (Surya Grahan) and lunar (Chandra Grahan) eclipse of ${year}: date, time of greatest eclipse in IST, type, duration, where it is seen, and whether it is visible from India.`,
+    h1: `Eclipses in ${year} — Surya and Chandra Grahan`,
+  };
+}
+
 export const ECLIPSE_YEARS_LIST = Array.from({ length: ECLIPSE_RANGE.to - ECLIPSE_RANGE.from + 1 }, (_, i) => ECLIPSE_RANGE.from + i);
 
 /** "3 h 27 min" from minutes. */

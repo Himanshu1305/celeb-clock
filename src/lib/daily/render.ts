@@ -36,7 +36,7 @@ function calendarHtml(s: DailySection): string {
       `<span class="font-semibold text-foreground">${escapeHtml(it.label)}</span>` +
       (it.tag ? ` <span class="inline-block rounded-full border border-primary/30 px-1.5 text-[10px] text-primary">${escapeHtml(it.tag)}</span>` : '') +
       `<br><span class="text-foreground">${escapeHtml(it.value)}</span>` +
-      (it.note ? `<br><span class="text-muted-foreground">${escapeHtml(it.note)}</span>` : '') +
+      (it.note ? `<br><span class="text-muted-foreground whitespace-pre-line">${escapeHtml(it.note)}</span>` : '') +
     `</li>`).join('');
   return `<ol class="daily-calendar mt-3 grid grid-cols-1 sm:grid-cols-7 gap-1">${head}${cells}</ol>`;
 }

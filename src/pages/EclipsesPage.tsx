@@ -13,23 +13,11 @@ import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
 import { TermTip } from '@/components/vedic/TermTip';
-import { eclipsesOfYear, durationText, ECLIPSE_RANGE, ECLIPSE_YEARS_LIST, type EclipseInfo } from '@/lib/vedic/eclipses';
+import { eclipsesOfYear, eclipsesMeta, durationText, ECLIPSE_RANGE, ECLIPSE_YEARS_LIST, type EclipseInfo } from '@/lib/vedic/eclipses';
 import { formatLongDateEn } from '@/lib/daily/dates';
 
 const hmText = (s: string) => { const m = s.match(/^(\d+)h(\d+)m$/); return m ? durationText(Number(m[1]) * 60 + Number(m[2])) : s; };
 
-export function eclipsesMeta(year?: number) {
-  if (!year) return {
-    title: 'Eclipses 2026–2030 — Surya & Chandra Grahan in India | BornClock',
-    description: 'Every solar and lunar eclipse from 2026 to 2030 — date, time of greatest eclipse in IST, type, how long it lasts, where it is seen, and which ones are visible from India and Delhi.',
-    h1: 'Solar and lunar eclipses 2026–2030',
-  };
-  return {
-    title: `Eclipses ${year} — Surya & Chandra Grahan Dates, IST Times | BornClock`,
-    description: `Every solar (Surya Grahan) and lunar (Chandra Grahan) eclipse of ${year}: date, time of greatest eclipse in IST, type, duration, where it is seen, and whether it is visible from India.`,
-    h1: `Eclipses in ${year} — Surya and Chandra Grahan`,
-  };
-}
 
 function EclipseCard({ e }: { e: EclipseInfo }) {
   const solar = e.body === 'solar';
@@ -57,7 +45,7 @@ function EclipseCard({ e }: { e: EclipseInfo }) {
         <dt className="text-muted-foreground">Seen from (NASA)</dt>
         <dd className="text-foreground">{e.nasa.region}</dd>
         <dt className="text-muted-foreground">India / Delhi</dt>
-        <dd className="text-foreground">{e.india ? `Listed by timeanddate.com as visible from India${e.delhi ? ', including Delhi' : ' (not from Delhi)'}.` : 'Not listed by timeanddate.com as visible from India.'}</dd>
+        <dd className="text-foreground">{e.india ? `Listed by timeanddate.com as visible from India${e.delhi ? ', including Delhi' : ' (not from Delhi)'}.` : 'Not listed by timeanddate.com as visible from India.'}{solar && e.india && e.type !== 'Partial' ? ' India is not among the countries NASA lists on the central path, so from India it is seen as a partial eclipse.' : ''}</dd>
       </dl>
       {solar && e.india && <p className="mt-2 text-xs text-muted-foreground">Eye safety: never look straight at the Sun during a partial or annular eclipse — use solar viewers made to the ISO 12312-2 standard; ordinary sunglasses are not safe (NASA).</p>}
     </li>
@@ -140,6 +128,7 @@ export default function EclipsesPage() {
           <div className="rounded-xl border border-border p-4 mb-6 text-sm text-muted-foreground space-y-2" data-testid="eclipse-how">
             <h2 className="font-semibold text-foreground">How these are worked out</h2>
             <p>The eclipses and the time of greatest eclipse are computed from the real positions of the Sun and Moon, near <TermTip id="rahu">Rahu or Ketu</TermTip>, and match NASA’s eclipse tables (Fred Espenak) in date and type; the IST time agrees with NASA’s to within a minute. Type, magnitude, durations and the region where each <TermTip id="eclipse">eclipse</TermTip> is seen are quoted from NASA; visibility from India and Delhi is quoted from timeanddate.com. We do not list Sutak timings, because we have not found a published rule we can cite and check — your family priest or temple calendar is the right guide for that.</p>
+            <p>Reading the cards: a solar eclipse’s magnitude is the share of the Sun’s diameter the Moon covers at greatest eclipse (1 or more on the central path of a total eclipse). For a lunar eclipse the umbral magnitude is how far the Moon enters the Earth’s dark inner shadow; a negative value marks a penumbral eclipse, when the Moon passes only through the faint outer shadow and dims slightly.</p>
             <p><Link to="/accuracy" className="underline">How we check accuracy →</Link> · <Link to="/grahan-dosha" className="underline">Grahan Dosha in a birth chart →</Link></p>
           </div>
 
