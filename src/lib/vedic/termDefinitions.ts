@@ -23,6 +23,7 @@
  * for the daily limbs and windows; the Ashtakoota and 10-Porutham tables as used by
  * AstroSage and South Indian practice) and match how BornClock's own engine computes them.
  */
+import { ADVANCED_TERMS } from './termDefinitionsAdvanced';
 
 export type TermCategory =
   | 'basics' | 'dasha' | 'matching' | 'porutham' | 'panchang' | 'dosha' | 'strength'
@@ -72,6 +73,8 @@ export interface TermDef {
 }
 
 export const VEDIC_TERMS: Record<string, TermDef> = {
+  // Batch 10: Bhava Chalit / KP / Jaimini terms (own file, see termDefinitionsAdvanced.ts).
+  ...ADVANCED_TERMS,
   // ─────────────────────────── Birth chart basics ───────────────────────────
   kundali: {
     term: 'Kundali (birth chart)', category: 'basics', hiTerm: 'कुंडली / जन्म पत्री',

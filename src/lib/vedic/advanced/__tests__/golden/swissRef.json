@@ -1,0 +1,1211 @@
+{
+ "_source": "Swiss Ephemeris pyswisseph 2.10.03 via swiss_chalit_kp_jaimini_ref.py (29 Oct 2026). Chalit: houses_ex O (madhya) / S (sandhi), SIDM_LAHIRI. KP: houses_ex P + calc_ut, SIDM_KRISHNAMURTI, mean node. Karakas: SIDM_LAHIRI.",
+ "P1": {
+  "chalit": {
+   "madhya": [
+    229.72947,
+    263.11258,
+    296.49569,
+    329.8788,
+    356.49569,
+    23.11258,
+    49.72947,
+    83.11258,
+    116.49569,
+    149.8788,
+    176.49569,
+    203.11258
+   ],
+   "sandhi": [
+    216.42102,
+    246.42102,
+    279.80413,
+    313.18724,
+    343.18724,
+    9.80413,
+    36.42102,
+    66.42102,
+    99.80413,
+    133.18724,
+    163.18724,
+    189.80413
+   ],
+   "bhava": {
+    "Sun": 10,
+    "Moon": 5,
+    "Mars": 8,
+    "Mercury": 10,
+    "Jupiter": 2,
+    "Venus": 8,
+    "Saturn": 4,
+    "Rahu": 11,
+    "Ketu": 5
+   }
+  },
+  "kp": {
+   "cusps": [
+    229.82632,
+    261.11179,
+    295.45852,
+    329.97565,
+    0.68355,
+    26.68027,
+    49.82632,
+    81.11179,
+    115.45852,
+    149.97565,
+    180.68355,
+    206.68027
+   ],
+   "cuspLords": [
+    {
+     "sign": "Mars",
+     "star": "Mercury",
+     "sub": "Venus"
+    },
+    {
+     "sign": "Jupiter",
+     "star": "Venus",
+     "sub": "Jupiter"
+    },
+    {
+     "sign": "Saturn",
+     "star": "Mars",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Saturn",
+     "star": "Jupiter",
+     "sub": "Moon"
+    },
+    {
+     "sign": "Mars",
+     "star": "Ketu",
+     "sub": "Ketu"
+    },
+    {
+     "sign": "Mars",
+     "star": "Sun",
+     "sub": "Sun"
+    },
+    {
+     "sign": "Venus",
+     "star": "Moon",
+     "sub": "Ketu"
+    },
+    {
+     "sign": "Mercury",
+     "star": "Jupiter",
+     "sub": "Jupiter"
+    },
+    {
+     "sign": "Moon",
+     "star": "Mercury",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Sun",
+     "star": "Sun",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Venus",
+     "star": "Mars",
+     "sub": "Mercury"
+    },
+    {
+     "sign": "Venus",
+     "star": "Jupiter",
+     "sub": "Venus"
+    }
+   ],
+   "planets": {
+    "Sun": 134.45687,
+    "Moon": 349.63811,
+    "Mars": 90.26405,
+    "Mercury": 159.05319,
+    "Jupiter": 254.12245,
+    "Venus": 89.0592,
+    "Saturn": 342.19121,
+    "Rahu": 165.83834,
+    "Ketu": 345.83834
+   },
+   "planetLords": {
+    "Sun": {
+     "sign": "Sun",
+     "star": "Venus",
+     "sub": "Venus"
+    },
+    "Moon": {
+     "sign": "Jupiter",
+     "star": "Mercury",
+     "sub": "Venus"
+    },
+    "Mars": {
+     "sign": "Moon",
+     "star": "Jupiter",
+     "sub": "Moon"
+    },
+    "Mercury": {
+     "sign": "Mercury",
+     "star": "Sun",
+     "sub": "Venus"
+    },
+    "Jupiter": {
+     "sign": "Jupiter",
+     "star": "Venus",
+     "sub": "Venus"
+    },
+    "Venus": {
+     "sign": "Mercury",
+     "star": "Jupiter",
+     "sub": "Sun"
+    },
+    "Saturn": {
+     "sign": "Jupiter",
+     "star": "Saturn",
+     "sub": "Mars"
+    },
+    "Rahu": {
+     "sign": "Mercury",
+     "star": "Moon",
+     "sub": "Saturn"
+    },
+    "Ketu": {
+     "sign": "Jupiter",
+     "star": "Saturn",
+     "sub": "Jupiter"
+    }
+   },
+   "occupancy": {
+    "Sun": 9,
+    "Moon": 4,
+    "Mars": 8,
+    "Mercury": 10,
+    "Jupiter": 1,
+    "Venus": 8,
+    "Saturn": 4,
+    "Rahu": 10,
+    "Ketu": 4
+   },
+   "significators": {
+    "1": {
+     "L1": [
+      "Mars",
+      "Venus"
+     ],
+     "L2": [
+      "Jupiter"
+     ],
+     "L3": [],
+     "L4": [
+      "Mars"
+     ]
+    },
+    "2": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Mars",
+      "Venus"
+     ],
+     "L4": [
+      "Jupiter"
+     ]
+    },
+    "3": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Ketu",
+      "Saturn"
+     ],
+     "L4": [
+      "Saturn"
+     ]
+    },
+    "4": {
+     "L1": [
+      "Ketu",
+      "Rahu",
+      "Saturn"
+     ],
+     "L2": [
+      "Ketu",
+      "Moon",
+      "Saturn"
+     ],
+     "L3": [
+      "Ketu",
+      "Saturn"
+     ],
+     "L4": [
+      "Saturn"
+     ]
+    },
+    "5": {
+     "L1": [],
+     "L2": [],
+     "L3": [],
+     "L4": [
+      "Mars"
+     ]
+    },
+    "6": {
+     "L1": [],
+     "L2": [],
+     "L3": [],
+     "L4": [
+      "Mars"
+     ]
+    },
+    "7": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Jupiter",
+      "Sun"
+     ],
+     "L4": [
+      "Venus"
+     ]
+    },
+    "8": {
+     "L1": [
+      "Jupiter",
+      "Sun"
+     ],
+     "L2": [
+      "Mars",
+      "Venus"
+     ],
+     "L3": [
+      "Moon"
+     ],
+     "L4": [
+      "Mercury"
+     ]
+    },
+    "9": {
+     "L1": [
+      "Mercury"
+     ],
+     "L2": [
+      "Sun"
+     ],
+     "L3": [
+      "Rahu"
+     ],
+     "L4": [
+      "Moon"
+     ]
+    },
+    "10": {
+     "L1": [
+      "Moon"
+     ],
+     "L2": [
+      "Mercury",
+      "Rahu"
+     ],
+     "L3": [
+      "Mercury"
+     ],
+     "L4": [
+      "Sun"
+     ]
+    },
+    "11": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Jupiter",
+      "Sun"
+     ],
+     "L4": [
+      "Venus"
+     ]
+    },
+    "12": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Jupiter",
+      "Sun"
+     ],
+     "L4": [
+      "Venus"
+     ]
+    }
+   }
+  },
+  "jaimini": {
+   "karakas": {
+    "AK": "Venus",
+    "AmK": "Moon",
+    "BK": "Sun",
+    "MK": "Jupiter",
+    "PK": "Saturn",
+    "GK": "Mercury",
+    "DK": "Mars"
+   },
+   "degInSign": {
+    "Sun": 14.36001,
+    "Moon": 19.54126,
+    "Mars": 0.1672,
+    "Mercury": 8.95634,
+    "Jupiter": 14.0256,
+    "Venus": 28.96235,
+    "Saturn": 12.09436
+   },
+   "karakamshaSign": 2
+  }
+ },
+ "P2": {
+  "chalit": {
+   "madhya": [
+    273.18173,
+    311.47577,
+    349.7698,
+    28.06384,
+    49.7698,
+    71.47577,
+    93.18173,
+    131.47577,
+    169.7698,
+    208.06384,
+    229.7698,
+    251.47577
+   ],
+   "sandhi": [
+    262.32875,
+    292.32875,
+    330.62278,
+    8.91682,
+    38.91682,
+    60.62278,
+    82.32875,
+    112.32875,
+    150.62278,
+    188.91682,
+    218.91682,
+    240.62278
+   ],
+   "bhava": {
+    "Sun": 11,
+    "Moon": 9,
+    "Mars": 1,
+    "Mercury": 10,
+    "Jupiter": 3,
+    "Venus": 9,
+    "Saturn": 4,
+    "Rahu": 7,
+    "Ketu": 1
+   }
+  },
+  "jaimini": {
+   "karakas": {
+    "AK": "Mercury",
+    "AmK": "Saturn",
+    "BK": "Sun",
+    "MK": "Mars",
+    "PK": "Venus",
+    "GK": "Jupiter",
+    "DK": "Moon"
+   },
+   "degInSign": {
+    "Sun": 17.18311,
+    "Moon": 0.27843,
+    "Mars": 11.80663,
+    "Mercury": 26.94935,
+    "Jupiter": 1.65643,
+    "Venus": 3.50742,
+    "Saturn": 17.80744
+   },
+   "karakamshaSign": 2
+  }
+ },
+ "P3": {
+  "kp": {
+   "cusps": [
+    258.44235,
+    294.62842,
+    332.15967,
+    4.82941,
+    31.53705,
+    54.909,
+    78.44235,
+    114.62842,
+    152.15967,
+    184.82941,
+    211.53705,
+    234.909
+   ],
+   "cuspLords": [
+    {
+     "sign": "Jupiter",
+     "star": "Venus",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Saturn",
+     "star": "Mars",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Jupiter",
+     "star": "Jupiter",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Mars",
+     "star": "Ketu",
+     "sub": "Mars"
+    },
+    {
+     "sign": "Venus",
+     "star": "Sun",
+     "sub": "Jupiter"
+    },
+    {
+     "sign": "Venus",
+     "star": "Mars",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Mercury",
+     "star": "Rahu",
+     "sub": "Moon"
+    },
+    {
+     "sign": "Moon",
+     "star": "Mercury",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Mercury",
+     "star": "Sun",
+     "sub": "Jupiter"
+    },
+    {
+     "sign": "Venus",
+     "star": "Mars",
+     "sub": "Venus"
+    },
+    {
+     "sign": "Mars",
+     "star": "Jupiter",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Mars",
+     "star": "Mercury",
+     "sub": "Rahu"
+    }
+   ],
+   "planets": {
+    "Sun": 270.98696,
+    "Moon": 138.11969,
+    "Mars": 235.95825,
+    "Mercury": 258.06654,
+    "Jupiter": 69.79541,
+    "Venus": 277.33196,
+    "Saturn": 263.63587,
+    "Rahu": 294.09352,
+    "Ketu": 114.09352
+   },
+   "planetLords": {
+    "Sun": {
+     "sign": "Saturn",
+     "star": "Sun",
+     "sub": "Rahu"
+    },
+    "Moon": {
+     "sign": "Sun",
+     "star": "Venus",
+     "sub": "Rahu"
+    },
+    "Mars": {
+     "sign": "Mars",
+     "star": "Mercury",
+     "sub": "Rahu"
+    },
+    "Mercury": {
+     "sign": "Jupiter",
+     "star": "Venus",
+     "sub": "Mars"
+    },
+    "Jupiter": {
+     "sign": "Mercury",
+     "star": "Rahu",
+     "sub": "Jupiter"
+    },
+    "Venus": {
+     "sign": "Saturn",
+     "star": "Sun",
+     "sub": "Ketu"
+    },
+    "Saturn": {
+     "sign": "Jupiter",
+     "star": "Venus",
+     "sub": "Saturn"
+    },
+    "Rahu": {
+     "sign": "Saturn",
+     "star": "Mars",
+     "sub": "Mars"
+    },
+    "Ketu": {
+     "sign": "Moon",
+     "star": "Mercury",
+     "sub": "Mars"
+    }
+   },
+   "occupancy": {
+    "Sun": 1,
+    "Moon": 8,
+    "Mars": 12,
+    "Mercury": 12,
+    "Jupiter": 6,
+    "Venus": 1,
+    "Saturn": 1,
+    "Rahu": 1,
+    "Ketu": 7
+   },
+   "significators": {
+    "1": {
+     "L1": [
+      "Jupiter",
+      "Mercury",
+      "Moon",
+      "Saturn",
+      "Sun",
+      "Venus"
+     ],
+     "L2": [
+      "Rahu",
+      "Saturn",
+      "Sun",
+      "Venus"
+     ],
+     "L3": [],
+     "L4": [
+      "Jupiter"
+     ]
+    },
+    "2": {
+     "L1": [],
+     "L2": [],
+     "L3": [],
+     "L4": [
+      "Saturn"
+     ]
+    },
+    "3": {
+     "L1": [],
+     "L2": [],
+     "L3": [],
+     "L4": [
+      "Jupiter"
+     ]
+    },
+    "4": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Rahu"
+     ],
+     "L4": [
+      "Mars"
+     ]
+    },
+    "5": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Mercury",
+      "Moon",
+      "Saturn"
+     ],
+     "L4": [
+      "Venus"
+     ]
+    },
+    "6": {
+     "L1": [],
+     "L2": [
+      "Jupiter"
+     ],
+     "L3": [
+      "Mercury",
+      "Moon",
+      "Saturn"
+     ],
+     "L4": [
+      "Venus"
+     ]
+    },
+    "7": {
+     "L1": [],
+     "L2": [
+      "Ketu"
+     ],
+     "L3": [
+      "Ketu",
+      "Mars"
+     ],
+     "L4": [
+      "Mercury"
+     ]
+    },
+    "8": {
+     "L1": [],
+     "L2": [
+      "Moon"
+     ],
+     "L3": [],
+     "L4": [
+      "Moon"
+     ]
+    },
+    "9": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Ketu",
+      "Mars"
+     ],
+     "L4": [
+      "Mercury"
+     ]
+    },
+    "10": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Mercury",
+      "Moon",
+      "Saturn"
+     ],
+     "L4": [
+      "Venus"
+     ]
+    },
+    "11": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Rahu"
+     ],
+     "L4": [
+      "Mars"
+     ]
+    },
+    "12": {
+     "L1": [
+      "Ketu",
+      "Mars",
+      "Rahu"
+     ],
+     "L2": [
+      "Mars",
+      "Mercury"
+     ],
+     "L3": [
+      "Rahu"
+     ],
+     "L4": [
+      "Mars"
+     ]
+    }
+   }
+  },
+  "jaimini": {
+   "karakas": {
+    "AK": "Mars",
+    "AmK": "Saturn",
+    "BK": "Moon",
+    "MK": "Mercury",
+    "PK": "Jupiter",
+    "GK": "Venus",
+    "DK": "Sun"
+   },
+   "degInSign": {
+    "Sun": 0.89011,
+    "Moon": 18.02284,
+    "Mars": 25.8614,
+    "Mercury": 17.96969,
+    "Jupiter": 9.69856,
+    "Venus": 7.2351,
+    "Saturn": 23.53902
+   },
+   "karakamshaSign": 10
+  }
+ },
+ "P5": {
+  "chalit": {
+   "madhya": [
+    162.60451,
+    193.24627,
+    223.88803,
+    254.52979,
+    283.88803,
+    313.24627,
+    342.60451,
+    13.24627,
+    43.88803,
+    74.52979,
+    103.88803,
+    133.24627
+   ],
+   "sandhi": [
+    147.92539,
+    177.92539,
+    208.56715,
+    239.20891,
+    269.20891,
+    298.56715,
+    327.92539,
+    357.92539,
+    28.56715,
+    59.20891,
+    89.20891,
+    118.56715
+   ],
+   "bhava": {
+    "Sun": 9,
+    "Moon": 2,
+    "Mars": 8,
+    "Mercury": 10,
+    "Jupiter": 12,
+    "Venus": 9,
+    "Saturn": 5,
+    "Rahu": 4,
+    "Ketu": 10
+   }
+  }
+ },
+ "P9": {
+  "chalit": {
+   "madhya": [
+    211.76275,
+    244.6345,
+    277.50625,
+    310.37801,
+    337.50625,
+    4.6345,
+    31.76275,
+    64.6345,
+    97.50625,
+    130.37801,
+    157.50625,
+    184.6345
+   ],
+   "sandhi": [
+    198.19862,
+    228.19862,
+    261.07038,
+    293.94213,
+    323.94213,
+    351.07038,
+    18.19862,
+    48.19862,
+    81.07038,
+    113.94213,
+    143.94213,
+    171.07038
+   ],
+   "bhava": {
+    "Sun": 7,
+    "Moon": 9,
+    "Mars": 9,
+    "Mercury": 6,
+    "Jupiter": 8,
+    "Venus": 8,
+    "Saturn": 10,
+    "Rahu": 11,
+    "Ketu": 5
+   }
+  },
+  "kp": {
+   "cusps": [
+    211.8596,
+    242.02996,
+    275.6336,
+    310.47486,
+    342.35251,
+    9.16196,
+    31.8596,
+    62.02996,
+    95.6336,
+    130.47486,
+    162.35251,
+    189.16196
+   ],
+   "cuspLords": [
+    {
+     "sign": "Mars",
+     "star": "Jupiter",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Jupiter",
+     "star": "Ketu",
+     "sub": "Venus"
+    },
+    {
+     "sign": "Saturn",
+     "star": "Sun",
+     "sub": "Mercury"
+    },
+    {
+     "sign": "Saturn",
+     "star": "Rahu",
+     "sub": "Saturn"
+    },
+    {
+     "sign": "Jupiter",
+     "star": "Saturn",
+     "sub": "Mars"
+    },
+    {
+     "sign": "Mars",
+     "star": "Ketu",
+     "sub": "Jupiter"
+    },
+    {
+     "sign": "Venus",
+     "star": "Sun",
+     "sub": "Jupiter"
+    },
+    {
+     "sign": "Mercury",
+     "star": "Mars",
+     "sub": "Ketu"
+    },
+    {
+     "sign": "Moon",
+     "star": "Saturn",
+     "sub": "Mercury"
+    },
+    {
+     "sign": "Sun",
+     "star": "Ketu",
+     "sub": "Saturn"
+    },
+    {
+     "sign": "Mercury",
+     "star": "Moon",
+     "sub": "Rahu"
+    },
+    {
+     "sign": "Venus",
+     "star": "Rahu",
+     "sub": "Jupiter"
+    }
+   ],
+   "planets": {
+    "Sun": 28.99046,
+    "Moon": 99.86833,
+    "Mars": 110.29741,
+    "Mercury": 3.17018,
+    "Jupiter": 71.92306,
+    "Venus": 56.28854,
+    "Saturn": 120.48252,
+    "Rahu": 160.07581,
+    "Ketu": 340.07581
+   },
+   "planetLords": {
+    "Sun": {
+     "sign": "Mars",
+     "star": "Sun",
+     "sub": "Mars"
+    },
+    "Moon": {
+     "sign": "Moon",
+     "star": "Saturn",
+     "sub": "Venus"
+    },
+    "Mars": {
+     "sign": "Moon",
+     "star": "Mercury",
+     "sub": "Venus"
+    },
+    "Mercury": {
+     "sign": "Mars",
+     "star": "Ketu",
+     "sub": "Sun"
+    },
+    "Jupiter": {
+     "sign": "Mercury",
+     "star": "Rahu",
+     "sub": "Saturn"
+    },
+    "Venus": {
+     "sign": "Venus",
+     "star": "Mars",
+     "sub": "Jupiter"
+    },
+    "Saturn": {
+     "sign": "Sun",
+     "star": "Ketu",
+     "sub": "Ketu"
+    },
+    "Rahu": {
+     "sign": "Mercury",
+     "star": "Moon",
+     "sub": "Moon"
+    },
+    "Ketu": {
+     "sign": "Jupiter",
+     "star": "Saturn",
+     "sub": "Venus"
+    }
+   },
+   "occupancy": {
+    "Sun": 6,
+    "Moon": 9,
+    "Mars": 9,
+    "Mercury": 5,
+    "Jupiter": 8,
+    "Venus": 7,
+    "Saturn": 9,
+    "Rahu": 10,
+    "Ketu": 4
+   },
+   "significators": {
+    "1": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Venus"
+     ],
+     "L4": [
+      "Mars"
+     ]
+    },
+    "2": {
+     "L1": [],
+     "L2": [],
+     "L3": [],
+     "L4": [
+      "Jupiter"
+     ]
+    },
+    "3": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Ketu",
+      "Moon"
+     ],
+     "L4": [
+      "Saturn"
+     ]
+    },
+    "4": {
+     "L1": [
+      "Mercury",
+      "Saturn"
+     ],
+     "L2": [
+      "Ketu"
+     ],
+     "L3": [
+      "Ketu",
+      "Moon"
+     ],
+     "L4": [
+      "Saturn"
+     ]
+    },
+    "5": {
+     "L1": [
+      "Mars"
+     ],
+     "L2": [
+      "Mercury"
+     ],
+     "L3": [],
+     "L4": [
+      "Jupiter"
+     ]
+    },
+    "6": {
+     "L1": [
+      "Sun"
+     ],
+     "L2": [
+      "Sun"
+     ],
+     "L3": [
+      "Venus"
+     ],
+     "L4": [
+      "Mars"
+     ]
+    },
+    "7": {
+     "L1": [],
+     "L2": [
+      "Venus"
+     ],
+     "L3": [],
+     "L4": [
+      "Venus"
+     ]
+    },
+    "8": {
+     "L1": [],
+     "L2": [
+      "Jupiter"
+     ],
+     "L3": [
+      "Mars"
+     ],
+     "L4": [
+      "Mercury"
+     ]
+    },
+    "9": {
+     "L1": [
+      "Ketu",
+      "Moon",
+      "Rahu",
+      "Venus"
+     ],
+     "L2": [
+      "Mars",
+      "Moon",
+      "Saturn"
+     ],
+     "L3": [
+      "Rahu"
+     ],
+     "L4": [
+      "Moon"
+     ]
+    },
+    "10": {
+     "L1": [
+      "Jupiter"
+     ],
+     "L2": [
+      "Rahu"
+     ],
+     "L3": [
+      "Sun"
+     ],
+     "L4": [
+      "Sun"
+     ]
+    },
+    "11": {
+     "L1": [],
+     "L2": [],
+     "L3": [
+      "Mars"
+     ],
+     "L4": [
+      "Mercury"
+     ]
+    },
+    "12": {
+     "L1": [],
+     "L2": [],
+     "L3": [],
+     "L4": [
+      "Venus"
+     ]
+    }
+   }
+  },
+  "jaimini": {
+   "karakas": {
+    "AK": "Sun",
+    "AmK": "Venus",
+    "BK": "Mars",
+    "MK": "Jupiter",
+    "PK": "Moon",
+    "GK": "Mercury",
+    "DK": "Saturn"
+   },
+   "degInSign": {
+    "Sun": 28.89361,
+    "Moon": 9.77147,
+    "Mars": 20.20056,
+    "Mercury": 3.07333,
+    "Jupiter": 11.82621,
+    "Venus": 26.19169,
+    "Saturn": 0.38567
+   },
+   "karakamshaSign": 8
+  }
+ },
+ "P10": {
+  "chalit": {
+   "madhya": [
+    13.65176,
+    41.02974,
+    68.40771,
+    95.78569,
+    128.40771,
+    161.02974,
+    193.65176,
+    221.02974,
+    248.40771,
+    275.78569,
+    308.40771,
+    341.02974
+   ],
+   "sandhi": [
+    357.34075,
+    27.34075,
+    54.71873,
+    82.0967,
+    112.0967,
+    144.71873,
+    177.34075,
+    207.34075,
+    234.71873,
+    262.0967,
+    292.0967,
+    324.71873
+   ],
+   "bhava": {
+    "Sun": 12,
+    "Moon": 11,
+    "Mars": 11,
+    "Mercury": 12,
+    "Jupiter": 1,
+    "Venus": 11,
+    "Saturn": 11,
+    "Rahu": 12,
+    "Ketu": 6
+   }
+  }
+ },
+ "CH": {
+  "jaimini": {
+   "karakas": {
+    "AK": "Jupiter",
+    "AmK": "Mars",
+    "BK": "Venus",
+    "MK": "Sun",
+    "PK": "Mercury",
+    "GK": "Moon",
+    "DK": "Saturn"
+   },
+   "degInSign": {
+    "Sun": 21.5595,
+    "Moon": 6.9593,
+    "Mars": 25.53608,
+    "Mercury": 9.92688,
+    "Jupiter": 25.82076,
+    "Venus": 23.7069,
+    "Saturn": 6.80692
+   },
+   "karakamshaSign": 7
+  }
+ }
+}
