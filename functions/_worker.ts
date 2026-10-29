@@ -273,6 +273,10 @@ const worker = {
       // src/lib/daily/registry.ts); anything else was a soft-404 200.
       const RH = new Set(['mesha','vrisha','mithuna','karka','simha','kanya','tula','vrischika','dhanu','makara','kumbha','meena']);
       if ((m = pathname.match(/^\/hi\/rashifal\/([a-z]+)\/?$/)))      return !RH.has(m[1]);
+      // Batch 9b review: per-rashi Sade Sati pages use the same two slug sets
+      // (src/lib/vedic/sadeSatiRashiText.ts SS_EN_SLUGS / SS_HI_SLUGS).
+      if ((m = pathname.match(/^\/sade-sati\/([a-z]+)\/?$/)))       return !R.has(m[1]);
+      if ((m = pathname.match(/^\/hi\/sade-sati\/([a-z]+)\/?$/)))   return !RH.has(m[1]);
       const NAK = new Set(['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati']);
       if ((m = pathname.match(/^\/nakshatra\/([a-z-]+)\/?$/)))        return !NAK.has(m[1]);
       if ((m = pathname.match(/^\/baby-names\/nakshatra\/([a-z-]+)\/?$/))) return !NAK.has(m[1]);
