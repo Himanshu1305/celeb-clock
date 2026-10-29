@@ -494,3 +494,10 @@
   top: auto !important;
   left: auto !important;
 }
+
+/* Batch 10 — ScrollTable: wide tables scroll inside their own box on phones; keep a thin,
+   visible scrollbar as a second cue next to the "swipe sideways" hint. */
+.scroll-table {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}

@@ -9,6 +9,7 @@
  * Criteria and their sources: src/lib/vedic/muhuratYear.ts (OCCASION_RULES).
  */
 import { useEffect, useMemo, useState } from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -105,7 +106,7 @@ export default function MuhuratYearPage() {
   const faqs = muhuratYearFaqs(slug, year, file?.seasons ?? []);
 
   const table = (list: MuhuratWindow[], testid: string) => (
-    <div className="overflow-x-auto">
+    <ScrollTable label="Muhurat dates and times">
       <table className="w-full text-sm border-collapse" data-testid={testid}>
         <thead>
           <tr className="text-left text-muted-foreground border-b border-border">
@@ -134,7 +135,7 @@ export default function MuhuratYearPage() {
           })}
         </tbody>
       </table>
-    </div>
+    </ScrollTable>
   );
 
   const monthBlock = ({ i, l }: { i: number; l: MuhuratWindow[] }) => (

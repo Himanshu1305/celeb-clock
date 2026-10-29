@@ -1,4 +1,5 @@
 import React from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { LC_FACTORS } from '@/content/longevityCalculatorContent';
@@ -154,7 +155,7 @@ export function DeathClockAlternativeArticle() {
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Death Clock vs BornClock — Side by Side</h2>
-          <div className="overflow-x-auto mb-8">
+          <ScrollTable className="mb-8">
             <table className="w-full border-collapse text-sm">
               <thead>
                 <tr className="bg-gray-100">
@@ -173,7 +174,7 @@ export function DeathClockAlternativeArticle() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
 
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-6 text-center text-white my-8">
             <h2 className="text-xl font-black mb-2">Skip the morbid countdown</h2>
