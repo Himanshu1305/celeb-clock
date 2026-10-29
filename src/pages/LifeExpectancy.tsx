@@ -228,7 +228,7 @@ const LifeExpectancy = () => {
     try {
     const html = buildLongevityBlueprintHtml(longevityResult, {
       personName,
-      profileName: profile?.full_name,
+      profileName: (profile as { full_name?: string } | null)?.full_name,
       userSelectedHabits,
     });
 
@@ -363,7 +363,7 @@ const LifeExpectancy = () => {
   const getInputValue = () => birthDate ? birthDate.toISOString().split('T')[0] : '';
 
   // When launched from Family Dashboard, use the family member's name everywhere a name appears
-  const displayName = prefilledFor || longevityResult?.quizSnapshot?.name || profile?.full_name || undefined;
+  const displayName = prefilledFor || longevityResult?.quizSnapshot?.name || (profile as { full_name?: string } | null)?.full_name || undefined;
 
   return (
     <ReportLayout
@@ -811,7 +811,6 @@ const LifeExpectancy = () => {
                 optimizedForecast={optimizedForecast ?? undefined}
                 userSelectedHabits={userSelectedHabits}
                 simulatorHabitFrequencies={userHabitFrequencies}
-                onDownloadBlueprint={() => handleDownloadBlueprint()}
               />
             </ReportErrorBoundary>
             <div className="no-print flex flex-col items-center gap-3 pt-6 pb-2">

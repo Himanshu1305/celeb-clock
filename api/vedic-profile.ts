@@ -173,10 +173,10 @@ async function computeProfile(env, y, m, d, h, min, lat, lon, tz, hasBirthTime) 
   }
 }
 
-async function handler(request, env) {
+async function handler(request, env?) {
   if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);
   const { searchParams } = new URL(request.url, 'http://localhost');
-  const n = (k, def) => { const v = searchParams.get(k); return (v===null||v==='') ? def : Number(v); };
+  const n = (k: string, def?: number) => { const v = searchParams.get(k); return (v===null||v==='') ? def : Number(v); };
   const y=n('y'), m=n('m'), d=n('d');
   if (![y,m,d].every(v=>Number.isFinite(v))) return json({ error:'Missing y/m/d' }, 400);
   const hasBirthTime = searchParams.has('h') && searchParams.get('h') !== '';

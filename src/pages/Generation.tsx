@@ -1,6 +1,7 @@
 import { useLocation, Link } from 'react-router-dom';
+import { PageFAQ } from '@/components/PageFAQ';
+import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { CollectionLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 import { ChevronDown, ChevronUp } from 'lucide-react';
@@ -227,9 +228,6 @@ export default function GenerationPage() {
             description="Free generation calculator — find out if you're Gen Z, Millennial, Gen X, Boomer or another generation with Pew Research-based dates and defining events."
             url="/generation"
           />
-          <Helmet>
-            <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
-          </Helmet>
         </>
       )}
       breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Generation' }}
@@ -358,6 +356,10 @@ export default function GenerationPage() {
 
         <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-sm text-blue-700 dark:text-blue-300">
           <strong>Sources:</strong> Pew Research Center (2019), "Defining Generations: Where Millennials end and Generation Z begins." McCrindle Research (2021), "Generation Alpha." Jonathan Haidt & Greg Lukianoff (2018), "The Coddling of the American Mind." Brookings Institution generational research series.
+        </div>
+        {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
+        <div className="mt-10">
+          <PageFAQ items={faqItemsFromSchema(faqSchema)} />
         </div>
       </div>
     </CollectionLayout>

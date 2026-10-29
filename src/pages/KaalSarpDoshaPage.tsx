@@ -5,13 +5,14 @@
  * breakthroughs, not catastrophe.
  */
 import { useState } from 'react';
+import { PageFAQ } from '@/components/PageFAQ';
+import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import { JsonLd } from '@/components/JsonLd';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 import { Remedies } from '@/components/vedic/Remedies';
 
@@ -111,7 +112,6 @@ export default function KaalSarpDoshaPage() {
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
     >
-      <JsonLd data={faqJsonLd} id="kaalsarp-faq" />
 
       <section className="section">
         <div className="section-head">
@@ -233,6 +233,8 @@ export default function KaalSarpDoshaPage() {
           </div>
         )}
       </section>
+      {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
+      <PageFAQ variant="plain" items={faqItemsFromSchema(faqJsonLd)} />
     </PajPage>
   );
 }

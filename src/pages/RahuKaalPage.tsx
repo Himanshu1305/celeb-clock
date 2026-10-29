@@ -5,6 +5,7 @@
  * from the shared daily-page mechanism; adds the week ahead and the weekday rule.
  */
 import { useMemo } from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -57,7 +58,7 @@ export default function RahuKaalPage() {
           <TermChips labels={TERMS} />
 
           <h2 className="font-semibold text-foreground mb-2">Which part of the day, by weekday</h2>
-          <div className="overflow-x-auto mb-2">
+          <ScrollTable className="mb-2">
             <table className="w-full text-sm border border-border rounded-lg" data-testid="rahu-kaal-rule">
               <thead><tr className="bg-muted/40 text-left">
                 <th className="px-3 py-2 font-medium">Weekday</th>
@@ -76,7 +77,7 @@ export default function RahuKaalPage() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
           <NumberNote testid="rahu-kaal-rule-note">Daylight (sunrise to sunset) is divided into eight equal parts; the table shows which part each window takes on each weekday. Because it follows the real sunrise and sunset, the clock time differs from city to city and shifts through the year.</NumberNote>
           <div className="mb-6" />
 

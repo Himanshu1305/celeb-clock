@@ -1,4 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
+import { PageFAQ } from '@/components/PageFAQ';
+import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { Helmet } from 'react-helmet-async';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -85,7 +87,6 @@ export default function BirthstonePage() {
             canonicalUrl={`/birthstone/${data.slug}`}
           />
           <Helmet>
-            <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
             <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
           </Helmet>
         </>
@@ -270,6 +271,10 @@ export default function BirthstonePage() {
         {/* About This Content */}
         <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-xl text-sm text-blue-700 dark:text-blue-300">
           <strong>About This Content:</strong> Gemological data sourced from GIA (gia.edu) and Mindat.org. Historical and cultural content draws on Kunz, G.F. (1913), <em>The Curious Lore of Precious Stones</em>. Birthstone properties described here are traditional and cultural — they are not medical claims.
+        </div>
+        {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
+        <div className="mt-10">
+          <PageFAQ items={faqItemsFromSchema(faqSchema)} />
         </div>
       </div>
     </CollectionLayout>

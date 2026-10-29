@@ -1,4 +1,5 @@
 import React from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
@@ -174,7 +175,7 @@ export function LongevitySupplementsArticle() {
             more human-tested evidence.
           </p>
 
-          <div className="overflow-x-auto mb-6" tabIndex={0} role="region" aria-label="Supplement comparison table (scrollable)">
+          <ScrollTable className="mb-6" label="Supplement comparison table">
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-gray-100 text-left">
@@ -199,7 +200,7 @@ export function LongevitySupplementsArticle() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
 
           <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6 my-8">
             <h2 className="text-lg font-black text-red-900 mb-2">Read This Before You Buy Anything</h2>

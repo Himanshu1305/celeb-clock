@@ -10,6 +10,7 @@
  * (tables, FAQ, JSON-LD) is phrased as fixed date ranges, which never go stale.
  */
 import { useParams, Link, Navigate } from 'react-router-dom';
+import { ScrollTable } from '@/components/ScrollTable';
 import { PajPage } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -80,7 +81,7 @@ function PeriodTable({ p, lang, nowMs }: { p: SaturnPeriod; lang: Lang; nowMs: n
         {t.run}: {fmtDate(p.start, lang, 'long')} – {fmtDate(p.end, lang, 'long')}
         {p.type !== 'sadeSati' && <span className="text-muted-foreground font-normal"> · {DHAIYA_NAME[lang][p.type]}</span>}
       </div>
-      <div className="overflow-x-auto mt-2">
+      <ScrollTable className="mt-2" lang={lang}>
         <table className="w-full text-sm">
           <thead><tr className="text-left text-muted-foreground">{t.th.map(h => <th key={h} className="py-1 pr-3 font-medium">{h}</th>)}</tr></thead>
           <tbody>
@@ -98,7 +99,7 @@ function PeriodTable({ p, lang, nowMs }: { p: SaturnPeriod; lang: Lang; nowMs: n
             })}
           </tbody>
         </table>
-      </div>
+      </ScrollTable>
     </div>
   );
 }

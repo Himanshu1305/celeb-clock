@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { render, cleanup, waitFor } from '@testing-library/react';
-// @ts-expect-error — plain ESM build script, no type declarations
 import { getTitleForRoute } from '../../../scripts/prerender-titles.mjs';
 import { chineseHoroscopeAnimalTitle, currentChineseYear } from '@/lib/chineseCalendar.js';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';

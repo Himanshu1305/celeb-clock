@@ -5,7 +5,8 @@ import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
 import { PlanetaryAge, SPACE_FACTS } from '@/components/PlanetaryAge';
 import { useBirthDate } from '@/context/BirthDateContext';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO } from '@/components/SEO';
+import { PageFAQ } from '@/components/PageFAQ';
 import PageTagline from '@/components/PageTagline';
 
 // ── Seeded star field (consistent, no layout thrash) ─────────────────────────
@@ -157,7 +158,6 @@ const PlanetaryAgePage = () => {
             canonicalUrl="/planetary-age"
             ogImage="https://bornclock.com/og/calculator.png"
           />
-          <FAQSchema items={FAQ_ITEMS} />
           <Helmet>
             <script type="application/ld+json">{JSON.stringify(WEB_APP_SCHEMA)}</script>
             <style>{`
@@ -397,6 +397,11 @@ const PlanetaryAgePage = () => {
           </p>
           <span className="inline-block mt-3 text-sm font-semibold text-[#2F6FB0]">Open the Weight on Planets calculator →</span>
         </a>
+      </div>
+
+      {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
+      <div className="container mx-auto px-4 pb-12 max-w-5xl">
+        <PageFAQ items={FAQ_ITEMS} />
       </div>
 
     </ToolLayout>

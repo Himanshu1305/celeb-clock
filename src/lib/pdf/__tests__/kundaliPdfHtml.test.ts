@@ -117,7 +117,7 @@ describe('Kundali PDF HTML — panel chart P1', () => {
     const t = text('[data-testid="pdf-dasha"]');
     expect(t).toContain(P1.expected.dashaAtRef.mahadasha);
     expect(t).toContain(P1.expected.dashaAtRef.antardasha);
-    expect(t).toContain(`${fmtDate(data.dasha!.mahadasha_start)} – ${fmtDate(data.dasha!.mahadasha_end)}`);
+    expect(t).toContain(`${fmtDate((data.dasha as any).mahadasha_start)} – ${fmtDate((data.dasha as any).mahadasha_end)}`);
     expect(t).toContain(`${fmtDate((data.dasha as any).antardasha_start)} – ${fmtDate((data.dasha as any).antardasha_end)}`);
     expect(t).toContain('3 Jan 2017 – 3 Jan 2037'); // Swiss reference Mahadasha span
   });

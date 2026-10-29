@@ -138,7 +138,7 @@ export async function handleReportOg(request: Request, env: OgEnv, ctx: Ctx): Pr
   if (!slug || !/^[a-z0-9-]{6,80}$/i.test(slug)) return serveDefault();
 
   // Cache-first — a successful card is immutable for a year, so real renders are rare.
-  const cache = (globalThis as { caches?: { default: Cache } }).caches?.default;
+  const cache = (globalThis as unknown as { caches?: { default: Cache } }).caches?.default;
   const cacheKey = new Request(`https://bornclock.com/og/report/${slug}.png`);
   if (cache) {
     const hit = await cache.match(cacheKey).catch(() => undefined);
@@ -170,7 +170,7 @@ export async function handleReportOg(request: Request, env: OgEnv, ctx: Ctx): Pr
   const png = await renderCardPng(cardHtml(name, dobLabel));
   if (!png) return serveDefault();
 
-  const res = new Response(png, {
+  const res = new Response(png as unknown as BodyInit, {
     status: 200,
     headers: { 'Content-Type': 'image/png', 'Cache-Control': 'public, max-age=31536000, immutable' },
   });

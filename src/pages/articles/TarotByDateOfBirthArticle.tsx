@@ -1,4 +1,5 @@
 import React from 'react';
+import { ScrollTable } from '@/components/ScrollTable';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { WESTERN_ZODIAC_PROFILES } from '@/data/astrologicalData';
@@ -226,7 +227,7 @@ export function TarotByDateOfBirthArticle() {
             Here is the complete table of all 12 zodiac signs and the Major Arcana card each one
             corresponds to, with the traditional meaning of that card.
           </p>
-          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Tarot card by zodiac sign">
+          <ScrollTable className="mb-8" label="Tarot card by zodiac sign">
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-[#6E5AA6]/10 text-[#6E5AA6]">
@@ -253,14 +254,14 @@ export function TarotByDateOfBirthArticle() {
                 })}
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Tarot Birth Card Pairs by Number</h2>
           <p className="text-gray-700 leading-relaxed mb-4">
             Once you have reduced month + day + year to 22 or less, read across to find your
             birth card and its pair.
           </p>
-          <div className="overflow-x-auto mb-8" tabIndex={0} role="region" aria-label="Tarot birth card pairs by number">
+          <ScrollTable className="mb-8" label="Tarot birth card pairs by number">
             <table data-testid="birth-card-table" className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-[#6E5AA6]/10 text-[#6E5AA6]">
@@ -283,7 +284,7 @@ export function TarotByDateOfBirthArticle() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </ScrollTable>
           <p className="text-gray-700 leading-relaxed mb-6">
             Reading the pair together is where birth-date tarot becomes genuinely useful. A
             birth card of <strong>Death</strong> (13) paired with <strong>The Emperor</strong> (4),
