@@ -678,13 +678,6 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'व्रत या पूजा की शुरुआत में लिया जाने वाला छोटा संकल्प — आप क्या करेंगे और क्यों।',
     aliases: ['Sankalp'],
   },
-  amantaPurnimanta: {
-    term: 'Amanta / Purnimanta', category: 'panchang', hiTerm: 'अमांत / पूर्णिमांत',
-    impact: 'Two ways of naming lunar months — so the same day can be “Kartika Krishna” in one calendar and “Ashwina Krishna” in another.',
-    why: 'Amanta months end at the new moon (Gujarat, Maharashtra, the South); purnimanta months end at the full moon (most of North India). The dark half is named one month ahead in purnimanta.',
-    hi: 'चंद्र मास के नाम रखने के दो तरीके — इसलिए एक ही दिन एक पंचांग में “कार्तिक कृष्ण” और दूसरे में “आश्विन कृष्ण” हो सकता है।',
-    aliases: ['Amanta', 'Purnimanta'],
-  },
   adhikMaas: {
     term: 'Adhik Maas (leap month)', category: 'panchang', hiTerm: 'अधिक मास',
     impact: 'An extra lunar month that comes about once in three years; new beginnings like weddings and house-warmings are not done in it.',
@@ -721,28 +714,8 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     hi: 'तमिल में "अच्छा समय" — गौरी पंचांगम् के शुभ भाग (अमिर्दा, धनम, उत्ति, लाभम, सुगम)।',
     aliases: ['Gowri Nalla Neram', 'good time'],
   },
-  tarabalam: {
-    term: 'Tarabalam', category: 'panchang', hiTerm: 'ताराबल',
-    impact: 'Tells you whether today’s star (Nakshatra) is friendly to YOUR birth star — a quick personal check before a new start.',
-    why: 'Count from your birth Nakshatra to today’s Nakshatra and divide by 9. The 2nd (Sampat), 4th (Kshema), 6th (Sadhana), 8th (Mitra) and 9th (Parama Mitra) counts are good.',
-    guidance: 'If your star is not on today’s list, nothing bad is coming — keep to routine work and pick a listed day for big starts.',
-    hi: 'आज का नक्षत्र आपके जन्म नक्षत्र से कितना अनुकूल है — नौ ताराओं में दूसरा, चौथा, छठा, आठवाँ और नौवाँ शुभ माना जाता है।',
-    aliases: ['Tara Bala', 'Tara balam'],
-  },
-  chandrabalam: {
-    term: 'Chandrabalam', category: 'panchang', hiTerm: 'चंद्रबल',
-    impact: 'Tells you whether today’s Moon supports YOUR Moon sign.',
-    why: 'Count from your Moon sign to the sign the Moon is in today: the 1st, 3rd, 6th, 7th, 10th and 11th are good.',
-    hi: 'आज चंद्रमा आपकी चंद्र राशि से पहले, तीसरे, छठे, सातवें, दसवें या ग्यारहवें भाव में हो तो चंद्रबल शुभ होता है।',
-    aliases: ['Chandra Bala', 'Moon strength'],
-  },
-  ashtamaChandra: {
-    term: 'Ashtama Chandra', category: 'panchang', hiTerm: 'अष्टम चंद्र',
-    impact: 'About two days a month when the Moon is 8th from your Moon sign — a time to go gently and keep plans simple, not a time of harm.',
-    why: 'The Moon moves through all twelve signs in about 27 days, so it spends a little over two days in the 8th sign from yours each month.',
-    hi: 'चंद्रमा आपकी राशि से आठवें भाव में हो (हर महीने लगभग सवा दो दिन) — इस समय काम सरल रखें; यह हानि का समय नहीं है।',
-    aliases: ['Chandrashtama', 'Chandrashtamam'],
-  },
+  // Tarabalam / Chandrabalam / Ashtama Chandra: one glossary entry each — see tarabala,
+  // chandrabala and chandrashtama below (batch 10 review: the panchang branch had added duplicates).
   sankranti: {
     term: 'Sankranti', category: 'panchang', hiTerm: 'संक्रांति',
     impact: 'The day the Sun moves into a new sign — twelve a year; Makar Sankranti is the best known.',
@@ -873,6 +846,8 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     why: 'Chandrashtama is when the moving Moon is in the 8th sign from your birth Moon — a personal, chart-specific caution (needs your birth details).',
     inline: 'personal days when the Moon sits 8th from your birth Moon',
     hi: 'हर महीने लगभग दो दिन जब गोचर का चंद्रमा आपकी जन्म राशि से 8वीं राशि में होता है — व्यक्तिगत सावधानी के दिन।',
+
+    aliases: ['Ashtama Chandra', 'Chandrashtamam'],
   },
 
   // ─────────────────────────── Doshas ───────────────────────────
@@ -1264,14 +1239,14 @@ export const VEDIC_TERMS: Record<string, TermDef> = {
     impact: 'Whether today\'s Moon supports you personally — the main reason one rashi\'s day reads better than another\'s.',
     why: 'It is judged from the house the moving Moon occupies counted from your Moon sign: the 1st, 3rd, 6th, 7th, 10th and 11th are classically supportive; the 4th, 8th and 12th call for care.',
     hi: 'आज का चंद्रमा आपका कितना साथ देता है — आपकी चंद्र राशि से चंद्रमा किस भाव में है, इससे देखा जाता है। 1, 3, 6, 7, 10, 11 भाव शुभ माने जाते हैं।',
-    aliases: ['Chandra bala', 'Moon strength'],
+    aliases: ['Chandrabalam', 'Chandra bala', 'Moon strength'],
   },
   tarabala: {
     term: 'Tarabala (star strength for the day)', category: 'transit', hiTerm: 'तारा बल',
     impact: 'How today\'s nakshatra (the Moon\'s star) sits with your birth nakshatra — a quick daily good-day / go-gently check.',
     why: 'Count from your birth nakshatra to today\'s in groups of nine: Janma, Sampat, Vipat, Kshema, Pratyari, Sadhaka, Vadha, Mitra, Parama Mitra. Vipat, Pratyari and Vadha are the classical "go gently" taras.',
     hi: 'आपके जन्म नक्षत्र से आज के नक्षत्र की गिनती नौ-नौ के क्रम में — विपत, प्रत्यरि और वध तारा में सावधानी रखी जाती है, बाक़ी शुभ माने जाते हैं।',
-    aliases: ['Tara bala', 'Tara balam'],
+    aliases: ['Tarabalam', 'Tara bala', 'Tara balam'],
   },
   solarHouse: {
     term: 'Solar houses (Western horoscopes)', category: 'transit', hiTerm: 'सूर्य राशि से भाव',
@@ -1627,8 +1602,8 @@ export const PANCHANG_PAGE_TERM: Record<string, string> = {
   'Rahu Kaal': 'rahuKalam', 'Gulika Kaal': 'gulikaKaal', Yamaganda: 'yamaganda', 'Dur Muhurtam': 'durMuhurtam',
   Varjyam: 'varjyam', Choghadiya: 'choghadiya',
   // Batch 10
-  'Gowri Panchangam': 'gowriPanchangam', 'Nalla Neram': 'nallaNeram', Tarabalam: 'tarabalam', Chandrabalam: 'chandrabalam',
-  'Ashtama Chandra': 'ashtamaChandra', Purnima: 'purnima', Amavasya: 'amavasya', Ekadashi: 'ekadashi', Sankranti: 'sankranti',
+  'Gowri Panchangam': 'gowriPanchangam', 'Nalla Neram': 'nallaNeram', Tarabalam: 'tarabala', Chandrabalam: 'chandrabala',
+  'Ashtama Chandra': 'chandrashtama', Purnima: 'purnima', Amavasya: 'amavasya', Ekadashi: 'ekadashi', Sankranti: 'sankranti',
 };
 
 export const CHOGHADIYA_TERM: Record<string, string> = {

@@ -22,7 +22,8 @@ type Lang = 'en' | 'hi';
 /** Terms explained on every vrat page (TermTip ids). */
 const VRAT_TERM: Record<string, string> = {
   Tithi: 'tithi', Paksha: 'paksha', Purnima: 'purnima', Ekadashi: 'ekadashi', Sankalpa: 'sankalpa', Parana: 'parana',
-  'Pradosh Kaal': 'pradoshKaal', 'Nishita Kaal': 'nishitaKaal', 'Amanta / Purnimanta': 'amantaPurnimanta',
+  'Pradosh Kaal': 'pradoshKaal', 'Nishita Kaal': 'nishitaKaal', // One glossary entry per concept: 'purnimanta' explains both month systems (amanta has its own).
+  'Amanta / Purnimanta': 'purnimanta',
   'Abhijit Muhurta': 'abhijit', 'Adhik Maas': 'adhikMaas', Chaturmas: 'chaturmas', Muhurat: 'muhurat',
 };
 /** Hindi chip labels for the same terms. */
