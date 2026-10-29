@@ -240,6 +240,7 @@ const FEATURES: Array<{ title: string; desc: string; to: string }> = [
   { title: 'AI Astrologer', desc: 'Ask about a placement and see the chart evidence it is grounded in.', to: '/astrologer' },
 ];
 const DEEPER: Array<{ title: string; desc: string; to: string }> = [
+  { title: 'Kundli Milan by Name', desc: 'No birth time? An approximate 36-guna match from the first syllable of each name.', to: '/kundli-milan-by-name' },
   { title: 'Sade Sati', desc: 'Where Saturn’s 7½-year cycle stands for you.', to: '/sade-sati' },
   { title: 'Muhurat Finder', desc: 'Auspicious timing for what matters.', to: '/muhurat' },
   { title: 'Career Report', desc: 'Vedic career analysis from your 10th house.', to: '/career-report' },
@@ -467,6 +468,7 @@ export default function VedicAstrologyLanding() {
           <p className="lead" data-testid="vap-explore" style={{ maxWidth: 'none' }}>
             {([
               ['Kundli', '/kundali'], ['Kundali Matching', '/kundali-match'],
+              ['Kundli Milan by Name', '/kundli-milan-by-name'], ['कुंडली मिलान (हिंदी)', '/hi/kundli-milan'],
               ['Rashifal', '/rashifal'], ['Daily Panchang', '/panchang'],
               ['Festival Calendar', '/festivals'],
               ['Planetary Transits', '/transit'], ['Mercury Retrograde', '/mercury-retrograde'],

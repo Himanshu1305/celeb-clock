@@ -103,6 +103,10 @@ export default function RashifalPage() {
             <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">
               कुंडली बनाएं →
             </Link>
+            {/* Batch 9b: Hindi matching tools from the Hindi hub. */}
+            <p data-testid="hi-rashifal-milan-links" className="text-sm text-muted-foreground mt-4">
+              विवाह के लिए: <Link to="/hi/kundli-milan" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan" className="underline">नाम से कुंडली मिलान</Link>
+            </p>
           </div>
         </div>
       </section>

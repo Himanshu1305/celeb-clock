@@ -395,6 +395,10 @@ export const STATIC_ROUTES = [
   '/mystic-corner',
   '/kundali',
   '/kundali-match',
+  // Batch 9b: Hindi Kundli milan + Kundli milan by name (English + Hindi).
+  '/kundli-milan-by-name',
+  '/hi/kundli-milan',
+  '/hi/naam-se-kundli-milan',
   // Part AL Step 7: prerender the redesigned Vedic tool pages so crawlers see real content
   // on first load (previously served a bare SPA shell before React hydrated).
   '/sade-sati',
