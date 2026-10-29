@@ -65,7 +65,9 @@ describe('Kundali PDF HTML — panel chart P1', () => {
     for (const v of ['Suchit', '31 Aug 1996', '13:04', 'Lucknow', 'Asia/Kolkata']) expect(bd).toContain(v);
     expect(text('[data-testid="pdf-title"]')).toBe('Suchit’s Kundali');
     const closing = text('[data-testid="pdf-closing"]');
-    expect(closing).toContain('free basic Kundali; calculations: Lahiri ayanamsa');
+    expect(closing).toContain('Calculations: Lahiri ayanamsa');
+    // No new free/paid wording (founder decides pricing later).
+    expect(html.toLowerCase()).not.toMatch(/\bfree\b|\bpaid\b/);
     expect(closing).toContain('bornclock.com/kundali');
     expect(closing).toContain('Generated 29 Oct 2026');
     expect(doc.querySelector('[data-testid="pdf-accuracy-link"]')!.getAttribute('href')).toBe('https://bornclock.com/accuracy');

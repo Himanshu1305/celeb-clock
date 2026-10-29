@@ -280,7 +280,7 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta =
   .brand { font-weight: 700; color: var(--navy); font-size: 12px; }
 </style></head><body>
 <table class="pt">
-  <thead><tr><td class="pc"><div class="rh"><span><b>${star} BornClock</b> · Free basic Kundali</span><span>bornclock.com/kundali</span></div></td></tr></thead>
+  <thead><tr><td class="pc"><div class="rh"><span><b>${star} BornClock</b> · Kundali</span><span>bornclock.com/kundali</span></div></td></tr></thead>
   <tfoot><tr><td class="pc"><div class="rf">BornClock · ${SITE_URL.replace('https://', '')} · Generated ${esc(generatedLabel)} · Calculations: Lahiri ayanamsa · For reflection, not certainty</div></td></tr></tfoot>
   <tbody><tr><td class="pc">
 
@@ -313,7 +313,7 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta =
 
   <div class="closing" data-testid="pdf-closing">
     <p class="brand">${star} BornClock — <a href="${SITE_URL}/kundali">bornclock.com/kundali</a></p>
-    <p>This is a free basic Kundali; calculations: Lahiri ayanamsa. How we check accuracy: <a href="${SITE_URL}/accuracy" data-testid="pdf-accuracy-link">bornclock.com/accuracy</a>.</p>
+    <p>Calculations: Lahiri ayanamsa. How we check accuracy: <a href="${SITE_URL}/accuracy" data-testid="pdf-accuracy-link">bornclock.com/accuracy</a>.</p>
     <p>A traditional Vedic reading for reflection — not a prediction of specific events. Your full interactive chart, Dasha deep-dive and written reading are at bornclock.com/kundali. Generated ${esc(generatedLabel)}.</p>
   </div>
 
