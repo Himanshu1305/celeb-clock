@@ -1,0 +1,261 @@
+{
+ "source": "pyswisseph 2.10.03, SE ephemeris files semo_18/sepl_18, swe.calc_ut(MOON, FLG_SWIEPH) = apparent geocentric longitude, true equinox of date; swe.deltat",
+ "generated": "2026-10-29",
+ "rows": [
+  {
+   "utc": "1950-11-20T20:33:26Z",
+   "moonApparentTropical": 16.7009598,
+   "deltaTSec": 29.28
+  },
+  {
+   "utc": "1952-04-18T01:59:46Z",
+   "moonApparentTropical": 307.2321141,
+   "deltaTSec": 29.81
+  },
+  {
+   "utc": "1954-07-14T03:56:38Z",
+   "moonApparentTropical": 269.0962299,
+   "deltaTSec": 30.85
+  },
+  {
+   "utc": "1956-07-28T17:29:31Z",
+   "moonApparentTropical": 10.7173983,
+   "deltaTSec": 31.52
+  },
+  {
+   "utc": "1958-04-04T20:00:54Z",
+   "moonApparentTropical": 204.1729469,
+   "deltaTSec": 32.31
+  },
+  {
+   "utc": "1960-09-21T12:07:46Z",
+   "moonApparentTropical": 184.967703,
+   "deltaTSec": 33.47
+  },
+  {
+   "utc": "1962-05-19T16:39:57Z",
+   "moonApparentTropical": 239.2660264,
+   "deltaTSec": 34.17
+  },
+  {
+   "utc": "1964-07-16T14:26:23Z",
+   "moonApparentTropical": 205.3258684,
+   "deltaTSec": 35.39
+  },
+  {
+   "utc": "1966-12-12T12:26:47Z",
+   "moonApparentTropical": 264.8881114,
+   "deltaTSec": 37.38
+  },
+  {
+   "utc": "1968-01-17T12:26:27Z",
+   "moonApparentTropical": 138.9244729,
+   "deltaTSec": 38.33
+  },
+  {
+   "utc": "1970-12-10T17:55:02Z",
+   "moonApparentTropical": 51.6582647,
+   "deltaTSec": 41.11
+  },
+  {
+   "utc": "1972-03-05T12:07:41Z",
+   "moonApparentTropical": 224.4019517,
+   "deltaTSec": 42.43
+  },
+  {
+   "utc": "1974-03-26T20:01:32Z",
+   "moonApparentTropical": 41.6297199,
+   "deltaTSec": 44.72
+  },
+  {
+   "utc": "1976-12-01T04:34:44Z",
+   "moonApparentTropical": 8.7586992,
+   "deltaTSec": 47.43
+  },
+  {
+   "utc": "1978-07-04T16:48:20Z",
+   "moonApparentTropical": 94.5897171,
+   "deltaTSec": 49.07
+  },
+  {
+   "utc": "1980-01-28T15:07:05Z",
+   "moonApparentTropical": 87.8950043,
+   "deltaTSec": 50.61
+  },
+  {
+   "utc": "1982-12-01T01:30:53Z",
+   "moonApparentTropical": 69.1959813,
+   "deltaTSec": 52.89
+  },
+  {
+   "utc": "1984-01-20T18:15:47Z",
+   "moonApparentTropical": 150.4248754,
+   "deltaTSec": 53.82
+  },
+  {
+   "utc": "1986-10-02T06:45:44Z",
+   "moonApparentTropical": 169.6702672,
+   "deltaTSec": 55.21
+  },
+  {
+   "utc": "1988-04-08T21:11:29Z",
+   "moonApparentTropical": 277.3447071,
+   "deltaTSec": 55.95
+  },
+  {
+   "utc": "1990-04-22T06:52:55Z",
+   "moonApparentTropical": 351.4978366,
+   "deltaTSec": 57.06
+  },
+  {
+   "utc": "1992-05-08T19:55:48Z",
+   "moonApparentTropical": 127.5662606,
+   "deltaTSec": 58.59
+  },
+  {
+   "utc": "1994-04-11T03:21:45Z",
+   "moonApparentTropical": 22.40695,
+   "deltaTSec": 60.21
+  },
+  {
+   "utc": "1996-11-03T16:18:28Z",
+   "moonApparentTropical": 135.3531164,
+   "deltaTSec": 62.19
+  },
+  {
+   "utc": "1998-08-13T00:57:22Z",
+   "moonApparentTropical": 26.3379024,
+   "deltaTSec": 63.29
+  },
+  {
+   "utc": "2000-03-03T14:59:32Z",
+   "moonApparentTropical": 313.0824497,
+   "deltaTSec": 63.88
+  },
+  {
+   "utc": "2002-12-22T20:24:47Z",
+   "moonApparentTropical": 127.56636,
+   "deltaTSec": 64.47
+  },
+  {
+   "utc": "2004-05-01T02:36:34Z",
+   "moonApparentTropical": 171.2126109,
+   "deltaTSec": 64.61
+  },
+  {
+   "utc": "2006-07-20T12:30:46Z",
+   "moonApparentTropical": 62.1586322,
+   "deltaTSec": 65.0
+  },
+  {
+   "utc": "2008-06-26T19:56:48Z",
+   "moonApparentTropical": 9.6719412,
+   "deltaTSec": 65.61
+  },
+  {
+   "utc": "2010-04-02T02:23:46Z",
+   "moonApparentTropical": 231.8928326,
+   "deltaTSec": 66.14
+  },
+  {
+   "utc": "2012-08-28T10:36:07Z",
+   "moonApparentTropical": 295.9428318,
+   "deltaTSec": 66.8
+  },
+  {
+   "utc": "2014-06-02T07:17:21Z",
+   "moonApparentTropical": 122.7692952,
+   "deltaTSec": 67.43
+  },
+  {
+   "utc": "2016-02-17T00:00:00Z",
+   "moonApparentTropical": 79.1152601,
+   "deltaTSec": 68.17
+  },
+  {
+   "utc": "2018-11-25T02:06:00Z",
+   "moonApparentTropical": 87.2827959,
+   "deltaTSec": 69.2
+  },
+  {
+   "utc": "2020-09-18T13:32:39Z",
+   "moonApparentTropical": 191.751775,
+   "deltaTSec": 69.37
+  },
+  {
+   "utc": "2022-01-23T10:49:19Z",
+   "moonApparentTropical": 187.0022164,
+   "deltaTSec": 69.29
+  },
+  {
+   "utc": "2024-01-02T05:46:45Z",
+   "moonApparentTropical": 170.6500366,
+   "deltaTSec": 69.1
+  },
+  {
+   "utc": "2026-04-09T15:11:49Z",
+   "moonApparentTropical": 283.4824644,
+   "deltaTSec": 68.87
+  },
+  {
+   "utc": "2028-06-20T12:57:47Z",
+   "moonApparentTropical": 61.4093543,
+   "deltaTSec": 68.91
+  },
+  {
+   "utc": "2030-05-09T11:48:49Z",
+   "moonApparentTropical": 124.5975033,
+   "deltaTSec": 69.36
+  },
+  {
+   "utc": "2032-01-05T10:41:22Z",
+   "moonApparentTropical": 189.1986907,
+   "deltaTSec": 69.76
+  },
+  {
+   "utc": "2034-11-16T15:06:07Z",
+   "moonApparentTropical": 295.2236796,
+   "deltaTSec": 70.48
+  },
+  {
+   "utc": "2036-07-24T04:04:37Z",
+   "moonApparentTropical": 132.403569,
+   "deltaTSec": 70.9
+  },
+  {
+   "utc": "2038-04-21T11:29:01Z",
+   "moonApparentTropical": 240.3464843,
+   "deltaTSec": 71.35
+  },
+  {
+   "utc": "2040-03-27T14:19:00Z",
+   "moonApparentTropical": 174.7932556,
+   "deltaTSec": 71.86
+  },
+  {
+   "utc": "2042-04-19T19:37:04Z",
+   "moonApparentTropical": 25.9450422,
+   "deltaTSec": 72.42
+  },
+  {
+   "utc": "2044-04-03T22:49:47Z",
+   "moonApparentTropical": 88.8773159,
+   "deltaTSec": 72.95
+  },
+  {
+   "utc": "2046-04-23T16:41:16Z",
+   "moonApparentTropical": 252.9333373,
+   "deltaTSec": 73.52
+  },
+  {
+   "utc": "2048-12-14T07:41:46Z",
+   "moonApparentTropical": 17.0129166,
+   "deltaTSec": 74.28
+  },
+  {
+   "utc": "2050-10-10T13:21:38Z",
+   "moonApparentTropical": 139.5449029,
+   "deltaTSec": 74.81
+  }
+ ]
+}
