@@ -11,6 +11,7 @@ import { rashifalPeriodTemplate } from './kinds/rashifalPeriod';
 import { rashifalFromSky, rashifalHiFromSky } from './kinds/rashifalDaily';
 import { horoscopeFromSky } from './kinds/westernDaily';
 import { panchangTemplate, renderPanchangHiEntry, type PanchangDayData } from './kinds/panchangTemplate';
+import { tomorrowOf } from './kinds/tomorrow';
 
 export type DailyTemplate = (dateIST: string, slug: string, data: unknown) => DailyEntry;
 
@@ -21,6 +22,9 @@ export const DAILY_TEMPLATES: Record<string, DailyTemplate> = {
   'rashifal-month': rashifalPeriodTemplate('month'),
   'rashifal-year': rashifalPeriodTemplate('year'),
   'horoscope': horoscopeFromSky,
+  // Batch 10 — tomorrow views (the Worker passes tomorrow's India date; see DailyPageDef.offsetDays).
+  'rashifal-tomorrow': tomorrowOf(rashifalFromSky),
+  'horoscope-tomorrow': tomorrowOf(horoscopeFromSky),
   'panchang': panchangTemplate('panchang'),
   'rahu-kaal': panchangTemplate('rahu-kaal'),
   'choghadiya': panchangTemplate('choghadiya'),

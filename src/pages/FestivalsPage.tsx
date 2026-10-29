@@ -77,7 +77,7 @@ export default function FestivalsPage() {
       testId="festivals"
       seo={<SEO title={title} description={description} canonicalUrl={yearParam ? `/festivals/${year}` : '/festivals'} ogImage="https://bornclock.com/og/vedic.png" />}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: `Festivals ${year}` }}
-      footer={{ tagline: 'Computed Hindu festival & vrat calendar.', nav: [{ label: 'Daily Panchang', to: '/panchang' }, { label: 'Muhurat Finder', to: '/muhurat' }, { label: 'Rashifal', to: '/rashifal' }], note: 'Dates are computed from real sidereal positions; local Panchangs may differ by a day. Not a substitute for a priest’s muhurta.' }}
+      footer={{ tagline: 'Computed Hindu festival & vrat calendar.', nav: [{ label: 'Daily Panchang', to: '/panchang' }, { label: 'Muhurat Finder', to: '/muhurat' }, { label: 'Hindu birthday (Janma Tithi)', to: '/janma-tithi-calculator' }, { label: 'Rashifal', to: '/rashifal' }], note: 'Dates are computed from real sidereal positions; local Panchangs may differ by a day. Not a substitute for a priest’s muhurta.' }}
       eyebrow="Panchang · festivals & vrats"
       h1={`Hindu Festival & Vrat Calendar ${year}`}
       lead="The major Hindu festivals plus every Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and Sankranti for the year — with exact dates computed from the real sky, not a fixed table."

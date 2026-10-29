@@ -334,3 +334,55 @@ export const HOUSE_MEANINGS: Record<number, string> = {
   8: 'An 8 home is read as a place of ambition and material focus — the tradition asks for balance so work does not crowd out rest.',
   9: 'A 9 home is read as open and generous — a place that welcomes many people and a broad, humane atmosphere.',
 };
+
+// ── Vehicle number (Batch 10, /vehicle-number-numerology) ─────────────────────
+// Same digit-sum pattern as the mobile number. Three methods are in common use, so all
+// three are shown, each labelled (sources opened 29 Oct 2026):
+//   • All digits — "Add all the digits present on the number plate of your vehicle and
+//     reduce it to a single digit" (astroyogi.com/blog/lucky-vehicle-number-numerology.aspx);
+//     garwarehitechfilms.com (lucky car number as per numerology in India) also notes
+//     "Most people only calculate the digits in the registration number". → our main number.
+//   • Last four digits — the registration number proper (the final block of an Indian
+//     plate); astroyogi's own worked example sums only that block (DL-12-XY-1234 → 1).
+//   • Full plate, Chaldean — letters take their Chaldean values (1–8, no 9) and are added
+//     to the digits, state code included (astromitra.com lucky vehicle number calculator:
+//     "MH 12 PK 4521" → M4 H5 P8 K2 + 1,2,4,5,2,1 = 34 → 7).
+export interface VehicleNumberResult {
+  plate: string;
+  allDigits: DigitStringResult;
+  /** The last run of digits on the plate (usually 4), when the plate has one. */
+  lastBlock: DigitStringResult | null;
+  /** Letters (Chaldean values) + digits. */
+  fullPlate: { total: number; root: number; letters: Array<{ ch: string; value: number }>; digits: number[] };
+}
+
+export function vehicleNumber(plate: string): VehicleNumberResult {
+  const clean = plate.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const allDigits = { ...sumDigitsOf(clean), input: plate.trim() };
+  const blocks = clean.match(/\d+/g) ?? [];
+  const last = blocks.length ? blocks[blocks.length - 1] : '';
+  const lastBlock = last ? sumDigitsOf(last) : null;
+  const letters = chaldeanName(clean.replace(/\d/g, '')).letters.map(l => ({ ch: l.ch.toUpperCase(), value: l.value }));
+  const digits = clean.replace(/\D/g, '').split('').map(Number);
+  const total = letters.reduce((s, l) => s + l.value, 0) + digits.reduce((s, d) => s + d, 0);
+  return { plate: plate.trim(), allDigits, lastBlock, fullPlate: { total, root: total === 0 ? 0 : reduceToSingleDigit(total), letters, digits } };
+}
+
+/** How a vehicle's number sits with the owner's Mulank (birth day number), by the
+ *  same friendly-number table the name-correction tool uses (areNumbersHarmonious). */
+export function vehicleOwnerHarmony(vehicleRoot: number, mulankNumber: number): 'same' | 'harmonious' | 'neutral' {
+  if (vehicleRoot === mulankNumber) return 'same';
+  return areNumbersHarmonious(vehicleRoot, mulankNumber) ? 'harmonious' : 'neutral';
+}
+
+export const VEHICLE_MEANINGS: Record<number, string> = {
+  1: 'Read as a self-directed, “first off the line” number — suits a vehicle you drive yourself to work and new ventures.',
+  2: 'Read as gentle and companionable — a calm, shared-use family number.',
+  3: 'Read as cheerful and sociable — trips with friends, outings and travel for learning.',
+  4: 'Read as steady but demanding — the tradition asks for regular servicing and careful, rule-following driving.',
+  5: 'Read as the travel and movement number — quick, flexible and always on the go.',
+  6: 'Read as the comfortable family number — care, home and pleasant journeys together.',
+  7: 'Read as quiet and reflective — long solo drives and journeys with a purpose.',
+  8: 'Read as hard-working and disciplined — the tradition links it to Saturn and asks for patience on the road.',
+  9: 'Read as energetic and bold — the tradition asks you to keep that energy for the destination, not the speed.',
+};

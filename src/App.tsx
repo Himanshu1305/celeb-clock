@@ -211,6 +211,13 @@ const ChaldeanNumerologyPage = lazyWithReload(() => import('@/pages/ChaldeanNume
 const NameCorrectionPage = lazyWithReload(() => import('@/pages/NameCorrectionPage'));
 const BusinessNameNumerologyPage = lazyWithReload(() => import('@/pages/BusinessNameNumerologyPage'));
 const MobileNumberNumerologyPage = lazyWithReload(() => import('@/pages/MobileNumberNumerologyPage'));
+// Batch 10 tools
+const VehicleNumberNumerologyPage = lazyWithReload(() => import('@/pages/VehicleNumberNumerologyPage'));
+const LoShuGridPage = lazyWithReload(() => import('@/pages/LoShuGridPage'));
+const KuaNumberPage = lazyWithReload(() => import('@/pages/KuaNumberPage'));
+const LoveCalculatorPage = lazyWithReload(() => import('@/pages/LoveCalculatorPage'));
+const JanmaTithiPage = lazyWithReload(() => import('@/pages/JanmaTithiPage'));
+const MarriageBiodataPage = lazyWithReload(() => import('@/pages/MarriageBiodataPage'));
 const HouseNumberNumerologyPage = lazyWithReload(() => import('@/pages/HouseNumberNumerologyPage'));
 const DoshaCheckPage = lazyWithReload(() => import('@/pages/DoshaCheckPage'));
 const LifeReportPage = lazyWithReload(() => import('@/pages/LifeReportPage'));
@@ -307,6 +314,7 @@ const App = () => (
               <Route path="/zodiac" element={<Zodiac />} />
               <Route path="/zodiac/:sign" element={<ZodiacSign />} />
               <Route path="/zodiac/:sign/today" element={<ZodiacToday />} />
+              <Route path="/zodiac/:sign/tomorrow" element={<ZodiacToday when="tomorrow" />} />
               <Route path="/birthstone" element={<Birthstone />} />
               <Route path="/birthstone/:month" element={<BirthstonePage />} />
               <Route path="/life-expectancy" element={<LifeExpectancy />} />
@@ -502,6 +510,13 @@ const App = () => (
               <Route path="/name-correction" element={<NameCorrectionPage />} />
               <Route path="/business-name-numerology" element={<BusinessNameNumerologyPage />} />
               <Route path="/mobile-number-numerology" element={<MobileNumberNumerologyPage />} />
+              {/* Batch 10 tools */}
+              <Route path="/vehicle-number-numerology" element={<VehicleNumberNumerologyPage />} />
+              <Route path="/lo-shu-grid-calculator" element={<LoShuGridPage />} />
+              <Route path="/kua-number-calculator" element={<KuaNumberPage />} />
+              <Route path="/love-calculator" element={<LoveCalculatorPage />} />
+              <Route path="/janma-tithi-calculator" element={<JanmaTithiPage />} />
+              <Route path="/marriage-biodata-maker" element={<MarriageBiodataPage />} />
               <Route path="/house-number-numerology" element={<HouseNumberNumerologyPage />} />
               <Route path="/pitra-dosha" element={<DoshaCheckPage kind="pitra" />} />
               <Route path="/mool-dosha" element={<DoshaCheckPage kind="mool" />} />

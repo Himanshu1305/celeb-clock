@@ -1,10 +1,10 @@
 // Worker helper for daily-changing pages (see src/lib/daily/index.ts).
 // Given a prerendered HTML shell for a registered daily route, fetch today's precomputed
 // entry (India date) from the static assets and inject it. No engine runs here.
-import { matchDailyRoute, dailyJsonPath, dailyFilePath, dailyFileKey } from '../src/lib/daily/registry.js';
+import { matchDailyRoute, dailyJsonPath, dailyFilePath, dailyFileKey, dailyPageDate } from '../src/lib/daily/registry.js';
 import { entryFromMonthFile } from '../src/lib/daily/templates.js';
 import { injectDailyHtml } from '../src/lib/daily/inject.js';
-import { istDateISO, monthKey, msUntilNextIstMidnight } from '../src/lib/daily/dates.js';
+import { monthKey, msUntilNextIstMidnight } from '../src/lib/daily/dates.js';
 import type { DailyMonthFile } from '../src/lib/daily/types.js';
 
 type Assets = { fetch: (request: Request) => Promise<Response> };
@@ -40,7 +40,8 @@ export interface DailyInjection {
 export async function applyDailyContent(pathname: string, html: string, assets: Assets, origin: string, now: Date = new Date()): Promise<DailyInjection | null> {
   const m = matchDailyRoute(pathname);
   if (!m) return null;
-  const date = istDateISO(now);
+  // The page's date: today (India), or tomorrow for the Batch 10 "tomorrow" views.
+  const date = dailyPageDate(m.def, now);
   const month = monthKey(date);
   // Compact data file (data + render kinds), else the page's own finished-entries file.
   // (Period kinds — weekly / monthly / yearly — read the file of the period containing today.)

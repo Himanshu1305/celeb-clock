@@ -17,6 +17,11 @@ export default function RashifalSign() {
   const period = (periodParam ?? 'today') as RashifalPeriod;
   const periodValid = RASHIFAL_PERIODS.includes(period);
 
+  // Batch 10: tomorrow's rashifal (next India date) — same mechanism, its own page.
+  if (rashi && periodParam === 'tomorrow') {
+    return <RashifalDailyView rashi={rashi} when="tomorrow" />;
+  }
+
   // Unknown period on a valid rashi → canonicalise to the daily page.
   if (rashi && periodParam && !periodValid) {
     return <Navigate to={`/rashifal/${rashi.slug}/today`} replace />;

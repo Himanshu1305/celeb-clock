@@ -242,6 +242,8 @@ export const STATIC_ROUTES = [
   ...ZODIAC_SIGNS.map(s => `/zodiac/${s}`),
   // Batch 7 (W2): daily Western horoscope — content injected daily by the Worker (src/lib/daily).
   ...ZODIAC_SIGNS.map(s => `/zodiac/${s}/today`),
+  // Batch 10: tomorrow's Western horoscope (daily kind 'horoscope-tomorrow').
+  ...ZODIAC_SIGNS.map(s => `/zodiac/${s}/tomorrow`),
   '/birthstone',
   ...BIRTHSTONE_MONTHS.map(m => `/birthstone/${m}`),
   '/life-expectancy',
@@ -322,7 +324,8 @@ export const STATIC_ROUTES = [
   ...VEDIC_RASHIS.map(r => `/vedic-zodiac/${r}`),
   '/western-birth-chart',
   '/rashifal',
-  ...VEDIC_RASHIS.flatMap(r => ['today', 'week', 'month', 'year'].map(p => `/rashifal/${r}/${p}`)),
+  // Batch 10 adds 'tomorrow' (daily kind 'rashifal-tomorrow').
+  ...VEDIC_RASHIS.flatMap(r => ['today', 'tomorrow', 'week', 'month', 'year'].map(p => `/rashifal/${r}/${p}`)),
   '/nakshatra',
   ...['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati'].map(n => `/nakshatra/${n}`),
   '/transit',
@@ -354,6 +357,13 @@ export const STATIC_ROUTES = [
   '/name-correction',
   '/business-name-numerology',
   '/mobile-number-numerology',
+  // Batch 10 tools
+  '/vehicle-number-numerology',
+  '/lo-shu-grid-calculator',
+  '/kua-number-calculator',
+  '/love-calculator',
+  '/janma-tithi-calculator',
+  '/marriage-biodata-maker',
   '/house-number-numerology',
   '/pitra-dosha',
   '/mool-dosha',

@@ -7,7 +7,8 @@
 import { Link } from 'react-router-dom';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { RASHIS, RASHIFAL_PERIODS, type RashifalPeriod, type RashiMeta } from '@/lib/vedic/rashifal';
+import { RASHIS, type RashifalPeriod, type RashiMeta } from '@/lib/vedic/rashifal';
+import { RASHIFAL_TABS } from './RashifalDailyView';
 import { useDailyEntry } from '@/lib/daily/useDailyEntry';
 import { DailyBody, DailyDate, DailyH1, DailyJsonLd } from '@/lib/daily/DailyParts';
 import { RASHI_SLUGS, RASHI_SLUGS_HI } from '@/lib/daily/registry';
@@ -42,10 +43,10 @@ export function RashifalPeriodView({ rashi, period }: { rashi: RashiMeta; period
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
           <div className="flex flex-wrap gap-2 mb-4" data-testid="rashifal-periods">
-            {RASHIFAL_PERIODS.map(p => (
-              <Link key={p} to={`/rashifal/${rashi.slug}/${p}`}
-                className={`px-3 py-1.5 rounded-lg border text-sm font-medium ${p === period ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-foreground hover:bg-primary/5'}`}>
-                {PERIOD_TAB[p]}
+            {RASHIFAL_TABS.map(p => (
+              <Link key={p.key} to={`/rashifal/${rashi.slug}/${p.key}`}
+                className={`px-3 py-1.5 rounded-lg border text-sm font-medium ${p.key === period ? 'bg-primary text-primary-foreground border-primary' : 'border-border text-foreground hover:bg-primary/5'}`}>
+                {p.label}
               </Link>
             ))}
             <Link to={`/hi/rashifal/${RASHI_SLUGS_HI[idx]}`} lang="hi" className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-primary/5">हिंदी में (आज)</Link>
