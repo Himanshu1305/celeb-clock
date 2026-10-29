@@ -122,7 +122,7 @@ describe('Yogini Dasha — panel vs Swiss Ephemeris reference and PyJHora', () =
       // PyJHora: same first Yogini and sequence; first start within 3 days. PyJHora uses Swiss Ephemeris'
       // TRUE Lahiri (with nutation) and a 365.256-day year; we follow Drik's mean Lahiri + 24.4″
       // (ayanamsaDrik.test.ts). That ~40″ Moon difference moves an 8-year Yogini's start by up to ~2.6 days.
-      const p = (pj as Record<string, { firstYogini: string; firstStartLocal: string; mahaStarts: [string, string][] }>)[r.id];
+      const p = (pj as unknown as Record<string, { firstYogini: string; firstStartLocal: string; mahaStarts: [string, string][] }>)[r.id];
       expect(y.startYogini).toBe(p.firstYogini);
       const [date, hrs] = p.firstStartLocal.split(' ');
       const pjUtc = Date.parse(`${date}T00:00:00Z`) + parseFloat(hrs) * 3600000 - PANEL[r.id].timezoneOffset * 3600000;

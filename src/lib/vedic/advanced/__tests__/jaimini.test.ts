@@ -21,7 +21,7 @@ import { jaiminiHeadline, karakamshaLine, currentCharaPeriod } from '../advanced
 import { PANEL } from './panel';
 
 const R = ref as unknown as Record<string, { jaimini: { karakas: Record<string, string>; karakamshaSign: number } }>;
-const PJ = (pj as { charts: Record<string, Array<[number, number, string]>> }).charts;
+const PJ = (pj as unknown as { charts: Record<string, Array<[number, number, string]>> }).charts;
 
 describe('Chara karakas (7-karaka, Rahu excluded) vs Swiss Ephemeris — 5 charts', () => {
   for (const id of ['P1', 'P2', 'P3', 'P9', 'CH']) {
