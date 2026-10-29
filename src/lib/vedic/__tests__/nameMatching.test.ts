@@ -26,6 +26,14 @@ describe('name → nakshatra pada (English spellings)', () => {
     expect(first(name)).toBe(expected);
   });
 
+  it('ai/au names use the nearest table vowel (गौ → गो Shatabhisha 1, वै → वे Mrigashira 1; hindutone.com, opened 29 Oct 2026)', () => {
+    expect(first('Gaurav')).toBe('Shatabhisha 1');
+    expect(first('गौरव')).toBe('Shatabhisha 1');
+    expect(first('Vaibhav')).toBe('Mrigashira 1');
+    expect(first('वैभव')).toBe('Mrigashira 1');
+    expect(first('Chaitanya')).toBe('Ashwini 2');
+  });
+
   it('ambiguous Roman spellings list every reading (Dev = दे Revati 1 or डे Ashlesha 3)', () => {
     expect(all('Dev')).toEqual(['Revati 1', 'Ashlesha 3']);
     expect(all('Tara')).toEqual(['Swati 4', 'Purva Phalguni 2']);

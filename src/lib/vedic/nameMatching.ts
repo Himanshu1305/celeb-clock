@@ -75,6 +75,15 @@ function padasForKey(key: string): NameStar[] {
   const out: NameStar[] = [];
   const [c, v] = key.split('|');
   for (const { s, key: k } of PADA_KEYS) if (k === key) out.push({ ...s, via: 'exact' });
+  // The 108-pada table has no ऐ/औ syllables: names in "ai"/"au" (वैभव, गौरव, कैलाश) are
+  // read with the nearest table vowel, e (वे) and o (गो). Checked against hindutone.com
+  // (opened 29 Oct 2026): "गौ … falls in Shatabhisha nakshatra, pada 1, within Kumbha"
+  // (गो = Shatabhisha 1) and Vaibhavraj → "Mrigashira nakshatra, Vrishabha rashi" (वे).
+  // Bare vowels ऐ/औ (ऐश्वर्या) are unsourced and still go to the syllable picker.
+  const near = v === 'ai' ? 'e' : v === 'au' ? 'o' : '';
+  if (!out.length && near && c) {
+    for (const { s, key: k } of PADA_KEYS) if (k === `${c}|${near}`) out.push({ ...s, via: 'firstLetter' });
+  }
   if (!out.length && c) {
     for (const { s, key: k } of PADA_KEYS) {
       if (isBare(s.akshara.hi) && k === `${c}|a`) out.push({ ...s, via: 'firstLetter' });
