@@ -148,6 +148,7 @@ export default function KundaliMatchPage() {
           description="Free Kundali matching by the 36-point Ashtakoota (Guna Milan) system — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi, with Nadi & Bhakoot dosha checks."
           canonicalUrl="/kundali-match"
           ogType="website"
+          hreflang={[{ lang: 'en', url: 'https://bornclock.com/kundali-match/' }, { lang: 'hi', url: 'https://bornclock.com/hi/kundli-milan/' }]}
         />
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali Matching', edition: 'Ashtakoota · 36-point Guna Milan' }}
@@ -172,6 +173,11 @@ export default function KundaliMatchPage() {
           {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts; AstroSage values entered 17 Oct 2026). */}
           <TrustStrip claim="The classical 36-point compatibility score (Ashtakoota) — all eight parts shown and added up in front of you. In our tests (October 2026), the total matched AstroSage for all 7 test couples." href="/accuracy" linkLabel="How we check accuracy" />
           <KundaliTabs active="match" />
+          {/* Batch 9b: the name-only (approximate) matcher and the Hindi version. */}
+          <p data-testid="kmatch-alt-links" className="subtle" style={{ marginTop: 8 }}>
+            No birth time? <Link to="/kundli-milan-by-name" className="textlink">Kundli milan by name</Link> gives an approximate score from the first syllable of each name.
+            {' '}हिंदी में: <Link to="/hi/kundli-milan" className="textlink" lang="hi">कुंडली मिलान</Link> · <Link to="/hi/naam-se-kundli-milan" className="textlink" lang="hi">नाम से कुंडली मिलान</Link>
+          </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 print:hidden" style={{ marginTop: 16 }}>
           {/* Person A — saved profile if present, else a form */}

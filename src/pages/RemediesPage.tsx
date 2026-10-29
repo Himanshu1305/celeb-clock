@@ -65,7 +65,7 @@ export default function RemediesPage({ lang = 'en' }: { lang?: Lang }) {
         seo={<SEO title={title} description={description} canonicalUrl={hubPath} ogImage="https://bornclock.com/og/vedic.png"
           hreflang={[{ lang: 'en', url: `${SITE}/remedies/` }, { lang: 'hi', url: `${SITE}/hi/upay/` }]} />}
         breadcrumb={{ trail: [{ label: lang === 'hi' ? 'वैदिक ज्योतिष' : 'Vedic Astrology', to: '/vedic-astrology' }], current: lang === 'hi' ? 'उपाय' : 'Remedies' }}
-        footer={{ tagline: lang === 'hi' ? 'शांत, स्रोत-सहित उपाय।' : 'Calm, sourced remedies.', nav: [{ label: lang === 'hi' ? 'निःशुल्क कुंडली' : 'Free Kundli', to: '/kundali' }, { label: lang === 'hi' ? 'कुंडली मिलान' : 'Kundali Match', to: '/kundali-match' }, { label: lang === 'hi' ? 'रत्न' : 'Gemstones', to: '/gemstones' }] }}
+        footer={{ tagline: lang === 'hi' ? 'शांत, स्रोत-सहित उपाय।' : 'Calm, sourced remedies.', nav: [{ label: lang === 'hi' ? 'निःशुल्क कुंडली' : 'Free Kundli', to: '/kundali' }, { label: lang === 'hi' ? 'कुंडली मिलान' : 'Kundali Match', to: lang === 'hi' ? '/hi/kundli-milan' : '/kundali-match' }, { label: lang === 'hi' ? 'रत्न' : 'Gemstones', to: '/gemstones' }] }}
         eyebrow={lang === 'hi' ? 'उपाय' : 'Remedies'}
         h1={lang === 'hi' ? 'ज्योतिषीय उपाय — सरल, शांत और स्रोत-सहित' : 'Vedic remedies — plain, calm and sourced'}
         lead={lang === 'hi'

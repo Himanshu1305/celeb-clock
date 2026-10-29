@@ -188,6 +188,9 @@ const BabyNamesPage = lazyWithReload(() => import('@/pages/BabyNamesPage'));
 const BabyNamesNakshatraPage = lazyWithReload(() => import('@/pages/BabyNamesNakshatraPage'));
 const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
 const HindiPanchangPage = lazyWithReload(() => import('@/pages/hi/PanchangPage'));
+// Batch 9b: Hindi Kundli milan + Kundli milan by name (English + Hindi).
+const HindiKundliMilanPage = lazyWithReload(() => import('@/pages/hi/KundliMilanPage'));
+const KundliMilanByNamePage = lazyWithReload(() => import('@/pages/KundliMilanByNamePage'));
 const RashifalIndex = lazyWithReload(() => import('@/pages/RashifalIndex'));
 const RashifalSign = lazyWithReload(() => import('@/pages/RashifalSign'));
 const NakshatraIndex = lazyWithReload(() => import('@/pages/NakshatraIndex'));
@@ -446,6 +449,9 @@ const App = () => (
               <Route path="/for-business" element={<ForBusinessPage />} />
               <Route path="/kundali" element={<KundaliPage />} />
               <Route path="/kundali-match" element={<KundaliMatchPage />} />
+              <Route path="/kundli-milan-by-name" element={<KundliMilanByNamePage lang="en" />} />
+              <Route path="/hi/kundli-milan" element={<HindiKundliMilanPage />} />
+              <Route path="/hi/naam-se-kundli-milan" element={<KundliMilanByNamePage lang="hi" />} />
               <Route path="/astrologer" element={<AstrologerPage />} />
               <Route path="/sade-sati" element={<SadeSatiPage />} />
               <Route path="/manglik" element={<ManglikPage />} />
