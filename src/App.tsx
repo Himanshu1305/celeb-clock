@@ -232,6 +232,7 @@ const BornOnIndiaIndex = lazyWithReload(() => import('@/pages/BornOnIndiaIndex')
 const AnswersIndex = lazyWithReload(() => import('@/pages/AnswersIndex'));
 import { AdminRoute } from "@/components/AdminRoute";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { HtmlLang } from "@/components/HtmlLang";
 import { CurrencyAdminToggle } from "@/components/CurrencyAdminToggle";
 import { BirthdayDiscountBanner } from "@/components/BirthdayDiscountBanner";
 import { MissingStateModal } from "@/components/MissingStateModal";
@@ -254,6 +255,7 @@ const App = () => (
         <BirthDateProvider>
           <BrowserRouter>
             <ScrollToTop />
+            <HtmlLang />
             <CurrencyAdminToggle />
             <BirthdayDiscountBanner />
             {/* One-time GST place-of-supply capture. Self-gates: renders only for a

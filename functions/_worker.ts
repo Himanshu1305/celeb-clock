@@ -47,6 +47,7 @@ import { INDIA_BORNON_SLUGS } from '../src/lib/seo/indiaBornOnSlugs.js';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../src/lib/seo/panchangSlugs.js';
 import { MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
 import { matchDailyRoute } from '../src/lib/daily/registry.js';
+import { pageLangForPath, withHtmlLang } from '../src/lib/seo/pageLang.js';
 import { applyDailyContent } from './daily.js';
 
 type Env = {
@@ -367,6 +368,15 @@ const worker = {
           headers.delete('Content-Length');
           headers.delete('ETag');
           if (daily) headers.set('X-Daily-Date', daily.date);
+        }
+        // Batch 10: Hindi pages (/hi/*, *-hindi) declare <html lang="hi">. Prerendered pages
+        // already carry it; this also covers the SPA shell served for any Hindi URL that has
+        // no prerendered file (and daily-injected shells). Same byte length → no
+        // Content-Length change, but drop it anyway in case the source tag differed.
+        if (htmlBody !== null && pageLangForPath(pathname) === 'hi') {
+          const text = typeof htmlBody === 'string' ? htmlBody : await new Response(htmlBody).text();
+          htmlBody = withHtmlLang(text, 'hi');
+          headers.delete('Content-Length');
         }
         // Fix 3: a validated-invalid address returns a real 404 (noindex — a genuine
         // not-found state, allowed by Rule 6) while still serving the styled page body.

@@ -342,6 +342,9 @@ async function prerenderRoute(page, baseUrl, route) {
       html = html.replace('</head>', `<script type="application/ld+json">${wp}</script></head>`);
     }
 
+    // ── Batch 10: <html lang> by route ("hi" for /hi/* and *-hindi) ───────────
+    html = withHtmlLang(html, pageLangForPath(route));
+
     // ── One canonical / og:url / twitter:url; identical JSON-LD blocks once ─────
     html = finalizeHead(html, route).html;
 
