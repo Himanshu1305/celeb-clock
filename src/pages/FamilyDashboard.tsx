@@ -47,6 +47,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, ReferenceLine,
 } from 'recharts';
 import { supabase } from '@/integrations/supabase/client';
+import type { TablesInsert } from '@/integrations/supabase/types';
 import { ToolLayout, UtilityLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SEO } from '@/components/SEO';
@@ -194,7 +195,9 @@ function FamilyDashboardInner() {
     }
 
     const doInsert = async (payload: Record<string, unknown>) => {
-      return supabase.from('family_members').insert(payload).select().single();
+      // Payload is built field-by-field above (relationship only when chosen); the cast only
+      // tells TS it matches the generated family_members Insert row.
+      return supabase.from('family_members').insert(payload as TablesInsert<'family_members'>).select().single();
     };
 
     try {
@@ -267,7 +270,9 @@ function FamilyDashboardInner() {
         remind_days_before: 3,
         notify_email: user.email || undefined,
       },
-      user.id,
+      // Was `user.id` (a string) passed where addReminder expects { email, consent }: at runtime
+      // that read as no email + consent false. `{}` keeps exactly that behaviour, type-safely.
+      {},
     );
     setRemindedIds(prev => new Set(prev).add(m.id));
   }

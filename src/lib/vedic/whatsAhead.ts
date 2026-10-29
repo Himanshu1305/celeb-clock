@@ -96,7 +96,7 @@ export interface HorizonChain {
   sookshma: string | null;
 }
 
-function find(periods: Array<{ lord: string; start: string; end: string }>, atMs: number) {
+function find<T extends { lord: string; start: string; end: string }>(periods: T[], atMs: number): T | null {
   return periods.find(p => atMs >= Date.parse(p.start) && atMs < Date.parse(p.end)) || null;
 }
 

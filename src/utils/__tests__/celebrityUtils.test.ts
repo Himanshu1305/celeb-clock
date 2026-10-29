@@ -299,19 +299,19 @@ describe('indianCelebrities data integrity', () => {
   it('TC-DATA-01: at least 500 celebrities', () => expect(indianCelebrities.length).toBeGreaterThanOrEqual(500));
   it('TC-DATA-02: every celebrity has name', () => {
     indianCelebrities.forEach((c, i) => {
-      expect((c as Record<string,unknown>).name, `Index ${i}`).toBeTruthy();
+      expect((c as unknown as Record<string,unknown>).name, `Index ${i}`).toBeTruthy();
     });
   });
   it('TC-DATA-03: no name is "undefined" or "null"', () => {
     indianCelebrities.forEach(c => {
-      const name = String((c as Record<string,unknown>).name);
+      const name = String((c as unknown as Record<string,unknown>).name);
       expect(name).not.toBe('undefined');
       expect(name).not.toBe('null');
     });
   });
   it('TC-DATA-04: ≥90% have date info', () => {
     const withDate = indianCelebrities.filter(c => {
-      const r = c as Record<string,unknown>;
+      const r = c as unknown as Record<string,unknown>;
       return r.birth_year || r.birthYear || r.dob || r.date_of_birth || r.birth_date;
     });
     expect(withDate.length / indianCelebrities.length).toBeGreaterThan(0.9);
@@ -322,7 +322,7 @@ describe('indianCelebrities data integrity', () => {
   });
   it('TC-DATA-06: year-only celebrities NEVER get fake January 1', () => {
     indianCelebrities.forEach(c => {
-      const dob = parseCelebrityDOB(c as Record<string,unknown>);
+      const dob = parseCelebrityDOB(c as unknown as Record<string,unknown>);
       if (dob && !dob.isFullDate) {
         const display = formatDOBDisplay(dob);
         expect(display).not.toMatch(/January\s+1[^0-9]/);
@@ -331,7 +331,7 @@ describe('indianCelebrities data integrity', () => {
   });
   it('TC-DATA-07: all zodiac calculations valid for sample', () => {
     indianCelebrities.slice(0, 50).forEach(c => {
-      const dob = parseCelebrityDOB(c as Record<string,unknown>);
+      const dob = parseCelebrityDOB(c as unknown as Record<string,unknown>);
       if (dob?.isFullDate) {
         const z = calculateWesternZodiac(dob.day, dob.month);
         expect(z.sign.length).toBeGreaterThan(0);

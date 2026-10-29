@@ -62,7 +62,7 @@ async function handler(request: Request): Promise<Response> {
 
   const pdf = await renderPdfFromHtml(html, invoiceNo);
   if (pdf) {
-    return new Response(pdf, {
+    return new Response(pdf as unknown as BodyInit, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

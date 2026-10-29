@@ -58,6 +58,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Type check (src + api + functions + vite config; any error stops the staging deploy)
+        # `npx tsc --noEmit -p .` used to check zero files (tsconfig.json had `"files": []`).
+        # tsconfig.json now includes src/, api/ and functions/, so this is a real check.
+        run: npm run typecheck
+
       - name: Unit + golden-chart tests (any failure stops the staging deploy)
         # Includes the golden astrology reference suite (src/lib/vedic/__tests__/goldenCharts.test.ts:
         # 20 births + 7 AstroSage couples vs Swiss Ephemeris / AstroSage) and the Drik Panchang /
@@ -127,6 +132,11 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Type check (src + api + functions + vite config; any error stops the production deploy)
+        # `npx tsc --noEmit -p .` used to check zero files (tsconfig.json had `"files": []`).
+        # tsconfig.json now includes src/, api/ and functions/, so this is a real check.
+        run: npm run typecheck
 
       - name: Unit + golden-chart tests (any failure stops the production deploy)
         # Includes the golden astrology reference suite (src/lib/vedic/__tests__/goldenCharts.test.ts:

@@ -9,6 +9,7 @@
     "build:app": "vite build && tsx scripts/gen-daily.mts && tsx scripts/gen-celebrity-slugs.mts && tsx scripts/generate-og-cards.mts",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p . && tsc --noEmit -p tsconfig.node.json",
     "preview": "vite preview",
     "import-celebrities": "node scripts/import-celebrity-sitelinks.mjs",
     "e2e": "playwright test",

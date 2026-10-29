@@ -101,7 +101,7 @@ describe('buildChatReply — timing accuracy retry loop (Part F rigor)', () => {
     const gen = async () => good;
     const out = await buildChatReply(f, [], 'when will I get rich', gen);
     expect(out.reply).toBe(good);
-    expect(out.timingChecked).toBe(true);
+    expect((out as { timingChecked?: boolean }).timingChecked).toBe(true);
     expect(out.sanitized).toBeFalsy();
   });
 

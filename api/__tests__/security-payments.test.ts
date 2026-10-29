@@ -25,7 +25,7 @@ process.env.RESEND_API_KEY = 're_test';
 // ── Razorpay / Resend / Gemini stub ────────────────────────────────────────────
 const rzp = { orders: {} as Record<string, any>, subscriptions: {} as Record<string, any>, payments: {} as Record<string, any> };
 const fetchCalls: string[] = [];
-const fetchStub = vi.fn(async (url: string) => {
+const fetchStub = vi.fn(async (url: string, _init?: any) => {
   fetchCalls.push(String(url));
   const m = String(url).match(/api\.razorpay\.com\/v1\/(orders|subscriptions|payments)\/([^/?]+)/);
   if (m) {

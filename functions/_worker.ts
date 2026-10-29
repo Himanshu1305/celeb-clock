@@ -1,3 +1,5 @@
+// Cloudflare Workers runtime global (no @cloudflare/workers-types installed); type-only, emits nothing.
+declare const HTMLRewriter: any;
 import { POST as createOrder }        from '../api/create-order.js';
 import { POST as createSubscription }  from '../api/create-subscription.js';
 import { GET  as getCredits }          from '../api/get-credits.js';

@@ -23,7 +23,9 @@ export function buildLongevityBlueprintHtml(
   opts: BlueprintHtmlOptions = {},
 ): string {
   const { personName, profileName, userSelectedHabits = [] } = opts;
-    const quiz = longevityResult.quizSnapshot;
+    // `dob` is not part of HealthQuizData and nothing sets it today, so the DOB line / countdown
+    // branches below stay inactive; typed as optional to keep that exact behaviour.
+    const quiz = longevityResult.quizSnapshot as LongevityResult['quizSnapshot'] & { dob?: string };
     const name = personName || quiz?.name || profileName || 'You';
     const forecast = Number(longevityResult.totalForecast || 0).toFixed(1);
     const currentAge = Number(longevityResult.currentAge || 0);

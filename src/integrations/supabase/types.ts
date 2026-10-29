@@ -44,6 +44,111 @@ export type Database = {
         }
         Relationships: []
       }
+      birthday_reminders: {
+        Row: {
+          consent_at: string | null
+          created_at: string
+          friend_dob: string
+          friend_name: string
+          id: string
+          last_notified_year: number | null
+          notify_email: string | null
+          relationship: string | null
+          remind_days_before: number
+          unsubscribe_token: string
+          unsubscribed_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          consent_at?: string | null
+          created_at?: string
+          friend_dob: string
+          friend_name: string
+          id?: string
+          last_notified_year?: number | null
+          notify_email?: string | null
+          relationship?: string | null
+          remind_days_before?: number
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          consent_at?: string | null
+          created_at?: string
+          friend_dob?: string
+          friend_name?: string
+          id?: string
+          last_notified_year?: number | null
+          notify_email?: string | null
+          relationship?: string | null
+          remind_days_before?: number
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      birthday_reports: {
+        Row: {
+          country: string | null
+          created_at: string | null
+          expires_at: string
+          gender: string | null
+          gifter_name: string | null
+          id: string
+          is_paid: boolean | null
+          is_premium_report: boolean | null
+          last_viewed_at: string | null
+          personal_message: string | null
+          recipient_dob: string
+          recipient_name: string
+          report_data: Json
+          slug: string
+          unlock_source: string | null
+          user_id: string | null
+          view_count: number | null
+        }
+        Insert: {
+          country?: string | null
+          created_at?: string | null
+          expires_at: string
+          gender?: string | null
+          gifter_name?: string | null
+          id?: string
+          is_paid?: boolean | null
+          is_premium_report?: boolean | null
+          last_viewed_at?: string | null
+          personal_message?: string | null
+          recipient_dob: string
+          recipient_name: string
+          report_data?: Json
+          slug: string
+          unlock_source?: string | null
+          user_id?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          country?: string | null
+          created_at?: string | null
+          expires_at?: string
+          gender?: string | null
+          gifter_name?: string | null
+          id?: string
+          is_paid?: boolean | null
+          is_premium_report?: boolean | null
+          last_viewed_at?: string | null
+          personal_message?: string | null
+          recipient_dob?: string
+          recipient_name?: string
+          report_data?: Json
+          slug?: string
+          unlock_source?: string | null
+          user_id?: string | null
+          view_count?: number | null
+        }
+        Relationships: []
+      }
       blog_drafts: {
         Row: {
           created_at: string | null
@@ -180,11 +285,14 @@ export type Database = {
           created_at: string | null
           death_date: string | null
           id: number
+          known_for: string | null
           name: string
           nationality: string | null
           nationality_code: string | null
           occupation: string | null
           sitelinks: number | null
+          slug: string | null
+          tier: string | null
           wikidata_id: string | null
           wikipedia_url: string | null
         }
@@ -194,11 +302,14 @@ export type Database = {
           created_at?: string | null
           death_date?: string | null
           id?: number
+          known_for?: string | null
           name: string
           nationality?: string | null
           nationality_code?: string | null
           occupation?: string | null
           sitelinks?: number | null
+          slug?: string | null
+          tier?: string | null
           wikidata_id?: string | null
           wikipedia_url?: string | null
         }
@@ -208,13 +319,208 @@ export type Database = {
           created_at?: string | null
           death_date?: string | null
           id?: number
+          known_for?: string | null
           name?: string
           nationality?: string | null
           nationality_code?: string | null
           occupation?: string | null
           sitelinks?: number | null
+          slug?: string | null
+          tier?: string | null
           wikidata_id?: string | null
           wikipedia_url?: string | null
+        }
+        Relationships: []
+      }
+      celebrity_sitelinks_dup_backup_20261024: {
+        Row: {
+          birth_date: string | null
+          birth_month_day: string | null
+          created_at: string | null
+          death_date: string | null
+          id: number | null
+          known_for: string | null
+          name: string | null
+          nationality: string | null
+          nationality_code: string | null
+          occupation: string | null
+          sitelinks: number | null
+          slug: string | null
+          tier: string | null
+          wikidata_id: string | null
+          wikipedia_url: string | null
+        }
+        Insert: {
+          birth_date?: string | null
+          birth_month_day?: string | null
+          created_at?: string | null
+          death_date?: string | null
+          id?: number | null
+          known_for?: string | null
+          name?: string | null
+          nationality?: string | null
+          nationality_code?: string | null
+          occupation?: string | null
+          sitelinks?: number | null
+          slug?: string | null
+          tier?: string | null
+          wikidata_id?: string | null
+          wikipedia_url?: string | null
+        }
+        Update: {
+          birth_date?: string | null
+          birth_month_day?: string | null
+          created_at?: string | null
+          death_date?: string | null
+          id?: number | null
+          known_for?: string | null
+          name?: string | null
+          nationality?: string | null
+          nationality_code?: string | null
+          occupation?: string | null
+          sitelinks?: number | null
+          slug?: string | null
+          tier?: string | null
+          wikidata_id?: string | null
+          wikipedia_url?: string | null
+        }
+        Relationships: []
+      }
+      credit_notes: {
+        Row: {
+          buyer_email: string
+          buyer_name: string
+          cgst: number
+          created_at: string
+          credit_note_date: string
+          credit_note_no: string
+          currency: string
+          emailed_at: string | null
+          gross_amount: number
+          id: string
+          igst: number
+          invoice_id: string
+          original_invoice_date: string
+          original_invoice_no: string
+          reason: string
+          refund_id: string
+          seq: number
+          series: string
+          sgst: number
+          tax_mode: string
+          taxable_value: number
+          user_id: string | null
+        }
+        Insert: {
+          buyer_email: string
+          buyer_name: string
+          cgst?: number
+          created_at?: string
+          credit_note_date?: string
+          credit_note_no: string
+          currency: string
+          emailed_at?: string | null
+          gross_amount: number
+          id?: string
+          igst?: number
+          invoice_id: string
+          original_invoice_date: string
+          original_invoice_no: string
+          reason?: string
+          refund_id: string
+          seq: number
+          series: string
+          sgst?: number
+          tax_mode: string
+          taxable_value: number
+          user_id?: string | null
+        }
+        Update: {
+          buyer_email?: string
+          buyer_name?: string
+          cgst?: number
+          created_at?: string
+          credit_note_date?: string
+          credit_note_no?: string
+          currency?: string
+          emailed_at?: string | null
+          gross_amount?: number
+          id?: string
+          igst?: number
+          invoice_id?: string
+          original_invoice_date?: string
+          original_invoice_no?: string
+          reason?: string
+          refund_id?: string
+          seq?: number
+          series?: string
+          sgst?: number
+          tax_mode?: string
+          taxable_value?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credit_notes_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "credit_notes_series_fkey"
+            columns: ["series"]
+            isOneToOne: false
+            referencedRelation: "invoice_counters"
+            referencedColumns: ["series"]
+          },
+        ]
+      }
+      email_subscribers: {
+        Row: {
+          consent_marketing: boolean
+          country_code: string | null
+          created_at: string
+          daily_horoscope: boolean
+          dob: string | null
+          email: string
+          id: number
+          rashi_index: number | null
+          source: string | null
+          transit_alerts: boolean
+          unsubscribe_token: string
+          unsubscribed_at: string | null
+          weekly_digest: boolean
+        }
+        Insert: {
+          consent_marketing?: boolean
+          country_code?: string | null
+          created_at?: string
+          daily_horoscope?: boolean
+          dob?: string | null
+          email: string
+          id?: never
+          rashi_index?: number | null
+          source?: string | null
+          transit_alerts?: boolean
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
+          weekly_digest?: boolean
+        }
+        Update: {
+          consent_marketing?: boolean
+          country_code?: string | null
+          created_at?: string
+          daily_horoscope?: boolean
+          dob?: string | null
+          email?: string
+          id?: never
+          rashi_index?: number | null
+          source?: string | null
+          transit_alerts?: boolean
+          unsubscribe_token?: string
+          unsubscribed_at?: string | null
+          weekly_digest?: boolean
         }
         Relationships: []
       }
@@ -249,6 +555,7 @@ export type Database = {
           id: string
           last_calculated: string | null
           name: string
+          relationship: string | null
           score_cache: number | null
           user_id: string
         }
@@ -261,6 +568,7 @@ export type Database = {
           id?: string
           last_calculated?: string | null
           name: string
+          relationship?: string | null
           score_cache?: number | null
           user_id: string
         }
@@ -273,10 +581,172 @@ export type Database = {
           id?: string
           last_calculated?: string | null
           name?: string
+          relationship?: string | null
           score_cache?: number | null
           user_id?: string
         }
         Relationships: []
+      }
+      feedback: {
+        Row: {
+          approved: boolean
+          comment: string | null
+          consent: boolean
+          content_type: string
+          created_at: string
+          dismissed: boolean
+          id: string
+          rating: number
+          slug: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approved?: boolean
+          comment?: string | null
+          consent?: boolean
+          content_type: string
+          created_at?: string
+          dismissed?: boolean
+          id?: string
+          rating?: number
+          slug: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approved?: boolean
+          comment?: string | null
+          consent?: boolean
+          content_type?: string
+          created_at?: string
+          dismissed?: boolean
+          id?: string
+          rating?: number
+          slug?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      invoice_counters: {
+        Row: {
+          next_value: number
+          series: string
+        }
+        Insert: {
+          next_value: number
+          series: string
+        }
+        Update: {
+          next_value?: number
+          series?: string
+        }
+        Relationships: []
+      }
+      invoices: {
+        Row: {
+          buyer_country: string
+          buyer_email: string
+          buyer_gstin: string | null
+          buyer_name: string
+          buyer_state: string | null
+          buyer_state_code: string | null
+          cgst: number
+          created_at: string
+          currency: string
+          emailed_at: string | null
+          fx_rate: number | null
+          fx_rate_date: string | null
+          fx_rate_source: string | null
+          gross_amount: number
+          id: string
+          igst: number
+          invoice_date: string
+          invoice_no: string
+          line_items: Json
+          order_id: string
+          payment_id: string
+          pdf_url: string | null
+          place_of_supply: string
+          seq: number
+          series: string
+          sgst: number
+          tax_mode: string
+          taxable_value: number
+          user_id: string | null
+        }
+        Insert: {
+          buyer_country: string
+          buyer_email: string
+          buyer_gstin?: string | null
+          buyer_name: string
+          buyer_state?: string | null
+          buyer_state_code?: string | null
+          cgst?: number
+          created_at?: string
+          currency: string
+          emailed_at?: string | null
+          fx_rate?: number | null
+          fx_rate_date?: string | null
+          fx_rate_source?: string | null
+          gross_amount: number
+          id?: string
+          igst?: number
+          invoice_date?: string
+          invoice_no: string
+          line_items: Json
+          order_id: string
+          payment_id: string
+          pdf_url?: string | null
+          place_of_supply: string
+          seq: number
+          series: string
+          sgst?: number
+          tax_mode: string
+          taxable_value: number
+          user_id?: string | null
+        }
+        Update: {
+          buyer_country?: string
+          buyer_email?: string
+          buyer_gstin?: string | null
+          buyer_name?: string
+          buyer_state?: string | null
+          buyer_state_code?: string | null
+          cgst?: number
+          created_at?: string
+          currency?: string
+          emailed_at?: string | null
+          fx_rate?: number | null
+          fx_rate_date?: string | null
+          fx_rate_source?: string | null
+          gross_amount?: number
+          id?: string
+          igst?: number
+          invoice_date?: string
+          invoice_no?: string
+          line_items?: Json
+          order_id?: string
+          payment_id?: string
+          pdf_url?: string | null
+          place_of_supply?: string
+          seq?: number
+          series?: string
+          sgst?: number
+          tax_mode?: string
+          taxable_value?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_series_fkey"
+            columns: ["series"]
+            isOneToOne: false
+            referencedRelation: "invoice_counters"
+            referencedColumns: ["series"]
+          },
+        ]
       }
       leaderboard_entries: {
         Row: {
@@ -341,6 +811,56 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string
+          id: string
+          product: string
+          razorpay_order_id: string | null
+          razorpay_payment_id: string
+          razorpay_subscription_id: string | null
+          report_slug: string | null
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string
+          id?: string
+          product: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id: string
+          razorpay_subscription_id?: string | null
+          report_slug?: string | null
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string
+          id?: string
+          product?: string
+          razorpay_order_id?: string | null
+          razorpay_payment_id?: string
+          razorpay_subscription_id?: string | null
+          report_slug?: string | null
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_report_slug_fkey"
+            columns: ["report_slug"]
+            isOneToOne: false
+            referencedRelation: "birthday_reports"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       pdf_reports_log: {
         Row: {
           created_at: string
@@ -362,11 +882,61 @@ export type Database = {
         }
         Relationships: []
       }
+      pending_reviews: {
+        Row: {
+          action_steps: string | null
+          auto_resolution_note: string | null
+          auto_resolved: boolean
+          body: string | null
+          category: string
+          created_at: string
+          extra: Json
+          id: number
+          reviewed_at: string | null
+          reviewed_by: string | null
+          severity: string
+          title: string
+        }
+        Insert: {
+          action_steps?: string | null
+          auto_resolution_note?: string | null
+          auto_resolved?: boolean
+          body?: string | null
+          category: string
+          created_at?: string
+          extra?: Json
+          id?: never
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity: string
+          title: string
+        }
+        Update: {
+          action_steps?: string | null
+          auto_resolution_note?: string | null
+          auto_resolved?: boolean
+          body?: string | null
+          category?: string
+          created_at?: string
+          extra?: Json
+          id?: never
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity?: string
+          title?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          birth_profile: Json | null
           blog_subscription: boolean
+          buyer_country: string | null
+          buyer_state: string | null
+          buyer_state_code: string | null
           country: string | null
           created_at: string
+          credits_granted_month: string | null
           email: string
           email_notifications: boolean
           first_name: string | null
@@ -374,13 +944,26 @@ export type Database = {
           last_name: string | null
           name: string
           premium_status: boolean
+          premium_until: string | null
+          promo_premium_until: string | null
+          report_credits: number | null
+          subscription_id: string | null
+          subscription_plan: string | null
+          subscription_status: string | null
           updated_at: string
           user_id: string
+          weekly_digest: boolean
+          welcomed_at: string | null
         }
         Insert: {
+          birth_profile?: Json | null
           blog_subscription?: boolean
+          buyer_country?: string | null
+          buyer_state?: string | null
+          buyer_state_code?: string | null
           country?: string | null
           created_at?: string
+          credits_granted_month?: string | null
           email: string
           email_notifications?: boolean
           first_name?: string | null
@@ -388,13 +971,26 @@ export type Database = {
           last_name?: string | null
           name: string
           premium_status?: boolean
+          premium_until?: string | null
+          promo_premium_until?: string | null
+          report_credits?: number | null
+          subscription_id?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
           updated_at?: string
           user_id: string
+          weekly_digest?: boolean
+          welcomed_at?: string | null
         }
         Update: {
+          birth_profile?: Json | null
           blog_subscription?: boolean
+          buyer_country?: string | null
+          buyer_state?: string | null
+          buyer_state_code?: string | null
           country?: string | null
           created_at?: string
+          credits_granted_month?: string | null
           email?: string
           email_notifications?: boolean
           first_name?: string | null
@@ -402,8 +998,16 @@ export type Database = {
           last_name?: string | null
           name?: string
           premium_status?: boolean
+          premium_until?: string | null
+          promo_premium_until?: string | null
+          report_credits?: number | null
+          subscription_id?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
           updated_at?: string
           user_id?: string
+          weekly_digest?: boolean
+          welcomed_at?: string | null
         }
         Relationships: []
       }
@@ -461,6 +1065,35 @@ export type Database = {
         }
         Relationships: []
       }
+      report_downloads: {
+        Row: {
+          downloaded_at: string | null
+          id: string
+          report_slug: string
+          user_id: string | null
+        }
+        Insert: {
+          downloaded_at?: string | null
+          id?: string
+          report_slug: string
+          user_id?: string | null
+        }
+        Update: {
+          downloaded_at?: string | null
+          id?: string
+          report_slug?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_downloads_report_slug_fkey"
+            columns: ["report_slug"]
+            isOneToOne: false
+            referencedRelation: "birthday_reports"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       status_checks: {
         Row: {
           client_name: string
@@ -476,6 +1109,24 @@ export type Database = {
           client_name?: string
           id?: string
           timestamp?: string | null
+        }
+        Relationships: []
+      }
+      trial_claims: {
+        Row: {
+          claimed_at: string
+          normalized_email: string
+          user_id: string | null
+        }
+        Insert: {
+          claimed_at?: string
+          normalized_email: string
+          user_id?: string | null
+        }
+        Update: {
+          claimed_at?: string
+          normalized_email?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -542,6 +1193,54 @@ export type Database = {
         }
         Relationships: []
       }
+      vedic_chart_cache: {
+        Row: {
+          access_count: number
+          cache_key: string
+          chart_data: Json
+          created_at: string
+          last_accessed_at: string
+          source: string
+        }
+        Insert: {
+          access_count?: number
+          cache_key: string
+          chart_data: Json
+          created_at?: string
+          last_accessed_at?: string
+          source?: string
+        }
+        Update: {
+          access_count?: number
+          cache_key?: string
+          chart_data?: Json
+          created_at?: string
+          last_accessed_at?: string
+          source?: string
+        }
+        Relationships: []
+      }
+      webhook_events: {
+        Row: {
+          event_id: string
+          event_type: string
+          payload: Json
+          processed_at: string | null
+        }
+        Insert: {
+          event_id: string
+          event_type: string
+          payload: Json
+          processed_at?: string | null
+        }
+        Update: {
+          event_id?: string
+          event_type?: string
+          payload?: Json
+          processed_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -554,6 +1253,89 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_report_view_count: {
+        Args: { report_id: string }
+        Returns: undefined
+      }
+      issue_credit_note: {
+        Args: { p: Json }
+        Returns: {
+          buyer_email: string
+          buyer_name: string
+          cgst: number
+          created_at: string
+          credit_note_date: string
+          credit_note_no: string
+          currency: string
+          emailed_at: string | null
+          gross_amount: number
+          id: string
+          igst: number
+          invoice_id: string
+          original_invoice_date: string
+          original_invoice_no: string
+          reason: string
+          refund_id: string
+          seq: number
+          series: string
+          sgst: number
+          tax_mode: string
+          taxable_value: number
+          user_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "credit_notes"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      issue_invoice: {
+        Args: { p: Json }
+        Returns: {
+          buyer_country: string
+          buyer_email: string
+          buyer_gstin: string | null
+          buyer_name: string
+          buyer_state: string | null
+          buyer_state_code: string | null
+          cgst: number
+          created_at: string
+          currency: string
+          emailed_at: string | null
+          fx_rate: number | null
+          fx_rate_date: string | null
+          fx_rate_source: string | null
+          gross_amount: number
+          id: string
+          igst: number
+          invoice_date: string
+          invoice_no: string
+          line_items: Json
+          order_id: string
+          payment_id: string
+          pdf_url: string | null
+          place_of_supply: string
+          seq: number
+          series: string
+          sgst: number
+          tax_mode: string
+          taxable_value: number
+          user_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "invoices"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      mark_review_reviewed: { Args: { p_id: number }; Returns: undefined }
+      redeem_report_credit: {
+        Args: { p_slug: string; p_user_id: string }
+        Returns: Json
+      }
+      touch_report_view: { Args: { p_slug: string }; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
