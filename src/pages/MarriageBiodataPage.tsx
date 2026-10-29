@@ -40,7 +40,7 @@ const TEMPLATES: Array<{ id: BiodataTemplate; label: string }> = [
 ];
 
 const FAQ = [
-  { q: 'Is my biodata stored anywhere?', a: 'No. Everything you type, and any photo you add, stays in this browser tab. The PDF is made on your device with your browser’s print dialog (“Save as PDF”). We do not send it to our servers or keep a copy — when you close the tab, it is gone, so save the PDF.' },
+  { q: 'Is my biodata stored anywhere?', a: 'No. Everything you type, and any photo you add, stays in this browser tab. The PDF is made on your device with your browser’s print dialog (“Save as PDF”). We do not send it to our servers or keep a copy — when you close the tab, it is gone, so save the PDF. The one exception: if you press “Search more places” for the birth place, only that place name is looked up online (OpenStreetMap) and it is not stored.' },
   { q: 'What should a marriage biodata include?', a: 'The usual sections are personal details (name, date, time and place of birth, height, education, work), family details (parents, siblings, native place), horoscope details (rashi, nakshatra, gotra, Manglik status) and contact details. Leave any field blank to keep it off the page.' },
   { q: 'How are rashi, nakshatra and Manglik filled in?', a: 'Enter the birth date, exact time and place and press “Fill from birth chart”. The browser computes the chart with the same sidereal (Lahiri) engine as our Kundali: rashi is the Moon’s sign, nakshatra is the Moon’s star with its pada, and Manglik follows our stated rule — Mars in the 1st, 4th, 7th, 8th or 12th house from the Lagna or the Moon. You can edit any value.' },
   { q: 'Why do I type the gotra myself?', a: 'Gotra is a family lineage passed down in the family, not something calculated from the stars, so only your family can fill it in.' },
@@ -151,7 +151,7 @@ export default function MarriageBiodataPage() {
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-5xl">
           <p className="text-sm rounded-lg border border-border bg-muted/40 px-4 py-3 mb-6" data-testid="bd-privacy">
-            <strong>Private by design:</strong> your details and photo stay in this browser tab. The PDF is created on your device; we do not upload, save or see it. Close the tab and it is gone — so download your PDF.
+            <strong>Private by design:</strong> your details and photo stay in this browser tab. The PDF is created on your device; we do not upload, save or see it. Close the tab and it is gone — so download your PDF. (Only if you press “Search more places” is the birth-place name looked up online, without being stored.)
           </p>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
