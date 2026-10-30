@@ -53,6 +53,12 @@ const STATIC: Record<string, string> = {
   // Batch 9: thin Hindi Life Path page, same intent as the Hindi Mulank/Bhagyank
   // calculator (numerology by date of birth, in Hindi) → 301 there.
   '/numerology-hindi': '/hi/numerology-by-date-of-birth/',
+  // Batch 11 (GSC): the "who do I share a birthday with / celebrities who share my
+  // birthday" queries split between this short article (whose only action was a link to
+  // the finder) and the real finder. One page per intent: the finder at
+  // /celebrity-birthday/ now answers the question first (date picker + results on top,
+  // FAQ), so the article 301s there.
+  '/answers/who-shares-my-birthday': '/celebrity-birthday/',
 };
 
 /** Month name (any case) → 1-12, or 0. */

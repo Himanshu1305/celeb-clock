@@ -21,9 +21,17 @@
  *  - Each card's "View profile & source ↗" is the real Wikipedia attribution URL.
  *  - The snapshot (zodiac / life path / weekday) is computed from the real calc utils.
  *  - WhatsApp share (reused WhatsAppShareButton) at the twins result moment.
+ *
+ * Batch 11 (GSC): this is THE page for "who do I share a birthday with / what famous
+ * person shares my birthday / celebrities who share my birthday". Title, H1 and lead use
+ * that wording; the date picker is the first thing in the page body (answer-first, also
+ * on a 375px phone), the results under it show today's celebrity birthdays until a date
+ * is chosen, and the FAQ (visible + FAQPage JSON-LD) answers the query variants. The old
+ * /answers/who-shares-my-birthday article 301s here (src/lib/seo/duplicateRedirects.ts),
+ * and the other birthday pages link here with the anchor "Who shares my birthday?".
  */
 import { useEffect, useMemo, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { SEO } from '@/components/SEO';
 import { ToolLayout } from '@/components/central';
@@ -124,10 +132,12 @@ export default function BirthdayCelebrityLanding() {
   const [dob, setDob] = useState<DobValue>({ day: '', month: '', year: '' });
   const [active, setActive] = useState<{ day: number; month: number; year?: number }>({ day: now.getDate(), month: now.getMonth() + 1, year: now.getFullYear() });
   const [message, setMessage] = useState('');
+  // false until the visitor submits a date — the results then show today's birthdays.
+  const [picked, setPicked] = useState(false);
 
   const activeMMDD = mmdd(active.month, active.day);
   const { people: twins, loading: twinsLoading } = useBirthdayPeople(activeMMDD, 9);
-  const { people: todayPeople, loading: todayLoading } = useBirthdayPeople(todayMMDD, 6);
+  const { people: todayPeople, loading: todayLoading } = useBirthdayPeople(picked ? todayMMDD : null, 6);
 
   // Name search against the real celebrity_sitelinks table (28k+ rows).
   const [query, setQuery] = useState('');
@@ -157,6 +167,7 @@ export default function BirthdayCelebrityLanding() {
     const { date, error } = parseDob(dob.day, dob.month, dob.year);
     if (!date) { setMessage(error || 'Please enter a full date of birth.'); return; }
     setActive({ day: date.getDate(), month: date.getMonth() + 1, year: date.getFullYear() });
+    setPicked(true);
     setMessage(`Showing the people who share ${MONTHS[date.getMonth()]} ${date.getDate()}.`);
     document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -168,10 +179,17 @@ export default function BirthdayCelebrityLanding() {
 
   const top3 = twins.slice(0, 3);
   const shareMsg = top3.length
-    ? `I share my birthday (${MONTHS[active.month - 1]} ${active.day}) with ${top3.map(t => t.name).join(', ')} 🎂 Who shares yours? https://bornclock.com/celebrity-birthday`
-    : `Find out which famous people share your birthday at BornClock: https://bornclock.com/celebrity-birthday`;
+    ? `I share my birthday (${MONTHS[active.month - 1]} ${active.day}) with ${top3.map(t => t.name).join(', ')} 🎂 Who shares yours? https://bornclock.com/celebrity-birthday/`
+    : `Find out which famous people share your birthday at BornClock: https://bornclock.com/celebrity-birthday/`;
 
+  // Batch 11: the first four answer the search wording people use for this page.
+  // Ranking = Wikipedia "sitelinks" (getRankedBirthdayCelebrities orders by it), see
+  // /how-it-works#celebrity-birthday and /articles/how-we-rank-celebrity-birthdays-sitelinks/.
   const faqs: Array<[string, string]> = [
+    ['Who shares my birthday?', 'Enter your day and month at the top of this page. You will see the famous people born on that same day — in any year — ranked by how widely they are known. Before you pick a date, the list shows the people born today.'],
+    ['What famous person shares my birthday?', 'The first card in your results is the best-known person born on your day. We rank people by how many Wikipedia language editions have an article about them, so names known around the world come first.'],
+    ['How do I find celebrities who share my birthday?', 'Type your date of birth into the form and press “Find my birthday twins”. Only the day and month are used to match; the year is used just for your life path number and the weekday you were born. You can also search any celebrity by name to see their birthday.'],
+    ['Do my celebrity birthday twins have to be born in the same year?', 'No. A birthday twin shares your month and day, not your year. Someone born on your exact date, year included, is very rare among famous people.'],
     ['What does “birthday twin” mean?', 'Someone who shares your birth month and day. The year can be different. It is a calendar connection, not evidence that you share personality traits.'],
     ['Where does the celebrity data come from?', 'Real people from our celebrity database, matched on month and day and ranked by global recognition. Photos are pulled live from Wikipedia; each card links to its source.'],
     ['Can I share my birthday result?', 'Yes — the WhatsApp share button composes a note with your date and your top birthday twins. It shares the month and day, not your full birth year.'],
@@ -185,9 +203,9 @@ export default function BirthdayCelebrityLanding() {
       seo={(
         <>
           <SEO
-            title="Everything Your Birthday Reveals — Celebrity Twins | BornClock"
-            description="Find the famous people who share your birthday — real profiles, real photos, ranked by recognition — plus your zodiac, life path and the weekday you were born. Free."
-            keywords="celebrity birthday twins, famous birthdays, who shares my birthday, born on this day, birthday zodiac, life path number"
+            title="Who Shares My Birthday? Celebrities Born on Your Day | BornClock"
+            description="Who shares your birthday? Enter your date to see the famous people born on the same day — real profiles ranked by recognition — plus today's celebrity birthdays."
+            keywords="who shares my birthday, who do i share a birthday with, what famous person shares my birthday, celebrities who share my birthday, celebrity birthday twins"
             canonicalUrl="/celebrity-birthday"
             ogType="website"
           />
@@ -198,34 +216,34 @@ export default function BirthdayCelebrityLanding() {
           </Helmet>
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity' }], current: 'Birthday & Celebrity', edition: 'Real dates · sourced profiles' }}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity/' }], current: 'Birthday & Celebrity', edition: 'Real dates · sourced profiles' }}
       footer={{
         tagline: 'One birth date. Different kinds of discovery. Facts, traditions and research — with the difference made clear.',
         nav: [
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Birthdays Today', to: '/todays-birthdays' },
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Birthdays Today', to: '/todays-birthdays/' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Celebrity birthdays.',
       }}
-      eyebrow="Your date. Good company."
-      h1={<>Everything your birthday reveals.<br /><em>Made for your story.</em></>}
-      lead={<>Some connections deserve to be celebrated. Start with the date that’s yours, then meet the people who turned it into something memorable.</>}
+      eyebrow="Celebrity birthday finder"
+      h1={<>Who shares my birthday?</>}
+      lead={<>Enter your birthday to see which famous people share it — actors, athletes, leaders and scientists born on the same day, ranked by how widely they are known. Until you pick a date, the list shows today’s celebrity birthdays.</>}
     >
         <JsonLd id="faq" data={{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faqs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) }} />
-        {/* HERO (field-guide) */}
-        <section className="hero" id="start" aria-label="Introduction">
+        {/* HERO — answer-first (Batch 11): the date picker comes first, then the ticket. */}
+        <section className="hero answer-first" id="start" aria-label="Find who shares your birthday">
           <div className="hero-top">
-            <div className="hero-copy">
-              <div>
-                <div className="accent-rule" />
-                <div className="hero-links">
-                  <a className="btn" href="#results">Meet the birthday twins →</a>
-                  <a className="text-button" href="#today">Today’s birthdays</a>
-                </div>
-              </div>
-              <p className="hero-note">Date connections are factual. Zodiac and numerology are playful traditions, clearly labelled — not personality science.</p>
+            <div className="guide-form">
+              <span className="eyebrow">Your birthday</span>
+              <h2 className="h3-like">When were you born?</h2>
+              <DobInput value={dob} onChange={setDob} label="" idPrefix="bc" />
+              <button className="btn" type="button" data-testid="bc-hero-submit" onClick={onDobSubmit} style={{ width: '100%', marginTop: 14 }}>
+                Find my birthday twins <span aria-hidden="true">→</span>
+              </button>
+              <p className="form-message" role="status" aria-live="polite">{message}</p>
+              <p className="hero-note">Only the day and month are matched. Zodiac and numerology below are playful traditions, clearly labelled — not personality science.</p>
             </div>
             <div className="hero-visual">
               <div className="visual-wrap">
@@ -237,64 +255,52 @@ export default function BirthdayCelebrityLanding() {
                     <div className="day-foot">ONE DATE. MANY POSSIBILITIES.</div>
                   </div>
                   <div className="ticket-side">
-                    <span className="badge">A LITTLE SERENDIPITY</span>
+                    <span className="badge">{picked ? 'YOUR BIRTHDAY' : 'BORN TODAY'}</span>
                     <h3>You’re in<br />good company.</h3>
                     <div className="initial-stack" aria-hidden="true">
                       {(top3.length ? top3 : [{ name: 'B C' }, { name: 'C D' }, { name: 'E F' }]).map((t, i) => <span key={i}>{initialsOf(t.name)}</span>)}
                     </div>
-                    <p className="small">{top3.length ? top3.map(t => t.name).join('. ') + '. And perhaps, you.' : 'Enter your date to meet your birthday twins.'}</p>
+                    <p className="small">{top3.length ? top3.map(t => t.name).join('. ') + (picked ? '. And you.' : '.') : 'Enter your date to meet your birthday twins.'}</p>
                   </div>
                 </div>
                 <div className="visual-caption">
                   <span>Birthday twins share a month and day.<br />Not a personality. Not a destiny.</span>
-                  <span><a className="textlink" href="#results">Meet your twins →</a></span>
+                  <span><a className="textlink" href="#results">See the list →</a></span>
                 </div>
               </div>
-            </div>
-            <div className="guide-form">
-              <span className="eyebrow">Your starting point</span>
-              <h3>When were you born?</h3>
-              <DobInput value={dob} onChange={setDob} label="" idPrefix="bc" />
-              <button className="btn" type="button" data-testid="bc-hero-submit" onClick={onDobSubmit} style={{ width: '100%', marginTop: 14 }}>
-                Find my birthday twins <span aria-hidden="true">→</span>
-              </button>
-              <p className="form-message" role="status" aria-live="polite">{message}</p>
-              <div className="guide-steps"><span>01</span> Begin — <span>02</span> Explore — <span>03</span> Understand</div>
             </div>
           </div>
         </section>
 
-        <div className="trust-strip">
-          <div><span className="tick" aria-hidden="true">✓</span>Real dates, sourced profiles</div>
-          <div><span className="tick" aria-hidden="true">✓</span>Real photos, ranked by recognition</div>
-          <div><span className="tick" aria-hidden="true">✓</span>A little wonder, no big claims</div>
-        </div>
-
-        {/* RESULTS — twins + name search */}
+        {/* RESULTS — today's birthdays until a date is picked, then the visitor's twins */}
         <section className="section white" id="results">
           <div className="section-head">
-            <div><span className="eyebrow">The birthday club</span><h2>Meet your birthday twins.</h2></div>
-            <p>Same month and day, not necessarily the same year — real people, ranked by global recognition.</p>
+            <div>
+              <span className="eyebrow">{picked ? 'Your birthday twins' : 'Celebrity birthdays today'}</span>
+              <h2>{picked ? <>Famous people born on {MONTHS[active.month - 1]} {active.day}</> : <>Born today, {MONTHS[active.month - 1]} {active.day}</>}</h2>
+            </div>
+            <p>{picked ? 'Same month and day, not necessarily the same year — real people, ranked by global recognition.' : 'Pick your own date above to see who shares your birthday. Ranked by global recognition.'}</p>
           </div>
-          <TrustStrip claim="Real people from our database, ranked by how widely recognised they are — and each card links to its source." href="/how-it-works#celebrity-birthday" />
+          <TrustStrip claim="Real people from our database, ranked by how widely recognised they are — and each card links to its source." href="/how-it-works/#celebrity-birthday" />
 
-          <div className="inline-actions" style={{ marginBottom: 14, gap: 10 }}>
-            <label htmlFor="celebSearch" className="eyebrow" style={{ margin: 0 }}>Search a name directly</label>
+          <div className="inline-actions" style={{ marginBottom: 14 }}>
+            <span className="pill accent">{MONTHS[active.month - 1].slice(0, 3)} {active.day} · {twins.length} profile{twins.length !== 1 ? 's' : ''}</span>
+            <WhatsAppShareButton message={shareMsg} label="Share a birthday note" />
+          </div>
+          <PeopleGrid people={twins} loading={twinsLoading} skeletonCount={9} emptyNote="No notable profiles recorded for this date yet. Try another date, or search a name below." />
+          <p className="small-note">Photos load live from Wikipedia; initials stand in only when no photo is on file. Each card links to its source. <Link className="textlink" to={`/born-on/${MONTHS[active.month - 1].toLowerCase()}-${active.day}/`}>Everyone born on {MONTHS[active.month - 1]} {active.day} →</Link>{!picked && <> · <Link className="textlink" to="/todays-birthdays/">Today’s full list →</Link></>}</p>
+
+          <div className="inline-actions" style={{ margin: '22px 0 14px', gap: 10 }}>
+            <label htmlFor="celebSearch" className="eyebrow" style={{ margin: 0 }}>Or search a celebrity by name</label>
             <input id="celebSearch" type="text" value={query} onChange={e => setQuery(e.target.value)}
               placeholder="e.g. Einstein, Simone Biles…"
-              style={{ flex: 1, minWidth: 220, padding: '8px 12px', border: '1px solid var(--line)', borderRadius: 3, font: 'inherit', background: 'var(--bg)' }} />
+              style={{ flex: 1, minWidth: 0, width: '100%', maxWidth: 420, padding: '8px 12px', border: '1px solid var(--line)', borderRadius: 3, font: 'inherit', background: 'var(--bg)' }} />
           </div>
           {(query.trim().length >= 2) && (
             <div style={{ marginBottom: 18 }}>
               <PeopleGrid people={searchResults} loading={searching} skeletonCount={3} emptyNote={`No one found matching “${query}”. Try another name.`} />
             </div>
           )}
-          <div className="inline-actions" style={{ marginBottom: 14 }}>
-            <span className="pill accent">{MONTHS[active.month - 1].slice(0, 3)} {active.day} · {twins.length} profile{twins.length !== 1 ? 's' : ''}</span>
-            <WhatsAppShareButton message={shareMsg} label="Share a birthday note" />
-          </div>
-          <PeopleGrid people={twins} loading={twinsLoading} skeletonCount={9} emptyNote="No notable profiles recorded for this date yet. Try another date, or search a name above." />
-          <p className="small-note">Photos load live from Wikipedia; initials stand in only when no photo is on file. Each card links to its source.</p>
         </section>
 
         {/* SNAPSHOT — computed */}
@@ -310,7 +316,8 @@ export default function BirthdayCelebrityLanding() {
           </div>
         </section>
 
-        {/* TODAY'S BIRTHDAYS */}
+        {/* TODAY'S BIRTHDAYS — once a date is picked (before that, #results already shows today). */}
+        {picked && (
         <section className="section" id="today">
           <div className="section-head">
             <div><span className="eyebrow">The daily celebration</span><h2>Today’s birthdays.</h2></div>
@@ -318,10 +325,11 @@ export default function BirthdayCelebrityLanding() {
           </div>
           <div className="today-head" style={{ marginBottom: 15 }}>
             <span className="pill accent">{MONTHS[now.getMonth()]} {now.getDate()} · today</span>
-            <div className="browse-dates"><Link to="/todays-birthdays"><button type="button">See the full list →</button></Link></div>
+            <div className="browse-dates"><Link to="/todays-birthdays/"><button type="button">See the full list →</button></Link></div>
           </div>
           <PeopleGrid people={todayPeople} loading={todayLoading} emptyNote="No notable profiles recorded for today yet." />
         </section>
+        )}
 
         {/* HONESTY */}
         <section className="section" id="honesty">
@@ -339,7 +347,7 @@ export default function BirthdayCelebrityLanding() {
           <div><span className="eyebrow">The keepsake · paid report</span><h2>Your Birthday Blueprint.<br />A date made personal.</h2></div>
           <p>Birthday twins, calendar discoveries and clearly labelled symbolic insights, gathered into one shareable keepsake — for yourself or as a gift.</p>
           <div className="report-actions">
-            <Link className="btn light" to="/birthday-report" data-testid="bc-final-cta">Create the Birthday Blueprint →</Link>
+            <Link className="btn light" to="/birthday-report/" data-testid="bc-final-cta">Create the Birthday Blueprint →</Link>
             <p className="small">A personalised, giftable report.</p>
           </div>
         </section>
@@ -366,10 +374,10 @@ export default function BirthdayCelebrityLanding() {
             ))}
           </p>
           <div className="crosslinks" style={{ marginTop: 20 }}>
-            <Link className="crosslink" to="/vedic-astrology">
+            <Link className="crosslink" to="/vedic-astrology/">
               <div><span className="eyebrow">The computed lens</span><h3>Vedic Astrology →</h3><p>Your real sidereal birth chart — planets, Nakshatra and Dasha, computed.</p></div><span>↗</span>
             </Link>
-            <Link className="crosslink" to="/mystic-corner">
+            <Link className="crosslink" to="/mystic-corner/">
               <div><span className="eyebrow">Different systems</span><h3>Mystic Corner →</h3><p>Numerology, Western and Chinese zodiac — each one actually computed.</p></div><span>↗</span>
             </Link>
           </div>

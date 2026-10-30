@@ -138,6 +138,15 @@
 .paj.field-guide .hero-visual{padding:20px}
 .paj.field-guide .guide-form{padding:24px;border-left:1px solid var(--line);background:var(--paper)}
 .paj .guide-form h3{font-family:'Fraunces',serif;font-size:26px;margin:9px 0 17px}
+/* Batch 11: answer-first hero (/celebrity-birthday) — the date form is the first column
+   (and the first block on a phone), the ticket visual second; its heading is an h2. */
+.paj .guide-form h2.h3-like{font-family:'Fraunces',serif;font-size:26px;margin:9px 0 17px}
+.paj.field-guide .hero.answer-first .hero-top{grid-template-columns:1fr 1.2fr}
+.paj.field-guide .hero.answer-first .guide-form{border-left:0;border-right:1px solid var(--line)}
+.paj.field-guide .hero.answer-first .guide-form .hero-note{margin-top:12px}
+@media(max-width:600px){
+  .paj.field-guide .hero.answer-first .guide-form{border-right:0;border-top:0;border-bottom:1px solid var(--line)}
+}
 .paj .guide-form .form-fields{display:grid;grid-template-columns:1fr 1fr}
 .paj .guide-form .field.place,.paj .guide-form .form-fields .btn{grid-column:1/-1}
 .paj .guide-form .form-meta{font-size:11px}

@@ -35,7 +35,7 @@ const PUBLIC_ROUTES = [
   { path: '/faq', title: 'FAQ', h1Contains: 'asked' },
   { path: '/answers/how-long-will-i-live', title: 'How Long', h1Contains: 'How Long' },
   { path: '/answers/what-is-my-biological-age', title: 'Biological Age', h1Contains: 'Biological Age' },
-  { path: '/answers/who-shares-my-birthday', title: 'Birthday', h1Contains: 'Birthday' },
+  { path: '/celebrity-birthday/', title: 'Birthday', h1Contains: 'Birthday' },
   { path: '/answers/how-old-am-i-on-mars', title: 'Mars', h1Contains: 'Mars' },
   { path: '/answers/what-is-my-zodiac-sign', title: 'Zodiac', h1Contains: 'Zodiac' },
   { path: '/answers/what-is-my-life-path-number', title: 'Life Path', h1Contains: 'Life Path' },

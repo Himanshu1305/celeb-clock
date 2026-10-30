@@ -21,7 +21,8 @@ describe('prerender / sitemap route list after duplicate retirement', () => {
     expect(routes.filter(r => /^\/birthday\/[a-z]+-\d+$/.test(r))).toEqual([]);
     for (const r of ['/biological-age-calculator', '/articles/biological-age-vs-chronological-age',
       '/life-expectancy-calculator-usa', '/life-expectancy-calculator-uk',
-      '/life-expectancy-calculator-australia', '/life-expectancy-calculator-canada']) {
+      '/life-expectancy-calculator-australia', '/life-expectancy-calculator-canada',
+      '/answers/who-shares-my-birthday']) {
       expect(routes).not.toContain(r);
     }
   });
@@ -45,5 +46,17 @@ describe('prerender / sitemap route list after duplicate retirement', () => {
 
   it('no duplicate entries', () => {
     expect(new Set(routes).size).toBe(routes.length);
+  });
+});
+
+describe('Batch 11: the "who shares my birthday" article is retired onto the finder', () => {
+  it('the Worker answers it with one 301 to /celebrity-birthday/', async () => {
+    const worker = (await import('../../../../functions/_worker')).default;
+    const env = { ASSETS: { fetch: async () => new Response('<!doctype html><title>x</title>', { headers: { 'content-type': 'text/html' } }) } };
+    for (const u of ['https://bornclock.com/answers/who-shares-my-birthday/', 'https://bornclock.com/answers/who-shares-my-birthday']) {
+      const res = await worker.fetch(new Request(u), env as never, {});
+      expect(res.status, u).toBe(301);
+      expect(res.headers.get('Location'), u).toBe('https://bornclock.com/celebrity-birthday/');
+    }
   });
 });
