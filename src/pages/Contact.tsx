@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ArticleLayout } from '@/components/central';
@@ -122,7 +122,7 @@ export default function Contact() {
                     privacy@bornclock.com
                   </a>
                   . See our{' '}
-                  <Link to="/privacy" className="text-accent hover:underline">
+                  <Link to="/privacy/" className="text-accent hover:underline">
                     Privacy Policy
                   </Link>
                   {' '}for more.

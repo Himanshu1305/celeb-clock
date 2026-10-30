@@ -178,7 +178,7 @@ const PlanetaryAgePage = () => {
           </Helmet>
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Planetary Age' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Planetary Age' }}
       eyebrow="Cosmic age"
       h1={<>How Old Are You in the Universe?</>}
       lead={<>On Mercury you have hundreds of birthdays. On Neptune you haven't had your first yet. Your age is completely relative to where you're standing.</>}
@@ -389,7 +389,7 @@ const PlanetaryAgePage = () => {
 
       {/* ── Cross-link to the dedicated weight tool (weight ≠ age — separate concepts) ── */}
       <div className="container mx-auto px-4 pb-12 max-w-5xl">
-        <a href="/weight-on-planets" className="block rounded-2xl bg-slate-900 border border-slate-800 p-6 hover:border-[#2F6FB0]/50 transition-colors">
+        <a href="/weight-on-planets/" className="block rounded-2xl bg-slate-900 border border-slate-800 p-6 hover:border-[#2F6FB0]/50 transition-colors">
           <h2 className="text-xl font-bold text-white mb-1">⚖️ How heavy are you on other planets?</h2>
           <p className="text-sm text-slate-300">
             Age is about orbits; <strong>weight</strong> is about gravity — a different question entirely. See your

@@ -72,7 +72,7 @@ export function RetirementAgeIndiaArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Retirement Age & Life Expectancy in India' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Retirement Age & Life Expectancy in India' }}
       eyebrow="Longevity"
       h1="Retirement Age & Life Expectancy in India"
       lead="Retirement planning in India used to be simple: work until 60, collect a provident fund and a pension, and rely on family. That world has changed. People are living longer, joint-family support is thinner, and healthcare costs are rising fast. The single most important input into any retirement plan is no longer just how much you save — it is how long you are likely to live. This guide connects retirement age in India to your personal life expectancy, walks through EPFO and NPS, and shows exactly when early retirement or a FIRE strategy actually adds up."
@@ -178,7 +178,7 @@ export function RetirementAgeIndiaArticle() {
               Before you pick a retirement age, get a personalised life expectancy so you know how
               many years you actually need to fund.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Estimate My Life Expectancy →
             </a>
@@ -209,7 +209,7 @@ export function RetirementAgeIndiaArticle() {
               Get a personalised life expectancy, then subtract your target retirement age to see
               exactly how many years you need to fund.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Open the Longevity Calculator →
             </a>
@@ -228,12 +228,12 @@ export function RetirementAgeIndiaArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
           <ul className="list-disc pl-6 text-[#2F6FB0] space-y-2 mb-6">
             <li>
-              <a href="/articles/retirement-planning-life-expectancy" className="hover:underline font-semibold">
+              <a href="/articles/retirement-planning-life-expectancy/" className="hover:underline font-semibold">
                 Retirement Planning &amp; Life Expectancy
               </a>
             </li>
             <li>
-              <a href="/articles/how-long-will-i-live-in-india" className="hover:underline font-semibold">
+              <a href="/articles/how-long-will-i-live-in-india/" className="hover:underline font-semibold">
                 How Long Will I Live in India?
               </a>
             </li>

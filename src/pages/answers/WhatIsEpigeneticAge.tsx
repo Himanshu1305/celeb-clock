@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
@@ -14,10 +14,10 @@ const CLOCKS = [
 ];
 
 const RELATED = [
-  { path: '/biological-age', label: 'Biological Age Calculator' },
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/coach', label: 'Longevity Coach' },
-  { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
+  { path: '/biological-age/', label: 'Biological Age Calculator' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/coach/', label: 'Longevity Coach' },
+  { path: '/biological-age-vs-chronological-age/', label: 'Biological vs Chronological Age' },
 ];
 
 // Batch 9b honesty pass — sources opened via PubMed (29 Oct 2026):
@@ -55,7 +55,7 @@ export default function WhatIsEpigeneticAge() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What is epigenetic age?' }}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers/' }], current: 'What is epigenetic age?' }}
       eyebrow="Answers"
       h1={<>What Is Epigenetic Age — and Why It's the Most Honest Number About How You're Aging</>}
       lead={<>Know your time. Live it well.</>}
@@ -93,7 +93,7 @@ export default function WhatIsEpigeneticAge() {
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Estimate My Biological Age</p>
             <p className="text-sm text-gray-500 mb-4">Free 15-question lifestyle and fitness estimate · Not a lab test</p>
-            <Link to="/biological-age"
+            <Link to="/biological-age/"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Estimate my biological age →
             </Link>

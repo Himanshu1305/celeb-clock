@@ -100,7 +100,7 @@ export function LifeExpectancySingaporeUAEPage() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Singapore & UAE Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Singapore & UAE Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy Calculator — Singapore & UAE"
       lead={(
@@ -126,7 +126,7 @@ export function LifeExpectancySingaporeUAEPage() {
             <p className="text-emerald-900 font-semibold mb-4">
               Averages describe countries. This tool describes you.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-emerald-600 text-white font-black px-8 py-3
                           rounded-full text-lg hover:bg-emerald-700 transition-colors">
               Calculate My Life Expectancy →
@@ -205,7 +205,7 @@ export function LifeExpectancySingaporeUAEPage() {
               Whether you&apos;re in Singapore, the UAE, India or the UK, the BornClock longevity
               calculator adjusts a population baseline for your country (UN WPP 2024 where available, otherwise a WHO regional average) across all 8 factors in about 3 minutes.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-emerald-700 font-black px-8 py-3
                           rounded-full text-lg hover:bg-emerald-50 transition-colors">
               Start My Free Longevity Calculator →

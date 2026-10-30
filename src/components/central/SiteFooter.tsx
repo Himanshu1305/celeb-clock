@@ -1,16 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 
 export type FooterLink = { label: string; to: string };
 
 const DEFAULT_NAV: FooterLink[] = [
-  { label: 'Vedic Astrology', to: '/vedic-astrology' },
-  { label: 'Birthday & Celebrity', to: '/celebrity-birthday' },
-  { label: 'Mystic Corner', to: '/mystic-corner' },
-  { label: 'Science & Longevity', to: '/life-expectancy' },
-  { label: 'Methodology', to: '/how-it-works' },
-  { label: 'Accuracy', to: '/accuracy' },
-  { label: 'Privacy', to: '/privacy' },
-  { label: 'Contact', to: '/contact' },
+  { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+  { label: 'Birthday & Celebrity', to: '/celebrity-birthday/' },
+  { label: 'Mystic Corner', to: '/mystic-corner/' },
+  { label: 'Science & Longevity', to: '/life-expectancy/' },
+  { label: 'Methodology', to: '/how-it-works/' },
+  { label: 'Accuracy', to: '/accuracy/' },
+  { label: 'Privacy', to: '/privacy/' },
+  { label: 'Contact', to: '/contact/' },
 ];
 
 /**

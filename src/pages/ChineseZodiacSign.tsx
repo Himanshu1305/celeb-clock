@@ -1,4 +1,5 @@
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -23,7 +24,7 @@ export default function ChineseZodiacSign() {
   const capitalised = slug.charAt(0).toUpperCase() + slug.slice(1);
   const data = CHINESE_SIGN_EXTENDED[capitalised];
 
-  if (!data) return <Navigate to="/chinese-zodiac" replace />;
+  if (!data) return <Navigate to="/chinese-zodiac/" replace />;
 
   const idx = ANIMALS_ORDER.indexOf(slug);
   const prevAnimal = ANIMALS_ORDER[(idx - 1 + 12) % 12];
@@ -71,15 +72,15 @@ export default function ChineseZodiacSign() {
           ogImage="https://bornclock.com/og/zodiac.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Chinese Zodiac', to: '/chinese-zodiac' }], current: `${capitalised} — Chinese Zodiac` }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Chinese Zodiac', to: '/chinese-zodiac/' }], current: `${capitalised} — Chinese Zodiac` }}
       footer={{
         tagline: `Year of the ${capitalised} — personality, compatibility, lucky elements and every ${capitalised} year.`,
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -276,7 +277,7 @@ export default function ChineseZodiacSign() {
             >
               ← {ANIMAL_EMOJI[prevAnimal]} {prevAnimal.charAt(0).toUpperCase() + prevAnimal.slice(1)}
             </Link>
-            <Link to="/chinese-zodiac" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link to="/chinese-zodiac/" className="text-sm text-muted-foreground hover:text-foreground">
               All Chinese Zodiac Signs
             </Link>
             <Link

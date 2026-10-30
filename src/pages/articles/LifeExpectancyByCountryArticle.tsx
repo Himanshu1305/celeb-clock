@@ -191,7 +191,7 @@ export function LifeExpectancyByCountryArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Life Expectancy by Country 2026 — Global Rankings' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Life Expectancy by Country 2026 — Global Rankings' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy by Country 2026 — Global Rankings"
       lead={`Life expectancy is one of the clearest single measures of how well a nation cares for its people. It captures healthcare, nutrition, sanitation, income, and safety in a single number: the average years a newborn can expect to live if today's conditions hold. Drawing on the UN World Population Prospects 2024 (estimates for 2023), the gap between the longest- and shortest-living countries is roughly 30 years — from Japan at ${leYears('Japan')} years down to Nigeria at ${leYears('Nigeria')}. This guide ranks the leaders and laggards, explains what drives the differences, and shows how to add years to your own life no matter where you were born.`}
@@ -203,7 +203,7 @@ export function LifeExpectancyByCountryArticle() {
             climbed from {WPP2024_HISTORY.World[1970]} years in 1970 to {leYears('World')} in 2023, and countries like India
             have gained more than two decades of life in a single generation. Curious what the
             numbers mean for you personally? Our{' '}
-            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
+            <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline">
               longevity calculator
             </a>{' '}
             estimates your own life expectancy from your lifestyle and habits.
@@ -382,7 +382,7 @@ export function LifeExpectancyByCountryArticle() {
             by more than a decade, which shows how much room there is for continued gains as
             healthcare and incomes keep rising. If you want to see how these national numbers
             translate to an individual in India, our{' '}
-            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
+            <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline">
               longevity calculator
             </a>{' '}
             factors in your own lifestyle rather than a national average.
@@ -419,7 +419,7 @@ export function LifeExpectancyByCountryArticle() {
               on your own lifestyle, habits and health with the free BornClock longevity
               calculator.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Calculate My Life Expectancy →
@@ -440,13 +440,13 @@ export function LifeExpectancyByCountryArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/how-long-will-i-live-in-india"
+                <a href="/articles/how-long-will-i-live-in-india/"
                    className="text-[#2F6FB0] font-semibold underline">
                   How Long Will I Live in India? →
                 </a>
               </li>
               <li>
-                <a href="/articles/how-to-live-to-100"
+                <a href="/articles/how-to-live-to-100/"
                    className="text-[#2F6FB0] font-semibold underline">
                   How to Live to 100 →
                 </a>

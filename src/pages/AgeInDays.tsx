@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
 import { useBirthDate } from '@/context/BirthDateContext';
@@ -15,9 +15,9 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/age-calculator', label: 'Age Calculator' },
-  { path: '/age-in-seconds', label: 'Age in Seconds' },
-  { path: '/birthday-countdown', label: 'Birthday Countdown' },
+  { path: '/age-calculator/', label: 'Age Calculator' },
+  { path: '/age-in-seconds/', label: 'Age in Seconds' },
+  { path: '/birthday-countdown/', label: 'Birthday Countdown' },
 ];
 
 const AgeInDays = () => {
@@ -44,14 +44,14 @@ const AgeInDays = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday' }], current: 'Age in Days' }}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday/' }], current: 'Age in Days' }}
       footer={{
         tagline: 'Exactly how many days old you are — recalculated every midnight.',
         nav: [
-          { label: 'Age Calculator', to: '/age-calculator' },
-          { label: 'Birthday Countdown', to: '/birthday-countdown' },
-          { label: "Today's Birthdays", to: '/todays-birthdays' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Age Calculator', to: '/age-calculator/' },
+          { label: 'Birthday Countdown', to: '/birthday-countdown/' },
+          { label: "Today's Birthdays", to: '/todays-birthdays/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Age & birthday tools.',
       }}

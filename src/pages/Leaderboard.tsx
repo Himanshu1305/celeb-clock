@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Trophy, Users, TrendingUp, Globe } from 'lucide-react';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -137,14 +137,14 @@ export default function Leaderboard() {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: 'Longevity Leaderboard' }}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday/' }], current: 'Longevity Leaderboard' }}
       footer={{
         tagline: 'Anonymous rankings of the highest longevity forecasts from our community.',
         nav: [
-          { label: 'Birthdays', to: '/birthday' },
-          { label: "Today's Birthdays", to: '/todays-birthdays' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthdays', to: '/birthday/' },
+          { label: "Today's Birthdays", to: '/todays-birthdays/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Birthdays.',
       }}
@@ -306,7 +306,7 @@ export default function Leaderboard() {
           <div className="mt-6 rounded-xl border border-dashed border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 p-5 text-center">
             <p className="text-sm text-muted-foreground mb-3">
               Take the quiz at{' '}
-              <Link to="/life-expectancy" className="text-[#6E5AA6] hover:underline">
+              <Link to="/life-expectancy/" className="text-[#6E5AA6] hover:underline">
                 /life-expectancy
               </Link>{' '}
               to get your forecast, then join the leaderboard.
@@ -323,7 +323,7 @@ export default function Leaderboard() {
               Sign in to join the leaderboard and see your rank.
             </p>
             <Button asChild>
-              <Link to="/auth">Sign In</Link>
+              <Link to="/auth/">Sign In</Link>
             </Button>
           </div>
         )}
@@ -334,7 +334,7 @@ export default function Leaderboard() {
           <p className="text-sm text-muted-foreground leading-relaxed">
             The Longevity Leaderboard ranks members by their <strong>longevity score</strong> — the
             personalised life-expectancy estimate produced by the BornClock{' '}
-            <Link to="/life-expectancy" className="text-primary hover:underline">Life Expectancy Calculator</Link>.
+            <Link to="/life-expectancy/" className="text-primary hover:underline">Life Expectancy Calculator</Link>.
             The score combines your age with self-reported lifestyle and health factors — sleep, exercise,
             stress, diet, BMI, smoking status and more — weighted using published population research from
             the WHO, the Global Burden of Disease study, and peer-reviewed longevity literature. A higher
@@ -346,7 +346,7 @@ export default function Leaderboard() {
             how long anyone will actually live. You choose a display name when you join, and only members
             who opt in appear here; you can leave at any time. To add your score, generate your forecast and
             join as a Premium member. Curious how the factors move a real number? Try the{' '}
-            <Link to="/life-expectancy" className="text-primary hover:underline">what-if simulator</Link>{' '}
+            <Link to="/life-expectancy/" className="text-primary hover:underline">what-if simulator</Link>{' '}
             and watch each habit shift the estimate.
           </p>
         </div>
@@ -388,7 +388,7 @@ export default function Leaderboard() {
                 The leaderboard is free to view. Join as a premium member to add your score.
               </p>
               <Button asChild className="w-full">
-                <Link to="/upgrade">Upgrade to Premium →</Link>
+                <Link to="/upgrade/">Upgrade to Premium →</Link>
               </Button>
             </div>
           )}

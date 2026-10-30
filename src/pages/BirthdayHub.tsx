@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { DobInput, toISODate } from '@/components/DobInput';
@@ -68,14 +69,14 @@ export default function BirthdayHub() {
           <FAQSchema items={faqs} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: 'Birthday Personality' }}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday/' }], current: 'Birthday Personality' }}
       footer={{
         tagline: 'Every birthday carries a unique blend of zodiac energy and numerology.',
         nav: [
-          { label: 'Birthdays', to: '/birthday' },
-          { label: "Today's Birthdays", to: '/todays-birthdays' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthdays', to: '/birthday/' },
+          { label: "Today's Birthdays", to: '/todays-birthdays/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Birthdays.',
       }}
@@ -96,8 +97,8 @@ export default function BirthdayHub() {
               </Link>
             </Button>
             <Button asChild variant="outline" className="gap-2">
-              <Link to="/celebrity-birthday">
-                <Users className="w-4 h-4" /> Celebrity Birthdays
+              <Link to="/celebrity-birthday/">
+                <Users className="w-4 h-4" /> Who Shares My Birthday?
               </Link>
             </Button>
           </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
@@ -73,14 +73,14 @@ export default function MoonSignPage() {
           <FAQSchema items={faqItems} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Moon Sign Calculator' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Moon Sign Calculator' }}
       footer={{
         tagline: 'Your moon sign and nakshatra by date of birth, computed with care.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Moon Sign', to: '/moon-sign/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -196,7 +196,7 @@ export default function MoonSignPage() {
               <div className="bg-blue-600 rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get the complete Birthday Intelligence Report</p>
                 <p className="text-blue-200 text-sm mb-4">Moon sign + nakshatra + tarot card + name numerology + 12 more sections — personalised to your exact birthday.</p>
-                <Link to="/birthday-report" className="inline-block bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors">
+                <Link to="/birthday-report/" className="inline-block bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors">
                   Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
@@ -311,14 +311,14 @@ export default function MoonSignPage() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { text: 'Tarot Card by Birthday', href: '/tarot-card-by-birthday' },
-                { text: 'Vedic Zodiac (Rashi)', href: '/vedic-zodiac' },
-                { text: 'Compatibility Calculator', href: '/compatibility' },
-                { text: 'Numerology Calculator', href: '/numerology' },
-                { text: 'Western Zodiac Signs', href: '/zodiac' },
-                { text: 'Sun Sign vs Moon Sign', href: '/sun-vs-moon-sign' },
-                { text: 'What Is My Moon Sign?', href: '/answers/what-is-my-moon-sign' },
-                { text: 'What Is Vedic Astrology?', href: '/answers/what-is-vedic-astrology' },
+                { text: 'Tarot Card by Birthday', href: '/tarot-card-by-birthday/' },
+                { text: 'Vedic Zodiac (Rashi)', href: '/vedic-zodiac/' },
+                { text: 'Compatibility Calculator', href: '/compatibility/' },
+                { text: 'Numerology Calculator', href: '/numerology/' },
+                { text: 'Western Zodiac Signs', href: '/zodiac/' },
+                { text: 'Sun Sign vs Moon Sign', href: '/sun-vs-moon-sign/' },
+                { text: 'What Is My Moon Sign?', href: '/answers/what-is-my-moon-sign/' },
+                { text: 'What Is Vedic Astrology?', href: '/answers/what-is-vedic-astrology/' },
               ].map(item => (
                 <Link key={item.href} to={item.href}
                   className="p-3 rounded-xl border border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-sm text-gray-700 hover:text-blue-700 transition-colors">

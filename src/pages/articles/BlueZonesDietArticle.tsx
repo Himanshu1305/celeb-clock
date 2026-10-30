@@ -104,7 +104,7 @@ export function BlueZonesDietArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: "The Blue Zones Diet — What the World's Longest-Lived People Eat" }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: "The Blue Zones Diet — What the World's Longest-Lived People Eat" }}
       eyebrow="Longevity"
       h1="The Blue Zones Diet — What the World's Longest-Lived People Eat"
       lead="A Blue Zone is a region where people live measurably longer than anywhere else on Earth and reach 100 at extraordinary rates. Author and researcher Dan Buettner identified five: Okinawa in Japan, Sardinia in Italy, Ikaria in Greece, Nicoya in Costa Rica, and Loma Linda in California. Despite being separated by oceans and cultures, the people in these places eat in strikingly similar ways — and their diets look far more like a traditional Indian thali than a modern Western plate."
@@ -118,7 +118,7 @@ export function BlueZonesDietArticle() {
             longevity, the core dietary rules — and how an everyday Indian diet already
             aligns with most of them. If you want to see how these habits translate into
             years, try our{' '}
-            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
+            <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline">
               free longevity calculator
             </a>.
           </p>
@@ -234,7 +234,7 @@ export function BlueZonesDietArticle() {
               Eating like the Blue Zones is one of the biggest levers you can pull. See how
               your diet, movement and habits add up in years with our science-based tool.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Try the Free Longevity Calculator →
@@ -245,12 +245,12 @@ export function BlueZonesDietArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/longevity-foods-india" className="text-[#2F6FB0] font-semibold underline">
+                <a href="/articles/longevity-foods-india/" className="text-[#2F6FB0] font-semibold underline">
                   Longevity Foods of India — What to Eat to Live Longer
                 </a>
               </li>
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-[#2F6FB0] font-semibold underline">
+                <a href="/articles/how-to-live-to-100/" className="text-[#2F6FB0] font-semibold underline">
                   How to Live to 100 — Blue Zones & Science-Backed Habits
                 </a>
               </li>

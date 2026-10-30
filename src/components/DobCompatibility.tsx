@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { calculateWesternZodiac } from '@/utils/celebrityCalculations';
 import { lifePathNumber } from '@/lib/lifePath';
 
@@ -151,7 +151,7 @@ export default function DobCompatibility() {
           <Dimension id="compat-lifepath" icon="🔢" title="Life Path" score={res.lifepath.score} detail={res.lifepath.text} />
           <p data-testid="compat-nakshatra-disclaimer" className="text-xs text-gray-600 italic">
             Vedic Rashi (Moon sign) and Nakshatra (Guna Milan) compatibility need both people's exact birth times and places — get them in the full{' '}
-            <a href="/kundali-match" className="text-[#6E5AA6] underline">Kundali match</a>.
+            <a href="/kundali-match/" className="text-[#6E5AA6] underline">Kundali match</a>.
           </p>
 
           <div className="flex flex-wrap gap-3">
@@ -165,7 +165,7 @@ export default function DobCompatibility() {
               Share on WhatsApp
             </a>
             <Link
-              to="/birthday-report"
+              to="/birthday-report/"
               className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-lg px-5 py-3 font-semibold hover:bg-[#0E2238] transition-colors"
             >
               Get the full Birthday Report →

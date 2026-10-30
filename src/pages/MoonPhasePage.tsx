@@ -6,7 +6,8 @@
  * engine (src/lib/vedic/sky.ts, checked against Swiss Ephemeris) and the same template.
  */
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -46,8 +47,8 @@ export default function MoonPhasePage() {
       theme="vedic"
       testId="moon-phase-page"
       seo={<SEO title={MOON_PHASE_STATIC.title} description={MOON_PHASE_STATIC.description} canonicalUrl="/moon-phase" ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Panchang', to: '/panchang' }], current: 'Moon phase' }}
-      footer={{ tagline: 'The Moon’s phase from its real position.', nav: [{ label: 'Panchang calendar', to: '/panchang-calendar' }, { label: 'Eclipses', to: '/eclipses' }, { label: 'Planets today', to: '/planets-today' }, { label: 'Festivals', to: '/festivals' }, { label: 'Glossary', to: '/glossary' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Panchang', to: '/panchang/' }], current: 'Moon phase' }}
+      footer={{ tagline: 'The Moon’s phase from its real position.', nav: [{ label: 'Panchang calendar', to: '/panchang-calendar/' }, { label: 'Eclipses', to: '/eclipses/' }, { label: 'Planets today', to: '/planets-today/' }, { label: 'Festivals', to: '/festivals/' }, { label: 'Glossary', to: '/glossary/' }] }}
       eyebrow="Moon phase"
       h1={<DailyH1 entry={entry} fallback={MOON_PHASE_STATIC.h1} />}
       lead={<DailyDate entry={entry} />}
@@ -72,15 +73,15 @@ export default function MoonPhasePage() {
             <p className="text-muted-foreground mb-2">The <TermTip id="purnima">Purnima</TermTip> and <TermTip id="amavasya">Amavasya</TermTip> days you keep for vrats are set by the <TermTip id="tithi">Tithi</TermTip> at sunrise, so see them in the Panchang:</p>
             <ul className="space-y-1">
               <li><Link to={`/panchang-calendar${month !== today.slice(0, 7) ? `?month=${month}` : ''}`} className="text-primary hover:underline">Panchang calendar for this month — every Purnima, Amavasya and Ekadashi →</Link></li>
-              <li><Link to="/festivals" className="text-primary hover:underline">Festival calendar for the year →</Link></li>
-              <li><Link to="/eclipses" className="text-primary hover:underline">Solar and lunar eclipses 2026–2030 →</Link></li>
+              <li><Link to="/festivals/" className="text-primary hover:underline">Festival calendar for the year →</Link></li>
+              <li><Link to="/eclipses/" className="text-primary hover:underline">Solar and lunar eclipses 2026–2030 →</Link></li>
             </ul>
           </div>
 
           <div className="rounded-xl border border-border p-4 mb-8 text-sm text-muted-foreground space-y-2" data-testid="moon-how">
             <h2 className="font-semibold text-foreground">How this is worked out</h2>
             <p>The <TermTip id="moonPhase">phase</TermTip> comes from the real angle between the Moon and the Sun as seen from Earth: 0° is the new Moon, 180° the full Moon. The lit share of the disc and the Moon’s age follow from it, and every 12° of that angle is one Tithi (<TermTip id="paksha">Shukla or Krishna Paksha</TermTip>). On the day of a new Moon, first quarter, full Moon or last quarter (IST), the day takes that name.</p>
-            <p>In our tests every new and full Moon of 2026–2027 agrees with Swiss Ephemeris to within about a minute, and the lit share to within 0.01% on five dates. <Link to="/accuracy" className="underline">How we check accuracy →</Link></p>
+            <p>In our tests every new and full Moon of 2026–2027 agrees with Swiss Ephemeris to within about a minute, and the lit share to within 0.01% on five dates. <Link to="/accuracy/" className="underline">How we check accuracy →</Link></p>
           </div>
         </div>
       </section>

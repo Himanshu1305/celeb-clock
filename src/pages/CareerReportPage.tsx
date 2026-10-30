@@ -87,15 +87,15 @@ export default function CareerReportPage() {
           description="A deeper Vedic career report: your 10th house and its lord, the Dasamsa (D10) career chart, career-relevant Yogas, and the real classical timing windows for professional moves."
           canonicalUrl="/career-report" ogType="website" />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Career Analysis', edition: '10th house · D10 · timing' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Career Analysis', edition: '10th house · D10 · timing' }}
       footer={{
         tagline: 'A Vedic career read from your real 10th house, D10 and timing periods — computed, not a trait list.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Sade Sati', to: '/sade-sati' },
-          { label: 'Gemstones', to: '/gemstones' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Sade Sati', to: '/sade-sati/' },
+          { label: 'Gemstones', to: '/gemstones/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -117,7 +117,7 @@ export default function CareerReportPage() {
             <p>A decisive-but-bounded read of your career: the 10th house and its lord, the Dasamsa (D10) career chart, career Yogas, and real timing windows.</p>
           </div>
 
-          <TrustStrip claim="Built from your actual career house (the 10th) and your real planetary periods — not a generic trait list." href="/how-it-works#vedic" />
+          <TrustStrip claim="Built from your actual career house (the 10th) and your real planetary periods — not a generic trait list." href="/how-it-works/#vedic" />
           <KundaliTabs active="kundali" />
 
           <div className="form-band" style={{ marginTop: 16 }}>

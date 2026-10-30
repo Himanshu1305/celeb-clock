@@ -99,15 +99,15 @@ export default function KaalSarpDoshaPage() {
           ogType="website"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kaal Sarp Dosha', edition: 'Rahu–Ketu · Nodal axis' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Kaal Sarp Dosha', edition: 'Rahu–Ketu · Nodal axis' }}
       footer={{
         tagline: 'Kaal Sarp Dosha from your real planetary positions — the same Lahiri-ayanamsa engine as the rest of BornClock.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Sade Sati', to: '/sade-sati' },
-          { label: 'How It Works', to: '/how-it-works' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Sade Sati', to: '/sade-sati/' },
+          { label: 'How It Works', to: '/how-it-works/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -118,7 +118,7 @@ export default function KaalSarpDoshaPage() {
           <div><span className="eyebrow">Rahu–Ketu · Nodal axis</span><h1>Kaal Sarp Dosha Calculator.</h1></div>
           <p>Check whether all seven classical planets fall between Rahu and Ketu in your birth chart, which of the 12 named types applies, and what it actually means — calmly, honestly, without fear.</p>
         </div>
-        <TrustStrip claim="Every planet's position is worked out from your real birth chart. Kaal Sarp is reported only when all seven planets sit between Rahu and Ketu by exact degree — a near-miss is shown as a note, never as a dosha." href="/how-it-works#vedic" />
+        <TrustStrip claim="Every planet's position is worked out from your real birth chart. Kaal Sarp is reported only when all seven planets sit between Rahu and Ketu by exact degree — a near-miss is shown as a note, never as a dosha." href="/how-it-works/#vedic" />
         <div className="form-band" style={{ marginTop: 16 }}>
           <div><h3>Your birth details</h3><p className="small muted">We need the exact positions of all planets, including Rahu and Ketu.</p></div>
           <BirthDetailsForm
@@ -203,7 +203,7 @@ export default function KaalSarpDoshaPage() {
                   <li><strong className="text-foreground">Descending (Ketu leads)</strong> — traditionally associated with inner growth, spiritual focus, and liberation from external attachments; the chart's energy turns inward.</li>
                 </ul>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  For a full picture of how Rahu and Ketu operate across your chart, see your <a href="/kundali" className="text-primary hover:underline">full Kundali</a>.
+                  For a full picture of how Rahu and Ketu operate across your chart, see your <a href="/kundali/" className="text-primary hover:underline">full Kundali</a>.
                 </p>
               </div>
             )}
@@ -215,7 +215,7 @@ export default function KaalSarpDoshaPage() {
                 All seven classical planet positions are computed from your birth data using the <TermTip id="ayanamsa">Lahiri ayanamsa (the traditional Indian sidereal calculation)</TermTip>. Kaal Sarp is reported only when all seven planets (Sun to Saturn) lie strictly between Rahu and Ketu on one side, by exact degree; near-misses are shown only as a note. The type is named from Rahu's house counted from the Lagna (whole-sign houses).
               </p>
               <p className="mt-2 text-xs text-muted-foreground">
-                Learn more at <a href="/how-it-works" className="text-primary hover:underline">How It Works</a> · <a href="/vedic-astrology" className="text-primary hover:underline">Vedic Astrology</a>.
+                Learn more at <a href="/how-it-works/" className="text-primary hover:underline">How It Works</a> · <a href="/vedic-astrology/" className="text-primary hover:underline">Vedic Astrology</a>.
               </p>
             </div>
 
@@ -228,7 +228,7 @@ export default function KaalSarpDoshaPage() {
 
             <p className="text-xs text-muted-foreground">
               Computed from all planetary positions using the same <TermTip id="ayanamsa">Lahiri-ayanamsa engine</TermTip> as the rest of BornClock.
-              See also: <a href="/kundali" className="text-primary hover:underline">Full Kundali</a> · <a href="/sade-sati" className="text-primary hover:underline">Sade Sati</a> · <a href="/vedic-astrology" className="text-primary hover:underline">Vedic Astrology</a> · <a href="/how-it-works" className="text-primary hover:underline">How It Works</a>.
+              See also: <a href="/kundali/" className="text-primary hover:underline">Full Kundali</a> · <a href="/sade-sati/" className="text-primary hover:underline">Sade Sati</a> · <a href="/vedic-astrology/" className="text-primary hover:underline">Vedic Astrology</a> · <a href="/how-it-works/" className="text-primary hover:underline">How It Works</a>.
             </p>
           </div>
         )}

@@ -19,7 +19,7 @@
  * GradeLegend, and a WhatsApp share (reused WhatsAppShareButton) at the real-example moment.
  */
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { PajPage } from '@/components/central';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
@@ -122,7 +122,7 @@ function RealExample() {
         <div><span className="eyebrow">Show, then explain</span><h2>The calculation behind the reading.</h2></div>
         <p>A real computed chart, with its inputs and method visible — not generated from a template.</p>
       </div>
-      <TrustStrip claim="The example chart is really computed — re-run live from the same calculation engine." href="/how-it-works#vedic" />
+      <TrustStrip claim="The example chart is really computed — re-run live from the same calculation engine." href="/how-it-works/#vedic" />
 
       <div className="tabs" role="tablist" aria-label="Explore the output">
         {tabs.map(([id, label]) => (
@@ -233,18 +233,18 @@ function RealExample() {
 }
 
 const FEATURES: Array<{ title: string; desc: string; to: string }> = [
-  { title: 'Kundli', desc: 'Your planetary positions, ascendant and twelve houses — the structure behind the reading.', to: '/kundali' },
-  { title: 'Dasha timing', desc: 'Follow Vimshottari planetary periods and sub-periods on a real timeline.', to: '/kundali' },
-  { title: 'Yoga detection', desc: 'Inspect the chart conditions behind a classical pattern, graded by strength.', to: '/kundali' },
-  { title: 'Kundali Matching', desc: 'Ashtakoota compatibility, point by point — a score and an honest caveat.', to: '/kundali-match' },
-  { title: 'AI Astrologer', desc: 'Ask about a placement and see the chart evidence it is grounded in.', to: '/astrologer' },
+  { title: 'Kundli', desc: 'Your planetary positions, ascendant and twelve houses — the structure behind the reading.', to: '/kundali/' },
+  { title: 'Dasha timing', desc: 'Follow Vimshottari planetary periods and sub-periods on a real timeline.', to: '/kundali/' },
+  { title: 'Yoga detection', desc: 'Inspect the chart conditions behind a classical pattern, graded by strength.', to: '/kundali/' },
+  { title: 'Kundali Matching', desc: 'Ashtakoota compatibility, point by point — a score and an honest caveat.', to: '/kundali-match/' },
+  { title: 'AI Astrologer', desc: 'Ask about a placement and see the chart evidence it is grounded in.', to: '/astrologer/' },
 ];
 const DEEPER: Array<{ title: string; desc: string; to: string }> = [
-  { title: 'Kundli Milan by Name', desc: 'No birth time? An approximate 36-guna match from the first syllable of each name.', to: '/kundli-milan-by-name' },
-  { title: 'Sade Sati', desc: 'Where Saturn’s 7½-year cycle stands for you.', to: '/sade-sati' },
-  { title: 'Muhurat Finder', desc: 'Auspicious timing for what matters.', to: '/muhurat' },
-  { title: 'Career Report', desc: 'Vedic career analysis from your 10th house.', to: '/career-report' },
-  { title: 'Gemstone Recommendation', desc: 'Stones matched to your Lagna lord.', to: '/gemstones' },
+  { title: 'Kundli Milan by Name', desc: 'No birth time? An approximate 36-guna match from the first syllable of each name.', to: '/kundli-milan-by-name/' },
+  { title: 'Sade Sati', desc: 'Where Saturn’s 7½-year cycle stands for you.', to: '/sade-sati/' },
+  { title: 'Muhurat Finder', desc: 'Auspicious timing for what matters.', to: '/muhurat/' },
+  { title: 'Career Report', desc: 'Vedic career analysis from your 10th house.', to: '/career-report/' },
+  { title: 'Gemstone Recommendation', desc: 'Stones matched to your Lagna lord.', to: '/gemstones/' },
 ];
 
 export default function VedicAstrologyLanding() {
@@ -433,8 +433,8 @@ export default function VedicAstrologyLanding() {
           <div><span className="eyebrow">Go deeper</span><h2>Your full chart is free.<br />Keep it as a report if you like.</h2></div>
           <p>Generate your Kundali free — birth chart, planetary periods, doshas and remedies, with the calculation notes. For a printable keepsake, the Birthday Blueprint is our one paid report.</p>
           <div className="report-actions">
-            <Link className="btn light" to="/kundali" data-testid="vap-free-kundali">Generate your free Kundali →</Link>
-            <p className="small"><Link className="textlink" to="/birthday-report" data-testid="vap-birthday-blueprint">The Birthday Blueprint — ₹199 →</Link></p>
+            <Link className="btn light" to="/kundali/" data-testid="vap-free-kundali">Generate your free Kundali →</Link>
+            <p className="small"><Link className="textlink" to="/birthday-report/" data-testid="vap-birthday-blueprint">The Birthday Blueprint — ₹199 →</Link></p>
           </div>
         </section>
 
@@ -445,7 +445,7 @@ export default function VedicAstrologyLanding() {
             <p>A judgment-free conversation grounded in your own birth chart — traditional guidance, offered gently and honestly.</p>
           </div>
           <div className="inline-actions">
-            <Link className="btn" to="/astrologer">Ask the AI Astrologer →</Link>
+            <Link className="btn" to="/astrologer/">Ask the AI Astrologer →</Link>
             <span className="inline-bullet">No account needed to start.</span>
           </div>
         </section>
@@ -491,11 +491,11 @@ export default function VedicAstrologyLanding() {
             ))}
           </p>
           <div className="crosslinks" style={{ marginTop: 20 }}>
-            <Link className="crosslink" to="/celebrity-birthday">
+            <Link className="crosslink" to="/celebrity-birthday/">
               <div><span className="eyebrow">The other lens</span><h3>Birthday &amp; Celebrity →</h3><p>Your birthday twins, real photos and the playful side of your date.</p></div>
               <span>↗</span>
             </Link>
-            <Link className="crosslink" to="/mystic-corner">
+            <Link className="crosslink" to="/mystic-corner/">
               <div><span className="eyebrow">Different systems</span><h3>Mystic Corner →</h3><p>Numerology, Western and Chinese zodiac — each one actually computed.</p></div>
               <span>↗</span>
             </Link>

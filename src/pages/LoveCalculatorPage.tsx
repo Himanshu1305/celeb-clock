@@ -4,7 +4,7 @@
  * astrology prediction, with links to real Kundali matching.
  */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -54,8 +54,8 @@ export default function LoveCalculatorPage() {
       seo={<SEO title={LOVE_META.title} description={LOVE_META.description}
         keywords="love calculator, love calculator by name, name compatibility calculator, love compatibility by name, numerology love calculator"
         canonicalUrl={LOVE_PATH} />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Love calculator' }}
-      footer={{ tagline: 'Name compatibility, just for fun.', nav: [{ label: 'Kundali matching', to: '/kundali-match' }, { label: 'Kundli milan by name', to: '/kundli-milan-by-name' }, { label: 'Zodiac compatibility', to: '/compatibility' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'Love calculator' }}
+      footer={{ tagline: 'Name compatibility, just for fun.', nav: [{ label: 'Kundali matching', to: '/kundali-match/' }, { label: 'Kundli milan by name', to: '/kundli-milan-by-name/' }, { label: 'Zodiac compatibility', to: '/compatibility/' }] }}
       eyebrow="Just for fun · Numerology"
       h1="Love Calculator by Name"
       lead="Type two names to see each name’s numerology number and how the two numbers get along. It is a bit of fun — the same names always give the same answer, and it is not an astrology prediction."
@@ -92,8 +92,8 @@ export default function LoveCalculatorPage() {
                 <p className="text-foreground font-semibold mb-1">Thinking about marriage?</p>
                 <p className="text-muted-foreground mb-3">Real matching compares the two birth charts, not names: <TermTip id="ashtakoota">Guna Milan</TermTip> (36 points) and <TermTip id="manglik">Manglik</TermTip> status from birth date, time and place.</p>
                 <div className="flex flex-wrap gap-3">
-                  <Link to="/kundali-match" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-5 py-2 font-semibold">Kundali matching →</Link>
-                  <Link to="/kundli-milan-by-name" className="inline-flex items-center gap-2 border border-border rounded-lg px-5 py-2 font-semibold text-foreground">Kundli milan by name →</Link>
+                  <Link to="/kundali-match/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-5 py-2 font-semibold">Kundali matching →</Link>
+                  <Link to="/kundli-milan-by-name/" className="inline-flex items-center gap-2 border border-border rounded-lg px-5 py-2 font-semibold text-foreground">Kundli milan by name →</Link>
                 </div>
               </div>
             </div>

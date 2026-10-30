@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -22,7 +23,7 @@ export default function LifeExpectancyFactorPage() {
         theme="neutral"
         testId="le-factors-hub"
         seo={<SEO title="What Affects Life Expectancy — Factor by Factor | BornClock" description="How much each factor changes life expectancy — smoking, exercise, diet, weight, sleep, alcohol, blood pressure, diabetes and social connection — with the years, the evidence and what to do." canonicalUrl="/life-expectancy/factors" ogType="website" />}
-        breadcrumb={{ trail: [{ label: 'Life Expectancy', to: '/life-expectancy' }], current: 'By factor' }}
+        breadcrumb={{ trail: [{ label: 'Life Expectancy', to: '/life-expectancy/' }], current: 'By factor' }}
         eyebrow="Longevity · by factor"
         h1="What affects life expectancy — factor by factor"
         lead="How many years each major factor adds or subtracts, the mechanism, the published evidence, and the actions that move the needle."
@@ -43,7 +44,7 @@ export default function LifeExpectancyFactorPage() {
             <p className="text-xs text-muted-foreground mt-4">{LONGEVITY_BASELINE_NOTE}</p>
             <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center mt-6">
               <p className="text-muted-foreground mb-3">Put the factors together — get your personal forecast and your chance of reaching 100.</p>
-              <Link to="/life-expectancy" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life Expectancy Calculator →</Link>
+              <Link to="/life-expectancy/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life Expectancy Calculator →</Link>
             </div>
           </div>
         </section>
@@ -66,7 +67,7 @@ export default function LifeExpectancyFactorPage() {
       theme="neutral"
       testId="le-factor"
       seo={<SEO title={title} description={description} canonicalUrl={`/life-expectancy/factors/${factor.slug}`} ogType="article" />}
-      breadcrumb={{ trail: [{ label: 'Life Expectancy', to: '/life-expectancy' }, { label: 'By factor', to: '/life-expectancy/factors' }], current: factor.name }}
+      breadcrumb={{ trail: [{ label: 'Life Expectancy', to: '/life-expectancy/' }, { label: 'By factor', to: '/life-expectancy/factors/' }], current: factor.name }}
       eyebrow={`Longevity · ${factor.category}`}
       h1={`${factor.name} & life expectancy`}
       lead={factor.summary}
@@ -113,7 +114,7 @@ export default function LifeExpectancyFactorPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">See how {factor.name.toLowerCase()} and everything else combine in <em>your</em> forecast — plus your chance of reaching 100.</p>
-            <Link to="/life-expectancy" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life Expectancy Calculator →</Link>
+            <Link to="/life-expectancy/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life Expectancy Calculator →</Link>
           </div>
         </div>
       </section>

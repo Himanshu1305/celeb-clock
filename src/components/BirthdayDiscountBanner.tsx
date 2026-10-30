@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { X } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { FEATURES } from '@/config/features';
@@ -41,7 +41,7 @@ export function BirthdayDiscountBanner() {
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <Link
-            to="/upgrade"
+            to="/upgrade/"
             className="bg-amber-900 text-amber-100 hover:bg-amber-800 transition-colors text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap"
           >
             Upgrade Now →

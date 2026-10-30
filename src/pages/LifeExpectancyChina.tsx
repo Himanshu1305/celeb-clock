@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -12,10 +12,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyChina = () => {
@@ -40,7 +40,7 @@ const LifeExpectancyChina = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'China Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'China Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in China — One of History's Most Dramatic Health Transformations"
       lead={`China's average life expectancy is approximately ${leYears('China')} years (${LE_CITATION}). Women average ${leYears('China', 'female')} years; men average ${leYears('China', 'male')} years. China has gained over 21 years of life expectancy since 1970 — from ${WPP2024_HISTORY.China[1970]} years to ${leYears('China')} — one of the most rapid improvements ever recorded for a large population.`}
@@ -71,7 +71,7 @@ const LifeExpectancyChina = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Air Pollution's Toll and Improvement</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Rapid industrialisation created severe air-quality problems, with PM2.5 exposure estimated to cut 2-3 years of life in the most polluted areas.</p>
-            <p className="text-muted-foreground leading-relaxed">The trend is now improving as clean-air policies take effect — Beijing's PM2.5 levels have fallen more than 50% since 2013. See how your own habits shift your forecast with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
+            <p className="text-muted-foreground leading-relaxed">The trend is now improving as clean-air policies take effect — Beijing's PM2.5 levels have fallen more than 50% since 2013. See how your own habits shift your forecast with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
 
@@ -79,7 +79,7 @@ const LifeExpectancyChina = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Compare China Against 57 Countries</h2>
             <p className="text-sm text-muted-foreground mb-4">See how China ranks globally — and how much your own habits could shift your personal forecast.</p>
-            <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Open the Country Comparison Tool →
             </Link>
           </div>

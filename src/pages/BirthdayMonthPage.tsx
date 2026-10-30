@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -40,14 +41,14 @@ export default function BirthdayMonthPage() {
       <CollectionLayout
         theme="birthday"
         testId="birthday-month-page"
-        breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: 'Month not found' }}
+        breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday/' }], current: 'Month not found' }}
         footer={{
           tagline: 'Explore personality insights for every day of the year.',
           nav: [
-            { label: 'Birthdays', to: '/birthday' },
-            { label: "Today's Birthdays", to: '/todays-birthdays' },
-            { label: 'Celebrities', to: '/celebrity' },
-            { label: 'Privacy', to: '/privacy' },
+            { label: 'Birthdays', to: '/birthday/' },
+            { label: "Today's Birthdays", to: '/todays-birthdays/' },
+            { label: 'Celebrities', to: '/celebrity/' },
+            { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock · Birthdays.',
         }}
@@ -56,7 +57,7 @@ export default function BirthdayMonthPage() {
       >
         <section className="section">
           <div className="text-center">
-            <Link to="/birthday" className="text-[#6E5AA6] hover:underline">Browse all months</Link>
+            <Link to="/birthday/" className="text-[#6E5AA6] hover:underline">Browse all months</Link>
           </div>
         </section>
       </CollectionLayout>
@@ -106,14 +107,14 @@ export default function BirthdayMonthPage() {
           <FAQSchema items={faqs} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: monthName }}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday/' }], current: monthName }}
       footer={{
         tagline: 'Explore personality insights for every day of the year.',
         nav: [
-          { label: 'Birthdays', to: '/birthday' },
-          { label: "Today's Birthdays", to: '/todays-birthdays' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthdays', to: '/birthday/' },
+          { label: "Today's Birthdays", to: '/todays-birthdays/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Birthdays.',
       }}
@@ -227,7 +228,7 @@ export default function BirthdayMonthPage() {
             <ChevronLeft className="w-4 h-4" />
             {MONTH_NAMES[prevMonth]}
           </Link>
-          <Link to="/birthday" className="text-xs text-gray-400 hover:text-[#6E5AA6] transition-colors">
+          <Link to="/birthday/" className="text-xs text-gray-400 hover:text-[#6E5AA6] transition-colors">
             All 12 Months
           </Link>
           <Link

@@ -32,7 +32,7 @@ describe('SampleReportPage — Positive', () => {
   it('TC-SR-P-04: CTA links to /birthday-report', () => {
     renderPage();
     const links = Array.from(document.querySelectorAll('a'));
-    expect(links.some(l => l.getAttribute('href') === '/birthday-report')).toBe(true);
+    expect(links.some(l => l.getAttribute('href') === '/birthday-report/')).toBe(true);
   });
   it('TC-SR-P-05: shows Capricorn (Jan 15 Western zodiac)', () => {
     renderPage();

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
@@ -91,15 +91,15 @@ export default function BiorhythmPage() {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Biorhythm Calculator' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'Biorhythm Calculator' }}
       footer={{
         tagline: 'Your physical, emotional and intellectual cycles — charted from your date of birth.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -195,7 +195,7 @@ export default function BiorhythmPage() {
               <div className="bg-teal-700 rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get the complete Birthday Intelligence Report</p>
                 <p className="text-teal-200 text-sm mb-4">Your biorhythm analysis + moon sign + tarot card + name numerology + 12 more sections.</p>
-                <Link to="/birthday-report" className="inline-block bg-white text-teal-600 px-8 py-3 rounded-xl font-semibold hover:bg-teal-50 transition-colors">
+                <Link to="/birthday-report/" className="inline-block bg-white text-teal-600 px-8 py-3 rounded-xl font-semibold hover:bg-teal-50 transition-colors">
                   Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
@@ -243,10 +243,10 @@ export default function BiorhythmPage() {
             <p className="text-sm font-semibold text-gray-600 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { text: 'Life Expectancy Calculator', href: '/life-expectancy' },
-                { text: 'Biological Age Calculator', href: '/biological-age' },
-                { text: 'Moon Sign Calculator', href: '/moon-sign' },
-                { text: 'Name Numerology', href: '/name-numerology' },
+                { text: 'Life Expectancy Calculator', href: '/life-expectancy/' },
+                { text: 'Biological Age Calculator', href: '/biological-age/' },
+                { text: 'Moon Sign Calculator', href: '/moon-sign/' },
+                { text: 'Name Numerology', href: '/name-numerology/' },
               ].map(item => (
                 <Link key={item.href} to={item.href}
                   className="p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 text-sm text-gray-700 hover:text-teal-700 transition-colors">

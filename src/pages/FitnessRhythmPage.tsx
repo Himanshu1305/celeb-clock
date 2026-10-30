@@ -1,4 +1,5 @@
-import { useLocation, Link, Navigate } from 'react-router-dom';
+import { useLocation, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
 import { RhythmWidget } from '@/components/RhythmWidget';
@@ -10,7 +11,7 @@ import { SharePageBar } from '@/components/SharePageBar';
 export default function FitnessRhythmPage() {
   const slug = useLocation().pathname.replace(/^\//, '').replace(/\/+$/, '').toLowerCase();
   const page = getFitnessPage(slug);
-  if (!page) return <Navigate to="/biorhythm" replace />;
+  if (!page) return <Navigate to="/biorhythm/" replace />;
 
   const related = FITNESS_PAGES.filter(p => p.slug !== page.slug).slice(0, 4);
   // Tag-matched blog reads for the internal mesh (rhythm/energy/exercise cluster).
@@ -33,15 +34,15 @@ export default function FitnessRhythmPage() {
           <FAQSchema items={page.faqs.map(f => ({ question: f.question, answer: f.answer }))} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Biorhythm', to: '/biorhythm' }], current: page.h1 }}
+      breadcrumb={{ trail: [{ label: 'Biorhythm', to: '/biorhythm/' }], current: page.h1 }}
       footer={{
         tagline: 'Energy and rhythm pages — charted from your date of birth.',
         nav: [
-          { label: 'Biorhythm', to: '/biorhythm' },
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Birthday Report', to: '/birthday-report' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Biorhythm', to: '/biorhythm/' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Birthday Report', to: '/birthday-report/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -103,8 +104,8 @@ export default function FitnessRhythmPage() {
                   → {r.h1}
                 </Link>
               ))}
-              <Link to="/biorhythm" className="p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 text-sm text-gray-700 hover:text-teal-700 transition-colors">→ Full Biorhythm Calculator</Link>
-              <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 text-sm text-gray-700 hover:text-teal-700 transition-colors">→ Your Birthday Report</Link>
+              <Link to="/biorhythm/" className="p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 text-sm text-gray-700 hover:text-teal-700 transition-colors">→ Full Biorhythm Calculator</Link>
+              <Link to="/birthday-report/" className="p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 text-sm text-gray-700 hover:text-teal-700 transition-colors">→ Your Birthday Report</Link>
               {meshPosts.map(p => (
                 <Link key={p.slug} to={`/blog/${p.slug}`}
                   className="p-3 rounded-xl border border-gray-200 hover:border-teal-300 hover:bg-teal-50 text-sm text-gray-700 hover:text-teal-700 transition-colors">

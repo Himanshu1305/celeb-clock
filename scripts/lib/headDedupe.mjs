@@ -19,6 +19,8 @@
 // complete block (the richer one, plus any field only the other had).
 // Pure string → string so it can be unit-tested (scripts/__tests__/headDedupe.test.ts).
 
+import { canonicalHref, isNonCanonicalInternalHref } from '../../src/lib/seo/canonicalPath.js';
+
 export const SITE = 'https://bornclock.com';
 
 /** Self URL of a route: absolute, trailing slash ('/' stays '/'). */
@@ -263,6 +265,28 @@ export function mergeSameEntityJsonLd(html) {
 }
 
 /**
+ * Batch 11: a page that re-renders its <SEO> after mount (e.g. /compatibility/:a/:b first
+ * renders the calculator hub, then the pair) can be captured with BOTH WebPage blocks
+ * still in the head — two top-level WebPage blocks with different urls, which
+ * mergeSameEntityJsonLd rightly does not merge. When one of them describes the page's
+ * canonical URL, the others are stale leftovers and are dropped.
+ */
+export function dropStaleWebPages(html, canonical) {
+  const pages = [];
+  html.replace(LD_RE, (full, body) => {
+    try {
+      const d = JSON.parse(body);
+      if (d && !Array.isArray(d) && d['@type'] === 'WebPage') pages.push({ full, url: typeof d.url === 'string' ? normalizeSiteUrl(d.url) : null });
+    } catch { /* ignore */ }
+    return full;
+  });
+  if (pages.length < 2 || !pages.some(p => p.url === canonical)) return html;
+  let out = html;
+  for (const p of pages) if (p.url !== null && p.url !== canonical) out = out.replace(p.full, '');
+  return out;
+}
+
+/**
  * Final head pass for a prerendered page. Returns { html, canonical }.
  * - exactly one <link rel="canonical">, one og:url, one twitter:url, all = canonical
  *   (kept with data-rh when Helmet rendered one, so the client re-render replaces
@@ -270,7 +294,9 @@ export function mergeSameEntityJsonLd(html) {
  * - one description / og:description / twitter:description / og:title / twitter:title /
  *   meta title (the page's own Helmet value preferred);
  * - identical JSON-LD blocks appear once, repeated Organization / WebSite / WebPage
- *   blocks are merged into one each, and at most one BreadcrumbList remains.
+ *   blocks are merged into one each, and at most one BreadcrumbList remains;
+ * - Batch 11: every internal <a href> points at the canonical trailing-slash URL
+ *   (`linksRewritten` = how many the source still got wrong).
  */
 export function finalizeHead(html, route) {
   const canonical = pickCanonical(html, route);
@@ -283,8 +309,43 @@ export function finalizeHead(html, route) {
   for (const re of Object.values(SINGLE_META)) out = keepOneMeta(out, re);
   out = dedupeJsonLd(out);
   out = mergeSameEntityJsonLd(out);
+  out = dropStaleWebPages(out, canonical);
   out = keepOneBreadcrumb(out);
-  return { html: out, canonical };
+  const links = canonicalizeInternalLinks(out);
+  return { html: links.html, canonical, linksRewritten: links.rewritten };
+}
+
+// ── Batch 11 (GSC): internal links in their canonical trailing-slash form ────────────
+// The source links already go through canonicalPath (the <Link> wrapper,
+// src/components/seo/CanonicalLink.tsx); this is the safety net for anything that still
+// slipped through (a raw <a href> built from data, markdown, a third-party widget).
+// Only href values of <a> and <link rel="alternate"> tags are touched; hash and query
+// are kept; files (.xml .png .pdf .json …), /api/, other sites and '#…' are left alone.
+const A_HREF_RE = /(<(?:a|link)\b[^>]*?\shref\s*=\s*)(["'])([^"']*)\2/gi;
+
+/** Rewrite internal non-slash hrefs to the slash form. Returns { html, rewritten }. */
+export function canonicalizeInternalLinks(html) {
+  let rewritten = 0;
+  const out = String(html).replace(A_HREF_RE, (full, pre, q, raw) => {
+    if (/^<link\b/i.test(pre) && !/\brel\s*=\s*["']?alternate/i.test(pre)) return full;
+    const href = decodeAttr(raw);
+    const fixed = canonicalHref(href);
+    if (fixed === href) return full;
+    rewritten++;
+    return `${pre}${q}${escAttr(fixed)}${q}`;
+  });
+  return { html: out, rewritten };
+}
+
+/** Internal <a> hrefs that are not canonical (validate-dist fails the build on any). */
+export function nonCanonicalInternalLinks(html) {
+  const bad = [];
+  String(html).replace(/<a\b[^>]*?\shref\s*=\s*(["'])([^"']*)\1/gi, (full, q, raw) => {
+    const href = decodeAttr(raw);
+    if (isNonCanonicalInternalHref(href)) bad.push(href);
+    return full;
+  });
+  return bad;
 }
 
 /** Counts used by validate-dist and the tests. */

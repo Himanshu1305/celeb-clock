@@ -120,7 +120,7 @@ function NakshatraCalculator() {
           <p className="text-sm text-gray-700 leading-relaxed mb-3">
             {profile.personality_summary}
           </p>
-          <a href={`/birthday-report?dob=${dob}`}
+          <a href={`/birthday-report/?dob=${dob}`}
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-[#0E2238]">
             See my full birthday profile →
@@ -179,14 +179,14 @@ export function NakshatraArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Nakshatra' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Nakshatra' }}
       footer={{
         tagline: 'Nakshatra by date of birth — all 27 lunar mansions with lord, deity and gana.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Kundali Matching', to: '/kundali-match' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Kundali Matching', to: '/kundali-match/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -299,15 +299,15 @@ export function NakshatraArticle() {
             sign) and interacts with your <strong>birth chart</strong> as a whole. To understand
             the bigger picture, explore how your moon sign shapes your emotional nature in our
             guide to the{' '}
-            <a href="/articles/moon-sign-by-date-of-birth" className="text-[#6E5AA6] underline font-semibold">
+            <a href="/articles/moon-sign-by-date-of-birth/" className="text-[#6E5AA6] underline font-semibold">
               moon sign by date of birth
             </a>
             , and see how every placement fits together in the{' '}
-            <a href="/articles/vedic-astrology-birth-chart" className="text-[#6E5AA6] underline font-semibold">
+            <a href="/articles/vedic-astrology-birth-chart/" className="text-[#6E5AA6] underline font-semibold">
               Vedic astrology birth chart
             </a>{' '}
             guide. For the fastest complete reading, generate your full{' '}
-            <a href="/birthday-report" className="text-[#6E5AA6] underline font-semibold">
+            <a href="/birthday-report/" className="text-[#6E5AA6] underline font-semibold">
               birthday report
             </a>{' '}
             — it combines your Nakshatra, Rashi, Western zodiac and more from a single date of birth.
@@ -330,7 +330,7 @@ export function NakshatraArticle() {
               Your Nakshatra is just one layer. BornClock also shows your Rashi, Western zodiac,
               Life Path number, lucky stone, and more — all from your date of birth.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Generate My Free Birthday Report →
@@ -341,12 +341,12 @@ export function NakshatraArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/moon-sign-by-date-of-birth" className="text-[#6E5AA6] underline font-semibold">
+                <a href="/articles/moon-sign-by-date-of-birth/" className="text-[#6E5AA6] underline font-semibold">
                   Moon Sign by Date of Birth — Find Your Vedic Rashi
                 </a>
               </li>
               <li>
-                <a href="/articles/vedic-astrology-birth-chart" className="text-[#6E5AA6] underline font-semibold">
+                <a href="/articles/vedic-astrology-birth-chart/" className="text-[#6E5AA6] underline font-semibold">
                   Vedic Astrology Birth Chart — Read Your Kundali
                 </a>
               </li>

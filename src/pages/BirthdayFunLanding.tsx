@@ -7,7 +7,7 @@
  * saved-profile hint, language selector and data-testids preserved unchanged.
  */
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import type { LucideIcon } from 'lucide-react';
 import { Cake, ArrowRight } from 'lucide-react';
 import { SEO } from '@/components/SEO';
@@ -29,13 +29,13 @@ const SEO_CONFIG = {
 const SCHEMA_CONFIG = {
   name: 'BornClock Birthday Fun & Celebrity Twins',
   description: "Find your celebrity birthday twin with real depth — Nakshatra, zodiac and numerology — plus today's birthdays, exact age tools and planetary age. 3,000+ celebrities.",
-  url: '/birthday-fun',
+  url: '/birthday-fun/',
 };
 const TESTID = 'birthday';
 const BADGE: { label: string; icon: LucideIcon } = { label: 'Birthday Fun & Celebrity Twins', icon: Cake };
 const HEADLINE = { lead: '3,000+ celebrities, and', accent: 'real depth most sites skip.' };
 const DIRECT_ANSWER = "Not just who shares your birthday — their actual Nakshatra, their zodiac sign, their numerology. See who's celebrating today, check back daily, and discover connections nobody else shows you. Your age, down to the second. Your birthday twin, waiting to be found.";
-const CTA = { label: 'Find my birthday twin', to: '/celebrity-birthday' };
+const CTA = { label: 'Find my birthday twin', to: '/celebrity-birthday/' };
 const SAVED_PROFILE_HINT_TO = '/celebrity-birthday';
 const STATS: LandingStat[] = [
   { value: 3000, suffix: '+', label: 'Celebrities in the database' },
@@ -44,15 +44,15 @@ const STATS: LandingStat[] = [
 ];
 const TIERS: LandingTier[] = [
   { key: 'core', heading: 'Start here', variant: 'flagship', tools: [
-    { to: '/age-calculator', emoji: '⏰', name: 'Age Calculator', desc: 'Your exact age — years, days, hours, right down to the second, updating live.' },
-    { to: '/celebrity-birthday', emoji: '🌟', name: 'Celebrity Match', desc: 'Find the famous faces who share your birthday — with their real Nakshatra, zodiac and numerology.' },
-    { to: '/todays-birthdays', emoji: '🎂', name: "Today's Birthdays", desc: "See who's celebrating today, and check back daily for a fresh cast of famous birthdays." },
+    { to: '/age-calculator/', emoji: '⏰', name: 'Age Calculator', desc: 'Your exact age — years, days, hours, right down to the second, updating live.' },
+    { to: '/celebrity-birthday/', emoji: '🌟', name: 'Celebrity Match', desc: 'Find the famous faces who share your birthday — with their real Nakshatra, zodiac and numerology.' },
+    { to: '/todays-birthdays/', emoji: '🎂', name: "Today's Birthdays", desc: "See who's celebrating today, and check back daily for a fresh cast of famous birthdays." },
   ] },
   { key: 'supporting', heading: 'More birthday tools', variant: 'medium', tools: [
-    { to: '/birthday-countdown', emoji: '🎉', name: 'Birthday Countdown' },
-    { to: '/age-in-days', emoji: '📅', name: 'Age in Days' },
-    { to: '/age-in-seconds', emoji: '⏱️', name: 'Age in Seconds' },
-    { to: '/planetary-age', emoji: '🌏', name: 'Planetary Age' },
+    { to: '/birthday-countdown/', emoji: '🎉', name: 'Birthday Countdown' },
+    { to: '/age-in-days/', emoji: '📅', name: 'Age in Days' },
+    { to: '/age-in-seconds/', emoji: '⏱️', name: 'Age in Seconds' },
+    { to: '/planetary-age/', emoji: '🌏', name: 'Planetary Age' },
   ] },
 ];
 const CLOSING = (
@@ -168,14 +168,14 @@ export default function BirthdayFunLanding() {
       seo={(
         <SEO title={SEO_CONFIG.title} description={SEO_CONFIG.description} keywords={SEO_CONFIG.keywords} canonicalUrl={SEO_CONFIG.canonicalUrl} ogType="website" />
       )}
-      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'Birthday Fun & Celebrity Twins' }}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers/' }], current: 'Birthday Fun & Celebrity Twins' }}
       footer={{
         tagline: "Who shares your birthday — with real Nakshatra, zodiac and numerology depth.",
         nav: [
-          { label: 'Answers', to: '/answers' },
-          { label: 'Age Calculator', to: '/age-calculator' },
-          { label: 'Birthdays', to: '/birthday' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Answers', to: '/answers/' },
+          { label: 'Age Calculator', to: '/age-calculator/' },
+          { label: 'Birthdays', to: '/birthday/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',
       }}

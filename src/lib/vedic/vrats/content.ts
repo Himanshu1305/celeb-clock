@@ -74,7 +74,7 @@ const S = {
   dShivaratri: { label: 'Drik Panchang — Maha Shivaratri (fasting and puja rules)', url: 'https://www.drikpanchang.com/festivals/maha-shivaratri/maha-shivaratri-date-time.html?year=2019' },
   wJanma: { label: 'Wikipedia — Krishna Janmashtami', url: 'https://en.wikipedia.org/wiki/Krishna_Janmashtami' },
   dJanma: { label: 'Drik Panchang — Janmashtami puja vidhi', url: 'https://www.drikpanchang.com/dashavatara/lord-krishna/janmashtami/puja-vidhi/krishna-janmashtami-puja-vidhi.html?lang=hi' },
-  festivals: { label: 'BornClock festival calendar (dates checked against Drik Panchang, New Delhi)', url: '/festivals' },
+  festivals: { label: 'BornClock festival calendar (dates checked against Drik Panchang, New Delhi)', url: '/festivals/' },
 } satisfies Record<string, Source>;
 export const VRAT_SOURCES = S;
 

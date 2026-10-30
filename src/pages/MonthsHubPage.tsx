@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -32,14 +32,14 @@ export default function MonthsHubPage() {
           canonicalUrl="/born-in"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: 'Born in Each Month' }}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on/' }], current: 'Born in Each Month' }}
       footer={{
         tagline: 'Every birth month’s zodiac signs, birthstone, flowers and famous birthdays.',
         nav: [
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Born In (months)', to: '/born-in' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Born In (months)', to: '/born-in/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Born-on dates.',
       }}
@@ -77,8 +77,8 @@ export default function MonthsHubPage() {
             {meshPosts.map(p => (
               <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ {p.title}</Link>
             ))}
-            <Link to="/born-on" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Browse by exact birth date</Link>
-            <Link to="/birthstone" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Birthstone finder</Link>
+            <Link to="/born-on/" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Browse by exact birth date</Link>
+            <Link to="/birthstone/" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Birthstone finder</Link>
           </div>
         </div>
       </section>

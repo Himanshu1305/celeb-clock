@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { fetchCelebrityImage } from '@/services/WikipediaImageService';
 import { ExternalLink, Rocket } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { FEATURES } from '@/config/features';
 import { boostCelebrity } from '@/services/CelebrityBoostService';
 import { useAuth } from '@/hooks/useAuth';

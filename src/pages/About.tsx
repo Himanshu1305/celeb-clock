@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Globe, FlaskConical, HeartHandshake } from 'lucide-react';
@@ -87,7 +87,7 @@ export default function About() {
           </div>
           <p className="text-muted-foreground text-sm mt-6">
             Every source and formula is publicly documented on our{' '}
-            <a href="/how-it-works" className="text-blue-500 hover:underline">How It Works page</a>.
+            <a href="/how-it-works/" className="text-blue-500 hover:underline">How It Works page</a>.
           </p>
         </section>
 
@@ -112,15 +112,15 @@ export default function About() {
           <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Explore Our Tools</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
-              { icon: '⏱️', label: 'Age Calculator', to: '/age-calculator' },
-              { icon: '🔬', label: 'Life Expectancy', to: '/life-expectancy' },
-              { icon: '🧬', label: 'Biological Age', to: '/biological-age' },
-              { icon: '🪐', label: 'Planetary Age', to: '/planetary-age' },
-              { icon: '⭐', label: 'Zodiac Signs', to: '/zodiac' },
-              { icon: '🔢', label: 'Numerology', to: '/numerology' },
-              { icon: '💎', label: 'Birthstone', to: '/birthstone' },
-              { icon: '🌍', label: 'Country Comparison', to: '/country-comparison' },
-              { icon: '🎂', label: 'Celebrity Birthdays', to: '/celebrity-birthday' },
+              { icon: '⏱️', label: 'Age Calculator', to: '/age-calculator/' },
+              { icon: '🔬', label: 'Life Expectancy', to: '/life-expectancy/' },
+              { icon: '🧬', label: 'Biological Age', to: '/biological-age/' },
+              { icon: '🪐', label: 'Planetary Age', to: '/planetary-age/' },
+              { icon: '⭐', label: 'Zodiac Signs', to: '/zodiac/' },
+              { icon: '🔢', label: 'Numerology', to: '/numerology/' },
+              { icon: '💎', label: 'Birthstone', to: '/birthstone/' },
+              { icon: '🌍', label: 'Country Comparison', to: '/country-comparison/' },
+              { icon: '🎂', label: 'Celebrity Birthdays', to: '/celebrity-birthday/' },
             ].map(tool => (
               <Link
                 key={tool.to}

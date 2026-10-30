@@ -5,7 +5,7 @@
  * browser; nothing is stored.
  */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { CityPicker } from '@/components/CityPicker';
@@ -95,8 +95,8 @@ export default function JanmaTithiPage() {
       seo={<SEO title={JANMA_TITHI_META.title} description={JANMA_TITHI_META.description}
         keywords="janma tithi calculator, hindu birthday calculator, tithi birthday, birthday as per hindu calendar, janmadin tithi"
         canonicalUrl={JANMA_TITHI_PATH} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Panchang', to: '/panchang' }], current: 'Janma Tithi' }}
-      footer={{ tagline: 'Your birthday by the Hindu lunar calendar.', nav: [{ label: 'Panchang', to: '/panchang' }, { label: 'Festivals', to: '/festivals' }, { label: 'Kundali', to: '/kundali' }], note: 'Computed with sidereal (Lahiri) Sun and Moon positions and real local sunrise — the same engine as our Panchang.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Panchang', to: '/panchang/' }], current: 'Janma Tithi' }}
+      footer={{ tagline: 'Your birthday by the Hindu lunar calendar.', nav: [{ label: 'Panchang', to: '/panchang/' }, { label: 'Festivals', to: '/festivals/' }, { label: 'Kundali', to: '/kundali/' }], note: 'Computed with sidereal (Lahiri) Sun and Moon positions and real local sunrise — the same engine as our Panchang.' }}
       eyebrow="Hindu birthday · Janma Tithi"
       h1="Janma Tithi Calculator — Your Hindu Birthday"
       lead={<>Your birthday by the Hindu calendar is the same <TermTip id="tithi">tithi</TermTip> in the same lunar month each year. Enter your birth details to see your birth tithi and the dates of your tithi birthday for the next 10 years.</>}
@@ -199,7 +199,7 @@ export default function JanmaTithiPage() {
             <p><strong className="text-foreground">The day:</strong> each year we take your lunar month (by the classical rule that a lunar month is named after the Sankranti, the Sun’s change of sign, inside it) and find the day on which your tithi is running at sunrise where you celebrate — the same sunrise rule the Panchang uses to name a day.</p>
             <p><strong className="text-foreground">Tithi on two days (vriddhi):</strong> the first day is listed and the second is shown. <strong className="text-foreground">Skipped tithi (kshaya):</strong> the day in which it falls is listed.</p>
             <p><strong className="text-foreground">Adhik Maas:</strong> the birthday is kept in the regular (nija) month; the extra-month date is shown as a note.</p>
-            <p>Want the full day’s Panchang for that date? See the <Link to="/panchang" className="underline">Panchang</Link>, or the <Link to="/festivals" className="underline">festival calendar</Link> for the year.</p>
+            <p>Want the full day’s Panchang for that date? See the <Link to="/panchang/" className="underline">Panchang</Link>, or the <Link to="/festivals/" className="underline">festival calendar</Link> for the year.</p>
           </section>
 
           <ToolFaq items={FAQ} title="Questions about the Hindu birthday" testId="jt-faq" />

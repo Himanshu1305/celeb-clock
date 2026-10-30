@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -43,8 +43,8 @@ export default function AttitudeNumberPage() {
         keywords="birthday number, attitude number, sun number numerology, numerology by date of birth"
         canonicalUrl="/attitude-number"
       />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Birthday & Attitude Number' }}
-      footer={{ tagline: 'Birthday and Attitude numbers from your date of birth.', nav: [{ label: 'Numerology', to: '/numerology' }, { label: 'Name numerology', to: '/name-numerology' }, { label: 'Personal year', to: '/personal-year-number' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'Birthday & Attitude Number' }}
+      footer={{ tagline: 'Birthday and Attitude numbers from your date of birth.', nav: [{ label: 'Numerology', to: '/numerology/' }, { label: 'Name numerology', to: '/name-numerology/' }, { label: 'Personal year', to: '/personal-year-number/' }] }}
       eyebrow="Numerology"
       h1="Birthday &amp; Attitude Number"
       lead="Two quick numbers from your date of birth: your Birthday number (a natural talent) and your Attitude number (your first-impression reflex)."
@@ -87,14 +87,14 @@ export default function AttitudeNumberPage() {
 
           <div className="rounded-xl border border-border p-4 mb-8">
             <h2 className="font-semibold text-foreground mb-1">How these differ from your Life Path</h2>
-            <p className="text-sm text-muted-foreground">Your <Link to="/numerology" className="underline">Life Path number</Link> uses your whole date of birth and is the headline number. The Birthday number (day only) adds one clear, specific gift; the Attitude number (day + month) describes your reflex reaction before the Life Path takes over. Read together they give a fuller, more honest picture than any single number.</p>
+            <p className="text-sm text-muted-foreground">Your <Link to="/numerology/" className="underline">Life Path number</Link> uses your whole date of birth and is the headline number. The Birthday number (day only) adds one clear, specific gift; the Attitude number (day + month) describes your reflex reaction before the Life Path takes over. Read together they give a fuller, more honest picture than any single number.</p>
           </div>
 
           <PageFAQ items={faqItems} />
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Go deeper with your full numerology chart.</p>
-            <Link to="/numerology" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life Path number →</Link>
+            <Link to="/numerology/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life Path number →</Link>
           </div>
         </div>
       </section>

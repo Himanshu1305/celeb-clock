@@ -1,3 +1,4 @@
+import { canonicalPath } from '@/lib/seo/canonicalPath'; // Batch 11: trailing-slash internal links
 /**
  * TrustStrip (Part AL, Step 9a) — one reusable, consistent trust line placed near the top of a
  * result/report page. The claim must be SPECIFIC and CHECKABLE against that page's real engine
@@ -37,7 +38,7 @@ export function TrustStrip({
           <>
             {' '}
             <a
-              href={href}
+              href={canonicalPath(href)}
               data-testid={`${testId}-link`}
               style={{ color: 'var(--accent-text)', fontWeight: 600, whiteSpace: 'nowrap' }}
             >

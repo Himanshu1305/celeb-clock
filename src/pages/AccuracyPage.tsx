@@ -9,7 +9,7 @@
  * no "100%", "most accurate" or comparisons; AstroSage and Drik Panchang are named only as
  * what we compared with — never as being wrong.
  */
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ScrollTable } from '@/components/ScrollTable';
 import { ArticleLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -44,16 +44,16 @@ export default function AccuracyPage() {
           modifiedTime={PAGE_UPDATED_ISO}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'How it works', to: '/how-it-works' }], current: 'Accuracy' }}
+      breadcrumb={{ trail: [{ label: 'How it works', to: '/how-it-works/' }], current: 'Accuracy' }}
       footer={{
         tagline: 'What we checked, against what, and when — including the limits.',
         nav: [
-          { label: 'How it works', to: '/how-it-works' },
-          { label: 'Free Kundali', to: '/kundali' },
-          { label: 'Kundali Matching', to: '/kundali-match' },
-          { label: 'Panchang', to: '/panchang' },
-          { label: 'Glossary', to: '/glossary' },
-          { label: 'Contact', to: '/contact' },
+          { label: 'How it works', to: '/how-it-works/' },
+          { label: 'Free Kundali', to: '/kundali/' },
+          { label: 'Kundali Matching', to: '/kundali-match/' },
+          { label: 'Panchang', to: '/panchang/' },
+          { label: 'Glossary', to: '/glossary/' },
+          { label: 'Contact', to: '/contact/' },
         ],
       }}
       eyebrow="Accuracy"
@@ -228,10 +228,10 @@ export default function AccuracyPage() {
           </div>
 
           <p className="text-sm">
-            Try it yourself: <Link to="/kundali" className={link}>Free Kundali</Link> ·{' '}
-            <Link to="/kundali-match" className={link}>Kundali Matching</Link> ·{' '}
-            <Link to="/panchang" className={link}>Today’s Panchang</Link> ·{' '}
-            <Link to="/how-it-works#vedic" className={link}>How BornClock works</Link>
+            Try it yourself: <Link to="/kundali/" className={link}>Free Kundali</Link> ·{' '}
+            <Link to="/kundali-match/" className={link}>Kundali Matching</Link> ·{' '}
+            <Link to="/panchang/" className={link}>Today’s Panchang</Link> ·{' '}
+            <Link to="/how-it-works/#vedic" className={link}>How BornClock works</Link>
           </p>
         </div>
       </section>

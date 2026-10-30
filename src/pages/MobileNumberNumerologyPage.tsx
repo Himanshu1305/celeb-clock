@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -32,8 +32,8 @@ export default function MobileNumberNumerologyPage() {
         keywords="mobile number numerology, phone number numerology, lucky mobile number, number vibration calculator"
         canonicalUrl="/mobile-number-numerology"
       />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Mobile Number' }}
-      footer={{ tagline: 'Mobile-number numerology, for reflection only.', nav: [{ label: 'House number', to: '/house-number-numerology' }, { label: 'Vehicle number', to: '/vehicle-number-numerology' }, { label: 'Name correction', to: '/name-correction' }, { label: 'Numerology', to: '/numerology' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'Mobile Number' }}
+      footer={{ tagline: 'Mobile-number numerology, for reflection only.', nav: [{ label: 'House number', to: '/house-number-numerology/' }, { label: 'Vehicle number', to: '/vehicle-number-numerology/' }, { label: 'Name correction', to: '/name-correction/' }, { label: 'Numerology', to: '/numerology/' }] }}
       eyebrow="Numerology"
       h1="Mobile Number Numerology"
       lead="Reduce your phone number to a single digit and see the character the tradition reads into it — a light reflection, never a reason to pay for a 'lucky' number."
@@ -63,7 +63,7 @@ export default function MobileNumberNumerologyPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Curious about your home instead?</p>
-            <Link to="/house-number-numerology" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">House number numerology →</Link>
+            <Link to="/house-number-numerology/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">House number numerology →</Link>
           </div>
         </div>
       </section>

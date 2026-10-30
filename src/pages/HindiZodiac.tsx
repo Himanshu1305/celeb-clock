@@ -1,12 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 
 const RELATED = [
-  { path: '/zodiac', label: 'Western Zodiac' },
-  { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)' },
-  { path: '/moon-sign', label: 'Moon Sign Calculator' },
-  { path: '/compatibility', label: 'Compatibility Calculator' },
+  { path: '/zodiac/', label: 'Western Zodiac' },
+  { path: '/vedic-zodiac/', label: 'Indian Zodiac (Vedic)' },
+  { path: '/moon-sign/', label: 'Moon Sign Calculator' },
+  { path: '/compatibility/', label: 'Compatibility Calculator' },
 ];
 
 const HindiZodiac = () => {
@@ -30,14 +30,14 @@ const HindiZodiac = () => {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'राशिफल by Date of Birth' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'राशिफल by Date of Birth' }}
       footer={{
         tagline: 'अपनी राशि जानें जन्म तिथि से — Western और Vedic दोनों।',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Moon Sign', to: '/moon-sign/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -51,7 +51,7 @@ const HindiZodiac = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">अपनी राशि अभी जानें</h2>
             <p className="text-sm text-muted-foreground mb-4">जन्म तिथि डालें और अपनी Western राशि, उसके गुण और compatible signs जानें।</p>
-            <Link to="/zodiac" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/zodiac/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Zodiac Calculator खोलें →
             </Link>
           </div>

@@ -39,7 +39,7 @@ describe('Chaldean numerology page (Batch 9: chart explainer, calculator on /nam
     const ex = getByTestId('chaldean-example').textContent || '';
     expect(ex).toContain('42');
     expect(ex).toMatch(/= 6/);
-    expect(getByTestId('chaldean-cta').getAttribute('href')).toBe('/name-numerology');
+    expect(getByTestId('chaldean-cta').getAttribute('href')).toBe('/name-numerology/');
     const list = getByTestId('compound-list').textContent || '';
     for (const n of [39, 42, 48, 49, 50, 51, 52]) expect(list).toContain(`${n} — `);
     expect(document.body.textContent).not.toContain('undefined');

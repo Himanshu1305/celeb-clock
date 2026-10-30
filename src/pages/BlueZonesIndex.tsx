@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -20,8 +20,8 @@ export default function BlueZonesIndex() {
         description="The nine habits (the Power 9) shared by the world's five Blue Zones — move naturally, purpose, downshift, 80% rule, plant slant, wine at 5, belong, loved ones first, right tribe. Each explained with honest sources."
         canonicalUrl="/blue-zones"
       />}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Blue Zones' }}
-      footer={{ tagline: 'The Power 9 habits of the world\'s longest-lived communities.', nav: [{ label: 'Life expectancy', to: '/life-expectancy' }, { label: 'Science & longevity', to: '/science-longevity' }] }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Blue Zones' }}
+      footer={{ tagline: 'The Power 9 habits of the world\'s longest-lived communities.', nav: [{ label: 'Life expectancy', to: '/life-expectancy/' }, { label: 'Science & longevity', to: '/science-longevity/' }] }}
       eyebrow="Blue Zones"
       h1="The Blue Zones Power 9"
       lead="Nine habits shared by the world's longest-lived communities — Okinawa, Sardinia, Nicoya, Ikaria and Loma Linda. Each one explained plainly, with how to apply it and honest sources."
@@ -46,7 +46,7 @@ export default function BlueZonesIndex() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">See how your habits shape your own estimate.</p>
-            <Link to="/life-expectancy" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life expectancy calculator →</Link>
+            <Link to="/life-expectancy/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life expectancy calculator →</Link>
           </div>
         </div>
       </section>

@@ -1,4 +1,5 @@
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { useState } from 'react';
@@ -230,7 +231,7 @@ export default function GenerationPage() {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Generation' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Generation' }}
       eyebrow="Generations"
       h1={<>Which Generation Are You? — Complete Guide</>}
       lead={<>From the Silent Generation to Generation Alpha — dates, defining events, values, and what the research actually says about each cohort.</>}
@@ -346,11 +347,11 @@ export default function GenerationPage() {
             </Link>
           </div>
           <div className="mt-4 flex flex-wrap gap-3 justify-center text-sm">
-            <Link to="/zodiac" className="text-primary hover:underline">Zodiac Signs</Link>
+            <Link to="/zodiac/" className="text-primary hover:underline">Zodiac Signs</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/numerology" className="text-primary hover:underline">Numerology</Link>
+            <Link to="/numerology/" className="text-primary hover:underline">Numerology</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/birthstone" className="text-primary hover:underline">Birthstone Finder</Link>
+            <Link to="/birthstone/" className="text-primary hover:underline">Birthstone Finder</Link>
           </div>
         </div>
 

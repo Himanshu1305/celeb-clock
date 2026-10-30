@@ -13,6 +13,7 @@ import { yogaTermId } from '@/lib/vedic/termDefinitions';
 import { shadbalaNote, dashaPairNote } from '@/lib/vedic/numberNotes';
 import { activeDoshaDetails } from '@/lib/vedic/doshaRemedies';
 import { SHADBALA_COMPONENT_EXPLANATIONS } from '@/lib/vedic/strengthScale';
+import { canonicalPath } from '@/lib/seo/canonicalPath'; // Batch 11: trailing-slash internal links
 
 const LIFE_AREAS: Array<{ key: 'career' | 'relationships' | 'health' | 'money' | 'family'; label: string }> = [
   { key: 'career', label: 'Career' },
@@ -189,7 +190,7 @@ function DoshaDetails({ facts }: { facts: ReadingFactsClient }) {
             <ul className="mt-1 list-disc pl-5 text-sm text-muted-foreground space-y-1">
               {d.remedies.map((r, i) => <li key={i}>{r}</li>)}
             </ul>
-            <a href={d.remedyPath} data-testid={`dosha-${d.termId}-remedies-link`} className="mt-1 inline-block text-xs text-primary hover:underline">Mantra, daan, puja, temples and more — full remedies →</a>
+            <a href={canonicalPath(d.remedyPath)} data-testid={`dosha-${d.termId}-remedies-link`} className="mt-1 inline-block text-xs text-primary hover:underline">Mantra, daan, puja, temples and more — full remedies →</a>
           </div>
         </div>
       ))}

@@ -5,7 +5,8 @@
  * All content comes from the single dictionary in src/lib/vedic/termDefinitions.ts.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
@@ -81,8 +82,8 @@ export default function GlossaryPage() {
         canonicalUrl="/glossary"
         ogImage="https://bornclock.com/og/vedic.png"
       />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Glossary' }}
-      footer={{ tagline: 'Every astrology term, explained in plain language.', nav: [{ label: 'Free Kundli', to: '/kundali' }, { label: 'Kundali Matching', to: '/kundali-match' }, { label: 'Panchang', to: '/panchang' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Glossary' }}
+      footer={{ tagline: 'Every astrology term, explained in plain language.', nav: [{ label: 'Free Kundli', to: '/kundali/' }, { label: 'Kundali Matching', to: '/kundali-match/' }, { label: 'Panchang', to: '/panchang/' }] }}
       eyebrow="Glossary · शब्दकोश"
       h1="Astrology terms, explained simply."
       lead={`${all.length} terms you’ll see on BornClock — what each one is, and why it matters to you. Hindi names included.`}
@@ -132,7 +133,7 @@ export default function GlossaryPage() {
 
           <p className="mt-8 text-xs text-muted-foreground">
             Explanations follow the classical texts (Brihat Parashara Hora Shastra and standard Panchang and matching practice) and describe tendencies, never certainties.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate →</Link>
           </p>
         </div>
       </section>

@@ -117,7 +117,7 @@ export const CookiePreferencesModal = ({
 
         <div className="text-xs text-muted-foreground">
           For more information about how we use cookies, please read our{' '}
-          <a href="/privacy" className="text-accent hover:underline inline-flex items-center gap-1">
+          <a href="/privacy/" className="text-accent hover:underline inline-flex items-center gap-1">
             Privacy Policy
             <ExternalLink className="h-3 w-3" />
           </a>

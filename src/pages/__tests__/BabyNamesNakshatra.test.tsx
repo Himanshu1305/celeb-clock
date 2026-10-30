@@ -144,7 +144,7 @@ describe('Kundali result → name letters link', () => {
     const { getByTestId } = render(<MemoryRouter><NakshatraNameLetters nakshatra="Rohini" pada={4} /></MemoryRouter>);
     const el = getByTestId('kundali-name-letters');
     expect(el.textContent).toContain('“Vu”');
-    expect(el.querySelector('a')?.getAttribute('href')).toBe('/baby-names/nakshatra/rohini');
+    expect(el.querySelector('a')?.getAttribute('href')).toBe('/baby-names/nakshatra/rohini/');
   });
   it('without a pada: all four syllables', () => {
     const { getByTestId } = render(<MemoryRouter><NakshatraNameLetters nakshatra="Purva Phalguni" pada={undefined} /></MemoryRouter>);

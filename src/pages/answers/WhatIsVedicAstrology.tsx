@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
@@ -7,10 +7,10 @@ import { ArticleLayout } from '@/components/central';
 const CANONICAL = 'https://bornclock.com/answers/what-is-vedic-astrology';
 
 const RELATED = [
-  { path: '/vedic-zodiac', label: 'Vedic Zodiac' },
-  { path: '/moon-sign', label: 'Moon Sign Calculator' },
-  { path: '/compatibility', label: 'Compatibility' },
-  { path: '/sun-vs-moon-sign', label: 'Sun vs Moon Sign' },
+  { path: '/vedic-zodiac/', label: 'Vedic Zodiac' },
+  { path: '/moon-sign/', label: 'Moon Sign Calculator' },
+  { path: '/compatibility/', label: 'Compatibility' },
+  { path: '/sun-vs-moon-sign/', label: 'Sun vs Moon Sign' },
 ];
 
 export default function WhatIsVedicAstrology() {
@@ -39,14 +39,14 @@ export default function WhatIsVedicAstrology() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'What is Vedic astrology?' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'What is Vedic astrology?' }}
       footer={{
         tagline: 'Vedic astrology uses the sidereal zodiac — which is why your Vedic sign is usually one sign behind your Western one.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Vedic Zodiac', to: '/vedic-zodiac' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Moon Sign', to: '/moon-sign/' },
+          { label: 'Vedic Zodiac', to: '/vedic-zodiac/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -87,7 +87,7 @@ export default function WhatIsVedicAstrology() {
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Find My Vedic Sign</p>
             <p className="text-sm text-gray-500 mb-4">See your Rashi, nakshatra, and Vedic zodiac profile</p>
-            <Link to="/vedic-zodiac"
+            <Link to="/vedic-zodiac/"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Find my Vedic sign →
             </Link>

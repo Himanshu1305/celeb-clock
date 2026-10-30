@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -40,8 +40,8 @@ export default function ChaldeanNumerologyPage() {
         keywords="chaldean numerology chart, chaldean letter values, chaldean compound numbers, cheiro compound number meanings"
         canonicalUrl="/chaldean-numerology"
       />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Chaldean Numerology Chart' }}
-      footer={{ tagline: 'The Chaldean letter chart and Cheiro\'s compound numbers, explained.', nav: [{ label: 'Numerology', to: '/numerology' }, { label: 'Name numerology calculator', to: '/name-numerology' }, { label: 'Name correction', to: '/name-correction' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'Chaldean Numerology Chart' }}
+      footer={{ tagline: 'The Chaldean letter chart and Cheiro\'s compound numbers, explained.', nav: [{ label: 'Numerology', to: '/numerology/' }, { label: 'Name numerology calculator', to: '/name-numerology/' }, { label: 'Name correction', to: '/name-correction/' }] }}
       eyebrow="Numerology"
       h1="Chaldean Numerology Chart — Letter Values & Compound Numbers"
       lead="How the Chaldean system turns letters into numbers, how a name total becomes a compound and a single name number, and what Cheiro's compound numbers mean. To work out your own, use the name calculator."
@@ -50,7 +50,7 @@ export default function ChaldeanNumerologyPage() {
         <div className="container mx-auto px-4 py-6 max-w-3xl">
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-5 mb-8 text-center">
             <p className="text-foreground mb-3">Want your own number? The calculator does the adding for you.</p>
-            <Link to="/name-numerology" data-testid="chaldean-cta" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Name number calculator →</Link>
+            <Link to="/name-numerology/" data-testid="chaldean-cta" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Name number calculator →</Link>
           </div>
 
           <div className="rounded-xl border border-border p-4 mb-8" data-testid="chaldean-table">
@@ -109,10 +109,10 @@ export default function ChaldeanNumerologyPage() {
           <PageFAQ items={faqItems} />
 
           <div className="grid sm:grid-cols-2 gap-3 text-sm mt-6">
-            <Link to="/name-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Name number calculator (Chaldean + Western)</Link>
-            <Link to="/name-correction" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Compare spelling variants (name correction)</Link>
-            <Link to="/numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Mulank & Bhagyank calculator</Link>
-            <Link to="/business-name-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Business name numerology</Link>
+            <Link to="/name-numerology/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Name number calculator (Chaldean + Western)</Link>
+            <Link to="/name-correction/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Compare spelling variants (name correction)</Link>
+            <Link to="/numerology/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Mulank & Bhagyank calculator</Link>
+            <Link to="/business-name-numerology/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Business name numerology</Link>
           </div>
         </div>
       </section>

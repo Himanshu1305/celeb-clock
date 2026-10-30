@@ -19,13 +19,13 @@ const CONFIG: CategoryLandingConfig = {
   schema: {
     name: 'BornClock Science & Longevity',
     description: 'A real statistical life-expectancy and biological-age model benchmarked against UN, WHO and GBD population data — shows which health factors move your life expectancy and where each number comes from.',
-    url: '/science-longevity',
+    url: '/science-longevity/',
   },
   testid: 'science',
   badge: { label: 'Science & Longevity', icon: Activity },
   headline: { lead: 'Not a guess.', accent: 'Not a horoscope.' },
   directAnswer: "A real statistical model, built the way actuaries do it — factoring in your exercise habits, stress levels, diet, sleep, and 15+ other real health variables, benchmarked against population data from the UN, WHO, and global health studies covering millions of real lives across 54 countries. Exercise regularly? That's +2.3 years. Chronic stress? That's real too, and we'll show you the number. See exactly which factors move your life expectancy — and exactly where every number comes from.",
-  cta: { label: 'See my life expectancy', to: '/life-expectancy' },
+  cta: { label: 'See my life expectancy', to: '/life-expectancy/' },
   savedProfileHintTo: '/life-expectancy',
   stats: [
     { value: 15, suffix: '+', label: 'Health factors considered' },
@@ -34,12 +34,12 @@ const CONFIG: CategoryLandingConfig = {
   ],
   tiers: [
     { key: 'core', heading: 'Core tools', variant: 'flagship', tools: [
-      { to: '/life-expectancy', emoji: '❤️', name: 'Life Expectancy', desc: 'A real statistical forecast from your exercise, stress, diet, sleep and 15+ health variables — with every factor and its source shown.' },
-      { to: '/biological-age', emoji: '🧬', name: 'Biological Age', desc: 'Is your body younger or older than your birthday? A WHO-aligned, evidence-based estimate from your real habits.' },
+      { to: '/life-expectancy/', emoji: '❤️', name: 'Life Expectancy', desc: 'A real statistical forecast from your exercise, stress, diet, sleep and 15+ health variables — with every factor and its source shown.' },
+      { to: '/biological-age/', emoji: '🧬', name: 'Biological Age', desc: 'Is your body younger or older than your birthday? A WHO-aligned, evidence-based estimate from your real habits.' },
     ] },
     { key: 'supporting', heading: 'Go deeper', variant: 'medium', tools: [
-      { to: '/coach', emoji: '🧘', name: 'Longevity Coach' },
-      { to: '/country-comparison', emoji: '🌍', name: 'Country Comparison (54 countries)' },
+      { to: '/coach/', emoji: '🧘', name: 'Longevity Coach' },
+      { to: '/country-comparison/', emoji: '🌍', name: 'Country Comparison (54 countries)' },
     ] },
   ],
   closing: (

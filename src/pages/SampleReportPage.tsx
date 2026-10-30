@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ReportLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 // Audit S4: every value on this page comes from the SAME functions the paid report
@@ -53,14 +53,14 @@ export function SampleReportPage() {
           ogType="article"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Sample Report' }}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report/' }], current: 'Sample Report' }}
       footer={{
         tagline: 'A sample Birthday Intelligence Report — zodiac, numerology, Vedic Rashi and more.',
         nav: [
-          { label: 'Birthday Report', to: '/birthday-report' },
-          { label: 'Results', to: '/results' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthday Report', to: '/birthday-report/' },
+          { label: 'Results', to: '/results/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',
       }}
@@ -82,7 +82,7 @@ export function SampleReportPage() {
               📋 Sample Report — This shows what YOUR report will look like
             </p>
             <Link
-              to="/birthday-report"
+              to="/birthday-report/"
               className="flex-shrink-0 bg-white text-primary font-bold px-5 py-2 rounded-full
                          text-sm hover:bg-[#6E5AA6]/10 transition-colors whitespace-nowrap"
             >
@@ -198,7 +198,7 @@ export function SampleReportPage() {
           <p className="text-sm text-gray-600 mb-2">
             This is a sample. Generate your personalised report — it's free.
           </p>
-          <a href="/birthday-report"
+          <a href="/birthday-report/"
              className="inline-block bg-primary text-white font-bold px-8 py-3
                         rounded-full text-base hover:bg-primary/90">
             Generate My Free Birthday Report →

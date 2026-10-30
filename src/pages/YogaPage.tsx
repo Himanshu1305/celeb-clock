@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -26,8 +27,8 @@ export default function YogaPage() {
         theme="vedic"
         testId="yoga-hub"
         seo={<SEO title="Vedic Yogas — Raja, Dhana & Pancha Mahapurusha | BornClock" description="The important Vedic yogas (planetary combinations) explained plainly — Raja Yoga, Dhana Yoga, Gaja Kesari, the five Pancha Mahapurusha yogas, Neecha Bhanga and more. Check yours free." canonicalUrl="/yoga" ogImage="https://bornclock.com/og/vedic.png" />}
-        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Yogas' }}
-        footer={{ tagline: 'The important Vedic yogas, explained honestly.', nav: [{ label: 'Free Kundli', to: '/kundali' }, { label: 'Planet in house', to: '/planet-in-house' }] }}
+        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Yogas' }}
+        footer={{ tagline: 'The important Vedic yogas, explained honestly.', nav: [{ label: 'Free Kundli', to: '/kundali/' }, { label: 'Planet in house', to: '/planet-in-house/' }] }}
         eyebrow="Vedic yogas"
         h1="Vedic Yogas — planetary combinations"
         lead="A yoga is a specific combination of planets that the tradition reads as a distinct result. Here are the important ones, explained plainly — and a free Kundli checks which actually form in your chart."
@@ -49,7 +50,7 @@ export default function YogaPage() {
             ))}
             <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center mt-4">
               <p className="text-muted-foreground mb-3">Your free Kundli computes which of these yogas actually form in your chart — and grades how strongly.</p>
-              <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+              <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
             </div>
           </div>
         </section>
@@ -72,8 +73,8 @@ export default function YogaPage() {
       theme="vedic"
       testId="yoga"
       seo={<SEO title={title} description={description} canonicalUrl={`/yoga/${yoga.slug}`} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Yogas', to: '/yoga' }], current: yoga.name }}
-      footer={{ tagline: 'Vedic yogas, explained honestly.', nav: [{ label: 'All yogas', to: '/yoga' }, { label: 'Free Kundli', to: '/kundali' }], note: 'A yoga describes potential, read by the tradition — not a fixed outcome. Strength depends on planetary dignity and your Dasha.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Yogas', to: '/yoga/' }], current: yoga.name }}
+      footer={{ tagline: 'Vedic yogas, explained honestly.', nav: [{ label: 'All yogas', to: '/yoga/' }, { label: 'Free Kundli', to: '/kundali/' }], note: 'A yoga describes potential, read by the tradition — not a fixed outcome. Strength depends on planetary dignity and your Dasha.' }}
       eyebrow={`Yoga · ${yoga.category}`}
       h1={yoga.name}
       lead={yoga.oneLine}
@@ -99,7 +100,7 @@ export default function YogaPage() {
 
           <p className="text-xs text-muted-foreground mb-6">
             Formation follows the classical (Parashari) rule. In your chart the result is shaped by each planet’s dignity, aspects and the running <TermTip id="dasha">Dasha</TermTip>.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           <h2 className="font-semibold text-foreground mb-2">Other yogas</h2>
@@ -113,7 +114,7 @@ export default function YogaPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-foreground mb-3">Does {yoga.name} form in <em>your</em> chart? Find out free — computed and graded.</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
       </section>

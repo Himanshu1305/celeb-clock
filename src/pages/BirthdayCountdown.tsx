@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
 import { BirthdayCountdownCard } from '@/components/BirthdayCountdownCard';
@@ -16,9 +16,9 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/age-calculator', label: 'Age Calculator' },
-  { path: '/todays-birthdays', label: "Today's Birthdays" },
-  { path: '/celebrity-birthday', label: 'Celebrity Birthday Match' },
+  { path: '/age-calculator/', label: 'Age Calculator' },
+  { path: '/todays-birthdays/', label: "Today's Birthdays" },
+  { path: '/celebrity-birthday/', label: 'Celebrity Birthday Match' },
 ];
 
 const BirthdayCountdown = () => {
@@ -44,14 +44,14 @@ const BirthdayCountdown = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday' }], current: 'Birthday Countdown' }}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday/' }], current: 'Birthday Countdown' }}
       footer={{
         tagline: 'Exactly how many days until your next birthday — down to the day.',
         nav: [
-          { label: 'Age Calculator', to: '/age-calculator' },
-          { label: 'Birthday Countdown', to: '/birthday-countdown' },
-          { label: "Today's Birthdays", to: '/todays-birthdays' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Age Calculator', to: '/age-calculator/' },
+          { label: 'Birthday Countdown', to: '/birthday-countdown/' },
+          { label: "Today's Birthdays", to: '/todays-birthdays/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Age & birthday tools.',
       }}

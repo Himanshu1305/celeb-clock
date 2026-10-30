@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
@@ -37,7 +37,7 @@ export default function WhatIsLifeExpectancy() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What is life expectancy?' }}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers/' }], current: 'What is life expectancy?' }}
       eyebrow="Answers"
       h1={<>What Is Life Expectancy and How Is It Calculated?</>}
       lead={<>Know your time. Live it well.</>}
@@ -95,7 +95,7 @@ export default function WhatIsLifeExpectancy() {
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Calculate My Personal Life Expectancy</p>
             <p className="text-sm text-gray-500 mb-4">Personalised to your habits, country, and family history</p>
-            <Link to="/life-expectancy"
+            <Link to="/life-expectancy/"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Calculate My Personal Life Expectancy →
             </Link>
@@ -104,10 +104,10 @@ export default function WhatIsLifeExpectancy() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-long-will-i-live" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How long will I live?</Link>
-              <Link to="/answers/how-to-live-longer" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How to live longer</Link>
-              <Link to="/answers/what-is-my-biological-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is my biological age?</Link>
-              <Link to="/answers/how-does-stress-affect-life-expectancy" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How stress affects life expectancy</Link>
+              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How long will I live?</Link>
+              <Link to="/answers/how-to-live-longer/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How to live longer</Link>
+              <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is my biological age?</Link>
+              <Link to="/answers/how-does-stress-affect-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How stress affects life expectancy</Link>
             </div>
           </div>
         </div>

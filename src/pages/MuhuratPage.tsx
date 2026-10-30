@@ -14,7 +14,7 @@ import { MUHURAT_OCCASIONS, type MuhuratPurpose } from '@/lib/vedic/panchang';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import { formatUtcOffset } from '@/lib/timezone/birthTimezone';
 import { TrustStrip } from '@/components/paj/TrustStrip';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { MUHURAT_YEAR_META, MUHURAT_YEAR_YEARS } from '@/lib/muhuratYearMeta.js';
 
 interface Day { date: string; weekday: string; nakshatra: string; tithiName: string; paksha: string; yoga: string; rahuKalam: { start: string; end: string }; score: number; reasons: string[]; auspicious: boolean }
@@ -67,15 +67,15 @@ export default function MuhuratPage() {
           description="Find auspicious Muhurat dates for marriage, house-warming, business, a vehicle, naming or travel — by Tithi, Nakshatra, Yoga and weekday for your own location, with the Rahu Kalam window to avoid."
           canonicalUrl="/muhurat" ogType="website" />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Muhurat Finder', edition: 'Panchang · auspicious timing' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Muhurat Finder', edition: 'Panchang · auspicious timing' }}
       footer={{
         tagline: 'Auspicious dates from the Panchang, computed for your own location and timezone.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Sade Sati', to: '/sade-sati' },
-          { label: 'Gemstones', to: '/gemstones' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Sade Sati', to: '/sade-sati/' },
+          { label: 'Gemstones', to: '/gemstones/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -101,7 +101,7 @@ export default function MuhuratPage() {
           </ul>
         </nav>
 
-        <TrustStrip claim="Your Panchang is computed for your exact location — the right timings shift from city to city, so we never guess." href="/how-it-works#vedic" />
+        <TrustStrip claim="Your Panchang is computed for your exact location — the right timings shift from city to city, so we never guess." href="/how-it-works/#vedic" />
         <div className="rounded-xl border border-border bg-card/60 p-5 space-y-4" style={{ marginTop: 16 }}>
           <div>
             <label className="block text-xs text-muted-foreground mb-1" htmlFor="muhurat-purpose">Occasion</label>

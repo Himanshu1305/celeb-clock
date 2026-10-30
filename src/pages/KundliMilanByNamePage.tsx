@@ -8,7 +8,7 @@
  * every result links to the accurate (birth-details) matcher.
  */
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -191,13 +191,13 @@ export default function KundliMilanByNamePage({ lang = 'en' }: { lang?: Lang }) 
              hreflang={[{ lang: 'en', url: `${SITE}${NAME_MATCH_PATH.en}/` }, { lang: 'hi', url: `${SITE}${NAME_MATCH_PATH.hi}/` }]} />
       )}
       breadcrumb={hi
-        ? { trail: [{ label: 'कुंडली मिलान', to: '/hi/kundli-milan' }], current: 'नाम से कुंडली मिलान', edition: '36 गुण · नाम के पहले अक्षर से' }
-        : { trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Kundali Matching', to: '/kundali-match' }], current: 'Kundli milan by name', edition: '36 gunas · from the first syllable' }}
+        ? { trail: [{ label: 'कुंडली मिलान', to: '/hi/kundli-milan/' }], current: 'नाम से कुंडली मिलान', edition: '36 गुण · नाम के पहले अक्षर से' }
+        : { trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Kundali Matching', to: '/kundali-match/' }], current: 'Kundli milan by name', edition: '36 gunas · from the first syllable' }}
       footer={{
         tagline: hi ? 'नाम के पहले अक्षर से गुण मिलान — एक अनुमान; सटीक मिलान जन्म विवरण से।' : 'Guna milan from the first syllable of each name — an approximation; birth details give the accurate match.',
         nav: hi
-          ? [{ label: 'कुंडली मिलान', to: '/hi/kundli-milan' }, { label: 'राशिफल', to: '/hi/rashifal' }, { label: 'उपाय', to: '/hi/upay' }, { label: 'English', to: NAME_MATCH_PATH.en }]
-          : [{ label: 'Kundali Matching', to: '/kundali-match' }, { label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Baby names by nakshatra', to: '/baby-names' }, { label: 'हिंदी', to: NAME_MATCH_PATH.hi }],
+          ? [{ label: 'कुंडली मिलान', to: '/hi/kundli-milan/' }, { label: 'राशिफल', to: '/hi/rashifal/' }, { label: 'उपाय', to: '/hi/upay/' }, { label: 'English', to: NAME_MATCH_PATH.en }]
+          : [{ label: 'Kundali Matching', to: '/kundali-match/' }, { label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Baby names by nakshatra', to: '/baby-names/' }, { label: 'हिंदी', to: NAME_MATCH_PATH.hi }],
       }}
     >
       <FAQSchema items={NAME_MATCH_FAQ[lang]} />

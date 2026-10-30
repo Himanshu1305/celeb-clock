@@ -2,7 +2,7 @@
  * Batch 7 (W8): one line under the Kundali result — "Your Nakshatra is X → name letter …"
  * linking to /baby-names/nakshatra/:slug. Uses the ONE site-wide syllable table.
  */
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { NAKSHATRA_PADA_AKSHARAS, aksharaForPada } from '@/data/nakshatraAksharas';
 import { NAKSHATRA_EXTRA } from '@/data/nakshatraPages';
 import { TermTip } from '@/components/vedic/TermTip';

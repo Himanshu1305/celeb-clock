@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 
 // Cosmic Twins — only renders if the visitor's saved birthday (localStorage)
 // shares this celebrity's day & month.
@@ -27,7 +27,7 @@ export function CosmicTwins({ day, month, celebName }: { day: number | null; mon
         You share your birthday with {celebName}. See everything your birthday reveals about you.
       </p>
       <Link
-        to="/birthday-report"
+        to="/birthday-report/"
         className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
       >
         Get my Birthday Report →

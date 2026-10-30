@@ -9,7 +9,7 @@
  * as "Western master number"; the Western Life Path keeps its own label.
  */
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { TermTip } from '@/components/vedic/TermTip';
 import { mulank, bhagyank, chaldeanName } from '@/lib/numerologyExtra';
 import { lifePathWorking } from '@/lib/lifePath';
@@ -226,7 +226,7 @@ export function NumerologyCalculator({ lang = 'en', initialDate, onDateChange }:
               <span className="text-muted-foreground">{t.noCompound}</span>
             )}
           </div>
-          <Link to="/name-numerology" className="inline-block text-sm text-primary hover:underline mt-2">{t.nameLink}</Link>
+          <Link to="/name-numerology/" className="inline-block text-sm text-primary hover:underline mt-2">{t.nameLink}</Link>
         </div>
       )}
     </div>

@@ -84,7 +84,7 @@ export function LifeExpectancyIndiaArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'How Long Will I Live in India? Life Expectancy by State' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'How Long Will I Live in India? Life Expectancy by State' }}
       eyebrow="Life Expectancy"
       h1="How Long Will I Live in India? Life Expectancy by State"
       lead={`"How long will I live?" is one of the most human questions there is — and in India, the honest answer depends enormously on where you were born and how you live today. According to the UN World Population Prospects 2024, India's national life expectancy at birth is ${leYears('India')} years (estimate for 2023). But that single number hides a range of about ten years between states in India's own Sample Registration System (SRS) data. A child born in Kerala can expect to live to 75.1, while a child born in Uttar Pradesh averages just 65.0 — a difference of a full decade, inside the same country.`}
@@ -228,7 +228,7 @@ export function LifeExpectancyIndiaArticle() {
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             BornClock takes you beyond the crude state average. Our{' '}
-            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
+            <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
               longevity calculator
             </a>{' '}
             personalises your estimate using your own lifestyle inputs — your habits, activity
@@ -245,7 +245,7 @@ export function LifeExpectancyIndiaArticle() {
               years your habits could add.
             </p>
             <a
-              href="/longevity-calculator"
+              href="/longevity-calculator/"
               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors"
             >
               Calculate My Life Expectancy →
@@ -266,12 +266,12 @@ export function LifeExpectancyIndiaArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/life-expectancy-by-country-2026" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
+                <a href="/articles/life-expectancy-by-country-2026/" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
                   Life Expectancy by Country 2026 — Global Rankings
                 </a>
               </li>
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
+                <a href="/articles/how-to-live-to-100/" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
                   How to Live to 100 — Habits of the World's Longest-Lived People
                 </a>
               </li>

@@ -95,7 +95,7 @@ function AgeDaysCalculator() {
               </div>
             ))}
           </div>
-          <a href="/birthday-report"
+          <a href="/birthday-report/"
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-[#0E2238] transition-colors">
             See my complete birthday report →
@@ -239,7 +239,7 @@ export function AgeDaysHoursMinutesArticle() {
               Your days-lived count is just the beginning. A BornClock birthday report adds your
               zodiac, numerology, planetary ages and life milestones — all from your date of birth.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Generate My Free Birthday Report →
@@ -261,7 +261,7 @@ export function AgeDaysHoursMinutesArticle() {
               Curious how your days translate into a deeper picture of who you are and how you're
               living?
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3
                           rounded-full text-base hover:bg-[#0E2238] transition-colors">
               Open My Free Birthday Report →
@@ -278,7 +278,7 @@ export function AgeDaysHoursMinutesArticle() {
                 How old are you on Mercury, Mars and Saturn? See your age across the solar system.
               </div>
             </a>
-            <a href="/articles/numerology-by-date-of-birth"
+            <a href="/articles/numerology-by-date-of-birth/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-5
                           hover:border-[#6E5AA6]/30 transition-colors">
               <div className="font-bold text-gray-900 mb-1">Numerology by Date of Birth</div>

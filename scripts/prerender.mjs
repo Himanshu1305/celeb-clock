@@ -347,7 +347,10 @@ async function prerenderRoute(page, baseUrl, route) {
     html = withHtmlLang(html, pageLangForPath(route));
 
     // ── One canonical / og:url / twitter:url; identical JSON-LD blocks once ─────
-    html = finalizeHead(html, route).html;
+    // Batch 11: also puts every internal <a href> in its trailing-slash form (safety net).
+    const fin = finalizeHead(html, route);
+    html = fin.html;
+    const linksRewritten = fin.linksRewritten;
 
     // Sanity: flag a GENUINELY generic title — missing, too short, or identical to
     // the site's default/home title (i.e. no per-route title was injected). The old
@@ -373,7 +376,7 @@ async function prerenderRoute(page, baseUrl, route) {
       outPath = join(dir, 'index.html');
     }
     writeFileSync(outPath, html, 'utf-8');
-    return { route, ok: true, title };
+    return { route, ok: true, title, linksRewritten };
   } catch (err) {
     console.error(`  [ERROR] ${route}: ${err.message}`);
     return { route, ok: false, error: err.message };
@@ -493,7 +496,7 @@ async function main() {
   const record = (r) => {
     if (r.ok) {
       results.ok++;
-      manifestEntries.push({ route: r.route, status: 'ok', title: r.title });
+      manifestEntries.push({ route: r.route, status: 'ok', title: r.title, ...(r.linksRewritten ? { linksRewritten: r.linksRewritten } : {}) });
       if (results.ok % 50 === 0) console.log(`   Progress: ${results.ok}/${ordered.length} routes done`);
     } else {
       results.failed++;
@@ -572,6 +575,8 @@ async function main() {
   const elapsed = Math.round((Date.now() - startTime) / 1000);
   console.log(`\n✅ Prerender complete: ${results.ok} ok, ${results.failed} failed, ${results.skipped} skipped (${elapsed}s)`);
   console.log(`   Manifest written: ${join(OUT, MANIFEST_NAME)}`);
+  const fixedLinks = manifestEntries.reduce((n, e) => n + (e.linksRewritten || 0), 0);
+  if (fixedLinks) console.log(`   Internal links the source left without a trailing slash (fixed in the HTML): ${fixedLinks}`);
 
   if (failedRoutes.length > 0) {
     console.log('   Failed routes:', failedRoutes.slice(0, 20).join(', '));

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Card, CardContent } from '@/components/ui/card';
 import { BadgeCheck } from 'lucide-react';
 
@@ -19,9 +19,9 @@ export const AuthorBio = () => {
               Our editorial team builds and reviews every calculator using verified data from WHO, CDC, NASA, and Wikipedia. We follow Google’s E-E-A-T principles — Experience, Expertise, Authoritativeness, Trustworthiness — to ensure accuracy and transparency.
             </p>
             <div className="flex flex-wrap gap-3 text-xs">
-              <Link to="/about" className="text-primary hover:underline">About the team</Link>
-              <Link to="/how-it-works" className="text-primary hover:underline">How It Works</Link>
-              <Link to="/editorial-policy" className="text-primary hover:underline">Editorial policy</Link>
+              <Link to="/about/" className="text-primary hover:underline">About the team</Link>
+              <Link to="/how-it-works/" className="text-primary hover:underline">How It Works</Link>
+              <Link to="/editorial-policy/" className="text-primary hover:underline">Editorial policy</Link>
             </div>
           </div>
         </CardContent>

@@ -146,7 +146,6 @@ const BirthdayCelebrityLanding = lazyWithReload(() => import("./pages/BirthdayCe
 const VedicZodiacSign = lazyWithReload(() => import("./pages/VedicZodiacSign"));
 const HowLongWillILive = lazyWithReload(() => import('@/pages/answers/HowLongWillILive'));
 const WhatIsMyBiologicalAge = lazyWithReload(() => import('@/pages/answers/WhatIsMyBiologicalAge'));
-const WhoSharesMyBirthday = lazyWithReload(() => import('@/pages/answers/WhoSharesMyBirthday'));
 const HowOldAmIOnMars = lazyWithReload(() => import('@/pages/answers/HowOldAmIOnMars'));
 const WhatIsMyZodiacSign = lazyWithReload(() => import('@/pages/answers/WhatIsMyZodiacSign'));
 const WhatIsMyLifePathNumber = lazyWithReload(() => import('@/pages/answers/WhatIsMyLifePathNumber'));
@@ -357,7 +356,7 @@ const App = () => (
               <Route path="/how-it-works" element={<Methodology />} />
               {/* Legacy path — 301'd at the edge by the Worker; this client
                   fallback covers dev + any direct SPA nav so it never 404s. */}
-              <Route path="/methodology" element={<Navigate to="/how-it-works" replace />} />
+              <Route path="/methodology" element={<Navigate to="/how-it-works/" replace />} />
               <Route path="/editorial-policy" element={<EditorialPolicy />} />
               {/* Batch 8: dated, evidence-backed accuracy page (src/lib/accuracy/evidence.ts). */}
               <Route path="/accuracy" element={<AccuracyPage />} />
@@ -439,7 +438,8 @@ const App = () => (
               <Route path="/answers" element={<AnswersIndex />} />
               <Route path="/answers/how-long-will-i-live" element={<HowLongWillILive />} />
               <Route path="/answers/what-is-my-biological-age" element={<WhatIsMyBiologicalAge />} />
-              <Route path="/answers/who-shares-my-birthday" element={<WhoSharesMyBirthday />} />
+              {/* Batch 11: retired duplicate of the finder — 301 in the Worker (duplicateRedirects). */}
+              <Route path="/answers/who-shares-my-birthday" element={<LegacyRedirect otherwise="/celebrity-birthday/" />} />
               <Route path="/answers/how-old-am-i-on-mars" element={<HowOldAmIOnMars />} />
               <Route path="/answers/what-is-my-zodiac-sign" element={<WhatIsMyZodiacSign />} />
               <Route path="/answers/what-is-my-life-path-number" element={<WhatIsMyLifePathNumber />} />

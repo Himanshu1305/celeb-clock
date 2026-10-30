@@ -4,7 +4,7 @@
  * around already-validated data, matching the other Vedic tool pages.
  */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { RASHIS } from '@/lib/vedic/rashifal';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -146,15 +146,15 @@ export default function SadeSatiPage() {
           description="Free Sade Sati calculator — find whether Saturn's 7.5-year Sade Sati (or the 2.5-year Dhaiya) is active for you, which phase, and the real start and end dates of your current and next cycle."
           canonicalUrl="/sade-sati" ogType="website" />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Sade Sati', edition: 'Shani · Saturn transit' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Sade Sati', edition: 'Shani · Saturn transit' }}
       footer={{
         tagline: 'Sade Sati from Saturn’s real transit — the same Lahiri-ayanamsa engine as the rest of BornClock.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Muhurat', to: '/muhurat' },
-          { label: 'Gemstones', to: '/gemstones' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Muhurat', to: '/muhurat/' },
+          { label: 'Gemstones', to: '/gemstones/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -165,7 +165,7 @@ export default function SadeSatiPage() {
             <p>Saturn’s 7.5-year Sade Sati passes over the 12th, 1st and 2nd signs from your Moon — this shows whether it’s active now, which phase, the real start/end dates, plus the 2.5-year Dhaiya (small Panoti).</p>
           </div>
           {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts). */}
-          <TrustStrip claim="Worked out from where Saturn actually is relative to your Moon sign, not a lookup table. In our tests (October 2026), the Sade Sati status matched Swiss Ephemeris Saturn positions for all 22 test births." href="/accuracy" linkLabel="How we check accuracy" />
+          <TrustStrip claim="Worked out from where Saturn actually is relative to your Moon sign, not a lookup table. In our tests (October 2026), the Sade Sati status matched Swiss Ephemeris Saturn positions for all 22 test births." href="/accuracy/" linkLabel="How we check accuracy" />
           <div className="form-band" style={{ marginTop: 16 }}>
             <div><h3>Your birth details</h3><p className="small muted">We use your Moon sign to locate Saturn’s transit.</p></div>
             <BirthDetailsForm initial={initial} submitLabel="Check my Sade Sati" loadingLabel="Calculating…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="sadesati" />
@@ -243,7 +243,7 @@ export default function SadeSatiPage() {
                 First, the honest part: <strong className="text-foreground">nothing here is necessary to "avoid harm"</strong> — Sade Sati is a period to move through steadily, not a threat to defend against. These are simply the customs people have found grounding during Saturn periods, offered for interest.
               </p>
               {report.blueSapphireOk && (
-                <p data-testid="sadesati-gem" className="text-sm text-muted-foreground mb-2"><strong className="text-foreground">Gemstone (with caution)</strong> — your full chart does favour Saturn, so a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>), Saturn’s classical stone, is an option. It is a powerful stone: traditionally worn on a short trial first, and only after a qualified astrologer has checked your chart. Never for anyone under 18. See the <a href="/gemstones" className="text-primary hover:underline">Gemstone tool</a> for the full reasoning.</p>
+                <p data-testid="sadesati-gem" className="text-sm text-muted-foreground mb-2"><strong className="text-foreground">Gemstone (with caution)</strong> — your full chart does favour Saturn, so a Blue Sapphire (<TermTip id="ratna">Ratna</TermTip>), Saturn’s classical stone, is an option. It is a powerful stone: traditionally worn on a short trial first, and only after a qualified astrologer has checked your chart. Never for anyone under 18. See the <a href="/gemstones/" className="text-primary hover:underline">Gemstone tool</a> for the full reasoning.</p>
               )}
               {/* Batch 5: the shared Remedies block for whichever Saturn period is running. */}
               {(report.active || report.paused) && (
@@ -256,7 +256,7 @@ export default function SadeSatiPage() {
                 <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
                   <li><strong className="text-foreground">Lean into Saturn’s own themes</strong> — patience, routine, honest hard work and finishing what you start. This is the most-cited "remedy" and the one that actually matches the period.</li>
                   <li><strong className="text-foreground">Service &amp; generosity</strong> — helping elders, workers or those in need on a Saturday is a traditional Saturn practice many find genuinely centring.</li>
-                  <li>Full, sourced remedies for when a Saturn period does arrive: <a href="/remedies/sade-sati" className="text-primary hover:underline">Sade Sati</a> · <a href="/remedies/shani-dhaiya" className="text-primary hover:underline">Dhaiya</a>.</li>
+                  <li>Full, sourced remedies for when a Saturn period does arrive: <a href="/remedies/sade-sati/" className="text-primary hover:underline">Sade Sati</a> · <a href="/remedies/shani-dhaiya/" className="text-primary hover:underline">Dhaiya</a>.</li>
                 </ul>
               )}
               <p className="mt-2 text-xs text-amber-700">Offered as tradition and reflection, not medical or financial advice — and never as something you must do out of fear.</p>

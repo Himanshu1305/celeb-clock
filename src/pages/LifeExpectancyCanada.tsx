@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -12,10 +12,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyCanada = () => {
@@ -40,7 +40,7 @@ const LifeExpectancyCanada = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Canada Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Canada Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Canada — Why Canadians Outlive Americans by 5 Years"
       lead={`Canada's average life expectancy is approximately ${leYears('Canada')} years (${LE_CITATION}). Women average ${leYears('Canada', 'female')} years; men average ${leYears('Canada', 'male')} years. Canada consistently outperforms the United States — by ${leDiff('Canada', 'United States')} years in 2023 — largely due to universal healthcare, lower gun violence, lower opioid mortality, and stronger social safety nets.`}
@@ -71,7 +71,7 @@ const LifeExpectancyCanada = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Challenges Ahead</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">An ageing population is putting pressure on the healthcare system, and the opioid crisis has worsened sharply, particularly in British Columbia. Mental-health service gaps are widening.</p>
-            <p className="text-muted-foreground leading-relaxed">Climate change is affecting northern communities through extreme weather and food-security pressures. See how your own habits shift your forecast with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
+            <p className="text-muted-foreground leading-relaxed">Climate change is affecting northern communities through extreme weather and food-security pressures. See how your own habits shift your forecast with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
 
@@ -79,7 +79,7 @@ const LifeExpectancyCanada = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Compare Canada Against 57 Countries</h2>
             <p className="text-sm text-muted-foreground mb-4">See how Canada ranks globally — and how much your own habits could shift your personal forecast.</p>
-            <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Open the Country Comparison Tool →
             </Link>
           </div>

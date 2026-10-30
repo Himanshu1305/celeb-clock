@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Calendar } from 'lucide-react';
@@ -92,14 +93,14 @@ export default function BornOnIndex() {
           ogImage="https://bornclock.com/og/born-on.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: 'Browse by Birthday' }}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on/' }], current: 'Browse by Birthday' }}
       footer={{
         tagline: 'Browse famous birthdays by date — January 1 to December 31.',
         nav: [
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Born In (months)', to: '/born-in' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Born In (months)', to: '/born-in/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Born-on dates.',
       }}
@@ -136,7 +137,7 @@ export default function BornOnIndex() {
           <p className="text-muted-foreground text-sm mb-3">
             Notable world events, famous births and deaths for any date — from Wikipedia.
           </p>
-          <Link to="/on-this-day" className="text-primary hover:underline text-sm font-semibold">
+          <Link to="/on-this-day/" className="text-primary hover:underline text-sm font-semibold">
             Explore what happened on this day →
           </Link>
         </div>

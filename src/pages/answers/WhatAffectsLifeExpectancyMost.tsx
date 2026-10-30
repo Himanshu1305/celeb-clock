@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
@@ -15,11 +15,11 @@ const FACTORS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/answers/what-is-epigenetic-age', label: 'What Is Epigenetic Age?' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/answers/what-is-epigenetic-age/', label: 'What Is Epigenetic Age?' },
 ];
 
 export default function WhatAffectsLifeExpectancyMost() {
@@ -49,7 +49,7 @@ export default function WhatAffectsLifeExpectancyMost() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'What affects life expectancy most?' }}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers/' }], current: 'What affects life expectancy most?' }}
       eyebrow="Answers"
       h1={<>What Affects Life Expectancy the Most? The Answer Might Surprise You</>}
       lead={<>Know your time. Live it well.</>}
@@ -85,7 +85,7 @@ export default function WhatAffectsLifeExpectancyMost() {
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Calculate My Life Expectancy</p>
             <p className="text-sm text-gray-500 mb-4">Personalised to your habits, country, and family history</p>
-            <Link to="/life-expectancy"
+            <Link to="/life-expectancy/"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Calculate my life expectancy →
             </Link>

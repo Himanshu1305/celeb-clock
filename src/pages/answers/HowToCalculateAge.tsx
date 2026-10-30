@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
@@ -35,7 +35,7 @@ export default function HowToCalculateAge() {
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How to calculate age' }}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers/' }], current: 'How to calculate age' }}
       h1="How to Calculate Your Exact Age in Years, Months, Days and Seconds"
     >
         <div className="max-w-2xl mx-auto px-4 py-12">
@@ -80,7 +80,7 @@ export default function HowToCalculateAge() {
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Calculate My Exact Age Right Now</p>
             <p className="text-sm text-gray-500 mb-4">Live countdown · Seconds · Generations · Celebrity twins</p>
-            <Link to="/age-calculator"
+            <Link to="/age-calculator/"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Calculate My Exact Age Right Now →
             </Link>
@@ -89,11 +89,11 @@ export default function HowToCalculateAge() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-many-days-until-my-birthday" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How many days until my birthday?</Link>
-              <Link to="/answers/what-generation-am-i" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What generation am I?</Link>
-              <Link to="/answers/how-old-am-i-on-mars" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How old am I on Mars?</Link>
-              <Link to="/answers/who-shares-my-birthday" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Who shares my birthday?</Link>
-              <Link to="/answers/what-is-my-zodiac-sign" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my zodiac sign?</Link>
+              <Link to="/answers/how-many-days-until-my-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How many days until my birthday?</Link>
+              <Link to="/answers/what-generation-am-i/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What generation am I?</Link>
+              <Link to="/answers/how-old-am-i-on-mars/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How old am I on Mars?</Link>
+              <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Who shares my birthday?</Link>
+              <Link to="/answers/what-is-my-zodiac-sign/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my zodiac sign?</Link>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, Component } from 'react';
 import type { ReactNode, ErrorInfo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { ReportLayout } from '@/components/central';
 import { FeedbackPrompt } from '@/components/FeedbackPrompt';
@@ -263,7 +264,7 @@ const ExpiryPage = () => (
       </p>
       <div className="flex flex-col sm:flex-row gap-3">
         <Link
-          to="/birthday-report"
+          to="/birthday-report/"
           className="px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition-colors"
         >
           Create a New Report 🎂
@@ -314,7 +315,7 @@ class ReportBoundary extends Component<{ children: ReactNode }, { error: Error |
           <p className="text-gray-500 text-sm mb-6 max-w-sm">
             {(this.state.error as Error).message}
           </p>
-          <Link to="/birthday-report" className="px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl">
+          <Link to="/birthday-report/" className="px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl">
             Create a New Report
           </Link>
         </div>
@@ -1071,14 +1072,14 @@ const ReportView = () => {
             ) : (
               <>
                 <a
-                  href={`/auth?returnTo=/report/${slug}`}
+                  href={`/auth/?returnTo=/report/${slug}`}
                   className="block w-full py-3.5 rounded-xl font-bold text-white text-base text-center transition-colors mb-3"
                   style={{ background: 'var(--navy)' }}
                 >
                   Sign in to Unlock
                 </a>
                 <a
-                  href={`/auth?signup=true&returnTo=/report/${slug}`}
+                  href={`/auth/?signup=true&returnTo=/report/${slug}`}
                   className="block w-full py-2.5 rounded-xl font-semibold text-sm text-center transition-colors mb-3"
                   style={{ border: '1.5px solid var(--navy)', color: 'var(--navy)' }}
                 >
@@ -1564,7 +1565,7 @@ const ReportView = () => {
                 )}
 
                 <div className="text-center no-print">
-                  <Link to="/kundali" className="text-xs underline" style={{ color: 'var(--navy)' }}>
+                  <Link to="/kundali/" className="text-xs underline" style={{ color: 'var(--navy)' }}>
                     See the full Kundali (birth chart) →
                   </Link>
                 </div>
@@ -1763,7 +1764,7 @@ const ReportView = () => {
               )}
 
               <div className="text-center no-print">
-                <Link to="/name-numerology" className="text-xs underline" style={{ color: 'var(--navy)' }}>
+                <Link to="/name-numerology/" className="text-xs underline" style={{ color: 'var(--navy)' }}>
                   Calculate with full birth name →
                 </Link>
               </div>
@@ -1855,7 +1856,7 @@ const ReportView = () => {
               )}
 
               <div className="text-center no-print">
-                <Link to="/tarot-card-by-birthday" className="text-xs underline" style={{ color: 'var(--gold)' }}>
+                <Link to="/tarot-card-by-birthday/" className="text-xs underline" style={{ color: 'var(--gold)' }}>
                   Explore more tarot interpretations →
                 </Link>
               </div>
@@ -2120,7 +2121,7 @@ const ReportView = () => {
             <h4 className="font-bold text-green-900 mb-2">Want to know how long they could live?</h4>
             <p className="text-sm text-green-700 mb-4">Calculate a personalised life expectancy based on lifestyle, country, and health factors.</p>
             <Link
-              to="/life-expectancy"
+              to="/life-expectancy/"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl text-sm transition-colors"
             >
               🧬 Try Life Expectancy Calculator
@@ -2212,7 +2213,7 @@ const ReportView = () => {
                 }
               </div>
               <div className="text-center no-print">
-                <Link to="/biorhythm" className="text-xs text-teal-500 hover:text-teal-700 underline">
+                <Link to="/biorhythm/" className="text-xs text-teal-500 hover:text-teal-700 underline">
                   See 30-day biorhythm chart →
                 </Link>
               </div>
@@ -2251,7 +2252,7 @@ const ReportView = () => {
           />
         </div>
         <p className="text-gray-500 text-sm mb-4">
-          Made with BornClock · <Link to="/birthday-report" className="hover:underline" style={{ color: 'var(--gold)' }}>Create another report</Link>
+          Made with BornClock · <Link to="/birthday-report/" className="hover:underline" style={{ color: 'var(--gold)' }}>Create another report</Link>
         </p>
         <div className="flex justify-center gap-3">
           <button

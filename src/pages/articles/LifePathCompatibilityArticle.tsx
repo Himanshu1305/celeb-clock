@@ -164,7 +164,7 @@ function LifePathCompatCalculator() {
               {compatibilityNote(lpA!, lpB!)}
             </p>
           </div>
-          <a href={`/birthday-report?dob=${dobA}`}
+          <a href={`/birthday-report/?dob=${dobA}`}
              className="inline-block bg-rose-600 text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-rose-700 transition-colors">
             See the full birthday profile →
@@ -216,15 +216,15 @@ export function LifePathCompatibilityArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Life Path Compatibility' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Life Path Compatibility' }}
       footer={{
         tagline: 'How Life Path numbers match in love — a numerology compatibility guide with a free calculator.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -359,7 +359,7 @@ export function LifePathCompatibilityArticle() {
               Your Life Path is just one layer of the picture. BornClock reads your Vedic Rashi,
               Western zodiac, Nakshatra, lucky stone and more — all from your date of birth.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-rose-700 font-black px-8 py-3
                           rounded-full text-lg hover:bg-rose-50 transition-colors">
               Generate My Free Birthday Profile →
@@ -370,13 +370,13 @@ export function LifePathCompatibilityArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/numerology-by-date-of-birth"
+                <a href="/articles/numerology-by-date-of-birth/"
                    className="text-rose-700 font-semibold hover:underline">
                   Numerology by Date of Birth — Find Your Life Path Number →
                 </a>
               </li>
               <li>
-                <a href="/articles/moon-sign-by-date-of-birth"
+                <a href="/articles/moon-sign-by-date-of-birth/"
                    className="text-rose-700 font-semibold hover:underline">
                   Moon Sign by Date of Birth — Find Your Vedic Rashi →
                 </a>
@@ -384,7 +384,7 @@ export function LifePathCompatibilityArticle() {
             </ul>
             <p className="text-sm text-gray-600 mt-4">
               Ready to go deeper? Your{' '}
-              <a href="/birthday-report" className="text-rose-700 font-semibold hover:underline">
+              <a href="/birthday-report/" className="text-rose-700 font-semibold hover:underline">
                 free birthday report
               </a>{' '}
               combines your Life Path with your full astrology profile.

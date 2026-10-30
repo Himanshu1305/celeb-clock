@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
@@ -79,7 +79,7 @@ export function LongevityCalculatorPage() {
           <JsonLd data={LC_WEBPAGE_SCHEMA} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Longevity Calculator' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Longevity Calculator' }}
       eyebrow={LC_COPY.hero.badge}
       h1={<>{LC_COPY.hero.h1Line1}{' '}<span>{LC_COPY.hero.h1Line2}</span></>}
       lead={LC_COPY.hero.subtitle}
@@ -104,7 +104,7 @@ export function LongevityCalculatorPage() {
 
             {/* Above-fold CTA — always visible without scrolling */}
             <Link
-              to="/life-expectancy"
+              to="/life-expectancy/"
               data-testid="cta-to-calculator"
               className="inline-block bg-primary hover:bg-primary/90
                          text-white font-black py-4 px-10 rounded-xl
@@ -143,7 +143,7 @@ export function LongevityCalculatorPage() {
               Get your personalised forecast, longevity score, and 90-day action plan.
             </p>
             <Link
-              to="/life-expectancy"
+              to="/life-expectancy/"
               data-testid="cta-to-calculator"
               className="inline-block bg-primary hover:bg-primary/90
                          text-white font-black py-4 px-10 rounded-xl
@@ -175,7 +175,7 @@ export function LongevityCalculatorPage() {
 
             {/* PDF / 90-day plan hook */}
             <Link
-              to="/birthday-report"
+              to="/birthday-report/"
               data-testid="longevity-pdf-cta"
               className="block bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-2xl p-5
                          text-[#2F6FB0] font-bold text-center hover:bg-[#2F6FB0]/10
@@ -257,7 +257,7 @@ export function LongevityCalculatorPage() {
             </p>
             <p className="text-gray-600 text-sm mb-4">{LC_COPY.midCTA.sub}</p>
             <Link
-              to="/life-expectancy"
+              to="/life-expectancy/"
               data-testid="cta-to-calculator"
               className="inline-block bg-primary hover:bg-primary/90
                          text-white font-bold py-3 px-8 rounded-xl transition-colors"
@@ -507,7 +507,7 @@ export function LongevityCalculatorPage() {
               {LC_COPY.bottomCTA.sub}
             </p>
             <Link
-              to="/life-expectancy"
+              to="/life-expectancy/"
               data-testid="cta-to-calculator"
               className="inline-block bg-white text-primary hover:bg-[#2F6FB0]/10
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"

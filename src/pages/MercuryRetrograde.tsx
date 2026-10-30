@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -24,7 +25,7 @@ export default function MercuryRetrograde() {
   const periods = useMemo(() => (yearValid ? computeMercuryRetrogrades(year) : []), [year, yearValid]);
 
   if (yearParam && !yearValid) {
-    return <Navigate to="/mercury-retrograde" replace />;
+    return <Navigate to="/mercury-retrograde/" replace />;
   }
 
   const title = `Mercury Retrograde ${year} — Exact Dates & Meaning | BornClock`;
@@ -56,8 +57,8 @@ export default function MercuryRetrograde() {
       theme="vedic"
       testId="mercury-retrograde"
       seo={<SEO title={title} description={description} canonicalUrl={yearParam ? `/mercury-retrograde/${year}` : '/mercury-retrograde'} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Transits', to: '/transit' }], current: `Mercury retrograde ${year}` }}
-      footer={{ tagline: 'Computed from Mercury’s real apparent motion.', nav: [{ label: 'All transits', to: '/transit' }, { label: 'Rashifal', to: '/rashifal' }, { label: 'Free Kundli', to: '/kundali' }], note: 'Reflective guidance attributed to the astrological tradition — not certainty or professional advice.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Transits', to: '/transit/' }], current: `Mercury retrograde ${year}` }}
+      footer={{ tagline: 'Computed from Mercury’s real apparent motion.', nav: [{ label: 'All transits', to: '/transit/' }, { label: 'Rashifal', to: '/rashifal/' }, { label: 'Free Kundli', to: '/kundali/' }], note: 'Reflective guidance attributed to the astrological tradition — not certainty or professional advice.' }}
       eyebrow="Gochar · Mercury"
       h1={`Mercury Retrograde ${year}`}
       lead={periods.length > 0 ? `${periods.length} retrograde period${periods.length === 1 ? '' : 's'} this year — exact, computed dates below.` : 'Exact, computed retrograde dates below.'}
@@ -110,8 +111,8 @@ export default function MercuryRetrograde() {
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">See how the current sky lands in your own chart.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
-              <Link to="/transit" className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">All transits →</Link>
+              <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+              <Link to="/transit/" className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">All transits →</Link>
             </div>
           </div>
         </div>

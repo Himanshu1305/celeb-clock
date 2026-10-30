@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import bornOnDates from '@/data/indiaBornOnDates.json';
@@ -31,14 +31,14 @@ export default function BornOnIndiaIndex() {
           ogType="website"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: 'India 🇮🇳' }}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on/' }], current: 'India 🇮🇳' }}
       footer={{
         tagline: 'Notable Indians by the day they were born.',
         nav: [
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Born In (months)', to: '/born-in' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Born In (months)', to: '/born-in/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Born-on dates.',
       }}

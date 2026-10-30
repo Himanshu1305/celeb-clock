@@ -6,7 +6,7 @@
  */
 import { useMemo } from 'react';
 import { ScrollTable } from '@/components/ScrollTable';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { NumberNote } from '@/components/vedic/TermTip';
@@ -42,8 +42,8 @@ export default function RahuKaalPage() {
       theme="vedic"
       testId="rahu-kaal-page"
       seo={<SEO title={meta.title} description={meta.description} canonicalUrl={canonical} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Rahu Kaal', to: '/rahu-kaal' }], current: place.name }}
-      footer={{ tagline: 'Rahu Kaal from real sunrise and sunset for your city.', nav: [{ label: 'Panchang', to: '/panchang' }, { label: 'Choghadiya', to: '/choghadiya' }, { label: 'Muhurat', to: '/muhurat' }, { label: 'Glossary', to: '/glossary' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Rahu Kaal', to: '/rahu-kaal/' }], current: place.name }}
+      footer={{ tagline: 'Rahu Kaal from real sunrise and sunset for your city.', nav: [{ label: 'Panchang', to: '/panchang/' }, { label: 'Choghadiya', to: '/choghadiya/' }, { label: 'Muhurat', to: '/muhurat/' }, { label: 'Glossary', to: '/glossary/' }] }}
       eyebrow="Rahu Kaal"
       h1={<DailyH1 entry={entry} fallback={meta.h1} />}
       lead={<span data-testid="panchang-date">{isIndex ? `${place.name} · ` : ''}<DailyDate entry={entry} fallback={dateWithWeekday(dateKey)} /></span>}
@@ -84,7 +84,7 @@ export default function RahuKaalPage() {
           <div className="rounded-xl border border-border p-4 mb-6 text-sm text-muted-foreground space-y-2" data-testid="rahu-kaal-how">
             <h2 className="font-semibold text-foreground">What to do during Rahu Kaal</h2>
             <p>Traditionally people avoid <em>starting</em> something new — a journey, a purchase, a ceremony or signing an agreement — during Rahu Kaal. Work already under way can simply continue. It is a gentle timing guide, not a cause for worry.</p>
-            <p>Times are local clock times rounded to the nearest minute, from the real astronomical sunrise and sunset; checked against Drik Panchang they agree to within a minute. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link> · <Link to="/accuracy" className="underline">How we check accuracy →</Link></p>
+            <p>Times are local clock times rounded to the nearest minute, from the real astronomical sunrise and sunset; checked against Drik Panchang they agree to within a minute. <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link> · <Link to="/accuracy/" className="underline">How we check accuracy →</Link></p>
           </div>
 
           {/* Batch 8: static local guide (temples + festivals, sourced) on the 50 city pages only. */}

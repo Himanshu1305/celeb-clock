@@ -8,7 +8,8 @@
  * browser so the prerendered HTML never goes stale.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -63,7 +64,7 @@ function NextEclipse() {
   if (!next) return null;
   return (
     <p className="rounded-xl border border-primary/30 bg-primary/5 p-4 mb-6 text-sm" data-testid="eclipse-next">
-      <strong className="text-foreground">Next eclipse visible from India:</strong> {next.name} — {formatLongDateEn(next.istDate)}, {next.istTime} IST (greatest eclipse). <a href={`/eclipses/${next.istDate.slice(0, 4)}#eclipse-${next.date}`} className="text-primary hover:underline">Details →</a>
+      <strong className="text-foreground">Next eclipse visible from India:</strong> {next.name} — {formatLongDateEn(next.istDate)}, {next.istTime} IST (greatest eclipse). <a href={`/eclipses/${next.istDate.slice(0, 4)}/#eclipse-${next.date}`} className="text-primary hover:underline">Details →</a>
     </p>
   );
 }
@@ -74,7 +75,7 @@ export default function EclipsesPage() {
   const valid = year === undefined || (Number.isInteger(year) && year >= ECLIPSE_RANGE.from && year <= ECLIPSE_RANGE.to);
   const years = useMemo(() => (year ? [year] : ECLIPSE_YEARS_LIST), [year]);
   const data = useMemo(() => (valid ? years.map(y => ({ y, list: eclipsesOfYear(y) })) : []), [years, valid]);
-  if (!valid) return <Navigate to="/eclipses" replace />;
+  if (!valid) return <Navigate to="/eclipses/" replace />;
 
   const meta = eclipsesMeta(year);
   const all = data.flatMap(d => d.list);
@@ -94,8 +95,8 @@ export default function EclipsesPage() {
       theme="vedic"
       testId="eclipses-page"
       seo={<SEO title={meta.title} description={meta.description} canonicalUrl={path} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: year ? [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Eclipses', to: '/eclipses' }] : [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: year ? String(year) : 'Eclipses' }}
-      footer={{ tagline: 'Eclipse dates computed and checked against NASA.', nav: [{ label: 'Moon phase', to: '/moon-phase' }, { label: 'Festivals', to: '/festivals' }, { label: 'Panchang calendar', to: '/panchang-calendar' }, { label: 'Grahan Dosha', to: '/grahan-dosha' }] }}
+      breadcrumb={{ trail: year ? [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Eclipses', to: '/eclipses/' }] : [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: year ? String(year) : 'Eclipses' }}
+      footer={{ tagline: 'Eclipse dates computed and checked against NASA.', nav: [{ label: 'Moon phase', to: '/moon-phase/' }, { label: 'Festivals', to: '/festivals/' }, { label: 'Panchang calendar', to: '/panchang-calendar/' }, { label: 'Grahan Dosha', to: '/grahan-dosha/' }] }}
       eyebrow="Surya & Chandra Grahan"
       h1={meta.h1}
       lead={`${all.length} eclipses in ${span}; ${india.length} visible from India.`}
@@ -114,7 +115,7 @@ export default function EclipsesPage() {
           {year && (
             <nav className="flex flex-wrap gap-2 mb-6" aria-label="Other years" data-testid="eclipse-years">
               {ECLIPSE_YEARS_LIST.map(y => <Link key={y} to={`/eclipses/${y}`} className={`px-3 py-1 rounded-lg border text-sm ${y === year ? 'border-primary text-primary' : 'border-border'}`}>{y}</Link>)}
-              <Link to="/eclipses" className="px-3 py-1 rounded-lg border border-border text-sm">All years</Link>
+              <Link to="/eclipses/" className="px-3 py-1 rounded-lg border border-border text-sm">All years</Link>
             </nav>
           )}
 
@@ -129,7 +130,7 @@ export default function EclipsesPage() {
             <h2 className="font-semibold text-foreground">How these are worked out</h2>
             <p>The eclipses and the time of greatest eclipse are computed from the real positions of the Sun and Moon, near <TermTip id="rahu">Rahu or Ketu</TermTip>, and match NASA’s eclipse tables (Fred Espenak) in date and type; the IST time agrees with NASA’s to within a minute. Type, magnitude, durations and the region where each <TermTip id="eclipse">eclipse</TermTip> is seen are quoted from NASA; visibility from India and Delhi is quoted from timeanddate.com. We do not list Sutak timings, because we have not found a published rule we can cite and check — your family priest or temple calendar is the right guide for that.</p>
             <p>Reading the cards: a solar eclipse’s magnitude is the share of the Sun’s diameter the Moon covers at greatest eclipse (1 or more on the central path of a total eclipse). For a lunar eclipse the umbral magnitude is how far the Moon enters the Earth’s dark inner shadow; a negative value marks a penumbral eclipse, when the Moon passes only through the faint outer shadow and dims slightly.</p>
-            <p><Link to="/accuracy" className="underline">How we check accuracy →</Link> · <Link to="/grahan-dosha" className="underline">Grahan Dosha in a birth chart →</Link></p>
+            <p><Link to="/accuracy/" className="underline">How we check accuracy →</Link> · <Link to="/grahan-dosha/" className="underline">Grahan Dosha in a birth chart →</Link></p>
           </div>
 
           <PageFAQ items={faq} />

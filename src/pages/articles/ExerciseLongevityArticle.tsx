@@ -69,7 +69,7 @@ export function ExerciseLongevityArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Exercise and Longevity — How Movement Adds Years to Your Life' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Exercise and Longevity — How Movement Adds Years to Your Life' }}
       eyebrow="Longevity"
       h1="Exercise and Longevity — How Movement Adds Years to Your Life"
       lead="Of every lifestyle choice you can make, regular exercise is the one most consistently linked to a longer, healthier life. It is not a fad or a supplement — it is the closest thing medicine has to a genuine anti-ageing intervention, and the evidence comes from some of the largest and most respected studies ever run. This guide walks through what the science actually shows, how it applies to everyday Indian life, and a practical 30-day plan to get you moving."
@@ -133,7 +133,7 @@ export function ExerciseLongevityArticle() {
             </ul>
             <p className="text-sm text-[#2F6FB0] mt-4">
               Curious what these habits could mean for you personally? The{' '}
-              <a href="/longevity-calculator" className="text-[#2F6FB0] font-bold underline">longevity calculator</a> turns
+              <a href="/longevity-calculator/" className="text-[#2F6FB0] font-bold underline">longevity calculator</a> turns
               lifestyle inputs like activity level into an estimated life expectancy.
             </p>
           </div>
@@ -209,7 +209,7 @@ export function ExerciseLongevityArticle() {
             resistance training twice a week, and far less unbroken sitting. Keep it
             going and the years, on the evidence, add up. Check your progress against an
             estimate with the{' '}
-            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">longevity calculator</a>.
+            <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline">longevity calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Frequently Asked Questions</h2>
@@ -230,7 +230,7 @@ export function ExerciseLongevityArticle() {
               the BornClock longevity calculator to get a personalised life-expectancy
               estimate — and see the impact of moving more.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Try the Longevity Calculator →
@@ -241,12 +241,12 @@ export function ExerciseLongevityArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/how-to-live-to-100" className="text-[#2F6FB0] font-semibold underline">
+                <a href="/articles/how-to-live-to-100/" className="text-[#2F6FB0] font-semibold underline">
                   How to Live to 100 — Habits of the World's Longest-Lived People
                 </a>
               </li>
               <li>
-                <a href="/articles/longevity-quiz" className="text-[#2F6FB0] font-semibold underline">
+                <a href="/articles/longevity-quiz/" className="text-[#2F6FB0] font-semibold underline">
                   The Longevity Quiz — Test Your Lifestyle Against the Science
                 </a>
               </li>

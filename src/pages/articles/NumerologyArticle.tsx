@@ -5,7 +5,7 @@ import { LIFE_PATH_EXTENDED } from '@/data/astrologicalData';
 import { famousForLifePath } from '@/data/famousLifePaths';
 import { mulank, bhagyank } from '@/lib/numerologyExtra';
 import { lifePathWorking } from '@/lib/lifePath';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 
 // Batch 9 (cannibalisation): this article is the INDIA GUIDE — what Mulank, Bhagyank and
 // the Western Life Path are and why they can differ. The calculator lives on /numerology,
@@ -85,15 +85,15 @@ export function NumerologyArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Numerology by Date of Birth' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Numerology by Date of Birth' }}
       footer={{
         tagline: 'Mulank, Bhagyank and the Western Life Path — three numbers from one date of birth, explained.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -117,7 +117,7 @@ export function NumerologyArticle() {
 
           <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-5 mb-8" data-testid="article-calc-cta">
             <p className="text-gray-800 mb-3">Just want your numbers? The free calculator shows your Mulank, Bhagyank, Western Life Path and name number with the working.</p>
-            <Link to="/numerology" className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5 rounded-full text-sm">Open the numerology calculator →</Link>
+            <Link to="/numerology/" className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5 rounded-full text-sm">Open the numerology calculator →</Link>
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Three numbers from one birth date</h2>
@@ -150,8 +150,8 @@ export function NumerologyArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-3">And your name number</h2>
           <p className="text-gray-700 leading-relaxed mb-6">
             Indian numerologists also read a <strong>name number</strong>, using the Chaldean letter chart
-            (values 1–8, no letter given 9). See the <Link to="/chaldean-numerology" className="text-[#6E5AA6] underline">Chaldean chart</Link> or
-            work yours out on the <Link to="/name-numerology" className="text-[#6E5AA6] underline">name number calculator</Link>.
+            (values 1–8, no letter given 9). See the <Link to="/chaldean-numerology/" className="text-[#6E5AA6] underline">Chaldean chart</Link> or
+            work yours out on the <Link to="/name-numerology/" className="text-[#6E5AA6] underline">name number calculator</Link>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-2">The Western Life Path numbers, with Indian examples</h2>
@@ -217,7 +217,7 @@ export function NumerologyArticle() {
               Western zodiac, Nakshatra, lucky stone, and more — all from your date of birth. Your
               Mulank, Bhagyank and Life Path stay free on the numerology calculator.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               See the full Birthday Report →

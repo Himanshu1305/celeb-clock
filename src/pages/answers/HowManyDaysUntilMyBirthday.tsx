@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
@@ -35,14 +35,14 @@ export default function HowManyDaysUntilMyBirthday() {
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'How many days until my birthday?' }}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers/' }], current: 'How many days until my birthday?' }}
       footer={{
         tagline: 'Count the exact days until your next birthday — and what they add up to.',
         nav: [
-          { label: 'Answers', to: '/answers' },
-          { label: 'Age Calculator', to: '/age-calculator' },
-          { label: 'Birthdays', to: '/birthday' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Answers', to: '/answers/' },
+          { label: 'Age Calculator', to: '/age-calculator/' },
+          { label: 'Birthdays', to: '/birthday/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',
       }}
@@ -85,7 +85,7 @@ export default function HowManyDaysUntilMyBirthday() {
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Count Down to Your Next Birthday</p>
             <p className="text-sm text-gray-500 mb-4">Your exact age, next-birthday countdown, zodiac and birthday twins — from your date of birth</p>
-            <Link to="/age-calculator"
+            <Link to="/age-calculator/"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Open the Age &amp; Birthday Calculator →
             </Link>
@@ -94,10 +94,10 @@ export default function HowManyDaysUntilMyBirthday() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-to-calculate-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How do I calculate my exact age?</Link>
-              <Link to="/answers/who-shares-my-birthday" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Which famous people share my birthday?</Link>
-              <Link to="/answers/what-is-my-zodiac-sign" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my zodiac sign?</Link>
-              <Link to="/answers/how-old-am-i-on-mars" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How old am I on Mars?</Link>
+              <Link to="/answers/how-to-calculate-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How do I calculate my exact age?</Link>
+              <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Who shares my birthday?</Link>
+              <Link to="/answers/what-is-my-zodiac-sign/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my zodiac sign?</Link>
+              <Link to="/answers/how-old-am-i-on-mars/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How old am I on Mars?</Link>
             </div>
           </div>
         </div>

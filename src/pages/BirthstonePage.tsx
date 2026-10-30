@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { Helmet } from 'react-helmet-async';
@@ -17,14 +18,14 @@ export default function BirthstonePage() {
         theme="birthday"
         testId="birthstone-month-page"
         seo={<SEO title="Month Not Found — Birthstone | BornClock" description="That birthstone month doesn't exist in our database." canonicalUrl="/birthstone" />}
-        breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }, { label: 'Birthstone', to: '/birthstone' }], current: 'Not Found' }}
+        breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report/' }, { label: 'Birthstone', to: '/birthstone/' }], current: 'Not Found' }}
         footer={{
           tagline: 'Birthstones by month — history, meaning and geology.',
           nav: [
-            { label: 'Birthday Report', to: '/birthday-report' },
-            { label: 'Results', to: '/results' },
-            { label: 'Celebrities', to: '/celebrity' },
-            { label: 'Privacy', to: '/privacy' },
+            { label: 'Birthday Report', to: '/birthday-report/' },
+            { label: 'Results', to: '/results/' },
+            { label: 'Celebrities', to: '/celebrity/' },
+            { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock.',
         }}
@@ -35,7 +36,7 @@ export default function BirthstonePage() {
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="text-center py-24">
             <p className="text-5xl mb-6">💎</p>
-            <Link to="/birthstone" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
+            <Link to="/birthstone/" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
               Back to All Birthstones
             </Link>
           </div>
@@ -91,14 +92,14 @@ export default function BirthstonePage() {
           </Helmet>
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }, { label: 'Birthstone', to: '/birthstone' }], current: data.month }}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report/' }, { label: 'Birthstone', to: '/birthstone/' }], current: data.month }}
       footer={{
         tagline: `${data.month} birthstone${data.answer ? 's' : ''} — ${birthstoneAnswer(data)}, history, meaning and geology.`,
         nav: [
-          { label: 'Birthday Report', to: '/birthday-report' },
-          { label: 'Results', to: '/results' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthday Report', to: '/birthday-report/' },
+          { label: 'Results', to: '/results/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',
       }}
@@ -258,11 +259,11 @@ export default function BirthstonePage() {
         <div className="bg-muted/50 rounded-xl p-6 text-center">
           <p className="text-muted-foreground text-sm mb-4">Explore more BornClock tools</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link to="/birthstone" className="text-sm text-primary hover:underline">All Birthstones</Link>
+            <Link to="/birthstone/" className="text-sm text-primary hover:underline">All Birthstones</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/zodiac" className="text-sm text-primary hover:underline">Zodiac Signs</Link>
+            <Link to="/zodiac/" className="text-sm text-primary hover:underline">Zodiac Signs</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/numerology" className="text-sm text-primary hover:underline">Numerology</Link>
+            <Link to="/numerology/" className="text-sm text-primary hover:underline">Numerology</Link>
             <span className="text-muted-foreground">·</span>
             <Link to="/" className="text-sm text-primary hover:underline">Age Calculator</Link>
           </div>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -12,10 +12,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyAustralia = () => {
@@ -40,7 +40,7 @@ const LifeExpectancyAustralia = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Australia Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Australia Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Australia — Why Australians Are Among the World's Longest-Lived"
       lead={`Australia's average life expectancy is approximately ${leYears('Australia')} years (${LE_CITATION}) — one of the highest of any nation. Women average ${leYears('Australia', 'female')} years; men average ${leYears('Australia', 'male')} years. Australia has maintained this position for decades through universal healthcare, outdoor lifestyle culture, and strong public health investment.`}
@@ -71,7 +71,7 @@ const LifeExpectancyAustralia = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Australian Lifestyle Factors Researchers Study</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">The outdoor culture and high sun exposure cut both ways — good for activity, though skin-cancer risk is a real countervailing factor that requires attention. Urban populations increasingly follow a Mediterranean-influenced diet.</p>
-            <p className="text-muted-foreground leading-relaxed">Strong social networks, relatively low work stress compared with East Asian economies, and high walkability in coastal cities round out the picture. See how these levers move your own number with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
+            <p className="text-muted-foreground leading-relaxed">Strong social networks, relatively low work stress compared with East Asian economies, and high walkability in coastal cities round out the picture. See how these levers move your own number with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
 
@@ -79,7 +79,7 @@ const LifeExpectancyAustralia = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Compare Australia Against 57 Countries</h2>
             <p className="text-sm text-muted-foreground mb-4">See how Australia ranks globally — and how much your own habits could shift your personal forecast.</p>
-            <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Open the Country Comparison Tool →
             </Link>
           </div>

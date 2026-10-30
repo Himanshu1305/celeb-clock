@@ -1,4 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { Link } from '@/components/seo/CanonicalLink';
 import { useEffect } from "react";
 import { UtilityLayout } from "@/components/central";
 
@@ -36,13 +37,13 @@ const NotFound = () => {
               Go Home
             </Link>
             <Link
-              to="/age-calculator"
+              to="/age-calculator/"
               className="bg-muted text-muted-foreground px-6 py-3 rounded-xl font-semibold hover:bg-muted/80 transition-colors"
             >
               Age Calculator
             </Link>
             <Link
-              to="/blog"
+              to="/blog/"
               className="bg-muted text-muted-foreground px-6 py-3 rounded-xl font-semibold hover:bg-muted/80 transition-colors"
             >
               Blog

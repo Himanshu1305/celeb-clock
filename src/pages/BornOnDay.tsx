@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -130,7 +131,7 @@ export default function BornOnDay() {
     });
   }, [slug]);
 
-  if (!parsed) return <Navigate to="/born-on" replace />;
+  if (!parsed) return <Navigate to="/born-on/" replace />;
 
   const { month, day } = parsed;
   const monthName = MONTH_NAMES[month];
@@ -234,14 +235,14 @@ export default function BornOnDay() {
           )}
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }], current: `${monthName} ${day}` }}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on/' }], current: `${monthName} ${day}` }}
       footer={{
         tagline: `Celebrities, zodiac and birthday facts for ${monthName} ${day}.`,
         nav: [
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Born In (months)', to: '/born-in' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Born In (months)', to: '/born-in/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Born-on dates.',
       }}
@@ -412,7 +413,7 @@ export default function BornOnDay() {
           {/* A2 clarifying line — the day-derived number is NOT the full Life Path */}
           <p className="text-xs text-muted-foreground leading-relaxed">
             Birth Day Number {bNum} comes from the day of the month alone. Your full <strong className="text-foreground">Life Path number</strong>, calculated from your complete birth date, is in the{' '}
-            <Link to="/birthday-report" className="text-primary hover:underline">Birthday Blueprint</Link>.
+            <Link to="/birthday-report/" className="text-primary hover:underline">Birthday Blueprint</Link>.
           </p>
         </div>
 
@@ -460,7 +461,7 @@ export default function BornOnDay() {
           <h2 className="font-semibold text-lg text-foreground mb-2">Chinese Zodiac</h2>
           <p className="text-muted-foreground text-sm">
             Your Chinese zodiac animal depends on your <em>birth year</em>, not just the day.{' '}
-            <Link to="/chinese-zodiac" className="text-primary hover:underline">Find your Chinese zodiac →</Link>
+            <Link to="/chinese-zodiac/" className="text-primary hover:underline">Find your Chinese zodiac →</Link>
           </p>
         </div>
 
@@ -501,7 +502,7 @@ export default function BornOnDay() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <Link to={`/born-in-${monthName.toLowerCase()}`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ Everyone born in {monthName}</Link>
             <Link to={`/zodiac/${zodiacSlug}`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ {zodiac.sign} zodiac guide</Link>
-            <Link to="/energy-forecast" className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ Your 7-day energy forecast</Link>
+            <Link to="/energy-forecast/" className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ Your 7-day energy forecast</Link>
             <Link to={`/on-this-day/${monthName.toLowerCase()}/${day}/`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ What happened on {monthName} {day} in history</Link>
             {postsForTags([zodiacSlug, 'birthday', 'birthstone'], 1).map(p => (
               <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-lg border border-border hover:border-primary/40 hover:bg-primary/5 text-sm text-muted-foreground hover:text-foreground transition-colors">→ {p.title}</Link>
@@ -518,7 +519,7 @@ export default function BornOnDay() {
             <ArrowLeft className="w-4 h-4" />
             {MONTH_NAMES[prev.month]} {prev.day}
           </Link>
-          <Link to="/born-on" className="text-sm text-muted-foreground hover:text-foreground">
+          <Link to="/born-on/" className="text-sm text-muted-foreground hover:text-foreground">
             All months
           </Link>
           <Link
@@ -532,10 +533,10 @@ export default function BornOnDay() {
 
         {/* Cross-links to viral tools (Task 19 internal linking) */}
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link to="/wish" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+          <Link to="/wish/" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
             🎂 Send a birthday wish →
           </Link>
-          <Link to="/compatibility" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+          <Link to="/compatibility/" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
             💞 Check birthday compatibility →
           </Link>
         </div>

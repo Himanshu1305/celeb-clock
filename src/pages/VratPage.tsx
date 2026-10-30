@@ -6,7 +6,8 @@
  * 'vrat-hi', data 'vrat-next') so it stays current between deploys; the title is static.
  * Linked from /festivals/:year and from the daily Panchang on the days the vrat falls.
  */
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -154,7 +155,7 @@ export default function VratPage({ lang = 'en' }: { lang?: Lang }) {
 
   const footer = {
     tagline: lang === 'hi' ? 'स्रोत-सहित व्रत कथा और पूजा विधि।' : 'Sourced vrat kathas and puja vidhi.',
-    nav: [{ label: t.calendar, to: '/festivals' }, { label: t.panchang, to: lang === 'hi' ? '/hi/panchang' : '/panchang' }, { label: lang === 'hi' ? 'सभी व्रत' : 'All vrats', to: hub }],
+    nav: [{ label: t.calendar, to: '/festivals/' }, { label: t.panchang, to: lang === 'hi' ? '/hi/panchang' : '/panchang' }, { label: lang === 'hi' ? 'सभी व्रत' : 'All vrats', to: hub }],
     note: lang === 'hi' ? 'तिथियाँ नई दिल्ली के लिए गणना की गई हैं; स्थानीय पंचांग में एक दिन का अंतर हो सकता है।' : 'Dates are computed for New Delhi; a local Panchang can differ by a day.',
   };
 
@@ -164,7 +165,7 @@ export default function VratPage({ lang = 'en' }: { lang?: Lang }) {
         theme="vedic"
         testId="vrat-hub"
         seo={<SEO title={meta.title} description={meta.description} canonicalUrl={path} ogImage="https://bornclock.com/og/vedic.png" hreflang={hreflang} />}
-        breadcrumb={{ trail: [{ label: t.crumbVedic, to: '/vedic-astrology' }], current: t.crumbVrat }}
+        breadcrumb={{ trail: [{ label: t.crumbVedic, to: '/vedic-astrology/' }], current: t.crumbVrat }}
         footer={footer}
         eyebrow={t.eyebrow}
         h1={<DailyH1 entry={entry} fallback={meta.h1} />}
@@ -214,7 +215,7 @@ export default function VratPage({ lang = 'en' }: { lang?: Lang }) {
       theme="vedic"
       testId="vrat-page"
       seo={<SEO title={meta.title} description={meta.description} canonicalUrl={path} ogImage="https://bornclock.com/og/vedic.png" ogType="article" hreflang={hreflang} />}
-      breadcrumb={{ trail: [{ label: t.crumbVedic, to: '/vedic-astrology' }, { label: t.crumbVrat, to: hub }], current: nameOf(s) }}
+      breadcrumb={{ trail: [{ label: t.crumbVedic, to: '/vedic-astrology/' }, { label: t.crumbVrat, to: hub }], current: nameOf(s) }}
       footer={footer}
       eyebrow={`${t.eyebrow} · ${t.deity}: ${lang === 'hi' ? VRAT_NAMES[s].deityHi : VRAT_NAMES[s].deityEn}`}
       h1={<DailyH1 entry={entry} fallback={meta.h1} />}
@@ -262,7 +263,7 @@ export default function VratPage({ lang = 'en' }: { lang?: Lang }) {
           <h2 className="font-semibold text-foreground mb-2">{t.others}</h2>
           <div className="flex flex-wrap gap-2 mb-8" data-testid="vrat-others">
             {VRAT_SLUGS.filter(x => x !== s).map(x => <Link key={x} to={vratPath(x, lang)} className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-primary/5">{nameOf(x)}</Link>)}
-            <Link to="/festivals" className="px-3 py-1.5 rounded-lg border border-border text-sm text-primary hover:bg-primary/5">{t.calendar} →</Link>
+            <Link to="/festivals/" className="px-3 py-1.5 rounded-lg border border-border text-sm text-primary hover:bg-primary/5">{t.calendar} →</Link>
           </div>
 
           <PageFAQ title={t.faq} items={c.faq.map(f => ({ question: f.q[lang], answer: f.a[lang] }))} />

@@ -5,7 +5,7 @@
  * the paediatrician; name letters link to the baby-names tool.
  */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
@@ -49,14 +49,14 @@ export default function ChildKundliPage() {
         title="Child (Bal) Kundli — Temperament, Talents & Care | BornClock"
         description="A free, gentle Child (Bal) Kundli from your child's birth chart: temperament, learning strengths, natural talents, favourable periods, name sounds and calm wellbeing guidance."
         canonicalUrl="/child-kundli" ogType="website" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Child Kundli', edition: 'Temperament · Talents · Care' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Child Kundli', edition: 'Temperament · Talents · Care' }}
       footer={{
         tagline: "A parent's gentle guide from your child's birth chart — computed, calm, never a verdict.",
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Baby Names by Nakshatra', to: '/baby-names' },
-          { label: 'How It Works', to: '/how-it-works' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Baby Names by Nakshatra', to: '/baby-names/' },
+          { label: 'How It Works', to: '/how-it-works/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -66,7 +66,7 @@ export default function ChildKundliPage() {
           <div><span className="eyebrow">Bal Kundli · for parents</span><h1>Your child's Kundli.</h1></div>
           <p>A gentle, parent-facing reading from your child's birth chart — their temperament, how they may learn, natural talents, favourable periods, the traditional name-starting sounds, and calm wellbeing guidance. Hints to understand your child, never a script for who they must become.</p>
         </div>
-        <TrustStrip claim="Read from your child's real birth chart — their Moon, birth star and planetary placements. A gentle guide, never a verdict on your child's future or health." href="/how-it-works#vedic" />
+        <TrustStrip claim="Read from your child's real birth chart — their Moon, birth star and planetary placements. A gentle guide, never a verdict on your child's future or health." href="/how-it-works/#vedic" />
 
         <div className="form-band" style={{ marginTop: 16 }}>
           <div><h3>Your child's birth details</h3><p className="small muted">Birth time and place give the most accurate reading.</p></div>
@@ -103,7 +103,7 @@ export default function ChildKundliPage() {
                   ))}
                 </div>
               )}
-              <Link to="/baby-names" className="text-primary hover:underline text-sm">Find baby names for these sounds →</Link>
+              <Link to="/baby-names/" className="text-primary hover:underline text-sm">Find baby names for these sounds →</Link>
             </div>
 
             <p className="text-xs text-muted-foreground">{result.disclaimer}</p>

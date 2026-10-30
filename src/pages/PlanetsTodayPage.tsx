@@ -9,7 +9,7 @@
  * Distinct from /transit (slow planets by year) and /planet-in-sign (meanings).
  */
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -63,8 +63,8 @@ export default function PlanetsTodayPage() {
       theme="vedic"
       testId="planets-today-page"
       seo={<SEO title={PLANETS_TODAY_STATIC.title} description={PLANETS_TODAY_STATIC.description} canonicalUrl="/planets-today" ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Transits', to: '/transit' }], current: 'Planets today' }}
-      footer={{ tagline: 'Daily planet positions from the real sky.', nav: [{ label: 'Transits by year', to: '/transit' }, { label: 'Mercury retrograde', to: '/mercury-retrograde' }, { label: 'Moon phase', to: '/moon-phase' }, { label: 'Rashifal', to: '/rashifal' }, { label: 'Glossary', to: '/glossary' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Transits', to: '/transit/' }], current: 'Planets today' }}
+      footer={{ tagline: 'Daily planet positions from the real sky.', nav: [{ label: 'Transits by year', to: '/transit/' }, { label: 'Mercury retrograde', to: '/mercury-retrograde/' }, { label: 'Moon phase', to: '/moon-phase/' }, { label: 'Rashifal', to: '/rashifal/' }, { label: 'Glossary', to: '/glossary/' }] }}
       eyebrow="Gochar · today"
       h1={<DailyH1 entry={entry} fallback={PLANETS_TODAY_STATIC.h1} />}
       lead={<DailyDate entry={entry} />}
@@ -89,18 +89,18 @@ export default function PlanetsTodayPage() {
           <div className="rounded-xl border border-border p-4 mb-6 text-sm text-muted-foreground space-y-2" data-testid="planets-how">
             <h2 className="font-semibold text-foreground">How these positions are worked out</h2>
             <p>Positions are for 12:00 noon IST and use the sidereal zodiac with the <TermTip id="ayanamsa">Lahiri ayanamsa</TermTip>, as Indian Panchangs do; <TermTip id="rahu">Rahu</TermTip> and Ketu are the mean lunar nodes. Each sign is split into <TermTip id="nakshatra">Nakshatras</TermTip> and their four <TermTip id="pada">padas</TermTip>; the degree is how far into its sign the planet is (<TermTip id="planetDegree">what the degree means</TermTip>).</p>
-            <p>In our tests the positions agree with Swiss Ephemeris to well within 1 arc-minute on five dates from 2026 to 2030, sign changes and stations to within minutes, and combustion spells to within minutes using the same orbs. Drik Panchang’s own combustion (Asta) dates use a visibility model for the observer, so they can differ from these orb-based dates by several days. <Link to="/accuracy" className="underline">How we check accuracy →</Link></p>
+            <p>In our tests the positions agree with Swiss Ephemeris to well within 1 arc-minute on five dates from 2026 to 2030, sign changes and stations to within minutes, and combustion spells to within minutes using the same orbs. Drik Panchang’s own combustion (Asta) dates use a visibility model for the observer, so they can differ from these orb-based dates by several days. <Link to="/accuracy/" className="underline">How we check accuracy →</Link></p>
           </div>
 
           <nav className="text-sm mb-8 space-x-3" aria-label="Related pages">
-            <Link to="/transit" className="text-primary hover:underline">Saturn, Jupiter, Rahu &amp; Ketu by year →</Link>
-            <Link to="/mercury-retrograde" className="text-primary hover:underline">Mercury retrograde dates →</Link>
-            <Link to="/planet-in-sign" className="text-primary hover:underline">What each planet means in each sign →</Link>
+            <Link to="/transit/" className="text-primary hover:underline">Saturn, Jupiter, Rahu &amp; Ketu by year →</Link>
+            <Link to="/mercury-retrograde/" className="text-primary hover:underline">Mercury retrograde dates →</Link>
+            <Link to="/planet-in-sign/" className="text-primary hover:underline">What each planet means in each sign →</Link>
           </nav>
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">See how today’s planets fall in YOUR chart — houses, dasha and transits from your Moon sign.</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Open your Kundli →</Link>
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Open your Kundli →</Link>
           </div>
         </div>
       </section>

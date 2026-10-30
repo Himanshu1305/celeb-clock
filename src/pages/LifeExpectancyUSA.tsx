@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -15,10 +15,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyUSA = () => {
@@ -43,7 +43,7 @@ const LifeExpectancyUSA = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'USA Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'USA Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in the USA — Why It Fell and Where It Stands Now"
       lead={`The United States life expectancy is approximately ${leYears('United States')} years (${LE_CITATION}). Women average ${leYears('United States', 'female')} years; men average ${leYears('United States', 'male')} years. US life expectancy fell from ${WPP2024_HISTORY['United States'][2019]} years in 2019 to ${WPP2024_HISTORY['United States'][2021]} years in 2021 — driven by COVID-19, the opioid crisis, and gun violence — before recovering by 2023.`}
@@ -91,7 +91,7 @@ const LifeExpectancyUSA = () => {
             <p className="text-xs text-muted-foreground mb-4">
               Life expectancy at birth, both sexes. Source: <a href={US_STATE_LE_SOURCE.url} className="underline" target="_blank" rel="noopener">{US_STATE_LE_SOURCE.label}</a> — the latest state table published. State figures are for {US_STATE_LE_SOURCE.year} and come from a different source and year than the national figure at the top of this page, so the two are not directly comparable.
             </p>
-            <p className="text-muted-foreground leading-relaxed">Income and race compound geography, so two people the same age can face very different odds. What you can control still moves the needle most — see your own number with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
+            <p className="text-muted-foreground leading-relaxed">Income and race compound geography, so two people the same age can face very different odds. What you can control still moves the needle most — see your own number with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
 
@@ -99,7 +99,7 @@ const LifeExpectancyUSA = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Compare the USA Against 57 Countries</h2>
             <p className="text-sm text-muted-foreground mb-4">See how the USA ranks globally — and how much your own habits could shift your personal forecast.</p>
-            <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Open the Country Comparison Tool →
             </Link>
           </div>

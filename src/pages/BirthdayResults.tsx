@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { getGenerationBasic } from '@/services/GenerationService';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ReportLayout } from '@/components/central';
 import { SaveResultsCapture } from '@/components/SaveResultsCapture';
 import { NativeShareButton } from '@/components/NativeShareButton';
@@ -176,14 +176,14 @@ const BirthdayResults = () => {
             description="Discover your exact age, celebrity birthday twins, zodiac sign, and more personalized birthday insights."
           />
         )}
-        breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Results' }}
+        breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report/' }], current: 'Results' }}
         footer={{
           tagline: 'Your exact age, celebrity twins, zodiac and numerology — from your birthday.',
           nav: [
-            { label: 'Birthday Report', to: '/birthday-report' },
-            { label: 'Results', to: '/results' },
-            { label: 'Celebrities', to: '/celebrity' },
-            { label: 'Privacy', to: '/privacy' },
+            { label: 'Birthday Report', to: '/birthday-report/' },
+            { label: 'Results', to: '/results/' },
+            { label: 'Celebrities', to: '/celebrity/' },
+            { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock.',
         }}
@@ -256,14 +256,14 @@ const BirthdayResults = () => {
           description={`Discover your exact age, celebrity birthday twins, zodiac sign, and more personalized birthday insights.`}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Results' }}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report/' }], current: 'Results' }}
       footer={{
         tagline: 'Your exact age, celebrity twins, zodiac and numerology — from your birthday.',
         nav: [
-          { label: 'Birthday Report', to: '/birthday-report' },
-          { label: 'Results', to: '/results' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthday Report', to: '/birthday-report/' },
+          { label: 'Results', to: '/results/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',
       }}
@@ -562,7 +562,7 @@ const BirthdayResults = () => {
                   Most people discover they differ from the national average by ±8 years
                 </p>
                 <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                  <Link to="/life-expectancy">Calculate My Longevity →</Link>
+                  <Link to="/life-expectancy/">Calculate My Longevity →</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -579,7 +579,7 @@ const BirthdayResults = () => {
                   On Mercury you'd be celebrating your {Math.round((age?.years || 0) / 0.24)}th birthday
                 </p>
                 <Button asChild className="w-full bg-[#0E2238] hover:bg-[#0E2238] text-white">
-                  <Link to="/planetary-age">Explore Cosmic Ages →</Link>
+                  <Link to="/planetary-age/">Explore Cosmic Ages →</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -596,7 +596,7 @@ const BirthdayResults = () => {
                   Celebrities ranked by global fame — see who tops your birthday list
                 </p>
                 <Button asChild className="w-full bg-amber-500 hover:bg-amber-600 text-white">
-                  <Link to="/todays-birthdays">Browse All Birthdays →</Link>
+                  <Link to="/todays-birthdays/">Browse All Birthdays →</Link>
                 </Button>
               </CardContent>
             </Card>

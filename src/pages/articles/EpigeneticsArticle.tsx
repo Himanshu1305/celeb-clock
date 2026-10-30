@@ -81,7 +81,7 @@ export function EpigeneticsArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Epigenetics and Longevity — How Lifestyle Rewrites Your Genes' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Epigenetics and Longevity — How Lifestyle Rewrites Your Genes' }}
       eyebrow="Science & Longevity"
       h1="Epigenetics and Longevity — How Lifestyle Rewrites Your Genes"
       lead="For most of the twentieth century, DNA was treated as destiny: the genes you inherited were the genes you were stuck with. Epigenetics has rewritten that story. Epigenetics is the study of changes in gene expression that occur without any change to the underlying DNA sequence itself. Your DNA is the hardware; epigenetic marks are the software layer that decides which genes each cell actually switches on — and that software can be edited by how you live."
@@ -140,7 +140,7 @@ export function EpigeneticsArticle() {
               assesses eight epigenetically-relevant lifestyle factors and turns them into a
               personalised estimate of how your habits are shaping your ageing.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-emerald-600 text-white font-bold px-5 py-2.5
                           rounded-full text-sm hover:bg-emerald-700 transition-colors">
               Try the free longevity calculator →
@@ -159,8 +159,8 @@ export function EpigeneticsArticle() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
           <ul className="list-disc pl-6 text-emerald-700 mb-10 space-y-1">
-            <li><a href="/biological-age-vs-chronological-age" className="hover:underline">Biological Age vs Chronological Age — What's the Difference?</a></li>
-            <li><a href="/articles/how-to-live-to-100" className="hover:underline">How to Live to 100 — Habits of the World's Longest-Lived People</a></li>
+            <li><a href="/biological-age-vs-chronological-age/" className="hover:underline">Biological Age vs Chronological Age — What's the Difference?</a></li>
+            <li><a href="/articles/how-to-live-to-100/" className="hover:underline">How to Live to 100 — Habits of the World's Longest-Lived People</a></li>
           </ul>
 
           <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl
@@ -170,7 +170,7 @@ export function EpigeneticsArticle() {
               Your genes are not your destiny. Measure the eight lifestyle factors that
               influence your biological age with BornClock's free longevity calculator.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-emerald-700 font-black px-8 py-3
                           rounded-full text-lg hover:bg-emerald-50 transition-colors">
               Calculate My Longevity Free →

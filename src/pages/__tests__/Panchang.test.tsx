@@ -135,8 +135,8 @@ describe('Rahu Kaal and Choghadiya city pages', () => {
   it('pages link to each other for the same city and to nearby cities', () => {
     const { getByTestId } = renderPath('/rahu-kaal/thane?date=2026-11-01');
     const links = [...getByTestId('panchang-city-links').querySelectorAll('a')].map(a => a.getAttribute('href'));
-    expect(links).toContain('/panchang/thane?date=2026-11-01');
-    expect(links).toContain('/choghadiya/thane?date=2026-11-01');
-    expect(links).toContain('/rahu-kaal/mumbai');
+    expect(links).toContain('/panchang/thane/?date=2026-11-01');
+    expect(links).toContain('/choghadiya/thane/?date=2026-11-01');
+    expect(links).toContain('/rahu-kaal/mumbai/');
   });
 });

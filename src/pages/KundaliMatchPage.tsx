@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
@@ -151,16 +151,16 @@ export default function KundaliMatchPage() {
           hreflang={[{ lang: 'en', url: 'https://bornclock.com/kundali-match/' }, { lang: 'hi', url: 'https://bornclock.com/hi/kundli-milan/' }]}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali Matching', edition: 'Ashtakoota · 36-point Guna Milan' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Kundali Matching', edition: 'Ashtakoota · 36-point Guna Milan' }}
       footer={{
         tagline: 'Kundali matching by the traditional 36-point Ashtakoota system — computed, with every koota shown.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Sade Sati', to: '/sade-sati' },
-          { label: 'Muhurat', to: '/muhurat' },
-          { label: 'Marriage biodata', to: '/marriage-biodata-maker' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Sade Sati', to: '/sade-sati/' },
+          { label: 'Muhurat', to: '/muhurat/' },
+          { label: 'Marriage biodata', to: '/marriage-biodata-maker/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -172,12 +172,12 @@ export default function KundaliMatchPage() {
           </div>
 
           {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts; AstroSage values entered 17 Oct 2026). */}
-          <TrustStrip claim="The classical 36-point compatibility score (Ashtakoota) — all eight parts shown and added up in front of you. In our tests (October 2026), the total matched AstroSage for all 7 test couples." href="/accuracy" linkLabel="How we check accuracy" />
+          <TrustStrip claim="The classical 36-point compatibility score (Ashtakoota) — all eight parts shown and added up in front of you. In our tests (October 2026), the total matched AstroSage for all 7 test couples." href="/accuracy/" linkLabel="How we check accuracy" />
           <KundaliTabs active="match" />
           {/* Batch 9b: the name-only (approximate) matcher and the Hindi version. */}
           <p data-testid="kmatch-alt-links" className="subtle" style={{ marginTop: 8 }}>
-            No birth time? <Link to="/kundli-milan-by-name" className="textlink">Kundli milan by name</Link> gives an approximate score from the first syllable of each name.
-            {' '}हिंदी में: <Link to="/hi/kundli-milan" className="textlink" lang="hi">कुंडली मिलान</Link> · <Link to="/hi/naam-se-kundli-milan" className="textlink" lang="hi">नाम से कुंडली मिलान</Link>
+            No birth time? <Link to="/kundli-milan-by-name/" className="textlink">Kundli milan by name</Link> gives an approximate score from the first syllable of each name.
+            {' '}हिंदी में: <Link to="/hi/kundli-milan/" className="textlink" lang="hi">कुंडली मिलान</Link> · <Link to="/hi/naam-se-kundli-milan/" className="textlink" lang="hi">नाम से कुंडली मिलान</Link>
           </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 print:hidden" style={{ marginTop: 16 }}>
@@ -434,12 +434,12 @@ export default function KundaliMatchPage() {
               <p className="mt-2">{result.gunaMilan.methodology}</p>
             </details>
 
-            <Link to="/articles/kundali-compatibility" className="text-[#6E5AA6] hover:underline text-sm print:hidden">Learn what each koota means →</Link>
+            <Link to="/articles/kundali-compatibility/" className="text-[#6E5AA6] hover:underline text-sm print:hidden">Learn what each koota means →</Link>
           </div>
         )}
 
         <p className="subtle" style={{ marginTop: 24 }}>
-          Read the full <Link to="/articles/kundali-compatibility" className="textlink">Kundali compatibility guide</Link>.
+          Read the full <Link to="/articles/kundali-compatibility/" className="textlink">Kundali compatibility guide</Link>.
         </p>
         </section>
     </PajPage>

@@ -100,7 +100,7 @@ export function BryanJohnsonArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'The Bryan Johnson Blueprint — And a Free, Science-Backed Alternative' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'The Bryan Johnson Blueprint — And a Free, Science-Backed Alternative' }}
       eyebrow="Longevity"
       h1="The Bryan Johnson Blueprint — And a Free, Science-Backed Alternative"
       lead="Tech entrepreneur Bryan Johnson has become the most visible face of the modern longevity movement. After selling his payments company Braintree, he poured his fortune into Project Blueprint — an intensely measured attempt to slow, and ideally reverse, his own biological ageing. His routine is documented in granular detail: hundreds of biomarkers tracked, dozens of supplements, custom meals weighed to the gram, MRI and ultrasound scans, and a full medical team interpreting the data."
@@ -168,7 +168,7 @@ export function BryanJohnsonArticle() {
               Our free longevity calculator estimates how sleep, exercise, diet, and smoking
               status shift your life-expectancy — no budget, no medical team required.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3
                           rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Try the free longevity calculator →
@@ -241,7 +241,7 @@ export function BryanJohnsonArticle() {
               longevity calculator to see how the habits that matter reshape your projected
               lifespan.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Open the Free Longevity Calculator →
@@ -252,13 +252,13 @@ export function BryanJohnsonArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-3">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/how-to-live-to-100"
+                <a href="/articles/how-to-live-to-100/"
                    className="text-[#2F6FB0] font-semibold hover:underline">
                   How to Live to 100 — Habits of the World&apos;s Longest-Lived People →
                 </a>
               </li>
               <li>
-                <a href="/articles/blue-zones-diet"
+                <a href="/articles/blue-zones-diet/"
                    className="text-[#2F6FB0] font-semibold hover:underline">
                   The Blue Zones Diet — What the Longest-Living Communities Eat →
                 </a>

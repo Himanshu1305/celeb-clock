@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 
@@ -22,14 +22,14 @@ export default function KundaliCompatArticle() {
           ogType="article"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali Compatibility' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Kundali Compatibility' }}
       footer={{
         tagline: 'Kundali matching by Ashtakoota (Guna Milan) — all eight kootas explained.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Kundali Matching', to: '/kundali-match' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Kundali Matching', to: '/kundali-match/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -82,8 +82,8 @@ export default function KundaliCompatArticle() {
 
           <h2 className="text-2xl font-bold mt-8 mb-3">Calculate your match</h2>
           <p>You can compute your own eight-Koota breakdown instantly with our free tool. Enter both birth dates — and, for the most accurate Nakshatra, both birth times — to see every Koota scored, along with Nadi and Bhakoot Dosha checks.</p>
-          <p><Link to="/kundali-match" className="text-[#6E5AA6] font-semibold underline">Try the free Kundali matching calculator →</Link></p>
-          <p>To understand a single person's chart in depth — Lagna, planetary positions, Nakshatra and Dasha — generate a full <Link to="/kundali" className="text-[#6E5AA6] underline">Janam Kundali</Link>. And remember: astrology at its best is a mirror for self-understanding and honest conversation between partners, never a substitute for it.</p>
+          <p><Link to="/kundali-match/" className="text-[#6E5AA6] font-semibold underline">Try the free Kundali matching calculator →</Link></p>
+          <p>To understand a single person's chart in depth — Lagna, planetary positions, Nakshatra and Dasha — generate a full <Link to="/kundali/" className="text-[#6E5AA6] underline">Janam Kundali</Link>. And remember: astrology at its best is a mirror for self-understanding and honest conversation between partners, never a substitute for it.</p>
 
           <h2 className="text-2xl font-bold mt-8 mb-3">Frequently asked questions</h2>
           {FAQ.map((f, i) => (

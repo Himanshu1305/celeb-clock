@@ -10,7 +10,8 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import { ScrollTable } from '@/components/ScrollTable';
-import { Link, Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -93,7 +94,7 @@ export default function MuhuratYearPage() {
   }, [windows]);
   const dayCount = (list: MuhuratWindow[]) => new Set(list.map(w => w.date)).size;
 
-  if (!valid) return <Navigate to="/muhurat" replace />;
+  if (!valid) return <Navigate to="/muhurat/" replace />;
 
   const totalDays = dayCount(windows);
   const upcoming = windows.filter(w => w.date >= today);
@@ -152,8 +153,8 @@ export default function MuhuratYearPage() {
       theme="vedic"
       testId="muhurat-year"
       seo={<SEO title={meta.title(year)} description={meta.description(year)} canonicalUrl={`/muhurat/${slug}/${year}`} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Muhurat', to: '/muhurat' }], current: `${meta.short} ${year}` }}
-      footer={{ tagline: 'Muhurat dates computed from the Panchang.', nav: [{ label: 'Muhurat Finder', to: '/muhurat' }, { label: `Festivals ${year}`, to: `/festivals/${year}` }, { label: 'Daily Panchang', to: '/panchang' }, { label: 'Kundali Matching', to: '/kundali-match' }], note: 'Panchang-based dates for guidance; for an important ceremony, a family priest or astrologer also checks the Lagna and your own chart.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Muhurat', to: '/muhurat/' }], current: `${meta.short} ${year}` }}
+      footer={{ tagline: 'Muhurat dates computed from the Panchang.', nav: [{ label: 'Muhurat Finder', to: '/muhurat/' }, { label: `Festivals ${year}`, to: `/festivals/${year}` }, { label: 'Daily Panchang', to: '/panchang/' }, { label: 'Kundali Matching', to: '/kundali-match/' }], note: 'Panchang-based dates for guidance; for an important ceremony, a family priest or astrologer also checks the Lagna and your own chart.' }}
       eyebrow="Panchang · muhurat"
       h1={meta.h1(year)}
       lead={file
@@ -261,7 +262,7 @@ export default function MuhuratYearPage() {
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Need a date for something else, or a custom range? Use the Muhurat Finder, or see the festivals of {year}.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link to="/muhurat" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Muhurat Finder →</Link>
+              <Link to="/muhurat/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Muhurat Finder →</Link>
               <Link to={`/festivals/${year}`} className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">Festivals {year} →</Link>
             </div>
           </div>
@@ -286,7 +287,7 @@ function Criteria({ slug }: { slug: string }) {
     <div className="rounded-xl border border-border p-4 mb-8 text-sm text-muted-foreground space-y-2" data-testid="muhurat-year-criteria">
       <h2 className="font-semibold text-foreground">How these dates are chosen</h2>
       {children}
-      <p>Everything is computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the Sun and Moon — the same engine as our daily <Link to="/panchang" className="underline">Panchang</Link> — for each place’s own sunrise-to-sunrise day. Windows shorter than 5 minutes are dropped. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link></p>
+      <p>Everything is computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the Sun and Moon — the same engine as our daily <Link to="/panchang/" className="underline">Panchang</Link> — for each place’s own sunrise-to-sunrise day. Windows shorter than 5 minutes are dropped. <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link></p>
     </div>
   );
   const common = <>This is the <em>Panchang Shuddhi</em> step: the day’s <TermTip id="tithi">Tithi</TermTip>, <TermTip id="panchangNakshatra">Nakshatra</TermTip>, <TermTip id="panchangYoga">Yoga</TermTip>, <TermTip id="karana">Karana</TermTip> and weekday must all be suitable at the same time.</>;
@@ -298,7 +299,7 @@ function Criteria({ slug }: { slug: string }) {
         <li><strong className="text-foreground">Yoga and Karana:</strong> not during the harsh Yogas (Vishkambha, Atiganda, Shula, Ganda, Vyaghata, Vajra, Vyatipata, Parigha, Vaidhriti), not in <TermTip id="bhadra">Bhadra (Vishti)</TermTip> and not in the four fixed Karanas.</li>
         <li><strong className="text-foreground">Season:</strong> no weddings in <TermTip id="kharmas">Kharmas</TermTip> (Sun in Dhanu or Meena), while the Sun is in Kanya, in <TermTip id="chaturmas">Chaturmas</TermTip>, in an <TermTip id="adhikMaas">Adhik (leap) month</TermTip>, or while Jupiter or Venus is <TermTip id="taraAsta">Asta</TermTip> (with three days either side). A day that is only partly inside such a period is left out.</li>
       </ul>
-      <p>These are the rules Drik Panchang applies in its Panchang-only marriage list; our tests compare the 2026 New Delhi dates with it. The final wedding time (the Lagna) is set by your priest, and the couple’s charts are matched separately — see <Link to="/kundali-match" className="underline">Kundali Matching</Link>.</p>
+      <p>These are the rules Drik Panchang applies in its Panchang-only marriage list; our tests compare the 2026 New Delhi dates with it. The final wedding time (the Lagna) is set by your priest, and the couple’s charts are matched separately — see <Link to="/kundali-match/" className="underline">Kundali Matching</Link>.</p>
     </>);
     case 'griha-pravesh': return box(<>
       <p>{common}</p>

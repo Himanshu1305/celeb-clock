@@ -115,7 +115,7 @@ function ZodiacCompatCalculator() {
           </span>
         </div>
         <p className="text-sm text-gray-700 leading-relaxed mb-4">{result.note}</p>
-        <a href="/birthday-report"
+        <a href="/birthday-report/"
            className="inline-block bg-pink-600 text-white font-bold px-5 py-2.5
                       rounded-full text-sm hover:bg-pink-700 transition-colors">
           See both signs in a full birthday report →
@@ -166,15 +166,15 @@ export function ZodiacCompatibilityArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Zodiac Compatibility' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Zodiac Compatibility' }}
       footer={{
         tagline: 'How all 12 zodiac signs match in love and friendship — best and worst matches for every sign.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -281,7 +281,7 @@ export function ZodiacCompatibilityArticle() {
               Western zodiac, Vedic Rashi, moon sign, Life Path number, and more — everything you
               need to understand your relationships in depth.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-pink-700 font-black px-8 py-3
                           rounded-full text-lg hover:bg-pink-50 transition-colors">
               Generate My Free Birthday Report →
@@ -296,7 +296,7 @@ export function ZodiacCompatibilityArticle() {
             you differ, so you can meet each other with patience instead of surprise. Sun-sign
             compatibility is a starting point; your moon signs, rising signs, and life paths add
             far richer detail. Curious how deep it goes? Generate a full{' '}
-            <a href="/birthday-report" className="text-pink-600 font-semibold underline">
+            <a href="/birthday-report/" className="text-pink-600 font-semibold underline">
               free birthday report
             </a>{' '}
             for you and your partner and compare the two side by side.
@@ -316,13 +316,13 @@ export function ZodiacCompatibilityArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/moon-sign-by-date-of-birth"
+                <a href="/articles/moon-sign-by-date-of-birth/"
                    className="text-pink-600 font-semibold hover:underline">
                   Moon Sign by Date of Birth — Find Your Vedic Rashi →
                 </a>
               </li>
               <li>
-                <a href="/articles/life-path-number-compatibility"
+                <a href="/articles/life-path-number-compatibility/"
                    className="text-pink-600 font-semibold hover:underline">
                   Life Path Number Compatibility — Numerology in Love →
                 </a>

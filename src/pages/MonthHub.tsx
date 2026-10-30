@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useLocation, Link, Navigate } from 'react-router-dom';
+import { useLocation, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
@@ -87,7 +88,7 @@ export default function MonthHub() {
     });
   }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!data) return <Navigate to="/born-on" replace />;
+  if (!data) return <Navigate to="/born-on/" replace />;
 
   const { month, monthNumber } = data;
   const birthstone = BIRTHSTONE_DATA[monthNumber - 1];
@@ -135,14 +136,14 @@ export default function MonthHub() {
           )}
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }, { label: 'Born in Each Month', to: '/born-in' }], current: `Born in ${month}` }}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on/' }, { label: 'Born in Each Month', to: '/born-in/' }], current: `Born in ${month}` }}
       footer={{
         tagline: `Zodiac, birthstone, birth flowers and famous people born in ${month}.`,
         nav: [
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Born In (months)', to: '/born-in' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Born In (months)', to: '/born-in/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Born-on dates.',
       }}
@@ -287,7 +288,7 @@ export default function MonthHub() {
           <p className="text-muted-foreground mb-4">
             Create a personalised Birthday Blueprint — celebrity twins, zodiac deep-dive, numerology, and more, from {reportPrice}.
           </p>
-          <Link to="/birthday-report"
+          <Link to="/birthday-report/"
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold hover:opacity-90 transition-opacity">
             <ArrowRightCircle className="w-4 h-4" />
             Create a Birthday Report
@@ -312,7 +313,7 @@ export default function MonthHub() {
           <Link to={`/born-in-${prev.slug}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="w-4 h-4" /> Born in {prev.month}
           </Link>
-          <Link to="/born-on" className="text-sm text-muted-foreground hover:text-foreground">All dates</Link>
+          <Link to="/born-on/" className="text-sm text-muted-foreground hover:text-foreground">All dates</Link>
           <Link to={`/born-in-${next.slug}`} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
             Born in {next.month} <ArrowRight className="w-4 h-4" />
           </Link>

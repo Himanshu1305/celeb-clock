@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { buildCTAHeading, buildDobParam } from '@/utils/seoHelpers';
 
 interface BirthdayReportCTAProps {

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
@@ -30,15 +30,15 @@ export default function WhatIsMyLifePathNumber() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'What is my Life Path number?' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'What is my Life Path number?' }}
       footer={{
         tagline: 'Your Life Path number reduces your full date of birth to reveal your core purpose.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -76,7 +76,7 @@ export default function WhatIsMyLifePathNumber() {
             </ul>
 
             <h2 className="text-xl font-bold text-gray-900">Is the Life Path the same as Bhagyank?</h2>
-            <p>Almost. The Indian <strong>Bhagyank</strong> adds every digit of your date of birth and reduces to 1–9, so it always ends on the same single digit as your Life Path. The only difference: the Western Life Path keeps 11, 22 and 33 as master numbers, while the Bhagyank reduces them (11 → 2). Your <strong>Mulank</strong> is different again — it uses only your birth day. The <Link to="/articles/numerology-by-date-of-birth" className="text-[#6E5AA6] underline">India guide</Link> explains all three, and the <Link to="/numerology" className="text-[#6E5AA6] underline">numerology calculator</Link> shows them side by side.</p>
+            <p>Almost. The Indian <strong>Bhagyank</strong> adds every digit of your date of birth and reduces to 1–9, so it always ends on the same single digit as your Life Path. The only difference: the Western Life Path keeps 11, 22 and 33 as master numbers, while the Bhagyank reduces them (11 → 2). Your <strong>Mulank</strong> is different again — it uses only your birth day. The <Link to="/articles/numerology-by-date-of-birth/" className="text-[#6E5AA6] underline">India guide</Link> explains all three, and the <Link to="/numerology/" className="text-[#6E5AA6] underline">numerology calculator</Link> shows them side by side.</p>
 
             <h2 className="text-xl font-bold text-gray-900">Your Personal Year Number for 2026</h2>
             <p>Your Personal Year number changes every calendar year and reflects the energy theme of the 12 months ahead. Calculate it: <strong>add your birth month + birth day + 2026</strong>, then reduce to a single digit.</p>
@@ -86,7 +86,7 @@ export default function WhatIsMyLifePathNumber() {
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Calculate My Life Path Number</p>
             <p className="text-sm text-gray-500 mb-4">Free · Western Life Path plus your Mulank and Bhagyank, with the working shown</p>
-            <Link to="/numerology"
+            <Link to="/numerology/"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Calculate My Life Path Number →
             </Link>
@@ -95,10 +95,10 @@ export default function WhatIsMyLifePathNumber() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/what-is-my-zodiac-sign" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my zodiac sign?</Link>
-              <Link to="/answers/who-shares-my-birthday" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Who shares my birthday?</Link>
-              <Link to="/answers/how-to-calculate-age" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How to calculate my exact age</Link>
-              <Link to="/answers/what-generation-am-i" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What generation am I?</Link>
+              <Link to="/answers/what-is-my-zodiac-sign/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my zodiac sign?</Link>
+              <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Who shares my birthday?</Link>
+              <Link to="/answers/how-to-calculate-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How to calculate my exact age</Link>
+              <Link to="/answers/what-generation-am-i/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What generation am I?</Link>
             </div>
           </div>
       </section>

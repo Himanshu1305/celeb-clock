@@ -1,5 +1,5 @@
 import React, { useState, type CSSProperties } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
@@ -286,15 +286,15 @@ export default function TarotByBirthday() {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Tarot Card by Birthday' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'Tarot Card by Birthday' }}
       footer={{
         tagline: 'Draw your card, then discover the permanent Major Arcana card written into your birthday.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -451,7 +451,7 @@ export default function TarotByBirthday() {
                   personalised to your exact birthday.
                 </p>
                 <Link
-                  to="/birthday-report"
+                  to="/birthday-report/"
                   className="inline-block bg-white text-[#6E5AA6] px-8 py-3 rounded-xl font-semibold hover:bg-[#6E5AA6]/10 transition-colors"
                 >
                   Generate My Report → {reportPriceLabel}
@@ -568,11 +568,11 @@ export default function TarotByBirthday() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { text: 'Interactive Tarot Reading', href: '/tarot-reading' },
-                { text: 'All 78 Tarot Card Meanings', href: '/tarot/cards' },
-                { text: 'Moon Sign Calculator', href: '/moon-sign' },
-                { text: 'Numerology Calculator', href: '/numerology' },
-                { text: 'Name Numerology', href: '/name-numerology' },
+                { text: 'Interactive Tarot Reading', href: '/tarot-reading/' },
+                { text: 'All 78 Tarot Card Meanings', href: '/tarot/cards/' },
+                { text: 'Moon Sign Calculator', href: '/moon-sign/' },
+                { text: 'Numerology Calculator', href: '/numerology/' },
+                { text: 'Name Numerology', href: '/name-numerology/' },
               ].map(item => (
                 <Link
                   key={item.href}

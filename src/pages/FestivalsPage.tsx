@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -37,7 +38,7 @@ export default function FestivalsPage() {
 
   const cal = useMemo(() => (yearValid ? computeFestivalCalendar(year) : null), [year, yearValid]);
 
-  if (yearParam && !yearValid) return <Navigate to="/festivals" replace />;
+  if (yearParam && !yearValid) return <Navigate to="/festivals/" replace />;
   if (!cal) return null;
 
   const major = cal.festivals.filter(f => f.type === 'festival' || f.type === 'vrat' || f.type === 'eclipse');
@@ -77,8 +78,8 @@ export default function FestivalsPage() {
       theme="vedic"
       testId="festivals"
       seo={<SEO title={title} description={description} canonicalUrl={yearParam ? `/festivals/${year}` : '/festivals'} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: `Festivals ${year}` }}
-      footer={{ tagline: 'Computed Hindu festival & vrat calendar.', nav: [{ label: 'Daily Panchang', to: '/panchang' }, { label: 'Muhurat Finder', to: '/muhurat' }, { label: 'Hindu birthday (Janma Tithi)', to: '/janma-tithi-calculator' }, { label: 'Rashifal', to: '/rashifal' }], note: 'Dates are computed from real sidereal positions; local Panchangs may differ by a day. Not a substitute for a priest’s muhurta.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: `Festivals ${year}` }}
+      footer={{ tagline: 'Computed Hindu festival & vrat calendar.', nav: [{ label: 'Daily Panchang', to: '/panchang/' }, { label: 'Muhurat Finder', to: '/muhurat/' }, { label: 'Hindu birthday (Janma Tithi)', to: '/janma-tithi-calculator/' }, { label: 'Rashifal', to: '/rashifal/' }], note: 'Dates are computed from real sidereal positions; local Panchangs may differ by a day. Not a substitute for a priest’s muhurta.' }}
       eyebrow="Panchang · festivals & vrats"
       h1={`Hindu Festival & Vrat Calendar ${year}`}
       lead="The major Hindu festivals plus every Ekadashi, Purnima, Amavasya, Pradosh, Sankashti and Sankranti for the year — with exact dates computed from the real sky, not a fixed table."
@@ -116,7 +117,7 @@ export default function FestivalsPage() {
             <p className="text-muted-foreground mb-2">The katha, a simple step-by-step puja vidhi and the next date for the most-kept vrats — each with its sources.</p>
             <ul className="flex flex-wrap gap-2">
               {VRAT_SLUGS.map(v => <li key={v}><Link to={vratPath(v)} className="inline-block px-3 py-1.5 rounded-lg border border-border hover:bg-primary/5 text-foreground">{VRAT_NAMES[v].en}</Link></li>)}
-              <li><Link to="/vrat" className="inline-block px-3 py-1.5 rounded-lg border border-border hover:bg-primary/5 text-primary">All vrats →</Link></li>
+              <li><Link to="/vrat/" className="inline-block px-3 py-1.5 rounded-lg border border-border hover:bg-primary/5 text-primary">All vrats →</Link></li>
             </ul>
           </div>
 
@@ -152,7 +153,7 @@ export default function FestivalsPage() {
 
           <p className="text-xs text-muted-foreground mb-8">
             Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the Sun and Moon and the classical <TermTip id="paksha">paksha</TermTip>/tithi rules. Lunar months are computed amanta (new moon to new moon); Krishna-paksha days also show the purnimanta (North Indian) month name, which is one month ahead.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           {MUHURAT_YEAR_YEARS.includes(year) && (
@@ -172,8 +173,8 @@ export default function FestivalsPage() {
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Planning a ceremony? Find an auspicious time for your city and occasion.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link to="/muhurat" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Muhurat Finder →</Link>
-              <Link to="/panchang" className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">Today’s Panchang →</Link>
+              <Link to="/muhurat/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Muhurat Finder →</Link>
+              <Link to="/panchang/" className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">Today’s Panchang →</Link>
             </div>
           </div>
         </div>

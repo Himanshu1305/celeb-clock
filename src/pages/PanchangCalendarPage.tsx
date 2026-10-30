@@ -13,7 +13,8 @@
  * deploys; anything else is computed in the browser with the same engine and template.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { CityPicker } from '@/components/CityPicker';
@@ -94,8 +95,8 @@ export default function PanchangCalendarPage() {
       theme="vedic"
       testId="panchang-calendar-page"
       seo={<SEO title={PANCHANG_CALENDAR_STATIC.title} description={PANCHANG_CALENDAR_STATIC.description} canonicalUrl="/panchang-calendar" ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Panchang', to: '/panchang' }], current: 'Calendar' }}
-      footer={{ tagline: 'Monthly Panchang computed from real sunrise and the real Moon.', nav: [{ label: 'Today’s Panchang', to: '/panchang' }, { label: 'Festivals', to: '/festivals' }, { label: 'Moon phase', to: '/moon-phase' }, { label: 'Planets today', to: '/planets-today' }, { label: 'Glossary', to: '/glossary' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Panchang', to: '/panchang/' }], current: 'Calendar' }}
+      footer={{ tagline: 'Monthly Panchang computed from real sunrise and the real Moon.', nav: [{ label: 'Today’s Panchang', to: '/panchang/' }, { label: 'Festivals', to: '/festivals/' }, { label: 'Moon phase', to: '/moon-phase/' }, { label: 'Planets today', to: '/planets-today/' }, { label: 'Glossary', to: '/glossary/' }] }}
       eyebrow="Panchang calendar"
       h1={<DailyH1 entry={entry} fallback={PANCHANG_CALENDAR_STATIC.h1} />}
       lead={<span data-testid="panchang-calendar-label">{shared ? <DailyDate entry={entry} fallback={`${monthLabel(month)} · ${place.name}`} /> : `${monthLabel(month)} · ${place.name}`}</span>}
@@ -140,12 +141,12 @@ export default function PanchangCalendarPage() {
           <div className="rounded-xl border border-border p-4 mb-6 text-sm text-muted-foreground space-y-2" data-testid="calendar-how">
             <h2 className="font-semibold text-foreground">How to read a day</h2>
             <p>The first line of each day is its Tithi (lunar day) and Nakshatra (the Moon’s star) at local sunrise — the classical way a Hindu calendar names the day. Below are sunrise, sunset and any festival or vrat. Tap a city or search any town to see its own sunrise times; open <Link to={place.slug && !custom ? `/panchang/${place.slug}` : '/panchang'} className="underline">today’s full Panchang</Link> for Rahu Kaal, Choghadiya, Gowri Nalla Neram and more.</p>
-            <p>Festival dates use the same rules as our <Link to={year >= 2025 && year <= 2027 ? `/festivals/${year}` : '/festivals'} className="underline">festival calendar</Link>; in our tests the Tithi and Nakshatra end times agree with Drik Panchang to within 2 minutes. <Link to="/accuracy" className="underline">How we check accuracy →</Link></p>
+            <p>Festival dates use the same rules as our <Link to={year >= 2025 && year <= 2027 ? `/festivals/${year}` : '/festivals'} className="underline">festival calendar</Link>; in our tests the Tithi and Nakshatra end times agree with Drik Panchang to within 2 minutes. <Link to="/accuracy/" className="underline">How we check accuracy →</Link></p>
           </div>
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Need a good date for something important? Find an auspicious muhurat.</p>
-            <Link to="/muhurat" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Muhurat finder →</Link>
+            <Link to="/muhurat/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Muhurat finder →</Link>
           </div>
         </div>
       </section>

@@ -52,7 +52,7 @@ describe('BiologicalAgeArticle', () => {
   it('TC-BIO-P-08: CTA links to the kept calculator /biological-age (Batch 6: /biological-age-calculator 301s there)', () => {
     renderArticle();
     const links = Array.from(document.querySelectorAll('a'));
-    expect(links.some(l => l.getAttribute('href') === '/biological-age')).toBe(true);
+    expect(links.some(l => l.getAttribute('href') === '/biological-age/')).toBe(true);
   });
   it('TC-BIO-N-01: no undefined or [object Object]', () => {
     renderArticle();

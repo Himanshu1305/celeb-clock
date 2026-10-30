@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import DobCompatibility from '@/components/DobCompatibility';
 import { ToolLayout, UtilityLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -163,7 +164,7 @@ export default function CompatibilityPage() {
     return (
       <UtilityLayout
         theme="mystic"
-        breadcrumb={{ trail: [{ label: 'Compatibility', to: '/compatibility' }], current: 'Not Found' }}
+        breadcrumb={{ trail: [{ label: 'Compatibility', to: '/compatibility/' }], current: 'Not Found' }}
         h1="That zodiac pairing doesn’t exist"
         seo={(
           <SEO
@@ -181,7 +182,7 @@ export default function CompatibilityPage() {
               “{paramSign1}” and “{paramSign2}” aren’t both zodiac signs. Compatibility is calculated between two of
               the twelve signs — Aries through Pisces. Head back to the calculator and pick a real pair.
             </p>
-            <Link to="/compatibility" className="inline-block bg-rose-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-rose-700 transition-colors">
+            <Link to="/compatibility/" className="inline-block bg-rose-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-rose-700 transition-colors">
               Open the Compatibility Calculator →
             </Link>
           </div>
@@ -204,15 +205,15 @@ export default function CompatibilityPage() {
           canonicalUrl={canonicalUrl}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Compatibility', edition: 'Zodiac · Rashi · Life Path' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'Compatibility', edition: 'Zodiac · Rashi · Life Path' }}
       footer={{
         tagline: 'Compatibility computed from both real birth dates across four systems — not a generic pairing table.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Chinese Zodiac', to: '/chinese-zodiac' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Chinese Zodiac', to: '/chinese-zodiac/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -241,7 +242,7 @@ export default function CompatibilityPage() {
 
         <div className="max-w-2xl mx-auto px-4 py-10">
           <PageTagline />
-          <TrustStrip claim="Calculated from both people's actual birth dates — star sign and Life Path number; Moon sign and birth star need birth times, so they are in the Kundali match — not a generic pairing table." href="/how-it-works#vedic" />
+          <TrustStrip claim="Calculated from both people's actual birth dates — star sign and Life Path number; Moon sign and birth star need birth times, so they are in the Kundali match — not a generic pairing table." href="/how-it-works/#vedic" />
 
           {/* DOB-based 4-dimension compatibility (Task 15) — zodiac, rashi, life path, nakshatra. */}
           <DobCompatibility />
@@ -374,7 +375,7 @@ export default function CompatibilityPage() {
                   <span className="text-gray-300">·</span>
                   <Link to={`/zodiac/${calcSigns.s2.toLowerCase()}`} className="text-sm text-[#6E5AA6] hover:underline">Full {calcSigns.s2} guide →</Link>
                   <span className="text-gray-300">·</span>
-                  <Link to="/compatibility" className="text-sm text-[#6E5AA6] hover:underline">Check another pair →</Link>
+                  <Link to="/compatibility/" className="text-sm text-[#6E5AA6] hover:underline">Check another pair →</Link>
                 </div>
               </div>
 
@@ -475,7 +476,7 @@ export default function CompatibilityPage() {
               <div className="bg-rose-700 rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">See your compatibility profile in your Birthday Report</p>
                 <p className="text-rose-100 text-sm mb-4">Your top compatible signs + moon sign + tarot card + name numerology + more.</p>
-                <Link to="/birthday-report" className="inline-block bg-white text-rose-600 px-8 py-3 rounded-xl font-semibold hover:bg-rose-50 transition-colors">
+                <Link to="/birthday-report/" className="inline-block bg-white text-rose-600 px-8 py-3 rounded-xl font-semibold hover:bg-rose-50 transition-colors">
                   Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
@@ -592,11 +593,11 @@ export default function CompatibilityPage() {
             <p className="text-sm font-semibold text-gray-600 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { text: 'Western Zodiac', href: '/zodiac' },
-                { text: 'Vedic Zodiac', href: '/vedic-zodiac' },
-                { text: 'Moon Sign Calculator', href: '/moon-sign' },
-                { text: 'Tarot by Birthday', href: '/tarot-card-by-birthday' },
-                { text: 'Numerology Calculator', href: '/numerology' },
+                { text: 'Western Zodiac', href: '/zodiac/' },
+                { text: 'Vedic Zodiac', href: '/vedic-zodiac/' },
+                { text: 'Moon Sign Calculator', href: '/moon-sign/' },
+                { text: 'Tarot by Birthday', href: '/tarot-card-by-birthday/' },
+                { text: 'Numerology Calculator', href: '/numerology/' },
               ].map(item => (
                 <Link key={item.href} to={item.href}
                   className="p-3 rounded-xl border border-gray-200 hover:border-rose-300 hover:bg-rose-50 text-sm text-gray-700 hover:text-rose-700 transition-colors">

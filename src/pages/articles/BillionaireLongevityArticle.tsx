@@ -102,7 +102,7 @@ export function BillionaireLongevityArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Longevity Habits of Indian Billionaires' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Longevity Habits of Indian Billionaires' }}
       eyebrow="Longevity"
       h1="Longevity Habits of Indian Billionaires"
       lead="When people picture the health routines of the ultra-wealthy, they imagine private doctors and exotic interventions. The publicly documented habits of India's most famous billionaires — Ratan Tata, Azim Premji and Mukesh Ambani — tell a quieter, more useful story. Their common threads are discipline, purpose, and, in the case of Ambani, an ordinary vegetarian diet and daily walking. This article sticks strictly to what is on the public record, adds each person's numerology Life Path number computed from their real date of birth, and draws out the longevity lessons that anyone can apply."
@@ -153,7 +153,7 @@ export function BillionaireLongevityArticle() {
               The habits below are free. Start by seeing your own baseline — then decide which
               lessons are worth adopting.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Estimate My Life Expectancy →
             </a>
@@ -202,7 +202,7 @@ export function BillionaireLongevityArticle() {
               Adopt the free habits — and track your progress against a personalised estimate of how
               long you might live.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Open the Longevity Calculator →
             </a>
@@ -221,12 +221,12 @@ export function BillionaireLongevityArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
           <ul className="list-disc pl-6 text-[#2F6FB0] space-y-2 mb-6">
             <li>
-              <a href="/articles/how-indian-celebrities-stay-fit" className="hover:underline font-semibold">
+              <a href="/articles/how-indian-celebrities-stay-fit/" className="hover:underline font-semibold">
                 How Indian Celebrities Stay Fit
               </a>
             </li>
             <li>
-              <a href="/articles/how-to-live-to-100" className="hover:underline font-semibold">
+              <a href="/articles/how-to-live-to-100/" className="hover:underline font-semibold">
                 How to Live to 100
               </a>
             </li>

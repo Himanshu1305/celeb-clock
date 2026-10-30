@@ -14,7 +14,7 @@ import { sunriseSunset } from '../../panchangDay';
 import { computeFestivalCalendar } from '../../festivals';
 
 const LANGS = ['en', 'hi'] as const;
-const okUrl = (u: string) => /^https:\/\/(en\.wikipedia\.org|www\.drikpanchang\.com)\//.test(u) || u === '/festivals';
+const okUrl = (u: string) => /^https:\/\/(en\.wikipedia\.org|www\.drikpanchang\.com)\//.test(u) || u === '/festivals/'; // Batch 11: internal source link in canonical slash form
 
 describe('vrat content — every section is sourced, bilingual and calm', () => {
   it('has content for all ten vrats', () => {
@@ -222,7 +222,7 @@ describe('vrat pages: titles, template and wiring', () => {
     const en = renderPanchangEntry('panchang', placeForSlug('delhi'), '2026-10-29', data);
     const sec = en.sections.find(s => s.id === 'vrat-today')!;
     expect(sec.links!.map(l => l.href)).toEqual(['/vrat/sankashti-chaturthi', '/vrat/karwa-chauth']);
-    expect(renderDailyBodyHtml(en)).toContain('href="/vrat/karwa-chauth"');
+    expect(renderDailyBodyHtml(en)).toContain('href="/vrat/karwa-chauth/"'); // Batch 11: canonical slash form
     const hi = renderPanchangHiEntry('delhi', '2026-10-29', data);
     expect(hi.sections.find(s => s.id === 'vrat-today')!.links!.map(l => l.href)).toEqual(['/hi/vrat/sankashti-chaturthi', '/hi/vrat/karwa-chauth']);
     // A day with no vrat gets no box.

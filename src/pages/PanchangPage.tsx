@@ -6,7 +6,7 @@
  * (src/lib/daily) so it never goes stale between deploys.
  */
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -37,8 +37,8 @@ export default function PanchangPage() {
       theme="vedic"
       testId="panchang-page"
       seo={<SEO title={meta.title} description={meta.description} canonicalUrl={canonical} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Panchang', to: '/panchang' }], current: place.name }}
-      footer={{ tagline: 'Daily Panchang computed from real sunrise and sunset.', nav: [{ label: 'Rahu Kaal', to: '/rahu-kaal' }, { label: 'Choghadiya', to: '/choghadiya' }, { label: 'Muhurat', to: '/muhurat' }, { label: 'Rashifal', to: '/rashifal' }, { label: 'Glossary', to: '/glossary' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Panchang', to: '/panchang/' }], current: place.name }}
+      footer={{ tagline: 'Daily Panchang computed from real sunrise and sunset.', nav: [{ label: 'Rahu Kaal', to: '/rahu-kaal/' }, { label: 'Choghadiya', to: '/choghadiya/' }, { label: 'Muhurat', to: '/muhurat/' }, { label: 'Rashifal', to: '/rashifal/' }, { label: 'Glossary', to: '/glossary/' }] }}
       eyebrow="Panchang"
       h1={<DailyH1 entry={entry} fallback={meta.h1} />}
       lead={<span data-testid="panchang-date">{isIndex ? `${place.name} · ` : ''}<DailyDate entry={entry} fallback={dateWithWeekday(dateKey)} /></span>}
@@ -53,13 +53,13 @@ export default function PanchangPage() {
           {place.slug && HINDI_PANCHANG_SLUGS.has(place.slug) && !ctl.isCustom ? (
             <p className="text-sm mb-6"><Link to={`/hi/panchang/${place.slug}`} className="text-primary hover:underline">{place.name} का पंचांग हिन्दी में देखें →</Link></p>
           ) : (
-            <p className="text-sm mb-6"><Link to="/hi/panchang" className="text-primary hover:underline">हिन्दी में देखें →</Link></p>
+            <p className="text-sm mb-6"><Link to="/hi/panchang/" className="text-primary hover:underline">हिन्दी में देखें →</Link></p>
           )}
 
           <p className="text-sm mb-6" data-testid="panchang-month-link">
             <Link to={`/panchang-calendar${place.slug && !ctl.isCustom ? `?city=${place.slug}` : ctl.isCustom ? `?place=${encodeURIComponent(place.name)}&lat=${place.lat}&lon=${place.lon}` : ''}`} className="text-primary hover:underline">Month view — {place.name} Panchang calendar with festivals →</Link>
-            {' · '}<Link to="/planets-today" className="text-primary hover:underline">Planets today →</Link>
-            {' · '}<Link to="/moon-phase" className="text-primary hover:underline">Moon phase →</Link>
+            {' · '}<Link to="/planets-today/" className="text-primary hover:underline">Planets today →</Link>
+            {' · '}<Link to="/moon-phase/" className="text-primary hover:underline">Moon phase →</Link>
           </p>
 
           <TermChips labels={TERMS} />
@@ -69,7 +69,7 @@ export default function PanchangPage() {
             <p>The five limbs are read at local sunrise, the classical convention: the Tithi from the Moon–Sun distance, the Nakshatra from the Moon, the Yoga from Sun + Moon, all sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>). The Tithi and Nakshatra change at the same instant everywhere, but which one is “at sunrise” — and every window on this page — depends on the place.</p>
             <p>Sunrise and sunset come from the real position of the Sun for the place’s latitude and longitude. Rahu Kaal, Gulika and Yamaganda are fixed eighths of daylight; Abhijit, Dur Muhurtam and Brahma Muhurta are fifteenths of the day or night; Amrit Kalam and Varjyam are fixed slices of the day’s Nakshatra. Times are local clock times rounded to the nearest minute. In our tests (October 2026, 5 cities) they agreed with Drik Panchang to within a minute, and Tithi and Nakshatra end times to within 2 minutes.</p>
             <p>The Tamil <TermTip id="gowriPanchangam">Gowri Panchangam</TermTip> uses the same eight day and eight night parts as the Choghadiya, named in the fixed weekday order of the Pambu Panchangam table that Drik Panchang follows. <TermTip id="tarabala">Tarabalam</TermTip> and <TermTip id="chandrabala">Chandrabalam</TermTip> list the birth stars and Moon signs for which today’s Nakshatra and Moon are supportive, split where the Nakshatra or the Moon’s sign changes. We checked these against Drik Panchang pages for New Delhi and Lancaster (California).</p>
-            <p>Use the date box or the previous / next buttons to see any date, or search any town in the world. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link> · <Link to="/accuracy" className="underline" data-testid="panchang-accuracy-link">How we check accuracy →</Link></p>
+            <p>Use the date box or the previous / next buttons to see any date, or search any town in the world. <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link> · <Link to="/accuracy/" className="underline" data-testid="panchang-accuracy-link">How we check accuracy →</Link></p>
           </div>
 
           {/* Batch 8: static local guide (temples + festivals, sourced) on the 50 city pages only. */}
@@ -79,7 +79,7 @@ export default function PanchangPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Choosing a date for something important? Find an auspicious muhurat.</p>
-            <Link to="/muhurat" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Muhurat finder →</Link>
+            <Link to="/muhurat/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Muhurat finder →</Link>
           </div>
         </div>
       </section>

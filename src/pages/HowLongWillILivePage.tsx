@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ScrollTable } from '@/components/ScrollTable';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -92,8 +92,8 @@ export function HowLongWillILivePage() {
       )}
       breadcrumb={{
         trail: [
-          { label: 'Science & Longevity', to: '/science-longevity' },
-          { label: 'Longevity Calculator', to: '/longevity-calculator' },
+          { label: 'Science & Longevity', to: '/science-longevity/' },
+          { label: 'Longevity Calculator', to: '/longevity-calculator/' },
         ],
         current: 'How Long Will I Live',
       }}
@@ -121,7 +121,7 @@ export function HowLongWillILivePage() {
 
             {/* Above-fold CTA */}
             <Link
-              to="/life-expectancy"
+              to="/life-expectancy/"
               data-testid="cta-to-calculator"
               className="inline-block bg-primary hover:bg-primary/90
                          text-white font-black py-4 px-10 rounded-xl
@@ -212,7 +212,7 @@ export function HowLongWillILivePage() {
               8 questions. WHO, Harvard, and NIH research. 3 minutes.
             </p>
             <Link
-              to="/life-expectancy"
+              to="/life-expectancy/"
               data-testid="cta-to-calculator"
               className="inline-block bg-primary hover:bg-primary/90
                          text-white font-bold py-3 px-8 rounded-xl transition-colors"
@@ -413,7 +413,7 @@ export function HowLongWillILivePage() {
               Not the national average. Yours — based on your 8 lifestyle factors.
             </p>
             <Link
-              to="/life-expectancy"
+              to="/life-expectancy/"
               data-testid="cta-to-calculator"
               className="inline-block bg-primary hover:bg-primary/90
                          text-white font-bold py-3 px-8 rounded-xl transition-colors"
@@ -536,7 +536,7 @@ export function HowLongWillILivePage() {
               3 minutes. 8 science-backed factors. Personalised result and 90-day plan.
             </p>
             <Link
-              to="/life-expectancy"
+              to="/life-expectancy/"
               data-testid="cta-to-calculator"
               className="inline-block bg-white text-primary hover:bg-[#2F6FB0]/10
                          font-black py-4 px-8 rounded-xl transition-colors text-lg"

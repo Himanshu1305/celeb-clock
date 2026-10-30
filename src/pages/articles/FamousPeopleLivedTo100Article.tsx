@@ -141,7 +141,7 @@ export function FamousPeopleLivedTo100Article() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Famous People Who Lived to 100 — Centenarian Secrets' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Famous People Who Lived to 100 — Centenarian Secrets' }}
       eyebrow="Longevity"
       h1="Famous People Who Lived to 100 — Centenarian Secrets"
       lead="Reaching your 100th birthday is still rare enough to make headlines — and for good reason. Only a tiny fraction of people ever join the centenarian club, and the handful who go well beyond it, into their 110s, are rarer still. Yet the famous people who lived to 100 are more than a curiosity. Studied together, they reveal a surprisingly consistent set of habits and circumstances that anyone can learn from."
@@ -153,7 +153,7 @@ export function FamousPeopleLivedTo100Article() {
             supercentenarian Kane Tanaka to Hollywood's Olivia de Havilland — followed by
             the six traits they most had in common, and how you can apply those lessons to
             your own life. Curious where you stand? You can estimate your own outlook with our
-            free <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">longevity calculator</a>.
+            free <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline">longevity calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Real Centenarians Who Lived to 100 and Beyond</h2>
@@ -218,7 +218,7 @@ export function FamousPeopleLivedTo100Article() {
               The habits of centenarians are within your reach. See how your own lifestyle
               shapes your outlook with BornClock's free, private longevity estimate.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Try the Longevity Calculator →
@@ -237,13 +237,13 @@ export function FamousPeopleLivedTo100Article() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Related Articles</h2>
           <div className="grid gap-3 mb-10">
-            <a href="/articles/how-to-live-to-100"
+            <a href="/articles/how-to-live-to-100/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-4
                           hover:border-[#2F6FB0]/30 transition-colors">
               <span className="font-bold text-[#2F6FB0]">How to Live to 100 →</span>
               <span className="block text-sm text-gray-600">The evidence-based habits that add healthy years to your life.</span>
             </a>
-            <a href="/articles/blue-zones-diet"
+            <a href="/articles/blue-zones-diet/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-4
                           hover:border-[#2F6FB0]/30 transition-colors">
               <span className="font-bold text-[#2F6FB0]">The Blue Zones Diet →</span>

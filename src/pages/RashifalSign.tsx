@@ -1,4 +1,5 @@
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { RashifalDailyView } from '@/components/daily/RashifalDailyView';
@@ -38,7 +39,7 @@ export default function RashifalSign() {
         theme="vedic"
         testId="rashifal-sign"
         seo={<SEO title="Rashifal — Horoscope by Moon Sign | BornClock" description="Pick your Vedic Moon sign (rashi) for a computed daily, weekly, monthly and yearly horoscope." canonicalUrl="/rashifal" />}
-        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Rashifal' }}
+        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Rashifal' }}
         eyebrow="Rashifal"
         h1="Choose your Rashi"
       >

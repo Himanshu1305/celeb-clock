@@ -3,7 +3,7 @@
  * Method + sources: src/lib/loShuGrid.ts.
  */
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -37,8 +37,8 @@ export default function LoShuGridPage() {
       seo={<SEO title={LO_SHU_META.title} description={LO_SHU_META.description}
         keywords="lo shu grid calculator, loshu grid, lo shu grid missing numbers, lo shu planes, numerology grid date of birth"
         canonicalUrl={LO_SHU_PATH} />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Lo Shu grid' }}
-      footer={{ tagline: 'The Lo Shu grid, for reflection only.', nav: [{ label: 'Numerology', to: '/numerology' }, { label: 'Kua number', to: '/kua-number-calculator' }, { label: 'Mobile number', to: '/mobile-number-numerology' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'Lo Shu grid' }}
+      footer={{ tagline: 'The Lo Shu grid, for reflection only.', nav: [{ label: 'Numerology', to: '/numerology/' }, { label: 'Kua number', to: '/kua-number-calculator/' }, { label: 'Mobile number', to: '/mobile-number-numerology/' }] }}
       eyebrow="Numerology"
       h1="Lo Shu Grid Calculator"
       lead={<>Your <TermTip id="loShuGrid">Lo Shu grid</TermTip> shows which numbers appear in your date of birth — the ones you have come naturally, the missing ones are qualities to build on purpose.</>}
@@ -110,7 +110,7 @@ export default function LoShuGridPage() {
             { label: 'astromedha.in — The Lo Shu Grid', href: 'https://astromedha.in/insights/lo-shu/grid', note: 'layout, “strike out every zero”, the six planes, missing numbers as “a pointer, not a curse”' },
             { label: 'astroarunpandit.org — Lo Shu grid planes', href: 'https://astroarunpandit.org/lo-shu-grid-planes-numerology/', note: 'the 4-5-6 and 2-5-8 lines' },
           ]} />
-          <p className="text-sm text-muted-foreground mb-8">More from your date: <Link to="/numerology" className="underline">Mulank &amp; Bhagyank</Link> · <Link to="/kua-number-calculator" className="underline">Kua number &amp; lucky directions</Link>.</p>
+          <p className="text-sm text-muted-foreground mb-8">More from your date: <Link to="/numerology/" className="underline">Mulank &amp; Bhagyank</Link> · <Link to="/kua-number-calculator/" className="underline">Kua number &amp; lucky directions</Link>.</p>
         </div>
       </section>
     </ToolLayout>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -41,8 +41,8 @@ export default function NameCorrectionPage() {
         keywords="name correction numerology, chaldean name number, lucky name numerology, name number calculator"
         canonicalUrl="/name-correction"
       />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Name Correction' }}
-      footer={{ tagline: 'Chaldean name-number correction, reflection-first.', nav: [{ label: 'Chaldean numerology', to: '/chaldean-numerology' }, { label: 'Name numerology', to: '/name-numerology' }, { label: 'Business name', to: '/business-name-numerology' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'Name Correction' }}
+      footer={{ tagline: 'Chaldean name-number correction, reflection-first.', nav: [{ label: 'Chaldean numerology', to: '/chaldean-numerology/' }, { label: 'Name numerology', to: '/name-numerology/' }, { label: 'Business name', to: '/business-name-numerology/' }] }}
       eyebrow="Numerology"
       h1="Name Correction Numerology — Check Spelling Variants"
       lead="See your name's Chaldean number and its classical compound meaning — and, if you add your birth date, how the two sit together. For reflection, never a promise."
@@ -106,7 +106,7 @@ export default function NameCorrectionPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Checking a company name instead?</p>
-            <Link to="/business-name-numerology" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Business name numerology →</Link>
+            <Link to="/business-name-numerology/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Business name numerology →</Link>
           </div>
         </div>
       </section>

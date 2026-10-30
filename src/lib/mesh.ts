@@ -37,15 +37,15 @@ export function postsForTags(tags: string[], limit = 2, excludeSlug?: string): B
 // when any of its keywords appears (as a substring) in the post's tags/keywords.
 type Tool = { label: string; to: string; match: string[] };
 const TOOLS: Tool[] = [
-  { label: 'Age Calculator', to: '/age-calculator', match: ['age calculator', 'exact age', 'how old', 'age in', 'calculate age'] },
-  { label: 'Life Expectancy Calculator', to: '/life-expectancy', match: ['life expectancy', 'longevity', 'live longer', 'lifespan', 'centenarian', 'blue zones', 'quit smoking', 'sleep', 'stress', 'bmi', 'diet', 'exercise'] },
-  { label: 'Zodiac Signs', to: '/zodiac', match: ['zodiac', 'astrology', 'star sign', 'sun sign', 'horoscope'] },
-  { label: 'Birthstone Finder', to: '/birthstone', match: ['birthstone', 'gemstone'] },
-  { label: 'Numerology', to: '/numerology', match: ['numerology', 'life path'] },
-  { label: 'Biorhythm & Energy', to: '/biorhythm', match: ['biorhythm', 'rhythm', 'cycle syncing', 'energy forecast', 'circadian'] },
-  { label: 'Celebrity Birthdays', to: '/celebrity-birthday', match: ['celebrity', 'famous birthdays', 'birthday twins', 'shares my birthday'] },
-  { label: 'Chinese Zodiac', to: '/chinese-zodiac', match: ['chinese zodiac'] },
-  { label: 'Birthday Report', to: '/birthday-report', match: ['birthday', 'birthday report', 'gift'] },
+  { label: 'Age Calculator', to: '/age-calculator/', match: ['age calculator', 'exact age', 'how old', 'age in', 'calculate age'] },
+  { label: 'Life Expectancy Calculator', to: '/life-expectancy/', match: ['life expectancy', 'longevity', 'live longer', 'lifespan', 'centenarian', 'blue zones', 'quit smoking', 'sleep', 'stress', 'bmi', 'diet', 'exercise'] },
+  { label: 'Zodiac Signs', to: '/zodiac/', match: ['zodiac', 'astrology', 'star sign', 'sun sign', 'horoscope'] },
+  { label: 'Birthstone Finder', to: '/birthstone/', match: ['birthstone', 'gemstone'] },
+  { label: 'Numerology', to: '/numerology/', match: ['numerology', 'life path'] },
+  { label: 'Biorhythm & Energy', to: '/biorhythm/', match: ['biorhythm', 'rhythm', 'cycle syncing', 'energy forecast', 'circadian'] },
+  { label: 'Celebrity Birthdays', to: '/celebrity-birthday/', match: ['celebrity', 'famous birthdays', 'birthday twins', 'shares my birthday'] },
+  { label: 'Chinese Zodiac', to: '/chinese-zodiac/', match: ['chinese zodiac'] },
+  { label: 'Birthday Report', to: '/birthday-report/', match: ['birthday', 'birthday report', 'gift'] },
 ];
 
 /** Tools relevant to a blog post, derived from its tags/keywords. */
@@ -54,8 +54,8 @@ export function toolsForTags(tags: string[], keywords: string[] = [], limit = 4)
   const hit = (tool: Tool) => tool.match.some(m => hay.some(h => h.includes(m)));
   const matched = TOOLS.filter(hit);
   // Always guarantee a money-page path even for off-topic posts.
-  if (!matched.some(t => t.to === '/birthday-report')) {
-    matched.push(TOOLS.find(t => t.to === '/birthday-report')!);
+  if (!matched.some(t => t.to === '/birthday-report/')) { // Batch 11: paths are in the slash form
+    matched.push(TOOLS.find(t => t.to === '/birthday-report/')!);
   }
   return matched.slice(0, limit);
 }

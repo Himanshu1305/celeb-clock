@@ -5,7 +5,7 @@
  * from the shared daily-page mechanism.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -63,8 +63,8 @@ export default function ChoghadiyaPage() {
       theme="vedic"
       testId="choghadiya-page"
       seo={<SEO title={meta.title} description={meta.description} canonicalUrl={canonical} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Choghadiya', to: '/choghadiya' }], current: place.name }}
-      footer={{ tagline: 'Choghadiya from real sunrise and sunset for your city.', nav: [{ label: 'Panchang', to: '/panchang' }, { label: 'Rahu Kaal', to: '/rahu-kaal' }, { label: 'Muhurat', to: '/muhurat' }, { label: 'Glossary', to: '/glossary' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Choghadiya', to: '/choghadiya/' }], current: place.name }}
+      footer={{ tagline: 'Choghadiya from real sunrise and sunset for your city.', nav: [{ label: 'Panchang', to: '/panchang/' }, { label: 'Rahu Kaal', to: '/rahu-kaal/' }, { label: 'Muhurat', to: '/muhurat/' }, { label: 'Glossary', to: '/glossary/' }] }}
       eyebrow="Choghadiya"
       h1={<DailyH1 entry={entry} fallback={meta.h1} />}
       lead={<span data-testid="panchang-date">{isIndex ? `${place.name} · ` : ''}<DailyDate entry={entry} fallback={dateWithWeekday(dateKey)} /></span>}
@@ -90,7 +90,7 @@ export default function ChoghadiyaPage() {
           <div className="rounded-xl border border-border p-4 mb-6 text-sm text-muted-foreground space-y-2" data-testid="choghadiya-how">
             <h2 className="font-semibold text-foreground">How <TermTip id="choghadiya">Choghadiya</TermTip> is worked out</h2>
             <p>The day (sunrise to sunset) and the night (sunset to the next sunrise) are each split into eight equal slots, so a slot is longer than 90 minutes in summer daytime and shorter in winter. The weekday fixes the first slot of the day — Udveg on Sunday, Amrit on Monday, Rog on Tuesday, Labh on Wednesday, Shubh on Thursday, Char on Friday, Kaal on Saturday — and the slots then follow a fixed order.</p>
-            <p>Night slots after midnight still belong to the same Panchang day, which runs from sunrise to the next sunrise. Times are local clock times rounded to the nearest minute. <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link></p>
+            <p>Night slots after midnight still belong to the same Panchang day, which runs from sunrise to the next sunrise. Times are local clock times rounded to the nearest minute. <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link></p>
           </div>
 
           {/* Batch 8: static local guide (temples + festivals, sourced) on the 50 city pages only. */}

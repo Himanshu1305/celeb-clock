@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Home, Crown, Cake, Menu, Star, Activity, X, type LucideIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -31,76 +32,76 @@ const NAV_CATEGORIES: NavCategory[] = [
   {
     key: 'birthday', trigger: 'Birthday Fun', heading: 'Birthday Fun & Celebrity Twins', icon: Cake,
     items: [
-      { path: '/birthday-fun', label: 'Birthday Fun — overview', emoji: '🎈' },
-      { path: '/age-calculator', label: 'Age Calculator', emoji: '⏰' },
-      { path: '/todays-birthdays', label: "Today's Birthdays", emoji: '🎂' },
-      { path: '/celebrity-birthday', label: 'Celebrity Match', emoji: '🌟' },
-      { path: '/birthday-report', label: 'Birthday Report', emoji: '📋' },
-      { path: '/planetary-age', label: 'Planetary Age', emoji: '🌏' },
-      { path: '/age-in-days', label: 'Age in Days', emoji: '📅' },
-      { path: '/age-in-seconds', label: 'Age in Seconds', emoji: '⏱️' },
-      { path: '/birthday-countdown', label: 'Birthday Countdown', emoji: '🎉' },
-      { path: '/celebrity', label: 'Celebrity Birthday Profiles', emoji: '⭐' },
-      { path: '/born-in', label: 'Born in Each Month', emoji: '📆' },
-      { path: '/born-on/india', label: 'Indian Celebrities by Date', emoji: '🇮🇳' },
-      { path: '/weight-on-planets', label: 'Weight on Planets', emoji: '⚖️' },
-      { path: '/gift', label: 'Gift a Report', emoji: '🎁' },
-      { path: '/birthstone', label: 'Birthstone', emoji: '💠' },
-      { path: '/birthday', label: 'Birthday Personalities', emoji: '🎈' },
+      { path: '/birthday-fun/', label: 'Birthday Fun — overview', emoji: '🎈' },
+      { path: '/age-calculator/', label: 'Age Calculator', emoji: '⏰' },
+      { path: '/todays-birthdays/', label: "Today's Birthdays", emoji: '🎂' },
+      { path: '/celebrity-birthday/', label: 'Who Shares My Birthday?', emoji: '🌟' },
+      { path: '/birthday-report/', label: 'Birthday Report', emoji: '📋' },
+      { path: '/planetary-age/', label: 'Planetary Age', emoji: '🌏' },
+      { path: '/age-in-days/', label: 'Age in Days', emoji: '📅' },
+      { path: '/age-in-seconds/', label: 'Age in Seconds', emoji: '⏱️' },
+      { path: '/birthday-countdown/', label: 'Birthday Countdown', emoji: '🎉' },
+      { path: '/celebrity/', label: 'Celebrity Birthday Profiles', emoji: '⭐' },
+      { path: '/born-in/', label: 'Born in Each Month', emoji: '📆' },
+      { path: '/born-on/india/', label: 'Indian Celebrities by Date', emoji: '🇮🇳' },
+      { path: '/weight-on-planets/', label: 'Weight on Planets', emoji: '⚖️' },
+      { path: '/gift/', label: 'Gift a Report', emoji: '🎁' },
+      { path: '/birthstone/', label: 'Birthstone', emoji: '💠' },
+      { path: '/birthday/', label: 'Birthday Personalities', emoji: '🎈' },
     ],
   },
   {
     key: 'vedic', trigger: 'Vedic Astrology', heading: 'Vedic Astrology', icon: Sparkles,
     items: [
-      { path: '/vedic-astrology', label: 'Vedic Astrology — overview', emoji: '🕉️' },
-      { path: '/kundali', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
-      { path: '/kundali-match', label: 'Kundali Matching', emoji: '💑' },
-      { path: '/astrologer', label: 'Ask an Astrologer (AI)', emoji: '💬' },
-      { path: '/sade-sati', label: 'Sade Sati Calculator', emoji: '🪐' },
-      { path: '/muhurat', label: 'Muhurat Finder', emoji: '🗓️' },
-      { path: '/career-report', label: 'Career Analysis (Vedic)', emoji: '💼' },
-      { path: '/gemstones', label: 'Gemstone Suggestions', emoji: '💍' },
-      { path: '/zodiac', label: 'Western Zodiac', emoji: '♈' },
-      { path: '/chinese-zodiac', label: 'Chinese Zodiac', emoji: '🐉' },
-      { path: '/vedic-zodiac', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
-      { path: '/moon-sign', label: 'Moon Sign Calculator', emoji: '🌙' },
-      { path: '/compatibility', label: 'Compatibility Calculator', emoji: '💕' },
-      { path: '/rashi-ratna', label: 'Rashi Ratna', emoji: '💎' },
-      { path: '/sun-vs-moon-sign', label: 'Sun Sign vs Moon Sign', emoji: '☀️' },
+      { path: '/vedic-astrology/', label: 'Vedic Astrology — overview', emoji: '🕉️' },
+      { path: '/kundali/', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
+      { path: '/kundali-match/', label: 'Kundali Matching', emoji: '💑' },
+      { path: '/astrologer/', label: 'Ask an Astrologer (AI)', emoji: '💬' },
+      { path: '/sade-sati/', label: 'Sade Sati Calculator', emoji: '🪐' },
+      { path: '/muhurat/', label: 'Muhurat Finder', emoji: '🗓️' },
+      { path: '/career-report/', label: 'Career Analysis (Vedic)', emoji: '💼' },
+      { path: '/gemstones/', label: 'Gemstone Suggestions', emoji: '💍' },
+      { path: '/zodiac/', label: 'Western Zodiac', emoji: '♈' },
+      { path: '/chinese-zodiac/', label: 'Chinese Zodiac', emoji: '🐉' },
+      { path: '/vedic-zodiac/', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
+      { path: '/moon-sign/', label: 'Moon Sign Calculator', emoji: '🌙' },
+      { path: '/compatibility/', label: 'Compatibility Calculator', emoji: '💕' },
+      { path: '/rashi-ratna/', label: 'Rashi Ratna', emoji: '💎' },
+      { path: '/sun-vs-moon-sign/', label: 'Sun Sign vs Moon Sign', emoji: '☀️' },
     ],
   },
   {
     key: 'mystic', trigger: 'Mystic Corner', heading: 'Mystic Corner', icon: Star,
     items: [
-      { path: '/mystic-corner', label: 'Mystic Corner — overview', emoji: '🔮' },
-      { path: '/numerology', label: 'Numerology by Birthday', emoji: '🔢' },
-      { path: '/name-numerology', label: 'Name Numerology', emoji: '✍️' },
-      { path: '/tarot-card-by-birthday', label: 'Tarot by Birthday', emoji: '🃏' },
+      { path: '/mystic-corner/', label: 'Mystic Corner — overview', emoji: '🔮' },
+      { path: '/numerology/', label: 'Numerology by Birthday', emoji: '🔢' },
+      { path: '/name-numerology/', label: 'Name Numerology', emoji: '✍️' },
+      { path: '/tarot-card-by-birthday/', label: 'Tarot by Birthday', emoji: '🃏' },
     ],
   },
   {
     key: 'science', trigger: 'Science & Longevity', heading: 'Science & Longevity', icon: Activity,
     items: [
-      { path: '/science-longevity', label: 'Science & Longevity — overview', emoji: '🔬' },
-      { path: '/life-expectancy', label: 'Life Expectancy', emoji: '⏳', premium: true },
-      { path: '/biological-age', label: 'Biological Age', emoji: '🧬' },
-      { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age', emoji: '📈' },
-      { path: '/coach', label: 'Longevity Coach', emoji: '🧘' },
-      { path: '/country-comparison', label: 'Life Expectancy by Country', emoji: '🌍' },
-      { path: '/biorhythm', label: 'Biorhythm Calculator', emoji: '🌀' },
-      { path: '/biorhythm-workout-calculator', label: 'Biorhythm Workout', emoji: '🏃' },
-      { path: '/energy-forecast', label: 'Energy Forecast', emoji: '⚡' },
+      { path: '/science-longevity/', label: 'Science & Longevity — overview', emoji: '🔬' },
+      { path: '/life-expectancy/', label: 'Life Expectancy', emoji: '⏳', premium: true },
+      { path: '/biological-age/', label: 'Biological Age', emoji: '🧬' },
+      { path: '/biological-age-vs-chronological-age/', label: 'Biological vs Chronological Age', emoji: '📈' },
+      { path: '/coach/', label: 'Longevity Coach', emoji: '🧘' },
+      { path: '/country-comparison/', label: 'Life Expectancy by Country', emoji: '🌍' },
+      { path: '/biorhythm/', label: 'Biorhythm Calculator', emoji: '🌀' },
+      { path: '/biorhythm-workout-calculator/', label: 'Biorhythm Workout', emoji: '🏃' },
+      { path: '/energy-forecast/', label: 'Energy Forecast', emoji: '⚡' },
     ],
   },
   {
     key: 'more', trigger: 'More', heading: 'Resources', icon: Menu,
     items: [
-      { path: '/articles', label: 'Articles', emoji: '📰' },
-      { path: '/answers', label: 'Answers', emoji: '❓' },
-      { path: '/blog', label: 'Blog', emoji: '📝' },
-      { path: '/leaderboard', label: 'Leaderboard', emoji: '🏆' },
-      { path: '/pricing', label: 'Pricing', emoji: '🏷️' },
-      { path: '/embed', label: 'Embed Our Widget', emoji: '🔗' },
+      { path: '/articles/', label: 'Articles', emoji: '📰' },
+      { path: '/answers/', label: 'Answers', emoji: '❓' },
+      { path: '/blog/', label: 'Blog', emoji: '📝' },
+      { path: '/leaderboard/', label: 'Leaderboard', emoji: '🏆' },
+      { path: '/pricing/', label: 'Pricing', emoji: '🏷️' },
+      { path: '/embed/', label: 'Embed Our Widget', emoji: '🔗' },
     ],
   },
 ];
@@ -117,7 +118,10 @@ export const Navigation = () => {
   const location = useLocation();
   const { user, isPremium, isInTrial, trialDaysRemaining, isPaidSubscriber, profile, loading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const isActive = (path: string) => location.pathname === path;
+  // Paths are compared without a trailing slash: links use the canonical /x/ form, and a
+  // visitor can arrive at either spelling.
+  const noSlash = (p: string) => (p.length > 1 ? p.replace(/\/+$/, '') : p);
+  const isActive = (path: string) => noSlash(location.pathname) === noSlash(path);
   const isHomePage = location.pathname === '/';
 
   // Trial UI is account-age driven; a paid subscriber must never see it. Gate
@@ -208,14 +212,14 @@ export const Navigation = () => {
           ))}
 
           {isAdminEmail(user?.email) && (
-            <Link to="/admin" className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 rounded transition-colors">
+            <Link to="/admin/" className="text-xs text-gray-400 hover:text-gray-600 px-2 py-1 rounded transition-colors">
               Admin
             </Link>
           )}
 
           {!loading && isPremium && !showTrialPill && (
             <Link
-              to="/upgrade"
+              to="/upgrade/"
               className="text-[#5c4620] border border-[#C6A15B]/50 bg-[#C6A15B]/20 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-[#C6A15B]/30 transition-colors"
             >
               ⭐ Premium
@@ -224,7 +228,7 @@ export const Navigation = () => {
 
           {!loading && !isPremium && !showTrialPill && (
             <Link
-              to="/upgrade"
+              to="/upgrade/"
               className="bg-[#C6A15B] !text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
             >
               Upgrade
@@ -233,7 +237,7 @@ export const Navigation = () => {
 
           {!loading && showTrialPill && (
             <Link
-              to="/upgrade"
+              to="/upgrade/"
               className="bg-[#C6A15B] !text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
             >
               Trial: {trialDaysRemaining}d left
@@ -283,7 +287,7 @@ export const Navigation = () => {
               ))}
 
               {isAdminEmail(user?.email) && (
-                <Link to="/admin" onClick={closeMobile} className={mobileLinkClass('/admin')}>
+                <Link to="/admin/" onClick={closeMobile} className={mobileLinkClass('/admin')}>
                   <span className="w-4 text-center flex-shrink-0">🛡️</span>
                   Admin Dashboard
                 </Link>
@@ -293,7 +297,7 @@ export const Navigation = () => {
               {!loading && user && !isPremium && !showTrialPill && (
                 <div className="mx-2 mt-4">
                   <Link
-                    to="/upgrade"
+                    to="/upgrade/"
                     onClick={closeMobile}
                     className="flex items-center justify-center gap-2 w-full bg-[#C6A15B] !text-[#0E2238] py-3 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
                   >
@@ -304,7 +308,7 @@ export const Navigation = () => {
               {!loading && showTrialPill && (
                 <div className="mx-2 mt-4">
                   <Link
-                    to="/upgrade"
+                    to="/upgrade/"
                     onClick={closeMobile}
                     className="flex items-center justify-center gap-2 w-full bg-amber-500 text-white py-3 rounded-xl text-sm font-semibold hover:bg-amber-600 transition-colors"
                   >
@@ -321,7 +325,7 @@ export const Navigation = () => {
       {showTrialBanner && (
         <div className="bg-amber-50 border-b border-amber-200 py-1.5 px-4 text-center text-sm text-amber-800 rounded-lg mt-1">
           🎁 Free trial — {trialDaysRemaining} day{trialDaysRemaining !== 1 ? 's' : ''} remaining ·{' '}
-          <Link to="/upgrade" className="font-medium underline ml-1">
+          <Link to="/upgrade/" className="font-medium underline ml-1">
             Upgrade to keep access →
           </Link>
         </div>

@@ -6,7 +6,7 @@
  * (src/lib/vedic/biodataHoroscope.ts). Nothing is sent to or stored on a server.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { CityPicker } from '@/components/CityPicker';
@@ -142,8 +142,8 @@ export default function MarriageBiodataPage() {
       seo={<SEO title={BIODATA_META.title} description={BIODATA_META.description}
         keywords="marriage biodata maker, biodata for marriage, marriage biodata format, biodata in hindi, biodata pdf"
         canonicalUrl={BIODATA_PATH} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Kundali matching', to: '/kundali-match' }], current: 'Marriage biodata' }}
-      footer={{ tagline: 'Marriage biodata, made on your device.', nav: [{ label: 'Kundali', to: '/kundali' }, { label: 'Kundali matching', to: '/kundali-match' }, { label: 'Manglik check', to: '/manglik' }], note: 'Nothing you type is stored on our servers.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Kundali matching', to: '/kundali-match/' }], current: 'Marriage biodata' }}
+      footer={{ tagline: 'Marriage biodata, made on your device.', nav: [{ label: 'Kundali', to: '/kundali/' }, { label: 'Kundali matching', to: '/kundali-match/' }, { label: 'Manglik check', to: '/manglik/' }], note: 'Nothing you type is stored on our servers.' }}
       eyebrow="Marriage biodata maker"
       h1="Marriage Biodata Maker"
       lead="Fill in the details, pick a template and save a clean A4 PDF. Rashi, nakshatra and Manglik can be filled from your birth chart. Everything stays on your device — nothing is stored on our servers."
@@ -220,7 +220,7 @@ export default function MarriageBiodataPage() {
               { label: 'Manglik: Mars from Lagna and Moon in houses 1, 4, 7, 8, 12', note: 'the one rule used across BornClock (see /manglik), matched to AstroSage’s Manglik column' },
               { label: 'PDF: made by your browser’s print dialog', note: 'no server, no upload' },
             ]} />
-            <p className="text-sm text-muted-foreground mb-8">Next step: <Link to="/kundali-match" className="underline">match two Kundalis (Guna Milan)</Link> · <Link to="/kundali" className="underline">make a full Kundali</Link>.</p>
+            <p className="text-sm text-muted-foreground mb-8">Next step: <Link to="/kundali-match/" className="underline">match two Kundalis (Guna Milan)</Link> · <Link to="/kundali/" className="underline">make a full Kundali</Link>.</p>
           </div>
         </div>
       </section>

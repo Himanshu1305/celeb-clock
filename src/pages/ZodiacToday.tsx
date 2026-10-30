@@ -6,7 +6,8 @@
  * Batch 10: <ZodiacToday when="tomorrow" /> serves /zodiac/:sign/tomorrow — the next
  * India date's reading (daily kind 'horoscope-tomorrow'), own dated title + canonical.
  */
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { getZodiacBySlug, ZODIAC_DATA } from '@/data/zodiacData';
@@ -30,7 +31,7 @@ export default function ZodiacToday({ when = 'today' }: { when?: 'today' | 'tomo
         theme="mystic"
         testId="zodiac-today-not-found"
         seo={<SEO title="Horoscope — Sign Not Found | BornClock" description="That zodiac sign doesn't exist. Pick one of the 12 signs for today's horoscope." canonicalUrl="/zodiac" />}
-        breadcrumb={{ trail: [{ label: 'Zodiac Signs', to: '/zodiac' }], current: 'Not found' }}
+        breadcrumb={{ trail: [{ label: 'Zodiac Signs', to: '/zodiac/' }], current: 'Not found' }}
         eyebrow="Western horoscope"
         h1="Choose your sign"
       >
@@ -57,10 +58,10 @@ export default function ZodiacToday({ when = 'today' }: { when?: 'today' | 'tomo
         canonicalUrl={path}
         ogImage="https://bornclock.com/og/zodiac.png"
       />}
-      breadcrumb={{ trail: [{ label: 'Zodiac Signs', to: '/zodiac' }, { label: data.name, to: `/zodiac/${data.slug}` }], current: Day }}
+      breadcrumb={{ trail: [{ label: 'Zodiac Signs', to: '/zodiac/' }, { label: data.name, to: `/zodiac/${data.slug}` }], current: Day }}
       footer={{
         tagline: `${data.name} (${data.dateRange}) — ${day}'s Western horoscope from the real sky.`,
-        nav: [{ label: `${data.name} profile`, to: `/zodiac/${data.slug}` }, { label: 'Zodiac', to: '/zodiac' }, { label: 'Vedic rashifal', to: '/rashifal' }],
+        nav: [{ label: `${data.name} profile`, to: `/zodiac/${data.slug}` }, { label: 'Zodiac', to: '/zodiac/' }, { label: 'Vedic rashifal', to: '/rashifal/' }],
         note: 'Western (tropical) astrology — reflective guidance, not certainty.',
       }}
       eyebrow={tomorrow ? 'Western (tropical) astrology · tomorrow’s horoscope' : 'Western (tropical) astrology · daily horoscope'}
@@ -70,7 +71,7 @@ export default function ZodiacToday({ when = 'today' }: { when?: 'today' | 'tomo
       <section className="section container mx-auto px-4 py-8 max-w-3xl">
         <p className="text-sm rounded-lg border border-border bg-muted/40 px-4 py-3 mb-6" data-testid="western-label">
           This is <strong>Western (tropical) astrology</strong>, read from your Sun sign. Your Vedic rashi (Moon sign) may differ —{' '}
-          <Link to="/moon-sign" className="underline">find your Vedic rashi here</Link>, then read the{' '}
+          <Link to="/moon-sign/" className="underline">find your Vedic rashi here</Link>, then read the{' '}
           <Link to={`/rashifal/${RASHI_OF[idx]}/${when}`} className="underline">Vedic rashifal for {day}</Link>.
         </p>
 
@@ -117,7 +118,7 @@ export default function ZodiacToday({ when = 'today' }: { when?: 'today' | 'tomo
           <div className="flex flex-wrap gap-3 justify-center">
             <Link to={`/zodiac/${data.slug}`} className="text-sm text-primary hover:underline">{data.name} traits &amp; compatibility</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/western-birth-chart" className="text-sm text-primary hover:underline">Your full Western birth chart</Link>
+            <Link to="/western-birth-chart/" className="text-sm text-primary hover:underline">Your full Western birth chart</Link>
           </div>
         </div>
       </section>

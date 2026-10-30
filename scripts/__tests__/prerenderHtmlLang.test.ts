@@ -14,6 +14,6 @@ describe('prerender.mjs — <html lang> by route', () => {
   it('applies them to every page before finalizeHead', () => {
     const apply = src.indexOf('html = withHtmlLang(html, pageLangForPath(route));');
     expect(apply).toBeGreaterThan(0);
-    expect(apply).toBeLessThan(src.indexOf('html = finalizeHead(html, route).html;'));
+    expect(apply).toBeLessThan(src.indexOf('const fin = finalizeHead(html, route);'));
   });
 });

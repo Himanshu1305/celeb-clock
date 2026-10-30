@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Crown, Lock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { LongevityResult, EPIGENETIC_HABITS } from '@/services/LongevityCalculationService';
 import { reachPercent } from '@/lib/longevity/survival';
 import { HealthGuideSection } from '@/components/HealthGuideSection';
@@ -67,7 +67,7 @@ const PremiumBlur = ({ children, tab }: { children: React.ReactNode; tab: string
     <div className="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-sm rounded-xl z-10 p-4 text-center space-y-3">
       <Crown className="w-6 h-6 text-accent" />
       <p className="font-bold text-sm text-foreground">Unlock full {tab} analysis</p>
-      <Link to="/upgrade"><Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">Upgrade to Premium</Button></Link>
+      <Link to="/upgrade/"><Button size="sm" className="bg-accent text-accent-foreground hover:bg-accent/90">Upgrade to Premium</Button></Link>
     </div>
   </div>
 );

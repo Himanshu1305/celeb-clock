@@ -94,7 +94,7 @@ export function LifeExpectancyHowCalculatedArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'How Life Expectancy Is Calculated — The WHO Method Explained' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'How Life Expectancy Is Calculated — The WHO Method Explained' }}
       eyebrow="Science & Longevity"
       h1="How Life Expectancy Is Calculated — The WHO Method Explained"
       lead={`When a headline says "life expectancy in India is ${leYears('India')} years" (UN World Population Prospects 2024, estimate for 2023), it can sound like a simple fact — a stopwatch on the average life. In reality that number is the output of a careful statistical machine called a life table, built from millions of records and standardised so that every country's figure means the same thing. This guide explains exactly how life expectancy is calculated, why demographers distinguish period from cohort life tables, the five data sources that feed the model, and why India's official figure may actually underestimate how long a child born today will live.`}
@@ -137,7 +137,7 @@ export function LifeExpectancyHowCalculatedArticle() {
               The national life table is only a starting point. BornClock takes the baseline and
               adjusts for your age, sex and lifestyle to estimate your personal outlook.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Try the Longevity Calculator →
             </a>
@@ -241,7 +241,7 @@ export function LifeExpectancyHowCalculatedArticle() {
               Move beyond the national average. Enter your details and see an estimate adjusted for
               your age, sex and lifestyle in seconds.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Open the Longevity Calculator →
             </a>
@@ -260,12 +260,12 @@ export function LifeExpectancyHowCalculatedArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
           <ul className="list-disc pl-6 text-[#2F6FB0] space-y-2 mb-6">
             <li>
-              <a href="/articles/life-expectancy-by-country-2026" className="hover:underline font-semibold">
+              <a href="/articles/life-expectancy-by-country-2026/" className="hover:underline font-semibold">
                 Life Expectancy by Country 2026
               </a>
             </li>
             <li>
-              <a href="/articles/how-long-will-i-live-in-india" className="hover:underline font-semibold">
+              <a href="/articles/how-long-will-i-live-in-india/" className="hover:underline font-semibold">
                 How Long Will I Live in India?
               </a>
             </li>

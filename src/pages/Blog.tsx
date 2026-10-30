@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { ArticleLayout } from '@/components/central';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -284,7 +285,7 @@ const Blog = () => {
                         <p className="text-sm text-muted-foreground">Delivered to your inbox — personalized birthday facts, zodiac tips & more</p>
                       </div>
                       <Button asChild className="gap-1 whitespace-nowrap">
-                        <Link to="/auth?signup=true">
+                        <Link to="/auth/?signup=true">
                           Sign Up Free
                           <ArrowRight className="w-4 h-4" />
                         </Link>

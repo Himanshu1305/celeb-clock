@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { ToolLayout } from '@/components/central';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -57,7 +57,7 @@ export default function WeightOnPlanetsPage() {
           canonicalUrl="/weight-on-planets"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Weight on Planets' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Weight on Planets' }}
       eyebrow={<span className="inline-flex items-center gap-2"><Globe className="w-4 h-4" /> Cosmic weigh-in</span>}
       h1={<>How much would you weigh on other planets?</>}
       lead={(
@@ -183,7 +183,7 @@ export default function WeightOnPlanetsPage() {
         <div className="rounded-2xl bg-gradient-to-br from-[#2F6FB0] to-[#2F6FB0] p-6 text-center text-white">
           <p className="text-lg font-bold mb-1">Loved this? See your age on every planet</p>
           <p className="text-white/80 text-sm mb-4">You’re a different number of years old on Mercury, Mars and Jupiter too — find out in seconds.</p>
-          <Link to="/planetary-age" className="inline-flex items-center gap-2 bg-white text-[#2F6FB0] px-6 py-3 rounded-xl font-semibold hover:bg-[#2F6FB0]/10 transition-colors">
+          <Link to="/planetary-age/" className="inline-flex items-center gap-2 bg-white text-[#2F6FB0] px-6 py-3 rounded-xl font-semibold hover:bg-[#2F6FB0]/10 transition-colors">
             <ArrowRightCircle className="w-5 h-5" /> Try the Planetary Age calculator
           </Link>
         </div>
@@ -205,8 +205,8 @@ export default function WeightOnPlanetsPage() {
           {meshPosts.map(p => (
             <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ {p.title}</Link>
           ))}
-          <Link to="/planetary-age" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Your age on every planet</Link>
-          <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Your Birthday Report</Link>
+          <Link to="/planetary-age/" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Your age on every planet</Link>
+          <Link to="/birthday-report/" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Your Birthday Report</Link>
         </div>
       </div>
     </ToolLayout>

@@ -60,7 +60,7 @@ describe('vrat pages', () => {
     expect(getByTestId('vrat-section-ekadashis').querySelectorAll('li').length).toBe(26);
     expect(getByTestId('vrat-mantras').textContent).toContain('ॐ नमो भगवते वासुदेवाय');
     expect(getByTestId('vrat-mantras').textContent).toContain('अर्थ');
-    expect(getByTestId('vrat-lang-switch').getAttribute('href')).toBe('/vrat/ekadashi');
+    expect(getByTestId('vrat-lang-switch').getAttribute('href')).toBe('/vrat/ekadashi/');
     await waitFor(() => expect(getByTestId('vrat-daily').textContent).toContain('रमा एकादशी'), { timeout: 30_000 });
   }, 60_000);
 
@@ -73,6 +73,6 @@ describe('vrat pages', () => {
     const { getByTestId, container } = renderPath('/festivals/2026');
     expect(getByTestId('festival-vrat-pages').querySelectorAll('a').length).toBe(11);
     const hrefs = [...container.querySelectorAll('a')].map(a => a.getAttribute('href'));
-    for (const h of ['/vrat/ekadashi', '/vrat/karwa-chauth', '/vrat/pradosh-vrat', '/vrat/janmashtami', '/vrat/mahashivratri', '/vrat/navratri']) expect(hrefs, h).toContain(h);
+    for (const h of ['/vrat/ekadashi/', '/vrat/karwa-chauth/', '/vrat/pradosh-vrat/', '/vrat/janmashtami/', '/vrat/mahashivratri/', '/vrat/navratri/']) expect(hrefs, h).toContain(h);
   }, 60_000);
 });

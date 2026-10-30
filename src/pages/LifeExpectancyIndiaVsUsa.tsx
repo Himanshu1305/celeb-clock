@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -14,10 +14,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyIndiaVsUsa = () => {
@@ -36,7 +36,7 @@ const LifeExpectancyIndiaVsUsa = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'India vs USA Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'India vs USA Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in India vs USA — Why the Gap Exists and What's Changing"
       lead={`India's average life expectancy is ${leYears('India')} years and the USA's is ${leYears('United States')} years (${LE_CITATION}) — a difference of ${leDiff('United States', 'India')} years. But here's the context that matters: in 1960, India's life expectancy was ${WPP2024_HISTORY.India[1960]} years. It has risen by more than 26 years in six decades — one of the most dramatic public health achievements of the 20th and 21st centuries. The gap is real, but the trajectory tells a different story.`}

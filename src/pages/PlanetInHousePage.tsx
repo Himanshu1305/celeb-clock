@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -23,8 +24,8 @@ export default function PlanetInHousePage() {
         theme="vedic"
         testId="planet-in-house-hub"
         seo={<SEO title="Planet in House — All 9 Planets Through 12 Houses | BornClock" description="What each of the 9 Vedic planets means in each of the 12 houses (bhavas) — the life area it activates, what it gives and the care points. 108 placements, plain language." canonicalUrl="/planet-in-house" ogImage="https://bornclock.com/og/vedic.png" />}
-        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Planet in house' }}
-        footer={{ tagline: 'Every planet in every house (bhava).', nav: [{ label: 'Planet in sign', to: '/planet-in-sign' }, { label: 'Free Kundli', to: '/kundali' }] }}
+        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Planet in house' }}
+        footer={{ tagline: 'Every planet in every house (bhava).', nav: [{ label: 'Planet in sign', to: '/planet-in-sign/' }, { label: 'Free Kundli', to: '/kundali/' }] }}
         eyebrow="Vedic placements"
         h1="Planet in House — all 108 placements"
         lead="Choose a planet and house to see which life area it activates, what it gives at its best, and where to take care."
@@ -64,8 +65,8 @@ export default function PlanetInHousePage() {
       theme="vedic"
       testId="planet-in-house"
       seo={<SEO title={title} description={description} canonicalUrl={`/planet-in-house/${planet.slug}/${house.num}`} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Planet in house', to: '/planet-in-house' }], current: data.headline }}
-      footer={{ tagline: 'Traditional Vedic placements, read honestly.', nav: [{ label: 'All placements', to: '/planet-in-house' }, { label: 'Planet in sign', to: '/planet-in-sign' }, { label: 'Free Kundli', to: '/kundali' }], note: 'A general, tradition-based reading — modified in your chart by sign, aspects and Dasha. Not a fixed prediction.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Planet in house', to: '/planet-in-house/' }], current: data.headline }}
+      footer={{ tagline: 'Traditional Vedic placements, read honestly.', nav: [{ label: 'All placements', to: '/planet-in-house/' }, { label: 'Planet in sign', to: '/planet-in-sign/' }, { label: 'Free Kundli', to: '/kundali/' }], note: 'A general, tradition-based reading — modified in your chart by sign, aspects and Dasha. Not a fixed prediction.' }}
       eyebrow="Vedic placement"
       h1={data.headline}
       lead={`${house.name} · ${house.theme}`}
@@ -83,7 +84,7 @@ export default function PlanetInHousePage() {
 
           <p className="text-xs text-muted-foreground my-6">
             Read by the classical significations of the <TermTip id="bhava">bhava</TermTip> (house) and the planet’s karaka.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           <h2 className="font-semibold text-foreground mb-2">{planet.name} in other houses</h2>
@@ -104,7 +105,7 @@ export default function PlanetInHousePage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-foreground mb-3">Find which house {planet.name} occupies in <em>your</em> chart.</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
       </section>

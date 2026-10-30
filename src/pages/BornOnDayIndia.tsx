@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { CelebrityCard, DisplayCelebrity } from '@/components/CelebrityCard';
@@ -84,7 +85,7 @@ export default function BornOnDayIndia() {
 
   // Only render India pages for slugs we generate (>=3 IN celebs); otherwise
   // send the visitor to the parent born-on page.
-  if (!parsed) return <Navigate to="/born-on" replace />;
+  if (!parsed) return <Navigate to="/born-on/" replace />;
   if (slug && !SLUG_SET.has(slug)) return <Navigate to={`/born-on/${slug}`} replace />;
 
   const { month, day } = parsed;
@@ -172,14 +173,14 @@ export default function BornOnDayIndia() {
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(qaPageJsonLd) }} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on' }, { label: dateLabel, to: `/born-on/${slug}` }], current: 'India 🇮🇳' }}
+      breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on/' }, { label: dateLabel, to: `/born-on/${slug}` }], current: 'India 🇮🇳' }}
       footer={{
         tagline: `Indian celebrities born on ${dateLabel}, ranked by global recognition.`,
         nav: [
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Born In (months)', to: '/born-in' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Born In (months)', to: '/born-in/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Born-on dates.',
       }}
@@ -267,7 +268,7 @@ export default function BornOnDayIndia() {
             <ArrowLeft className="w-4 h-4" />
             {MONTH_NAMES[prev.month]} {prev.day}
           </Link>
-          <Link to="/born-on" className="text-sm text-muted-foreground hover:text-foreground">All dates</Link>
+          <Link to="/born-on/" className="text-sm text-muted-foreground hover:text-foreground">All dates</Link>
           <Link
             to={`/born-on/${next.slug}/india`}
             className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -279,10 +280,10 @@ export default function BornOnDayIndia() {
 
         {/* Cross-links to viral tools (Task 19 internal linking) */}
         <div className="mt-8 flex flex-wrap gap-3">
-          <Link to="/wish" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+          <Link to="/wish/" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
             🎂 Send a birthday wish →
           </Link>
-          <Link to="/compatibility" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
+          <Link to="/compatibility/" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
             💞 Check birthday compatibility →
           </Link>
         </div>

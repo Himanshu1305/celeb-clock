@@ -117,7 +117,7 @@ export function BirthTimeVedicSection({ dob, onDetailsChange }: {
 
       {failed && (
         <p className="text-xs text-gray-500 mt-2">
-          Precise Vedic chart is included in the full report — <a href="/kundali" className="text-[#6E5AA6] underline">generate your Kundali</a>.
+          Precise Vedic chart is included in the full report — <a href="/kundali/" className="text-[#6E5AA6] underline">generate your Kundali</a>.
         </p>
       )}
 

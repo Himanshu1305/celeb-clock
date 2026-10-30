@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ReportLayout } from '@/components/central';
 import { DobInput } from '@/components/DobInput';
 import { BirthTimeVedicSection, type BirthTimeDetails } from '@/components/BirthTimeVedicSection';
@@ -289,14 +290,14 @@ const BirthdayReport = () => {
           ogImage="https://bornclock.com/og/report.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Create a Report' }}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report/' }], current: 'Create a Report' }}
       footer={{
         tagline: 'A personalised Birthday Blueprint — celebrity twins, zodiac, numerology and a personal message.',
         nav: [
-          { label: 'Birthday Report', to: '/birthday-report' },
-          { label: 'Results', to: '/results' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthday Report', to: '/birthday-report/' },
+          { label: 'Results', to: '/results/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',
       }}
@@ -528,7 +529,7 @@ const BirthdayReport = () => {
 
                 <p data-testid="sample-report-link" className="text-center text-sm text-gray-500 mt-4">
                   Not sure what you'll get?{' '}
-                  <a href="/birthday-report/sample" className="text-primary font-semibold hover:underline">
+                  <a href="/birthday-report/sample/" className="text-primary font-semibold hover:underline">
                     See a sample report →
                   </a>
                 </p>

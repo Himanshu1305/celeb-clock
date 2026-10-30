@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { TrendingUp, RefreshCw } from 'lucide-react';
 import { LongevityResult, calculateLongevityScore } from '@/services/LongevityCalculationService';
 
@@ -103,7 +103,7 @@ export function LongevityScoreCard({ result, userId, isPremium, onRetake }: Long
               </button>
             ) : (
               <Link
-                to="/life-expectancy"
+                to="/life-expectancy/"
                 className="inline-flex items-center gap-1 text-xs text-[#6E5AA6] hover:underline"
               >
                 <RefreshCw className="w-3 h-3" /> Retake quiz to update →

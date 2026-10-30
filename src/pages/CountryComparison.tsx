@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ScrollTable } from '@/components/ScrollTable';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ReportLayout } from '@/components/central';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -168,16 +168,16 @@ const SHARE_OPTIONS = [
 // Country longevity pages (SEO Batch 2) — the per-country deep dives this hub links to.
 // Figures: UN World Population Prospects 2023.
 const COUNTRY_PAGES = [
-  { path: '/life-expectancy-india', label: '🇮🇳 India', stat: `${leYears('India')} years` },
-  { path: '/life-expectancy-usa', label: '🇺🇸 United States', stat: `${leYears('United States')} years` },
-  { path: '/life-expectancy-japan', label: '🇯🇵 Japan', stat: `${leYears('Japan')} years` },
-  { path: '/life-expectancy-uk', label: '🇬🇧 United Kingdom', stat: `${leYears('United Kingdom')} years` },
-  { path: '/life-expectancy-australia', label: '🇦🇺 Australia', stat: `${leYears('Australia')} years` },
-  { path: '/life-expectancy-canada', label: '🇨🇦 Canada', stat: `${leYears('Canada')} years` },
-  { path: '/life-expectancy-germany', label: '🇩🇪 Germany', stat: `${leYears('Germany')} years` },
-  { path: '/life-expectancy-china', label: '🇨🇳 China', stat: `${leYears('China')} years` },
-  { path: '/life-expectancy-singapore', label: '🇸🇬 Singapore', stat: `${leYears('Singapore')} years` },
-  { path: '/life-expectancy-brazil', label: '🇧🇷 Brazil', stat: `${leYears('Brazil')} years` },
+  { path: '/life-expectancy-india/', label: '🇮🇳 India', stat: `${leYears('India')} years` },
+  { path: '/life-expectancy-usa/', label: '🇺🇸 United States', stat: `${leYears('United States')} years` },
+  { path: '/life-expectancy-japan/', label: '🇯🇵 Japan', stat: `${leYears('Japan')} years` },
+  { path: '/life-expectancy-uk/', label: '🇬🇧 United Kingdom', stat: `${leYears('United Kingdom')} years` },
+  { path: '/life-expectancy-australia/', label: '🇦🇺 Australia', stat: `${leYears('Australia')} years` },
+  { path: '/life-expectancy-canada/', label: '🇨🇦 Canada', stat: `${leYears('Canada')} years` },
+  { path: '/life-expectancy-germany/', label: '🇩🇪 Germany', stat: `${leYears('Germany')} years` },
+  { path: '/life-expectancy-china/', label: '🇨🇳 China', stat: `${leYears('China')} years` },
+  { path: '/life-expectancy-singapore/', label: '🇸🇬 Singapore', stat: `${leYears('Singapore')} years` },
+  { path: '/life-expectancy-brazil/', label: '🇧🇷 Brazil', stat: `${leYears('Brazil')} years` },
 ];
 
 // ── Main page component ───────────────────────────────────────────────────────
@@ -305,7 +305,7 @@ const CountryComparison = () => {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Country Comparison' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Country Comparison' }}
       eyebrow={<span className="inline-flex items-center gap-2"><Globe className="w-4 h-4" /> 57 countries · UN WPP 2024 data</span>}
       h1="Your Personal Forecast Across 57 Countries"
       lead={savedResult
@@ -482,7 +482,7 @@ const CountryComparison = () => {
               <p className="text-xs text-gray-400 italic mb-2">
                 [European Journal of Clinical Nutrition, Nature, 2021] [WHO Global Health Data, 2024]
               </p>
-              <Link to="/blog/best-foods-to-eat-to-live-longer-longevity-diet" className="text-[#2F6FB0] text-xs underline hover:text-[#2F6FB0]">
+              <Link to="/blog/best-foods-to-eat-to-live-longer-longevity-diet/" className="text-[#2F6FB0] text-xs underline hover:text-[#2F6FB0]">
                 → Read: How Diet Affects Your Longevity
               </Link>
             </div>
@@ -515,7 +515,7 @@ const CountryComparison = () => {
               <p className="text-xs text-gray-400 italic mb-2">
                 [Blue Zones Research, Buettner, 2023] [ScienceInsights, 2026]
               </p>
-              <Link to="/blog/secrets-of-people-who-live-to-100-centenarian-habits" className="text-green-700 text-xs underline hover:text-green-900">
+              <Link to="/blog/secrets-of-people-who-live-to-100-centenarian-habits/" className="text-green-700 text-xs underline hover:text-green-900">
                 → Read: The Longevity Diet Guide
               </Link>
             </div>
@@ -548,7 +548,7 @@ const CountryComparison = () => {
               <p className="text-xs text-gray-400 italic mb-2">
                 [Khaw et al., PLOS Medicine, 2008 — 4 health behaviors and 14 years longevity]
               </p>
-              <Link to="/life-expectancy" className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#0E2238] text-white text-xs rounded-lg hover:bg-[#0E2238] transition-colors">
+              <Link to="/life-expectancy/" className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#0E2238] text-white text-xs rounded-lg hover:bg-[#0E2238] transition-colors">
                 Calculate your personal forecast →
               </Link>
             </div>
@@ -808,7 +808,7 @@ const CountryComparison = () => {
                 ) : null}
                 <p className="text-xs text-gray-500 leading-relaxed">This represents the maximum longevity advantage that country selection alone could provide — with your same habits.</p>
                 {!savedResult && (
-                  <Link to="/life-expectancy" className="mt-3 inline-flex items-center gap-1 text-xs text-green-700 underline hover:text-green-900">
+                  <Link to="/life-expectancy/" className="mt-3 inline-flex items-center gap-1 text-xs text-green-700 underline hover:text-green-900">
                     Take the quiz for personalized numbers →
                   </Link>
                 )}
@@ -832,7 +832,7 @@ const CountryComparison = () => {
           {!savedResult && (
             <p className="text-sm text-muted-foreground mb-4">
               Complete the longevity quiz for your personalized numbers.{' '}
-              <Link to="/life-expectancy" className="text-primary underline">Take the quiz →</Link>
+              <Link to="/life-expectancy/" className="text-primary underline">Take the quiz →</Link>
             </p>
           )}
 
@@ -1057,12 +1057,12 @@ const CountryComparison = () => {
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Related Topics</h2>
           <div className="flex flex-wrap gap-2">
             {[
-              { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-              { path: '/biological-age', label: 'Biological Age Test' },
-              { path: '/coach', label: 'Longevity Coach' },
-              { path: '/life-expectancy-india', label: 'Life Expectancy in India' },
-              { path: '/life-expectancy-usa', label: 'Life Expectancy in USA' },
-              { path: '/life-expectancy-japan', label: 'Life Expectancy in Japan' },
+              { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+              { path: '/biological-age/', label: 'Biological Age Test' },
+              { path: '/coach/', label: 'Longevity Coach' },
+              { path: '/life-expectancy-india/', label: 'Life Expectancy in India' },
+              { path: '/life-expectancy-usa/', label: 'Life Expectancy in USA' },
+              { path: '/life-expectancy-japan/', label: 'Life Expectancy in Japan' },
             ].map((t) => (
               <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground transition-colors">{t.label}</Link>
             ))}

@@ -4,7 +4,7 @@
  * src/lib/numerologyTools.ts.
  */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -51,8 +51,8 @@ export default function VehicleNumberNumerologyPage() {
       seo={<SEO title={VEHICLE_META.title} description={VEHICLE_META.description}
         keywords="vehicle number numerology, car number numerology, bike number numerology, lucky vehicle number, number plate numerology"
         canonicalUrl={VEHICLE_PATH} />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Vehicle Number' }}
-      footer={{ tagline: 'Vehicle-number numerology, for reflection only.', nav: [{ label: 'Mobile number', to: '/mobile-number-numerology' }, { label: 'House number', to: '/house-number-numerology' }, { label: 'Numerology', to: '/numerology' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'Vehicle Number' }}
+      footer={{ tagline: 'Vehicle-number numerology, for reflection only.', nav: [{ label: 'Mobile number', to: '/mobile-number-numerology/' }, { label: 'House number', to: '/house-number-numerology/' }, { label: 'Numerology', to: '/numerology/' }] }}
       eyebrow="Numerology"
       h1="Vehicle Number Numerology"
       lead="Reduce your car or bike number plate to a single digit — three common ways, each labelled — and see how it sits with your birth number. A light reflection, never a reason to pay for a ‘lucky’ plate."
@@ -111,8 +111,8 @@ export default function VehicleNumberNumerologyPage() {
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center mb-8">
             <p className="text-muted-foreground mb-3">The same method for your phone and home:</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link to="/mobile-number-numerology" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Mobile number →</Link>
-              <Link to="/house-number-numerology" className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">House number →</Link>
+              <Link to="/mobile-number-numerology/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Mobile number →</Link>
+              <Link to="/house-number-numerology/" className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">House number →</Link>
             </div>
           </div>
         </div>

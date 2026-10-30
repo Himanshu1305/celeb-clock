@@ -190,7 +190,7 @@ export function LongevityFoodsIndiaArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Longevity Foods in India — 15 Foods for a Longer, Healthier Life' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Longevity Foods in India — 15 Foods for a Longer, Healthier Life' }}
       eyebrow="Longevity"
       h1="Longevity Foods in India — 15 Foods for a Longer, Healthier Life"
       lead={'You do not need imported superfoods or expensive supplements to eat for a longer life. Some of the most evidence-backed longevity foods in the world are already sitting in the Indian kitchen — in the dal pot, the spice box, and the vegetable basket. The world\'s longest-lived communities, studied by longevity researchers as the "Blue Zones", share a strikingly simple pattern: mostly plants, plenty of beans and whole grains, modest dairy, and very little ultra-processed food. A traditional Indian thali, when built from whole ingredients, maps onto that pattern remarkably well.'}
@@ -251,7 +251,7 @@ export function LongevityFoodsIndiaArticle() {
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             Curious how your own habits and birth date stack up against a longer life expectancy?
-            Try our <a href="/longevity-calculator" className="text-emerald-700 font-semibold underline">free longevity calculator</a> to
+            Try our <a href="/longevity-calculator/" className="text-emerald-700 font-semibold underline">free longevity calculator</a> to
             get a personalised estimate and see where small changes could add the most healthy years.
           </p>
 
@@ -261,7 +261,7 @@ export function LongevityFoodsIndiaArticle() {
               Diet is one lever. Enter your details in the BornClock longevity calculator to see a
               personalised life-expectancy estimate and the habits that move it most.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-emerald-700 font-black px-8 py-3 rounded-full text-lg hover:bg-emerald-50 transition-colors">
               Try the Longevity Calculator →
             </a>
@@ -279,12 +279,12 @@ export function LongevityFoodsIndiaArticle() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Related Articles</h2>
           <div className="grid gap-3 sm:grid-cols-2 mb-6">
-            <a href="/articles/blue-zones-diet"
+            <a href="/articles/blue-zones-diet/"
                className="block border border-gray-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
               <div className="font-bold text-gray-900">The Blue Zones Diet</div>
               <div className="text-sm text-gray-600">What the world's longest-lived people eat every day.</div>
             </a>
-            <a href="/articles/how-to-live-to-100"
+            <a href="/articles/how-to-live-to-100/"
                className="block border border-gray-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
               <div className="font-bold text-gray-900">How to Live to 100</div>
               <div className="text-sm text-gray-600">Habits and lifestyle factors linked with a very long life.</div>

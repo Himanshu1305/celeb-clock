@@ -8,7 +8,7 @@
  * gemstone (always with the caution) and when to consult. Every item shows its
  * traditional source. BornClock sells no pujas or stones.
  */
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import {
   REMEDIES, TEMPLES, GEM_CAUTION, remedyByKey,
   type Finding, type Lang, type L10n, type Mantra, type Practice, type RemedyEntry,
@@ -175,7 +175,7 @@ export function RemedyActions({ entry, lang = 'en' }: { entry: RemedyEntry; lang
       <div className="rounded-lg border border-amber-200 bg-amber-50/60 p-3 text-sm text-amber-900">
         <p>{tx(entry.gemstone.note, lang)}</p>
         <p data-testid="remedy-gem-caution" className="mt-1 text-xs">{tx(GEM_CAUTION, lang)}</p>
-        <Link to="/gemstones" className="mt-1 inline-block text-xs font-semibold underline">{t('gemTool', lang)}</Link>
+        <Link to="/gemstones/" className="mt-1 inline-block text-xs font-semibold underline">{t('gemTool', lang)}</Link>
       </div>
 
       <H testid="remedy-consult">{t('consult', lang)}</H>
