@@ -40,9 +40,12 @@ test.describe('SEO meta tags and schema', () => {
     const response = await page.goto('/sitemap.xml');
     expect(response?.status()).toBe(200);
     const content = await page.content();
-    expect(content).toContain('<urlset');
-    expect(content).toContain('bornclock.com');
-    const urlCount = (content.match(/<url>/g) || []).length;
+    // Batch 11: a sitemap index pointing at the section sitemaps.
+    expect(content).toContain('sitemapindex');
+    expect(content).toContain('https://bornclock.com/sitemap-core.xml');
+    const core = await page.goto('/sitemap-core.xml');
+    expect(core?.status()).toBe(200);
+    const urlCount = ((await page.content()).match(/<url>/g) || []).length;
     expect(urlCount).toBeGreaterThan(50);
   });
 

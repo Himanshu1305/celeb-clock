@@ -8,8 +8,9 @@ const BASE = (process.env.BASE || 'https://bornclock-staging.usdvisionai.workers
 const CONC = Number(process.env.CONC || 8);
 const SITEMAP = process.env.SITEMAP || 'dist/sitemap.xml';
 
-const xml = readFileSync(SITEMAP, 'utf8');
-const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].trim());
+// Batch 11: dist/sitemap.xml is an index — read the URLs of every section sitemap.
+const { readSitemapUrls } = await import('./lib/sitemap.mjs');
+const locs = readSitemapUrls(SITEMAP.replace(/\/sitemap\.xml$/, '')).map(u => u.trim());
 // rewrite host → staging
 const urls = locs.map(u => u.replace(/^https?:\/\/[^/]+/, BASE));
 console.log(`crawling ${urls.length} URLs @ concurrency ${CONC} against ${BASE}`);

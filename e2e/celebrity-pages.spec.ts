@@ -127,7 +127,8 @@ test.describe('Celebrity Pages — E2E', () => {
 
   // SITEMAP AND INTERNAL LINKING
   test('TC-E2E-15: celebrity pages in sitemap', async ({ page }) => {
-    const xml = await (await page.request.get(`${BASE}/sitemap.xml`)).text();
+    // Batch 11: celebrity pages live in the celebrity section sitemap (sitemap.xml is an index).
+    const xml = await (await page.request.get(`${BASE}/sitemap-celebrity.xml`)).text();
     expect(xml).toContain('/celebrity/');
     expect((xml.match(/\/celebrity\/[a-z0-9-]+\//g) || []).length).toBeGreaterThan(100);
   });

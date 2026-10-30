@@ -15,9 +15,16 @@
 //   V10 (Batch 10): on EVERY prerendered page, each FAQPage question is visible in the
 //      body (outside scripts) and each answer is in the HTML (collapsed/hidden is fine) —
 //      Google requires FAQ structured data to match visible content. scripts/lib/faqVisible.mjs
+//   V11 (Batch 11): on EVERY prerendered page, every internal <a href> is the canonical
+//      trailing-slash URL on the apex host (no link may cost Googlebot a 301 hop; files,
+//      /api/, '#…' and other sites are exempt) — src/lib/seo/canonicalPath.js
+//   V12 (Batch 11): /sitemap.xml is a sitemap index; every child sitemap it lists exists,
+//      URLs appear once across them, every <loc> is apex + trailing slash, every <lastmod>
+//      is a real YYYY-MM-DD not in the future, and dist/sitemap-manifest.json covers them.
 import { readFileSync, existsSync, readdirSync } from 'fs';
 import { resolve, join } from 'path';
-import { headStats } from './lib/headDedupe.mjs';
+import { headStats, nonCanonicalInternalLinks } from './lib/headDedupe.mjs';
+import { sitemapProblems, readSitemapUrls } from './lib/sitemap.mjs';
 import { faqVisibilityProblems } from './lib/faqVisible.mjs';
 
 const DIST = 'dist';
@@ -41,8 +48,8 @@ const htmlPath = (route) => {
   return null;
 };
 
-const sitemap = existsSync(resolve(DIST, 'sitemap.xml'))
-  ? readFileSync(resolve(DIST, 'sitemap.xml'), 'utf8') : '';
+// Batch 11: sitemap.xml is an index of section sitemaps — check routes against all of them.
+const sitemap = readSitemapUrls(DIST).join('\n');
 
 let pass = 0, fail = 0;
 const results = [];
@@ -78,6 +85,8 @@ for (const route of ROUTES) {
 // V7 — sweep every prerendered index.html under dist/.
 const headProblems = [];
 const faqProblems = [];
+const linkProblems = [];
+let badLinkCount = 0;
 let swept = 0;
 const walk = (dir) => {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
@@ -88,6 +97,8 @@ const walk = (dir) => {
       const html = readFileSync(p, 'utf8');
       const s = headStats(html);
       const fp = faqVisibilityProblems(html);
+      const badLinks = nonCanonicalInternalLinks(html);
+      if (badLinks.length) { badLinkCount += badLinks.length; linkProblems.push(`${p.slice(DIST.length) || '/'}: ${badLinks.length} (${[...new Set(badLinks)].slice(0, 3).join(', ')})`); }
       if (fp.length) faqProblems.push(`${p.slice(DIST.length) || '/'}: ${fp.length} (${fp.slice(0, 2).map(x => `${x.kind} "${x.text.slice(0, 50)}"`).join('; ')})`);
       const bad = [];
       if (s.canonicals !== 1) bad.push(`${s.canonicals} canonicals`);
@@ -114,6 +125,21 @@ if (faqProblems.length) {
   results.push(`  ❌ FAQ visibility: ${faqProblems.length} of ${swept} pages have FAQPage Q&As not shown on the page — ${faqProblems.slice(0, 15).join(' | ')}`);
 } else {
   results.push(`  ✅ FAQ visibility: every FAQPage question is visible and every answer is in the HTML on all ${swept} pages`);
+}
+
+if (linkProblems.length) {
+  fail++;
+  results.push(`  ❌ internal links: ${badLinkCount} links without the trailing slash (or on www) on ${linkProblems.length} of ${swept} pages — ${linkProblems.slice(0, 15).join(' | ')}`);
+} else {
+  results.push(`  ✅ internal links: every internal <a href> on all ${swept} pages is the canonical trailing-slash URL`);
+}
+
+const smProblems = sitemapProblems(DIST);
+if (smProblems.length) {
+  fail++;
+  results.push(`  ❌ sitemap: ${smProblems.slice(0, 15).join(' | ')}`);
+} else {
+  results.push(`  ✅ sitemap: index + section sitemaps valid (${readSitemapUrls(DIST).length} URLs, canonical locs, real lastmod dates, manifest present)`);
 }
 
 console.log(results.join('\n'));

@@ -34,13 +34,20 @@ test('robots.txt has Sitemap directive', async ({ request }) => {
 
 // ── sitemap.xml ───────────────────────────────────────────────────────────────
 
+// Batch 11: /sitemap.xml is a sitemap index — count the <loc> entries of its section sitemaps.
+async function sitemapLocCount(request: { get: (u: string) => Promise<{ status(): number; text(): Promise<string> }> }): Promise<number> {
+  const index = await (await request.get('/sitemap.xml')).text();
+  const children = [...index.matchAll(/<loc>https:\/\/bornclock\.com\/(sitemap-[a-z]+\.xml)<\/loc>/g)].map(m => m[1]);
+  let n = 0;
+  for (const c of children) n += ((await (await request.get(`/${c}`)).text()).match(/<loc>/g) || []).length;
+  return n;
+}
+
 test('sitemap.xml is served with > 800 entries', async ({ request }) => {
   const res = await request.get('/sitemap.xml');
   expect(res.status()).toBe(200);
-  const text = await res.text();
-  const matches = text.match(/<loc>/g);
-  expect(matches, 'sitemap.xml has fewer than 800 <loc> entries').not.toBeNull();
-  expect(matches!.length).toBeGreaterThan(800);
+  expect(await res.text()).toContain('<sitemapindex');
+  expect(await sitemapLocCount(request), 'sitemaps have fewer than 800 <loc> entries').toBeGreaterThan(800);
 });
 
 test('sitemap.xml entries reference bornclock.com domain', async ({ request }) => {

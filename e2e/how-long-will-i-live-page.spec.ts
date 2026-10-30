@@ -284,7 +284,7 @@ test.describe('How Long Will I Live Page', () => {
   });
 
   test('TC-E2E-35: page appears in sitemap.xml', async ({ page }) => {
-    const xml = await (await page.request.get(`${BASE}/sitemap.xml`)).text();
+    const xml = await (await page.request.get(`${BASE}/sitemap-core.xml`)).text(); // Batch 11: section sitemap
     expect(xml).toContain('/how-long-will-i-live');
   });
 

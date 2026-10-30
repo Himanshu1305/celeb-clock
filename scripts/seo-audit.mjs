@@ -122,8 +122,9 @@ for (const f of files) pages.set(routeOf(f), extract(readFileSync(f, 'utf8')));
 const routeSet = new Set(pages.keys());
 
 // sitemap
-const sitemapXml = existsSync(join(DIST, 'sitemap.xml')) ? readFileSync(join(DIST, 'sitemap.xml'), 'utf8') : '';
-const sitemapLocs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
+// Batch 11: dist/sitemap.xml is an index — read the URLs of every section sitemap.
+const { readSitemapUrls } = await import('./lib/sitemap.mjs');
+const sitemapLocs = readSitemapUrls(DIST);
 const sitemapRoutes = new Set(sitemapLocs.map(l => (l.replace(BASE, '').replace(/\/$/, '') || '/')));
 
 const findings = [];

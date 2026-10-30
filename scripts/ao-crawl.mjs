@@ -1,8 +1,9 @@
 import { readFileSync } from 'node:fs';
 
 const BASE = process.env.BASE || 'https://f537587c-bornclock.usdvisionai.workers.dev';
-const sitemap = readFileSync('dist/sitemap.xml', 'utf8');
-const allUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].replace('https://bornclock.com', ''));
+// Batch 11: dist/sitemap.xml is an index — read the URLs of every section sitemap.
+const { readSitemapUrls } = await import('./lib/sitemap.mjs');
+const allUrls = readSitemapUrls('dist').map(u => u.replace('https://bornclock.com', ''));
 
 // Representative sample: every distinct top-level path shape + a random slice of the long tail.
 const byType = new Map();

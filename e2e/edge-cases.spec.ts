@@ -526,7 +526,9 @@ test.describe('Content quality edge cases', () => {
   });
 
   test('Sitemap.xml has more than 400 URLs', async ({ page }) => {
-    const response = await page.goto('/sitemap.xml');
+    // Batch 11: /sitemap.xml is an index; the celebrity section alone has > 400 URLs.
+    expect((await page.goto('/sitemap.xml'))?.status()).toBe(200);
+    const response = await page.goto('/sitemap-celebrity.xml');
     expect(response?.status()).toBe(200);
     const content = await page.content();
     const urlCount = (content.match(/<loc>/g) || []).length;
