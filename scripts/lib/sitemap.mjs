@@ -107,7 +107,9 @@ export function pageContentForHash(html, buildDate) {
       text = text.split(v).join('{date}');
     }
   }
-  return text.replace(/\s+/g, ' ').trim();
+  // Digits are dropped: ages and planetary ages tick with the calendar, and must not
+  // count as a content change (they would bump lastmod on every celebrity page).
+  return text.replace(/\d+/g, '#').replace(/\s+/g, ' ').trim();
 }
 
 export const contentHash = (html, buildDate) =>

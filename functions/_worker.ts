@@ -136,7 +136,8 @@ const worker = {
     // Runs before anything else; staging / *.workers.dev / localhost are not affected.
     {
       const apex = wwwRedirectTarget(_url);
-      if (apex) return Response.redirect(apex, 301);
+      // 308 for non-GET/HEAD so a POST (e.g. a webhook) keeps its method and body.
+      if (apex) return Response.redirect(apex, request.method === 'GET' || request.method === 'HEAD' ? 301 : 308);
     }
     const { pathname } = _url;
     // Part AO: staging / *.workers.dev / localhost are non-production — hide from search and
