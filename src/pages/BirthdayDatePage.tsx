@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
@@ -34,14 +35,14 @@ export default function BirthdayDatePage() {
       <CollectionLayout
         theme="birthday"
         testId="birthday-date-page"
-        breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: 'Date not found' }}
+        breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday/' }], current: 'Date not found' }}
         footer={{
           tagline: 'Discover the personality behind every birthday.',
           nav: [
-            { label: 'Birthdays', to: '/birthday' },
-            { label: "Today's Birthdays", to: '/todays-birthdays' },
-            { label: 'Celebrities', to: '/celebrity' },
-            { label: 'Privacy', to: '/privacy' },
+            { label: 'Birthdays', to: '/birthday/' },
+            { label: "Today's Birthdays", to: '/todays-birthdays/' },
+            { label: 'Celebrities', to: '/celebrity/' },
+            { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock · Birthdays.',
         }}
@@ -51,7 +52,7 @@ export default function BirthdayDatePage() {
       >
         <section className="section">
           <div className="text-center">
-            <Button asChild><Link to="/birthday">Browse all birthdays</Link></Button>
+            <Button asChild><Link to="/birthday/">Browse all birthdays</Link></Button>
           </div>
         </section>
       </CollectionLayout>
@@ -118,14 +119,14 @@ export default function BirthdayDatePage() {
           </Helmet>
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }, { label: monthName, to: `/birthday/${month}` }], current: `${monthName} ${day}` }}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday/' }, { label: monthName, to: `/birthday/${month}` }], current: `${monthName} ${day}` }}
       footer={{
         tagline: 'Discover the personality behind every birthday.',
         nav: [
-          { label: 'Birthdays', to: '/birthday' },
-          { label: "Today's Birthdays", to: '/todays-birthdays' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthdays', to: '/birthday/' },
+          { label: "Today's Birthdays", to: '/todays-birthdays/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Birthdays.',
       }}
@@ -150,7 +151,7 @@ export default function BirthdayDatePage() {
         <p className="text-xs text-gray-500 -mt-4 mb-8 leading-relaxed">
           Your <strong className="text-gray-700">Birth Day Number ({p.lifePathNumber})</strong> comes from the day of the month alone.
           Your full <strong className="text-gray-700">Life Path number</strong>, calculated from your complete birth date, is in the{' '}
-          <Link to="/birthday-report" className="text-[#6E5AA6] hover:underline">Birthday Blueprint</Link>.
+          <Link to="/birthday-report/" className="text-[#6E5AA6] hover:underline">Birthday Blueprint</Link>.
         </p>
 
         {/* Core traits */}
@@ -310,9 +311,9 @@ export default function BirthdayDatePage() {
           </p>
           <p className="text-sm text-gray-700 leading-relaxed mt-3">
             Find yours with the{' '}
-            <Link to="/articles/moon-sign-by-date-of-birth" className="text-orange-700 underline font-semibold">Moon sign (Rashi) finder</Link>{' '}
+            <Link to="/articles/moon-sign-by-date-of-birth/" className="text-orange-700 underline font-semibold">Moon sign (Rashi) finder</Link>{' '}
             (date only), or the{' '}
-            <Link to="/kundali" className="text-orange-700 underline font-semibold">free Kundali</Link>{' '}
+            <Link to="/kundali/" className="text-orange-700 underline font-semibold">free Kundali</Link>{' '}
             for the exact Rashi, Nakshatra and pada with your birth time and place.
           </p>
         </section>

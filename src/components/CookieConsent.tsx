@@ -119,9 +119,9 @@ export const CookieConsent = () => {
                 
                 <p className="text-xs text-muted-foreground">
                   By continuing to use this site, you agree to our{' '}
-                  <a href="/privacy" className="font-medium text-foreground underline underline-offset-2 hover:opacity-80">Privacy Policy</a>
+                  <a href="/privacy/" className="font-medium text-foreground underline underline-offset-2 hover:opacity-80">Privacy Policy</a>
                   {' '}and{' '}
-                  <a href="/terms" className="font-medium text-foreground underline underline-offset-2 hover:opacity-80">Terms of Service</a>.
+                  <a href="/terms/" className="font-medium text-foreground underline underline-offset-2 hover:opacity-80">Terms of Service</a>.
                 </p>
               </div>
               

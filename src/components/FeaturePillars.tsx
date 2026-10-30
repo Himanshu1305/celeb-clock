@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ const mainFeatures = [
     title: 'Age Calculator',
     description: 'Calculate your exact age in days, hours, minutes, and seconds — updated live in real-time. Find out your generation (Boomer, Millennial, Gen Z…) and share your results with friends.',
     icon: Clock,
-    path: '/age-calculator',
+    path: '/age-calculator/',
     cta: 'Calculate My Age',
     color: 'from-primary/20 to-primary/5',
     iconBg: 'bg-primary/10',
@@ -21,7 +21,7 @@ const mainFeatures = [
     title: 'Celebrity Birthday Match',
     description: 'Enter your date of birth and discover which celebrities, scientists, athletes, and world leaders share your birthday. We match your DOB against thousands of verified famous birthdays.',
     icon: Users,
-    path: '/celebrity-birthday',
+    path: '/celebrity-birthday/',
     cta: 'Find My Celebrity Twins',
     color: 'from-accent/20 to-accent/5',
     iconBg: 'bg-accent/10',
@@ -32,7 +32,7 @@ const mainFeatures = [
     title: 'Zodiac & Birthstone',
     description: "Discover your zodiac sign with detailed personality traits, compatibility insights, and your birth month's gemstone with its meaning and history.",
     icon: Sparkles,
-    path: '/zodiac',
+    path: '/zodiac/',
     cta: 'Explore My Zodiac',
     color: 'from-secondary/20 to-secondary/5',
     iconBg: 'bg-secondary/10',
@@ -43,7 +43,7 @@ const mainFeatures = [
     title: 'Celebrity Birthday Search',
     description: "Search for any celebrity's birthday. Find out when your favorite stars were born — results powered by our comprehensive celebrity database.",
     icon: Search,
-    path: '/celebrity-birthday',
+    path: '/celebrity-birthday/',
     cta: 'Search Celebrity Birthdays',
     color: 'from-primary/20 to-accent/5',
     iconBg: 'bg-primary/10',
@@ -54,7 +54,7 @@ const mainFeatures = [
     title: 'Life Expectancy Report',
     description: 'Get a personalized life expectancy estimate based on 15+ factors including smoking, drinking, diabetes, cardiac health, exercise habits, and stress levels. See how many years you could gain by changing habits.',
     icon: HeartPulse,
-    path: '/life-expectancy',
+    path: '/life-expectancy/',
     cta: 'Get My Report',
     isPremium: true,
     color: 'from-amber-500/15 to-amber-500/5',
@@ -66,7 +66,7 @@ const mainFeatures = [
     title: 'What-If Scenarios',
     description: 'Already have your report? See the real-time impact of lifestyle changes — quit smoking, exercise more, reduce stress — and watch your projected lifespan increase instantly.',
     icon: RefreshCw,
-    path: '/life-expectancy',
+    path: '/life-expectancy/',
     cta: 'Try What-If Scenarios',
     isPremium: true,
     color: 'from-amber-500/15 to-amber-500/5',
@@ -76,9 +76,9 @@ const mainFeatures = [
 ];
 
 const secondaryTools = [
-  { title: 'Numerology', emoji: '🔢', description: 'Discover your Life Path Number', icon: Hash, path: '/numerology' },
-  { title: 'Planetary Age', emoji: '🪐', description: 'Your age on Mars, Jupiter & more', icon: Globe, path: '/planetary-age' },
-  { title: "Today's Birthdays", emoji: '🎂', description: 'Famous people born today', icon: Cake, path: '/todays-birthdays' },
+  { title: 'Numerology', emoji: '🔢', description: 'Discover your Life Path Number', icon: Hash, path: '/numerology/' },
+  { title: 'Planetary Age', emoji: '🪐', description: 'Your age on Mars, Jupiter & more', icon: Globe, path: '/planetary-age/' },
+  { title: "Today's Birthdays", emoji: '🎂', description: 'Famous people born today', icon: Cake, path: '/todays-birthdays/' },
 ];
 
 export const FeaturePillars = () => {

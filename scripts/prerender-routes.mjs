@@ -121,7 +121,7 @@ const BLOG_SLUGS = [
 const ANSWER_ROUTES = [
   '/answers/how-long-will-i-live',
   '/answers/what-is-my-biological-age',
-  '/answers/who-shares-my-birthday',
+  // '/answers/who-shares-my-birthday' — Batch 11: retired, 301 → /celebrity-birthday/
   '/answers/how-old-am-i-on-mars',
   '/answers/what-is-my-zodiac-sign',
   '/answers/what-is-my-life-path-number',

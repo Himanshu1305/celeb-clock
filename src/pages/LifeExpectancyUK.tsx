@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -12,10 +12,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyUK = () => {
@@ -40,7 +40,7 @@ const LifeExpectancyUK = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'UK Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'UK Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in the UK — The National Average and the Regional Reality"
       lead={`The United Kingdom's average life expectancy is approximately ${leYears('United Kingdom')} years (${LE_CITATION}). Women average ${leYears('United Kingdom', 'female')} years; men average ${leYears('United Kingdom', 'male')} years. The UK has some of the most dramatic regional life expectancy gaps of any wealthy nation — up to 12 years between the healthiest and least healthy areas.`}
@@ -71,7 +71,7 @@ const LifeExpectancyUK = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">What's Actually Improving</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Smoking rates are at historic lows, cancer survival is improving significantly, and cardiovascular mortality continues to decline. The trend lines are broadly positive.</p>
-            <p className="text-muted-foreground leading-relaxed">Life expectancy at 65 is competitive with European peers — the shortfall is concentrated in younger-age mortality from avoidable causes. See how your own habits change your forecast with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
+            <p className="text-muted-foreground leading-relaxed">Life expectancy at 65 is competitive with European peers — the shortfall is concentrated in younger-age mortality from avoidable causes. See how your own habits change your forecast with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
 
@@ -79,7 +79,7 @@ const LifeExpectancyUK = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Compare the UK Against 57 Countries</h2>
             <p className="text-sm text-muted-foreground mb-4">See how the UK ranks globally — and how much your own habits could shift your personal forecast.</p>
-            <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Open the Country Comparison Tool →
             </Link>
           </div>

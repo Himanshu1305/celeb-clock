@@ -14,6 +14,6 @@ describe('TrustStrip', () => {
   it('renders a How we test link pointing to the given how-it-works section', () => {
     render(<TrustStrip claim="A plain claim." href="/how-it-works#vedic" />);
     const link = screen.getByRole('link', { name: /How we test/ });
-    expect(link.getAttribute('href')).toBe('/how-it-works#vedic');
+    expect(link.getAttribute('href')).toBe('/how-it-works/#vedic'); // Batch 11: canonical slash form
   });
 });

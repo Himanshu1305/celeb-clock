@@ -6,7 +6,7 @@
 import { useState } from 'react';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
@@ -102,7 +102,7 @@ export default function DashaCalculatorPage() {
         />
       )}
       breadcrumb={{
-        trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }],
+        trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }],
         current: 'Dasha Calculator',
         edition: 'Vimshottari · planetary periods',
       }}
@@ -110,11 +110,11 @@ export default function DashaCalculatorPage() {
         tagline:
           'Dasha timeline computed from your real Moon position — the same Lahiri-ayanamsa engine as the rest of BornClock.',
         nav: [
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Sade Sati', to: '/sade-sati' },
-          { label: 'How It Works', to: '/how-it-works' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Sade Sati', to: '/sade-sati/' },
+          { label: 'How It Works', to: '/how-it-works/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -167,7 +167,7 @@ export default function DashaCalculatorPage() {
           </p>
         </div>
 
-        <TrustStrip claim="Worked out from your real Moon position — the same engine as the full Kundali, not a lookup table." href="/how-it-works#vedic" />
+        <TrustStrip claim="Worked out from your real Moon position — the same engine as the full Kundali, not a lookup table." href="/how-it-works/#vedic" />
 
         <div className="form-band" style={{ marginTop: 16 }}>
           <div>
@@ -273,22 +273,22 @@ export default function DashaCalculatorPage() {
           <p className="text-xs text-muted-foreground mb-2">Related tools</p>
           <ul className="flex flex-wrap gap-3 text-sm">
             <li>
-              <Link to="/kundali" className="text-primary hover:underline">
+              <Link to="/kundali/" className="text-primary hover:underline">
                 Full Kundali chart
               </Link>
             </li>
             <li>
-              <Link to="/vedic-astrology" className="text-primary hover:underline">
+              <Link to="/vedic-astrology/" className="text-primary hover:underline">
                 Vedic Astrology overview
               </Link>
             </li>
             <li>
-              <Link to="/sade-sati" className="text-primary hover:underline">
+              <Link to="/sade-sati/" className="text-primary hover:underline">
                 Sade Sati calculator
               </Link>
             </li>
             <li>
-              <Link to="/how-it-works" className="text-primary hover:underline">
+              <Link to="/how-it-works/" className="text-primary hover:underline">
                 How it works
               </Link>
             </li>

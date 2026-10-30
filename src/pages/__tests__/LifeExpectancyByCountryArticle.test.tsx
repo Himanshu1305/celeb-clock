@@ -46,7 +46,7 @@ describe('LifeExpectancyByCountryArticle', () => {
   it('TC-LEC-P-06: a link to /longevity-calculator exists', () => {
     renderArticle();
     const links = Array.from(document.querySelectorAll('a'));
-    expect(links.some(l => l.getAttribute('href') === '/longevity-calculator')).toBe(true);
+    expect(links.some(l => l.getAttribute('href') === '/longevity-calculator/')).toBe(true);
   });
   it('TC-LEC-N-01: no undefined or [object Object]', () => {
     renderArticle();

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { SEO } from '@/components/SEO';
@@ -22,12 +22,12 @@ const MOON_SIGNS = [
 ];
 
 const RELATED = [
-  { path: '/moon-sign', label: 'Moon Sign Calculator' },
-  { path: '/zodiac', label: 'Zodiac Signs' },
-  { path: '/compatibility', label: 'Compatibility' },
-  { path: '/sun-vs-moon-sign', label: 'Sun vs Moon Sign' },
-  { path: '/vedic-zodiac', label: 'Vedic Zodiac' },
-  { path: '/answers/what-is-vedic-astrology', label: 'What Is Vedic Astrology?' },
+  { path: '/moon-sign/', label: 'Moon Sign Calculator' },
+  { path: '/zodiac/', label: 'Zodiac Signs' },
+  { path: '/compatibility/', label: 'Compatibility' },
+  { path: '/sun-vs-moon-sign/', label: 'Sun vs Moon Sign' },
+  { path: '/vedic-zodiac/', label: 'Vedic Zodiac' },
+  { path: '/answers/what-is-vedic-astrology/', label: 'What Is Vedic Astrology?' },
 ];
 
 export default function WhatIsMyMoonSign() {
@@ -56,14 +56,14 @@ export default function WhatIsMyMoonSign() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'What is my moon sign?' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'What is my moon sign?' }}
       footer={{
         tagline: 'Your moon sign is where the Moon was when you were born — far more personal than your sun sign.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Vedic Zodiac', to: '/vedic-zodiac' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Moon Sign', to: '/moon-sign/' },
+          { label: 'Vedic Zodiac', to: '/vedic-zodiac/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -105,7 +105,7 @@ export default function WhatIsMyMoonSign() {
           <div className="bg-gray-50 rounded-2xl p-6 mt-10 text-center">
             <p className="text-lg font-bold text-gray-900 mb-2">Find My Moon Sign</p>
             <p className="text-sm text-gray-500 mb-4">Discover the sign the Moon was in when you were born</p>
-            <Link to="/moon-sign"
+            <Link to="/moon-sign/"
               className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
               Find my moon sign →
             </Link>

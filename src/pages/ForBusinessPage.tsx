@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -48,7 +48,7 @@ export default function ForBusinessPage() {
               </a>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <Link to="/birthday-report">See a sample report</Link>
+              <Link to="/birthday-report/">See a sample report</Link>
             </Button>
           </div>
         </div>

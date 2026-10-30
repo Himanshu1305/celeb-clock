@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { LanguageToggle } from '@/components/LanguageToggle';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -23,7 +23,7 @@ export const AuthNav = () => {
     return (
       <div className="flex items-center gap-2">
         <LanguageToggle />
-        <Link to="/auth">
+        <Link to="/auth/">
           {/* Navy site-header forces white text; the default shadcn outline button
               uses an ivory bg-background → white-on-ivory (invisible). Make it
               readable on the navy bar (a11y: color-contrast). */}
@@ -35,7 +35,7 @@ export const AuthNav = () => {
             Sign In
           </Button>
         </Link>
-        <Link to="/auth?signup=true">
+        <Link to="/auth/?signup=true">
           <Button size="sm" className="gap-1">
             Join Free
             <ArrowRight className="w-3 h-3" />
@@ -91,14 +91,14 @@ export const AuthNav = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link to="/profile" className="cursor-pointer">
+          <Link to="/profile/" className="cursor-pointer">
             <User className="mr-2 h-4 w-4" />
             <span>Profile</span>
           </Link>
         </DropdownMenuItem>
         {isAdmin && (
           <DropdownMenuItem asChild>
-            <Link to="/admin" className="cursor-pointer">
+            <Link to="/admin/" className="cursor-pointer">
               <Shield className="mr-2 h-4 w-4" />
               <span>Admin Dashboard</span>
             </Link>
@@ -106,7 +106,7 @@ export const AuthNav = () => {
         )}
         {!isPremium && (
           <DropdownMenuItem asChild>
-            <Link to="/upgrade" className="cursor-pointer">
+            <Link to="/upgrade/" className="cursor-pointer">
               <Crown className="mr-2 h-4 w-4" />
               <span>Upgrade to Premium</span>
             </Link>

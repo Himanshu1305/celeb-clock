@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { MoneyLayout } from '@/components/central';
 import { Button } from '@/components/ui/button';
@@ -104,7 +104,7 @@ export default function Pricing() {
                 3 birthday report credits per month — auto-applied, roll over, stack up to 9
               </li>
             </ul>
-            <Button asChild className="w-full"><Link to="/upgrade">Go Premium <ArrowRight className="w-4 h-4 ml-1" /></Link></Button>
+            <Button asChild className="w-full"><Link to="/upgrade/">Go Premium <ArrowRight className="w-4 h-4 ml-1" /></Link></Button>
           </div>
 
           {/* Birthday Report */}
@@ -123,7 +123,7 @@ export default function Pricing() {
                 </li>
               ))}
             </ul>
-            <Button asChild variant="outline" className="w-full border-amber-300"><Link to="/birthday-report">Create a report</Link></Button>
+            <Button asChild variant="outline" className="w-full border-amber-300"><Link to="/birthday-report/">Create a report</Link></Button>
           </div>
         </div>
 
@@ -188,7 +188,7 @@ export default function Pricing() {
         </div>
 
         <div className="text-center">
-          <Button asChild size="lg"><Link to="/upgrade">Compare plans &amp; subscribe <ArrowRight className="w-4 h-4 ml-1" /></Link></Button>
+          <Button asChild size="lg"><Link to="/upgrade/">Compare plans &amp; subscribe <ArrowRight className="w-4 h-4 ml-1" /></Link></Button>
         </div>
       </div>
     </MoneyLayout>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -32,8 +32,8 @@ export default function HouseNumberNumerologyPage() {
         keywords="house number numerology, flat number numerology, home number meaning, apartment numerology"
         canonicalUrl="/house-number-numerology"
       />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'House Number' }}
-      footer={{ tagline: 'House-number numerology, a gentle reflection.', nav: [{ label: 'Mobile number', to: '/mobile-number-numerology' }, { label: 'Name correction', to: '/name-correction' }, { label: 'Numerology', to: '/numerology' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'House Number' }}
+      footer={{ tagline: 'House-number numerology, a gentle reflection.', nav: [{ label: 'Mobile number', to: '/mobile-number-numerology/' }, { label: 'Name correction', to: '/name-correction/' }, { label: 'Numerology', to: '/numerology/' }] }}
       eyebrow="Numerology"
       h1="House Number Numerology"
       lead="Reduce your house or flat number to a single digit and read the atmosphere the tradition links to it — from the fresh-start 1 home to the family-warm 6."
@@ -63,7 +63,7 @@ export default function HouseNumberNumerologyPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Check your phone number too.</p>
-            <Link to="/mobile-number-numerology" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Mobile number numerology →</Link>
+            <Link to="/mobile-number-numerology/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Mobile number numerology →</Link>
           </div>
         </div>
       </section>

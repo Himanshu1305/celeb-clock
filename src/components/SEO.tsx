@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 interface SEOProps {
@@ -62,6 +63,17 @@ export const SEO = ({
     ? (canonicalUrl === '/' ? '/' : canonicalUrl.replace(/\/+$/, '') + '/')
     : undefined;
   const fullCanonicalUrl = canonicalPath ? `${SITE_URL}${canonicalPath}` : undefined;
+
+  // Batch 11 (GSC "Duplicate without user-selected canonical"): a URL that has no
+  // prerendered file is served the SPA shell (index.html), whose static head carries the
+  // HOMEPAGE canonical + og:url. Helmet adds this page's own (data-rh) tags next to them,
+  // so the rendered page declared two different canonicals — which Google treats as none.
+  // Once this page has its own canonical, drop the static leftovers.
+  useEffect(() => {
+    if (!fullCanonicalUrl || typeof document === 'undefined') return;
+    document.head.querySelectorAll('link[rel="canonical"]:not([data-rh]), meta[property="og:url"]:not([data-rh])')
+      .forEach(el => el.remove());
+  }, [fullCanonicalUrl]);
   
   // Generate JSON-LD structured data
   const generateStructuredData = () => {

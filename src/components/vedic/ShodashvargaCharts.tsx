@@ -10,7 +10,7 @@
  *  - if the birth time is unknown, every chart above D1 says it cannot be relied on.
  */
 import { lazy, Suspense, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { TermTip } from '@/components/vedic/TermTip';
 import { SHODASHVARGA_META, VARGA_TERM, D60_NOTE } from '@/data/shodashvarga';
 

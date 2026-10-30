@@ -113,7 +113,7 @@ function RashiCalculator() {
               </p>
             </div>
           ))}
-          <a href={`/birthday-report?dob=${dob}`}
+          <a href={`/birthday-report/?dob=${dob}`}
              className="inline-block bg-amber-600 text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-amber-700">
             See my full birthday profile →
@@ -158,14 +158,14 @@ export function MoonSignArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Moon Sign by Date of Birth' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Moon Sign by Date of Birth' }}
       footer={{
         tagline: 'Find your Vedic Rashi (moon sign) by date of birth — all 12 Rashis with lucky stone, mantra and personality.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Moon Sign', to: '/moon-sign/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -291,7 +291,7 @@ export function MoonSignArticle() {
               Your Rashi is just one piece. BornClock also shows your Nakshatra, Western zodiac,
               Life Path number, lucky stone, and more — all from your date of birth.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-amber-700 font-black px-8 py-3
                           rounded-full text-lg hover:bg-amber-50 transition-colors">
               Generate My Free Birthday Profile →

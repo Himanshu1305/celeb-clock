@@ -47,7 +47,7 @@ describe('/kundli-milan-by-name', () => {
     expect(document.querySelector('h1')?.textContent).toBe('Kundli milan by name');
     const lim = q('nm-limit')!;
     expect(lim.textContent).toContain('Name-based matching is an approximation; for an accurate match use birth details.');
-    expect(lim.querySelector('a')?.getAttribute('href')).toBe('/kundali-match');
+    expect(lim.querySelector('a')?.getAttribute('href')).toBe('/kundali-match/');
     expect(q('nm-faq')).toBeTruthy();
   });
 
@@ -76,7 +76,7 @@ describe('/hi/naam-se-kundli-milan (Devanagari input)', () => {
     wrap(<KundliMilanByNamePage lang="hi" />, NAME_MATCH_PATH.hi);
     expect(document.querySelector('h1')?.textContent).toBe('नाम से कुंडली मिलान');
     expect(q('nm-limit')!.textContent).toContain('नाम से मिलान केवल एक अनुमान है');
-    expect(q('nm-limit')!.querySelector('a')?.getAttribute('href')).toBe('/hi/kundli-milan');
+    expect(q('nm-limit')!.querySelector('a')?.getAttribute('href')).toBe('/hi/kundli-milan/');
     fireEvent.change(q('nm-name-boy')!, { target: { value: 'नूतन' } });
     fireEvent.change(q('nm-name-girl')!, { target: { value: 'राधा' } });
     expect(q('nm-reading-boy')?.textContent).toContain('अनुराधा');

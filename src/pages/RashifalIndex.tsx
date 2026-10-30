@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -36,8 +36,8 @@ export default function RashifalIndex() {
         canonicalUrl="/rashifal"
         ogImage="https://bornclock.com/og/vedic.png"
       />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Rashifal' }}
-      footer={{ tagline: 'Computed Vedic horoscopes from your real Moon sign.', nav: [{ label: 'Free Kundli', to: '/kundali' }, { label: 'Vedic signs', to: '/vedic-zodiac' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Rashifal' }}
+      footer={{ tagline: 'Computed Vedic horoscopes from your real Moon sign.', nav: [{ label: 'Free Kundli', to: '/kundali/' }, { label: 'Vedic signs', to: '/vedic-zodiac/' }] }}
       eyebrow="Rashifal"
       h1="Rashifal — horoscope by your Moon sign"
       lead="Pick your Vedic Moon sign for a daily, weekly, monthly or yearly reading — computed from today's real planetary transits, not a fixed template."
@@ -59,20 +59,20 @@ export default function RashifalIndex() {
           </div>
 
           <p className="text-sm text-muted-foreground mt-6">
-            <Link to="/hi/rashifal" lang="hi" className="underline">आज का राशिफल हिंदी में →</Link>
-            {' · '}Planning ahead? <Link to="/rashifal/mesh/tomorrow" className="underline">Tomorrow’s rashifal →</Link>
-            {' · '}Looking for the Western (Sun sign) daily horoscope? <Link to="/zodiac/aries/today" className="underline">Western horoscope today →</Link>
+            <Link to="/hi/rashifal/" lang="hi" className="underline">आज का राशिफल हिंदी में →</Link>
+            {' · '}Planning ahead? <Link to="/rashifal/mesh/tomorrow/" className="underline">Tomorrow’s rashifal →</Link>
+            {' · '}Looking for the Western (Sun sign) daily horoscope? <Link to="/zodiac/aries/today/" className="underline">Western horoscope today →</Link>
           </p>
           <p className="text-xs text-muted-foreground mt-4 mb-10">
             Each reading is a <TermTip id="rashi">Moon-sign</TermTip> gochar (transit) reading, computed from the sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the planets — the same engine behind your Kundli.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           <PageFAQ items={faqItems} />
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Don't know your Moon sign? Find it free in seconds.</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
       </section>

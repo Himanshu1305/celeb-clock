@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
 import { useBirthDate } from '@/context/BirthDateContext';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 
 const RELATED = [
-  { path: '/age-calculator', label: 'Age Calculator' },
-  { path: '/age-in-days', label: 'Age in Days' },
-  { path: '/biological-age', label: 'Biological Age Calculator' },
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
+  { path: '/age-calculator/', label: 'Age Calculator' },
+  { path: '/age-in-days/', label: 'Age in Days' },
+  { path: '/biological-age/', label: 'Biological Age Calculator' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
 ];
 
 const HindiAgeCalculator = () => {
@@ -34,14 +34,14 @@ const HindiAgeCalculator = () => {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday' }], current: 'मेरी उम्र कितनी है' }}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday/' }], current: 'मेरी उम्र कितनी है' }}
       footer={{
         tagline: 'अपनी सटीक उम्र साल, महीने, दिन और सेकंड में जानें।',
         nav: [
-          { label: 'Age Calculator', to: '/age-calculator' },
-          { label: 'Birthday Countdown', to: '/birthday-countdown' },
-          { label: "Today's Birthdays", to: '/todays-birthdays' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Age Calculator', to: '/age-calculator/' },
+          { label: 'Birthday Countdown', to: '/birthday-countdown/' },
+          { label: "Today's Birthdays", to: '/todays-birthdays/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Age & birthday tools.',
       }}

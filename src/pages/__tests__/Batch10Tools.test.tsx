@@ -113,7 +113,7 @@ describe('calculators', () => {
     fireEvent.click(document.querySelector('[data-testid="love-go"]')!);
     expect(text('love-result')).toBe(first);
     expect(text('love-side-a')).toContain('Chaldean total 42 → 6');
-    expect(document.querySelector('[data-testid="love-real"] a[href="/kundali-match"]')).toBeTruthy();
+    expect(document.querySelector('[data-testid="love-real"] a[href="/kundali-match/"]')).toBeTruthy();
     expect(document.body.textContent).toContain('not an astrology prediction');
   });
   it('Janma Tithi: form with optional time, celebration place and the stated rules', () => {

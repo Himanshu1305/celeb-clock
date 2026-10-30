@@ -68,8 +68,8 @@ describe('/chinese-zodiac/:animal', () => {
     expect(text).toContain("What is the Rat's outlook this year?");
     expect(text).toContain('Year of the Fire Horse (17 Feb 2026 – 5 Feb 2027)');
     const hrefs = Array.from(document.querySelectorAll('a')).map(a => a.getAttribute('href'));
-    expect(hrefs).toContain('/chinese-horoscope/rat');
-    expect(hrefs).toContain('/articles/chinese-zodiac-by-year#1996');
+    expect(hrefs).toContain('/chinese-horoscope/rat/');
+    expect(hrefs).toContain('/articles/chinese-zodiac-by-year/#1996');
   });
   it('no sign data carries a dated outlook field', () => {
     for (const d of Object.values(CHINESE_SIGN_EXTENDED)) expect('outlook_2026' in d).toBe(false);

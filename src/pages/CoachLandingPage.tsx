@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { UtilityLayout } from '@/components/central';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -66,7 +66,7 @@ export default function CoachLandingPage() {
           canonicalUrl="/coach"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Longevity Coach' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Longevity Coach' }}
       eyebrow={<span className="inline-flex items-center gap-2"><Bot className="w-4 h-4" /> Longevity Coach</span>}
       h1="A coach that explains your forecast — not a doctor that diagnoses you"
       lead="The BornClock Longevity Coach is an AI advisor built into your life-expectancy results. It reads your own forecast — your factor breakdown, genetic score and bonuses — and answers questions about them in plain language, with evidence-based next steps. It explains your data and points you toward what you can change; it never diagnoses, and never predicts a date."
@@ -76,10 +76,10 @@ export default function CoachLandingPage() {
 
       <section className="max-w-3xl mx-auto px-4 pt-6 pb-6 text-center">
         <div className="flex flex-wrap gap-3 justify-center">
-          <Link to="/life-expectancy" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#0E2238] transition-colors">
+          <Link to="/life-expectancy/" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#0E2238] transition-colors">
             <ArrowRightCircle className="w-5 h-5" /> Get your forecast & meet the Coach
           </Link>
-          <Link to="/upgrade" className="inline-flex items-center gap-2 border border-gray-300 rounded-xl px-6 py-3 font-semibold text-gray-700 hover:border-[#2F6FB0]/30 hover:text-[#2F6FB0] transition-colors">
+          <Link to="/upgrade/" className="inline-flex items-center gap-2 border border-gray-300 rounded-xl px-6 py-3 font-semibold text-gray-700 hover:border-[#2F6FB0]/30 hover:text-[#2F6FB0] transition-colors">
             See Premium pricing
           </Link>
         </div>
@@ -150,14 +150,14 @@ export default function CoachLandingPage() {
           <p className="text-gray-700 leading-relaxed">
             The Coach is part of the Premium experience and is available during your{' '}
             <strong>free trial</strong>. It lives inside your{' '}
-            <Link to="/life-expectancy" className="text-[#2F6FB0] hover:underline">Life Expectancy results</Link>{' '}
+            <Link to="/life-expectancy/" className="text-[#2F6FB0] hover:underline">Life Expectancy results</Link>{' '}
             — generate a forecast, then open the Coach panel to ask your first question.
           </p>
           <p className="text-gray-700 leading-relaxed mt-3">
             Premium is <strong>{subscriptionPrice('annual', currency)}/year</strong> (about{' '}
             {annualPerMonth(currency)}/month) or <strong>{subscriptionPrice('monthly', currency)}/month</strong>,
             and includes the Coach plus report credits. See{' '}
-            <Link to="/upgrade" className="text-[#2F6FB0] hover:underline">full Premium pricing</Link> for what’s included.
+            <Link to="/upgrade/" className="text-[#2F6FB0] hover:underline">full Premium pricing</Link> for what’s included.
           </p>
         </div>
       </section>
@@ -172,8 +172,8 @@ export default function CoachLandingPage() {
           {meshPosts.map(p => (
             <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ {p.title}</Link>
           ))}
-          <Link to="/life-expectancy" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Life Expectancy Calculator</Link>
-          <Link to="/biological-age" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Biological Age</Link>
+          <Link to="/life-expectancy/" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Life Expectancy Calculator</Link>
+          <Link to="/biological-age/" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Biological Age</Link>
         </div>
       </div>
     </UtilityLayout>

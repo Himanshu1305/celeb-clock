@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { UtilityLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -85,7 +85,7 @@ export default function DashboardPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Link to="/kundli"><Button className="gap-2">Create your Kundli <ArrowRight className="h-4 w-4" /></Button></Link>
+              <Link to="/kundli/"><Button className="gap-2">Create your Kundli <ArrowRight className="h-4 w-4" /></Button></Link>
             </CardContent>
           </Card>
         )}
@@ -146,7 +146,7 @@ export default function DashboardPage() {
                       <div className="h-2 rounded-full bg-muted overflow-hidden"><div className={`h-full ${v >= 0 ? 'bg-accent' : 'bg-primary/50'}`} style={{ width: `${Math.abs(v)}%` }} /></div>
                     </div>
                   ))}
-                  <Link to="/biorhythm" className="text-sm font-semibold text-primary inline-flex items-center gap-1">See your full rhythm chart <ArrowRight className="h-4 w-4" /></Link>
+                  <Link to="/biorhythm/" className="text-sm font-semibold text-primary inline-flex items-center gap-1">See your full rhythm chart <ArrowRight className="h-4 w-4" /></Link>
                 </CardContent>
               </Card>
             )}
@@ -161,9 +161,9 @@ export default function DashboardPage() {
                   {dtb === 0 ? "It's your birthday today! 🎉" : `${dtb} day${dtb === 1 ? '' : 's'} until your next birthday.`}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <Link to="/kundli"><Button variant="outline" size="sm">Your Kundli</Button></Link>
-                  <Link to="/whats-ahead"><Button variant="outline" size="sm">What's Ahead</Button></Link>
-                  <Link to="/family"><Button variant="outline" size="sm" className="gap-1.5"><Users className="h-3.5 w-3.5" /> Family</Button></Link>
+                  <Link to="/kundli/"><Button variant="outline" size="sm">Your Kundli</Button></Link>
+                  <Link to="/whats-ahead/"><Button variant="outline" size="sm">What's Ahead</Button></Link>
+                  <Link to="/family/"><Button variant="outline" size="sm" className="gap-1.5"><Users className="h-3.5 w-3.5" /> Family</Button></Link>
                 </div>
               </CardContent>
             </Card>

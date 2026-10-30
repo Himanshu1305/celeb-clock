@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -35,8 +35,8 @@ export default function TransitIndex() {
         canonicalUrl="/transit"
         ogImage="https://bornclock.com/og/vedic.png"
       />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Transits' }}
-      footer={{ tagline: 'Computed Vedic transits from real sidereal positions.', nav: [{ label: 'Rashifal', to: '/rashifal' }, { label: 'Sade Sati', to: '/sade-sati' }, { label: 'Free Kundli', to: '/kundali' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Transits' }}
+      footer={{ tagline: 'Computed Vedic transits from real sidereal positions.', nav: [{ label: 'Rashifal', to: '/rashifal/' }, { label: 'Sade Sati', to: '/sade-sati/' }, { label: 'Free Kundli', to: '/kundali/' }] }}
       eyebrow="Gochar · planetary transits"
       h1="Planetary transits by year"
       lead="Where the slow planets are, when they change sign, and what each movement means for your Moon sign — computed from the real sky, not a fixed table."
@@ -56,25 +56,25 @@ export default function TransitIndex() {
           <div className="rounded-xl border border-border p-5 mt-4" data-testid="transit-today-card">
             <div className="font-semibold text-foreground mb-1">Planets today</div>
             <p className="text-sm text-muted-foreground leading-relaxed">Where all nine grahas are right now — sign, degree, Nakshatra, retrograde and combust status, and when each next changes sign. Updated every day.</p>
-            <Link to="/planets-today" className="text-xs text-primary mt-2 inline-block">Today’s planet positions →</Link>
+            <Link to="/planets-today/" className="text-xs text-primary mt-2 inline-block">Today’s planet positions →</Link>
           </div>
 
           <div className="rounded-xl border border-border p-5 mt-4" data-testid="transit-mercury-card">
             <div className="font-semibold text-foreground mb-1">Mercury retrograde {year}</div>
             <p className="text-sm text-muted-foreground leading-relaxed">The dates Mercury appears to move backward — read in the Vedic tradition as a time to review, re-check and re-do rather than launch. Computed from real apparent motion.</p>
-            <Link to="/mercury-retrograde" className="text-xs text-primary mt-2 inline-block">Mercury retrograde dates →</Link>
+            <Link to="/mercury-retrograde/" className="text-xs text-primary mt-2 inline-block">Mercury retrograde dates →</Link>
           </div>
 
           <p className="text-xs text-muted-foreground mt-6 mb-10">
             Each transit is read by its <TermTip id="rashi">house from your Moon sign</TermTip>, from the sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) positions of the planets.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           <PageFAQ items={faqItems} />
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Don't know your Moon sign? Find it free, then read every transit from the right sign.</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
       </section>

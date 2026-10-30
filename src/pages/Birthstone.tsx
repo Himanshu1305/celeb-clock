@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -60,14 +60,14 @@ export default function Birthstone() {
           </Helmet>
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Birthstone Guide' }}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report/' }], current: 'Birthstone Guide' }}
       footer={{
         tagline: 'Birthstones by month and Vedic Rashi Ratna — history, meaning and geology.',
         nav: [
-          { label: 'Birthday Report', to: '/birthday-report' },
-          { label: 'Results', to: '/results' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthday Report', to: '/birthday-report/' },
+          { label: 'Results', to: '/results/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',
       }}
@@ -119,7 +119,7 @@ export default function Birthstone() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
               {RASHI_RATNA_DATA.map(rr => (
-                <Link key={rr.rashi} to="/rashi-ratna"
+                <Link key={rr.rashi} to="/rashi-ratna/"
                   className="border border-gray-200 rounded-2xl p-4 hover:border-orange-300 hover:bg-orange-50/50 transition-all">
                   <div className="text-2xl mb-1">{rr.symbol}</div>
                   <div className="font-bold text-gray-900 text-sm">{rr.rashi} ({rr.rashiEnglish})</div>
@@ -148,7 +148,7 @@ export default function Birthstone() {
             </div>
 
             <div className="text-center">
-              <Link to="/rashi-ratna"
+              <Link to="/rashi-ratna/"
                 className="inline-block bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-orange-700 transition-colors">
                 Explore Full Rashi Ratna Guide →
               </Link>
@@ -293,11 +293,11 @@ export default function Birthstone() {
             </Link>
           </div>
           <div className="mt-4 flex flex-wrap gap-3 justify-center text-sm">
-            <Link to="/zodiac" className="text-primary hover:underline">Zodiac Signs</Link>
+            <Link to="/zodiac/" className="text-primary hover:underline">Zodiac Signs</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/numerology" className="text-primary hover:underline">Numerology</Link>
+            <Link to="/numerology/" className="text-primary hover:underline">Numerology</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/generation" className="text-primary hover:underline">Which Generation Are You?</Link>
+            <Link to="/generation/" className="text-primary hover:underline">Which Generation Are You?</Link>
           </div>
         </div>
 

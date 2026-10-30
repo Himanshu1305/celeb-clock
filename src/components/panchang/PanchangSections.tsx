@@ -2,7 +2,7 @@
  * Building blocks shared by the Panchang, Rahu Kaal and Choghadiya pages (batch 7, W7).
  * Every term shown gets a TermTip (plain-language explanation).
  */
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { TermTip } from '@/components/vedic/TermTip';
 import { PANCHANG_PAGE_TERM } from '@/lib/vedic/termDefinitions';
 import type { DayPanchang, PanchangCity } from '@/lib/vedic/panchangDay';

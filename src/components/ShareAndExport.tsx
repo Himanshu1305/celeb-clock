@@ -5,7 +5,7 @@ import { Share2, Download, Twitter, Facebook, Instagram, Copy } from 'lucide-rea
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 
 interface Props {
   birthDate: Date | null;
@@ -189,7 +189,7 @@ export const ShareAndExport = ({ birthDate, ageData, celebrities, lifeExpectancy
             <p className="text-sm text-muted-foreground">
               Upgrade to export personalized PDF reports with charts, analysis, and your complete time capsule data
             </p>
-            <Link to="/upgrade">
+            <Link to="/upgrade/">
               <Button variant="outline" className="w-full mt-2">
                 <Download className="w-4 h-4 mr-2" />
                 Upgrade to Export PDF

@@ -155,16 +155,16 @@ export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
       variant="editorial"
       testId={`dosha-${kind}-page`}
       seo={<SEO title={cfg.title} description={cfg.description} canonicalUrl={cfg.canonical} ogType="website" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: cfg.h1.replace(/\.$/, '') }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: cfg.h1.replace(/\.$/, '') }}
       footer={{
         tagline: 'Computed from your real planetary positions — the same Lahiri-ayanamsa engine as the rest of BornClock.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Manglik', to: '/manglik' },
-          { label: 'Kaal Sarp', to: '/kaal-sarp-dosha' },
-          { label: 'Remedies', to: '/remedies' },
-          { label: 'How It Works', to: '/how-it-works' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Manglik', to: '/manglik/' },
+          { label: 'Kaal Sarp', to: '/kaal-sarp-dosha/' },
+          { label: 'Remedies', to: '/remedies/' },
+          { label: 'How It Works', to: '/how-it-works/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -176,7 +176,7 @@ export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
           <div><span className="eyebrow">{cfg.eyebrow}</span><h1>{cfg.h1}</h1></div>
           <p>{cfg.intro}</p>
         </div>
-        <TrustStrip claim="Every planet's position is worked out from your real birth chart, then read against the classical rule for this pattern — shown calmly and honestly." href="/how-it-works#vedic" />
+        <TrustStrip claim="Every planet's position is worked out from your real birth chart, then read against the classical rule for this pattern — shown calmly and honestly." href="/how-it-works/#vedic" />
 
         <div className="form-band" style={{ marginTop: 16 }}>
           <div><h3>Your birth details</h3><p className="small muted">We need the Moon&rsquo;s birth star and the planetary positions from your chart.</p></div>
@@ -211,7 +211,7 @@ export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
               <Remedies remedyKey={REMEDY_KEY[kind]!} testid={`dosha-${kind}-remedies`} label={{ en: `${cfg.h1.replace(/\.$/, '').replace(/ Calculator$/, '')} — what it means and what you can do`, hi: 'अर्थ और उपाय' }} />
             )}
             {kind === 'nadi' && (
-              <p className="text-sm text-muted-foreground">Nadi dosha only arises between two people. If a match shows it, see <a href="/remedies/nadi-dosha" className="text-primary hover:underline">Nadi dosha — meaning and remedies</a>.</p>
+              <p className="text-sm text-muted-foreground">Nadi dosha only arises between two people. If a match shows it, see <a href="/remedies/nadi-dosha/" className="text-primary hover:underline">Nadi dosha — meaning and remedies</a>.</p>
             )}
           </div>
         )}
@@ -230,7 +230,7 @@ export default function DoshaCheckPage({ kind }: { kind: DoshaKind }) {
 
         <p className="text-xs text-muted-foreground mt-6">
           Computed from your planetary positions using the same <TermTip id="ayanamsa">Lahiri-ayanamsa engine</TermTip> as the rest of BornClock.
-          See also: <a href="/kundali" className="text-primary hover:underline">Full Kundali</a> · <a href="/manglik" className="text-primary hover:underline">Manglik</a> · <a href="/kaal-sarp-dosha" className="text-primary hover:underline">Kaal Sarp</a> · <a href="/kundali-match" className="text-primary hover:underline">Matching</a>.
+          See also: <a href="/kundali/" className="text-primary hover:underline">Full Kundali</a> · <a href="/manglik/" className="text-primary hover:underline">Manglik</a> · <a href="/kaal-sarp-dosha/" className="text-primary hover:underline">Kaal Sarp</a> · <a href="/kundali-match/" className="text-primary hover:underline">Matching</a>.
         </p>
       </section>
     </PajPage>

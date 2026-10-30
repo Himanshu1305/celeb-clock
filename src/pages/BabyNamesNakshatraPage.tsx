@@ -9,7 +9,8 @@
  * Nakshatra's name (Wikipedia "Nakshatra", nakshatraNameFacts.ts), and only the names
  * from our list whose first Devanagari syllable matches each pada.
  */
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -55,7 +56,7 @@ export default function BabyNamesNakshatraPage() {
         theme="neutral"
         testId="baby-names-nakshatra-page"
         seo={<SEO title="Baby Names by Nakshatra | BornClock" description="Baby-name starting letters for all 27 Nakshatras." canonicalUrl="/baby-names" />}
-        breadcrumb={{ trail: [{ label: 'Baby Names', to: '/baby-names' }], current: 'Nakshatra' }}
+        breadcrumb={{ trail: [{ label: 'Baby Names', to: '/baby-names/' }], current: 'Nakshatra' }}
         h1="Nakshatra not found"
       >
         <div className="container mx-auto px-4 py-8 max-w-2xl flex flex-wrap gap-2">
@@ -105,7 +106,7 @@ export default function BabyNamesNakshatraPage() {
           canonicalUrl={`/baby-names/nakshatra/${extra.slug}`}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Baby Names', to: '/baby-names' }], current: name }}
+      breadcrumb={{ trail: [{ label: 'Baby Names', to: '/baby-names/' }], current: name }}
       eyebrow={`Nakshatra ${index + 1} of 27`}
       h1={`${name} Nakshatra Baby Names`}
       lead={<>A baby born with the Moon in {name} {hiName && <span lang="hi">({hiName})</span>} is traditionally given a name starting with one of four sounds: <strong>{row.map(a => a.en).join(', ')}</strong> — one for each pada.</>}
@@ -156,8 +157,8 @@ export default function BabyNamesNakshatraPage() {
         <div className="rounded-xl border border-primary/30 bg-primary/5 p-5 mb-8 text-center">
           <p className="text-sm text-muted-foreground mb-3">Not sure of the Nakshatra or pada? Enter the birth details and we’ll work it out.</p>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/baby-names" className="inline-flex bg-primary text-primary-foreground rounded-lg px-5 py-2.5 font-semibold">Find from birth details →</Link>
-            <Link to="/kundali" className="inline-flex border border-border rounded-lg px-5 py-2.5 font-semibold text-foreground">Free Kundali</Link>
+            <Link to="/baby-names/" className="inline-flex bg-primary text-primary-foreground rounded-lg px-5 py-2.5 font-semibold">Find from birth details →</Link>
+            <Link to="/kundali/" className="inline-flex border border-border rounded-lg px-5 py-2.5 font-semibold text-foreground">Free Kundali</Link>
           </div>
         </div>
 

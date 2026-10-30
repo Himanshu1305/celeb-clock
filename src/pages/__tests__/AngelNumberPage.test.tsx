@@ -39,8 +39,8 @@ describe('angel number pages', () => {
       expect(ld.mainEntity.length).toBe(6);
       expect(ld.mainEntity[0].name).toBe(`What does angel number ${seq} mean?`);
       expect(document.querySelector('[data-testid="angel-numerology"]')).toBeTruthy();
-      expect(document.querySelector('a[href="/numerology"]')).toBeTruthy();
-      expect(document.querySelector('a[href="/angel-numbers"]')).toBeTruthy();
+      expect(document.querySelector('a[href="/numerology/"]')).toBeTruthy();
+      expect(document.querySelector('a[href="/angel-numbers/"]')).toBeTruthy();
     });
   }
 
@@ -55,14 +55,14 @@ describe('angel number pages', () => {
   it('unknown number shows a not-found page that links to the real ones', () => {
     renderAt('/angel-numbers/123');
     expect(document.querySelector('h1')?.textContent).toMatch(/not found/i);
-    expect(document.querySelector('a[href="/angel-numbers/111"]')).toBeTruthy();
+    expect(document.querySelector('a[href="/angel-numbers/111/"]')).toBeTruthy();
   });
 
   it('hub links every number page and keeps the old #a111 anchors', () => {
     renderAt('/angel-numbers');
     for (const seq of ANGEL_SEQUENCES) {
       const a = document.getElementById(`a${seq}`);
-      expect(a?.getAttribute('href')).toBe(`/angel-numbers/${seq}`);
+      expect(a?.getAttribute('href')).toBe(`/angel-numbers/${seq}/`);
     }
   });
 });

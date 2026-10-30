@@ -94,15 +94,15 @@ export function HindiNumerologyArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'अंकज्योतिष जन्मतिथि से' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'अंकज्योतिष जन्मतिथि से' }}
       footer={{
         tagline: 'जन्मतिथि से मूलांक और भाग्यांक, नाम से नामांक — मुफ्त, गणना के साथ।',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -182,7 +182,7 @@ export function HindiNumerologyArticle() {
               मूलांक तो केवल एक हिस्सा है। BornClock आपकी वैदिक राशि, पश्चिमी राशि, नक्षत्र,
               भाग्यशाली रत्न और बहुत कुछ आपकी जन्मतिथि से बताता है।
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                data-testid="hi-paid-report"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">

@@ -41,7 +41,7 @@ import { GET  as bornTodayPhoto }      from '../api/born-today-photo.js';
 import { GET  as unsubscribe }         from '../api/unsubscribe.js';
 import { POST as reminders }           from '../api/reminders.js';
 import { handleReportOg, injectReportOgTags } from './og-report.js';
-import { isProductionHost, DISALLOW_ALL_ROBOTS } from './host.js';
+import { isProductionHost, DISALLOW_ALL_ROBOTS, wwwRedirectTarget } from './host.js';
 import { duplicateRedirect } from '../src/lib/seo/duplicateRedirects.js';
 import { INDIA_BORNON_SLUGS } from '../src/lib/seo/indiaBornOnSlugs.js';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../src/lib/seo/panchangSlugs.js';
@@ -130,6 +130,15 @@ const worker = {
     (globalThis as any).__bcSelfFetch = (req: Request) => worker.fetch(req, env, ctx);
 
     const _url = new URL(request.url);
+    // Batch 11 (GSC): www.bornclock.com served the whole site (200) with a canonical to the
+    // apex, so Search Console listed 332 "Alternate page with proper canonical" URLs. One
+    // host only: 301 every www request (any path, query kept) to https://bornclock.com.
+    // Runs before anything else; staging / *.workers.dev / localhost are not affected.
+    {
+      const apex = wwwRedirectTarget(_url);
+      // 308 for non-GET/HEAD so a POST (e.g. a webhook) keeps its method and body.
+      if (apex) return Response.redirect(apex, request.method === 'GET' || request.method === 'HEAD' ? 301 : 308);
+    }
     const { pathname } = _url;
     // Part AO: staging / *.workers.dev / localhost are non-production — hide from search and
     // disable tracking by HOSTNAME only (never by editing public/robots.txt or page HTML).
@@ -147,13 +156,14 @@ const worker = {
 
     // Permanent redirects for renamed routes (301). Keep old SEO equity, never 404.
     const REDIRECTS: Record<string, string> = {
-      '/methodology': '/how-it-works',
-      '/methodology/': '/how-it-works',
+      // Targets carry the trailing slash (Batch 11) so the redirect is one hop, not two.
+      '/methodology': '/how-it-works/',
+      '/methodology/': '/how-it-works/',
       // /rising-sign-calculator retired (a 2-hour-block ascendant is confidently wrong
       // without birth latitude/longitude). The URL was submitted to Google + IndexNow,
       // so 301 to the closest genuinely-useful page rather than waste the crawl on a 404.
-      '/rising-sign-calculator': '/moon-sign',
-      '/rising-sign-calculator/': '/moon-sign',
+      '/rising-sign-calculator': '/moon-sign/',
+      '/rising-sign-calculator/': '/moon-sign/',
     };
     if (REDIRECTS[pathname]) {
       return Response.redirect(new URL(REDIRECTS[pathname], request.url).toString(), 301);

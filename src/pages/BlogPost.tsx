@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { ScrollTable } from '@/components/ScrollTable';
 import { useAuth } from '@/hooks/useAuth';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { ArticleSEO, FAQSchema } from '@/components/SEO';
 import { FeedbackPrompt } from '@/components/FeedbackPrompt';
@@ -78,7 +79,7 @@ const BlogPostPage = () => {
       <ArticleLayout
         theme="neutral"
         testId="blog-post-page"
-        breadcrumb={{ trail: [{ label: 'Blog', to: '/blog' }], current: 'Article Not Found' }}
+        breadcrumb={{ trail: [{ label: 'Blog', to: '/blog/' }], current: 'Article Not Found' }}
         h1="Article Not Found"
       >
         <div className="max-w-2xl mx-auto text-center py-20">
@@ -137,7 +138,7 @@ const BlogPostPage = () => {
           )}
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Blog', to: '/blog' }], current: post.title }}
+      breadcrumb={{ trail: [{ label: 'Blog', to: '/blog/' }], current: post.title }}
       h1={post.title}
       lead={<>{post.excerpt}</>}
     >
@@ -407,7 +408,7 @@ const BlogPostPage = () => {
                   Sign up for free to get personalized birthday insights and weekly health tips delivered to your inbox.
                 </p>
                 <Button asChild size="lg" className="gap-2">
-                  <Link to="/auth?signup=true">
+                  <Link to="/auth/?signup=true">
                     Sign Up Free
                     <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -470,12 +471,12 @@ const BlogPostPage = () => {
                   </Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link to="/celebrity-birthday">
+                  <Link to="/celebrity-birthday/">
                     Celebrity Match
                   </Link>
                 </Button>
                 <Button asChild variant="outline">
-                  <Link to="/zodiac">
+                  <Link to="/zodiac/">
                     Zodiac Signs
                   </Link>
                 </Button>

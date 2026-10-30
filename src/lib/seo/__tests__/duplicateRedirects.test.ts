@@ -64,6 +64,9 @@ describe('duplicateRedirect — static retired pages', () => {
     // Batch 9: thin Hindi Life Path page → the Hindi Mulank/Bhagyank calculator.
     ['/numerology-hindi', '/hi/numerology-by-date-of-birth/'],
     ['/numerology-hindi/', '/hi/numerology-by-date-of-birth/'],
+    // Batch 11: the "who shares my birthday" article → the finder that answers it.
+    ['/answers/who-shares-my-birthday', '/celebrity-birthday/'],
+    ['/answers/who-shares-my-birthday/', '/celebrity-birthday/'],
   ])('%s → %s', (from, to) => expect(duplicateRedirect(from)).toBe(to));
 });
 

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -80,15 +80,15 @@ export default function Zodiac() {
           ogImage="https://bornclock.com/og/zodiac.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Zodiac Signs' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'Zodiac Signs' }}
       footer={{
         tagline: 'The complete reference to all 12 zodiac signs — dates, traits, history and what science says.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -230,11 +230,11 @@ export default function Zodiac() {
             </Link>
           </div>
           <div className="mt-4 flex flex-wrap gap-3 justify-center text-sm">
-            <Link to="/birthstone" className="text-primary hover:underline">Birthstone Finder</Link>
+            <Link to="/birthstone/" className="text-primary hover:underline">Birthstone Finder</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/numerology" className="text-primary hover:underline">Numerology</Link>
+            <Link to="/numerology/" className="text-primary hover:underline">Numerology</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/generation" className="text-primary hover:underline">Which Generation Are You?</Link>
+            <Link to="/generation/" className="text-primary hover:underline">Which Generation Are You?</Link>
           </div>
         </div>
 
@@ -248,11 +248,11 @@ export default function Zodiac() {
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Related Topics</h2>
           <div className="flex flex-wrap gap-2">
             {[
-              { path: '/moon-sign', label: 'Moon Sign Calculator' },
-              { path: '/compatibility', label: 'Compatibility' },
-              { path: '/vedic-zodiac', label: 'Vedic Zodiac' },
-              { path: '/sun-vs-moon-sign', label: 'Sun vs Moon Sign' },
-              { path: '/numerology', label: 'Numerology' },
+              { path: '/moon-sign/', label: 'Moon Sign Calculator' },
+              { path: '/compatibility/', label: 'Compatibility' },
+              { path: '/vedic-zodiac/', label: 'Vedic Zodiac' },
+              { path: '/sun-vs-moon-sign/', label: 'Sun vs Moon Sign' },
+              { path: '/numerology/', label: 'Numerology' },
             ].map((t) => (
               <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground transition-colors">{t.label}</Link>
             ))}

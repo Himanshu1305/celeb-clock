@@ -12,6 +12,7 @@ import {
   getBirthTimeReliability,
   type BirthTimeReliability,
 } from '@/data/celebrityBirthTimes';
+import { canonicalPath } from '@/lib/seo/canonicalPath'; // Batch 11: trailing-slash internal links
 
 const BADGE: Record<BirthTimeReliability, { label: string; cls: string; dot: string }> = {
   reliable:    { label: 'Birth time: reliable',    cls: 'bg-green-50 border-green-200 text-green-800', dot: 'bg-green-500' },
@@ -73,7 +74,7 @@ export function CelebrityBirthTimeNote({
       )}
 
       <a
-        href={ctaHref}
+        href={canonicalPath(ctaHref)}
         data-testid="celebrity-birthtime-cta"
         className="inline-block mt-2 text-xs font-bold text-primary underline"
       >

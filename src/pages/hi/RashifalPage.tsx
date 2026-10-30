@@ -1,4 +1,5 @@
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { RASHIS } from '@/lib/vedic/rashifal';
@@ -42,7 +43,7 @@ export default function RashifalPage() {
               ))}
             </div>
             <p data-testid="hi-rashifal-index-tools" className="text-sm text-muted-foreground mt-6">
-              और हिंदी में: <Link to="/hi/kundli-milan" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan" className="underline">नाम से कुंडली मिलान</Link> · <Link to="/hi/panchang" className="underline">पंचांग</Link> · <Link to="/hi/upay" className="underline">उपाय</Link>
+              और हिंदी में: <Link to="/hi/kundli-milan/" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan/" className="underline">नाम से कुंडली मिलान</Link> · <Link to="/hi/panchang/" className="underline">पंचांग</Link> · <Link to="/hi/upay/" className="underline">उपाय</Link>
             </p>
           </div>
         </section>
@@ -64,7 +65,7 @@ export default function RashifalPage() {
           canonicalUrl={path}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'राशिफल', to: '/hi/rashifal' }], current: meta.hindi }}
+      breadcrumb={{ trail: [{ label: 'राशिफल', to: '/hi/rashifal/' }], current: meta.hindi }}
       h1={<DailyH1 entry={entry} fallback={`${meta.hindi} राशिफल`} />}
       lead={<>स्वामी ग्रह: {meta.lordHindi} · {meta.english} · <DailyDate entry={entry} /></>}
     >
@@ -107,12 +108,12 @@ export default function RashifalPage() {
 
           <div className="mt-10 bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">अपनी चंद्र राशि और जन्म नक्षत्र जानने के लिए अपनी पूरी कुंडली बनाएं</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">
               कुंडली बनाएं →
             </Link>
             {/* Batch 9b: Hindi matching tools from the Hindi hub. */}
             <p data-testid="hi-rashifal-milan-links" className="text-sm text-muted-foreground mt-4">
-              विवाह के लिए: <Link to="/hi/kundli-milan" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan" className="underline">नाम से कुंडली मिलान</Link>
+              विवाह के लिए: <Link to="/hi/kundli-milan/" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan/" className="underline">नाम से कुंडली मिलान</Link>
             </p>
           </div>
         </div>

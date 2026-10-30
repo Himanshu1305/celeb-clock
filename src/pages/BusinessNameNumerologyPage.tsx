@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -33,8 +33,8 @@ export default function BusinessNameNumerologyPage() {
         keywords="business name numerology, company name number, chaldean business numerology, lucky business name"
         canonicalUrl="/business-name-numerology"
       />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Business Name' }}
-      footer={{ tagline: 'Chaldean business-name numerology, honestly framed.', nav: [{ label: 'Name correction', to: '/name-correction' }, { label: 'Chaldean numerology', to: '/chaldean-numerology' }, { label: 'Mobile number', to: '/mobile-number-numerology' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'Business Name' }}
+      footer={{ tagline: 'Chaldean business-name numerology, honestly framed.', nav: [{ label: 'Name correction', to: '/name-correction/' }, { label: 'Chaldean numerology', to: '/chaldean-numerology/' }, { label: 'Mobile number', to: '/mobile-number-numerology/' }] }}
       eyebrow="Numerology"
       h1="Business Name Numerology"
       lead="Your company name's Chaldean number, its ruling planet and the compound meaning behind it — with an honest note on which numbers the tradition favours for enterprise."
@@ -76,7 +76,7 @@ export default function BusinessNameNumerologyPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Check your personal name too.</p>
-            <Link to="/name-correction" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Name correction →</Link>
+            <Link to="/name-correction/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Name correction →</Link>
           </div>
         </div>
       </section>

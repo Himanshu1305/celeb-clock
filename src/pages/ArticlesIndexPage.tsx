@@ -1,6 +1,7 @@
 import React from 'react';
 import { SEO } from '@/components/SEO';
 import { CollectionLayout } from '@/components/central';
+import { canonicalPath } from '@/lib/seo/canonicalPath'; // Batch 11: trailing-slash internal links
 
 function JsonLd({ data }: { data: object }) {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
@@ -17,115 +18,115 @@ const ARTICLES: ArticleEntry[] = [
   // Longevity
   {
     title: 'Life Expectancy by Country (2026)',
-    href: '/articles/life-expectancy-by-country-2026',
+    href: '/articles/life-expectancy-by-country-2026/',
     category: 'Longevity',
     blurb: 'Compare average lifespans across the world with the latest 2026 data and see how your country ranks.',
   },
   {
     title: 'How Long Will I Live in India?',
-    href: '/articles/how-long-will-i-live-in-india',
+    href: '/articles/how-long-will-i-live-in-india/',
     category: 'Longevity',
     blurb: 'A data-driven look at Indian life expectancy and the lifestyle factors that add or subtract years.',
   },
   {
     title: 'Biological Age vs Chronological Age',
-    href: '/biological-age-vs-chronological-age',
+    href: '/biological-age-vs-chronological-age/',
     category: 'Longevity',
     blurb: 'Why the number on your birthday cake is not the whole story, and how to measure your true body age.',
   },
   {
     title: 'Longevity Quiz',
-    href: '/articles/longevity-quiz',
+    href: '/articles/longevity-quiz/',
     category: 'Longevity',
     blurb: 'Take a quick, evidence-based quiz to estimate your longevity and spot the habits worth changing.',
   },
   {
     title: 'Bryan Johnson Blueprint Alternative',
-    href: '/articles/bryan-johnson-blueprint-alternative',
+    href: '/articles/bryan-johnson-blueprint-alternative/',
     category: 'Longevity',
     blurb: 'A realistic, affordable take on the Blueprint protocol for people who are not billionaires.',
   },
   {
     title: 'How to Live to 100',
-    href: '/articles/how-to-live-to-100',
+    href: '/articles/how-to-live-to-100/',
     category: 'Longevity',
     blurb: 'The science-backed habits shared by centenarians and how to start building them today.',
   },
   {
     title: 'Exercise and Longevity',
-    href: '/articles/exercise-and-longevity',
+    href: '/articles/exercise-and-longevity/',
     category: 'Longevity',
     blurb: 'How much movement actually extends your life, and which types of exercise matter most.',
   },
   {
     title: 'Blue Zones Diet',
-    href: '/articles/blue-zones-diet',
+    href: '/articles/blue-zones-diet/',
     category: 'Longevity',
     blurb: 'What the world\'s longest-lived communities eat, and how to bring their plate to your kitchen.',
   },
   {
     title: 'Longevity Foods in India',
-    href: '/articles/longevity-foods-india',
+    href: '/articles/longevity-foods-india/',
     category: 'Longevity',
     blurb: 'Everyday Indian ingredients and dishes linked to a longer, healthier life.',
   },
   {
     title: 'Death Clock Alternative',
-    href: '/articles/death-clock-alternative',
+    href: '/articles/death-clock-alternative/',
     category: 'Longevity',
     blurb: 'A kinder, more useful way to think about your remaining time than a grim countdown.',
   },
   {
     title: 'Retirement Planning by Life Expectancy',
-    href: '/articles/retirement-planning-life-expectancy',
+    href: '/articles/retirement-planning-life-expectancy/',
     category: 'Longevity',
     blurb: 'How to plan your finances around how long you are actually likely to live.',
   },
   {
     title: 'Longevity Supplements',
-    href: '/articles/longevity-supplements',
+    href: '/articles/longevity-supplements/',
     category: 'Longevity',
     blurb: 'An evidence-first review of the supplements people take for a longer life, and which have real backing.',
   },
   {
     title: 'How Indian Celebrities Stay Fit',
-    href: '/articles/how-indian-celebrities-stay-fit',
+    href: '/articles/how-indian-celebrities-stay-fit/',
     category: 'Longevity',
     blurb: 'The routines and diets behind the ageless looks of India\'s biggest stars.',
   },
   {
     title: 'Famous People Who Lived to 100',
-    href: '/articles/famous-people-lived-to-100',
+    href: '/articles/famous-people-lived-to-100/',
     category: 'Longevity',
     blurb: 'Centenarians from history and their remarkable stories of a full, long life.',
   },
   {
     title: 'Epigenetics and Longevity',
-    href: '/articles/epigenetics-and-longevity',
+    href: '/articles/epigenetics-and-longevity/',
     category: 'Longevity',
     blurb: 'How your lifestyle switches genes on and off, and what that means for your lifespan.',
   },
   {
     title: 'Life Expectancy: How It Is Calculated',
-    href: '/articles/life-expectancy-how-it-is-calculated',
+    href: '/articles/life-expectancy-how-it-is-calculated/',
     category: 'Longevity',
     blurb: 'The demographics and math behind life-expectancy numbers, explained simply.',
   },
   {
     title: 'Retirement Age and Life Expectancy in India',
-    href: '/articles/retirement-age-india-life-expectancy',
+    href: '/articles/retirement-age-india-life-expectancy/',
     category: 'Longevity',
     blurb: 'How India\'s rising life expectancy is reshaping retirement age and savings needs.',
   },
   {
     title: 'Longevity Habits of Indian Billionaires',
-    href: '/articles/longevity-habits-of-indian-billionaires',
+    href: '/articles/longevity-habits-of-indian-billionaires/',
     category: 'Longevity',
     blurb: 'The daily disciplines the ultra-wealthy use to protect their health and their years.',
   },
   {
     title: 'Age in Days, Hours and Minutes',
-    href: '/articles/age-in-days-hours-minutes',
+    href: '/articles/age-in-days-hours-minutes/',
     category: 'Longevity',
     blurb: 'See your age broken down into days, hours and minutes, and why the count matters.',
   },
@@ -133,13 +134,13 @@ const ARTICLES: ArticleEntry[] = [
   // Numerology
   {
     title: 'Numerology by Date of Birth',
-    href: '/articles/numerology-by-date-of-birth',
+    href: '/articles/numerology-by-date-of-birth/',
     category: 'Numerology',
     blurb: 'Find your Life Path number from your birth date, with all nine paths explained.',
   },
   {
     title: 'Life Path Number Compatibility',
-    href: '/articles/life-path-number-compatibility',
+    href: '/articles/life-path-number-compatibility/',
     category: 'Numerology',
     blurb: 'Which Life Path numbers click and which clash, for love and friendship.',
   },
@@ -147,19 +148,19 @@ const ARTICLES: ArticleEntry[] = [
   // Vedic Astrology
   {
     title: 'Moon Sign by Date of Birth',
-    href: '/articles/moon-sign-by-date-of-birth',
+    href: '/articles/moon-sign-by-date-of-birth/',
     category: 'Vedic Astrology',
     blurb: 'Discover your Vedic Rashi (moon sign) and what it reveals about your inner world.',
   },
   {
     title: 'Nakshatra by Date of Birth',
-    href: '/articles/nakshatra-by-date-of-birth',
+    href: '/articles/nakshatra-by-date-of-birth/',
     category: 'Vedic Astrology',
     blurb: 'Find your birth star among the 27 nakshatras and its meaning in Vedic astrology.',
   },
   {
     title: 'Vedic Astrology Birth Chart',
-    href: '/articles/vedic-astrology-birth-chart',
+    href: '/articles/vedic-astrology-birth-chart/',
     category: 'Vedic Astrology',
     blurb: 'Understand the houses, planets and signs that make up your Vedic birth chart.',
   },
@@ -167,25 +168,25 @@ const ARTICLES: ArticleEntry[] = [
   // Western Astrology
   {
     title: 'Zodiac Compatibility',
-    href: '/articles/zodiac-compatibility',
+    href: '/articles/zodiac-compatibility/',
     category: 'Western Astrology',
     blurb: 'How the twelve zodiac signs match up in love and how to read the chemistry.',
   },
   {
     title: 'Tarot Card by Date of Birth',
-    href: '/articles/tarot-card-by-date-of-birth',
+    href: '/articles/tarot-card-by-date-of-birth/',
     category: 'Western Astrology',
     blurb: 'Find the tarot card tied to your birth date and the archetype it carries.',
   },
   {
     title: 'Birth Month Personality',
-    href: '/articles/birth-month-personality',
+    href: '/articles/birth-month-personality/',
     category: 'Western Astrology',
     blurb: 'What the month you were born in says about your traits and tendencies.',
   },
   {
     title: 'Biorhythm Calculator',
-    href: '/articles/biorhythm-calculator',
+    href: '/articles/biorhythm-calculator/',
     category: 'Western Astrology',
     blurb: 'Track your physical, emotional and intellectual cycles from your date of birth.',
   },
@@ -199,7 +200,7 @@ const ARTICLES: ArticleEntry[] = [
   // Chinese Zodiac
   {
     title: 'Chinese Zodiac by Year',
-    href: '/articles/chinese-zodiac-by-year',
+    href: '/articles/chinese-zodiac-by-year/',
     category: 'Chinese Zodiac',
     blurb: 'Find your Chinese zodiac animal by birth year and what it means for your personality.',
   },
@@ -207,73 +208,73 @@ const ARTICLES: ArticleEntry[] = [
   // Monthly
   {
     title: 'Famous Indians Born in January',
-    href: '/articles/famous-indians-born-in-january',
+    href: '/articles/famous-indians-born-in-january/',
     category: 'Monthly',
     blurb: 'Celebrated Indians who share a January birthday, from leaders to stars.',
   },
   {
     title: 'Famous Indians Born in February',
-    href: '/articles/famous-indians-born-in-february',
+    href: '/articles/famous-indians-born-in-february/',
     category: 'Monthly',
     blurb: 'The notable Indians born in February and the legacy they left behind.',
   },
   {
     title: 'Famous Indians Born in March',
-    href: '/articles/famous-indians-born-in-march',
+    href: '/articles/famous-indians-born-in-march/',
     category: 'Monthly',
     blurb: 'March-born Indian icons across politics, cinema, sport and science.',
   },
   {
     title: 'Famous Indians Born in April',
-    href: '/articles/famous-indians-born-in-april',
+    href: '/articles/famous-indians-born-in-april/',
     category: 'Monthly',
     blurb: 'The famous Indians who celebrate their birthdays in April.',
   },
   {
     title: 'Famous Indians Born in May',
-    href: '/articles/famous-indians-born-in-may',
+    href: '/articles/famous-indians-born-in-may/',
     category: 'Monthly',
     blurb: 'Remarkable Indians born in May and the stories that made them famous.',
   },
   {
     title: 'Famous Indians Born in June',
-    href: '/articles/famous-indians-born-in-june',
+    href: '/articles/famous-indians-born-in-june/',
     category: 'Monthly',
     blurb: 'June-born personalities who shaped modern India.',
   },
   {
     title: 'Famous Indians Born in July',
-    href: '/articles/famous-indians-born-in-july',
+    href: '/articles/famous-indians-born-in-july/',
     category: 'Monthly',
     blurb: 'The well-known Indians who share a July birthday.',
   },
   {
     title: 'Famous Indians Born in August',
-    href: '/articles/famous-indians-born-in-august',
+    href: '/articles/famous-indians-born-in-august/',
     category: 'Monthly',
     blurb: 'August-born Indian legends from freedom fighters to film stars.',
   },
   {
     title: 'Famous Indians Born in September',
-    href: '/articles/famous-indians-born-in-september',
+    href: '/articles/famous-indians-born-in-september/',
     category: 'Monthly',
     blurb: 'The notable Indians born in September and why they are remembered.',
   },
   {
     title: 'Famous Indians Born in October',
-    href: '/articles/famous-indians-born-in-october',
+    href: '/articles/famous-indians-born-in-october/',
     category: 'Monthly',
     blurb: 'October-born Indian icons and their lasting contributions.',
   },
   {
     title: 'Famous Indians Born in November',
-    href: '/articles/famous-indians-born-in-november',
+    href: '/articles/famous-indians-born-in-november/',
     category: 'Monthly',
     blurb: 'The famous Indians who celebrate a November birthday.',
   },
   {
     title: 'Famous Indians Born in December',
-    href: '/articles/famous-indians-born-in-december',
+    href: '/articles/famous-indians-born-in-december/',
     category: 'Monthly',
     blurb: 'December-born personalities who left a mark on India.',
   },
@@ -281,19 +282,19 @@ const ARTICLES: ArticleEntry[] = [
   // Hindi
   {
     title: 'जीवन प्रत्याशा कैलकुलेटर (Life Expectancy Calculator)',
-    href: '/hi/life-expectancy-calculator',
+    href: '/hi/life-expectancy-calculator/',
     category: 'Hindi',
     blurb: 'हिंदी में अपनी जीवन प्रत्याशा का अनुमान लगाएं — मुफ़्त और साक्ष्य-आधारित।',
   },
   {
     title: 'अंक ज्योतिष जन्म तिथि से (Numerology by Date of Birth)',
-    href: '/hi/numerology-by-date-of-birth',
+    href: '/hi/numerology-by-date-of-birth/',
     category: 'Hindi',
     blurb: 'अपनी जन्म तिथि से अपना मूलांक और जीवन पथ अंक हिंदी में जानें।',
   },
   {
     title: 'मेरी जीवन प्रत्याशा (Meri Jeevan Pratyasha)',
-    href: '/hi/meri-jeevan-pratyasha',
+    href: '/hi/meri-jeevan-pratyasha/',
     category: 'Hindi',
     blurb: 'हिंदी में जानें कि आप कितने वर्ष जी सकते हैं और इसे कैसे बढ़ाएं।',
   },
@@ -372,7 +373,7 @@ export function ArticlesIndexPage() {
             {visible.map(a => (
               <a
                 key={a.href}
-                href={a.href}
+                href={canonicalPath(a.href)}
                 data-testid="article-card"
                 className="block bg-white border-2 border-gray-100 rounded-2xl p-5
                            hover:border-[#6E5AA6]/30 hover:shadow-md transition-all"
@@ -400,7 +401,7 @@ export function ArticlesIndexPage() {
             </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <a
-                href="/birthday-report"
+                href="/birthday-report/"
                 data-testid="cta-birthday-report"
                 className="inline-block bg-white text-[#6E5AA6] font-black px-6 py-3
                            rounded-full text-base hover:bg-[#6E5AA6]/10 transition-colors"
@@ -408,7 +409,7 @@ export function ArticlesIndexPage() {
                 Generate My Birthday Report →
               </a>
               <a
-                href="/longevity-calculator"
+                href="/longevity-calculator/"
                 data-testid="cta-longevity-calculator"
                 className="inline-block bg-[#0E2238] text-white font-black px-6 py-3
                            rounded-full text-base hover:bg-[#0E2238] transition-colors"

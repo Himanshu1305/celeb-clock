@@ -6,7 +6,8 @@
  * repeating number sequences. This is NOT astronomy, NOT numerology-from-birth,
  * and NOT scientifically validated. Presented honestly, per Rule 6.
  */
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PageFAQ } from '@/components/PageFAQ';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -52,18 +53,18 @@ export default function AngelNumbersPage() {
         />
       )}
       breadcrumb={{
-        trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }],
+        trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }],
         current: 'Angel Numbers',
         edition: 'Modern spiritual belief · No birth data',
       }}
       footer={{
         tagline: 'Angel numbers explained honestly — a modern spiritual belief, not numerology from a birthday.',
         nav: [
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Personal Year Number', to: '/personal-year-number' },
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'How It Works', to: '/how-it-works' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Personal Year Number', to: '/personal-year-number/' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'How It Works', to: '/how-it-works/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Symbolic tradition, presented honestly.',
       }}
@@ -83,7 +84,7 @@ export default function AngelNumbersPage() {
           </p>
         </div>
 
-        <TrustStrip claim="Meanings are presented as they exist within this spiritual tradition — not as facts or predictions." href="/how-it-works#numerology" />
+        <TrustStrip claim="Meanings are presented as they exist within this spiritual tradition — not as facts or predictions." href="/how-it-works/#numerology" />
 
         {/* Honest framing — first paint */}
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-6 text-sm text-amber-900">
@@ -187,10 +188,10 @@ export default function AngelNumbersPage() {
         <div className="rounded-xl border border-border p-4 mb-8">
           <div className="font-semibold text-foreground mb-2">Continue exploring</div>
           <ul className="text-sm space-y-1">
-            <li><Link to="/numerology" className="text-[#6E5AA6] hover:underline">Numerology overview</Link> — Life Path and other numbers calculated from your birthday</li>
-            <li><Link to="/personal-year-number" className="text-[#6E5AA6] hover:underline">Personal Year Number Calculator</Link> — your nine-year cycle from birth month and day</li>
-            <li><Link to="/mystic-corner" className="text-[#6E5AA6] hover:underline">Mystic Corner</Link> — all symbolic tools on BornClock</li>
-            <li><Link to="/how-it-works" className="text-[#6E5AA6] hover:underline">How it works</Link> — our methodology and data sources</li>
+            <li><Link to="/numerology/" className="text-[#6E5AA6] hover:underline">Numerology overview</Link> — Life Path and other numbers calculated from your birthday</li>
+            <li><Link to="/personal-year-number/" className="text-[#6E5AA6] hover:underline">Personal Year Number Calculator</Link> — your nine-year cycle from birth month and day</li>
+            <li><Link to="/mystic-corner/" className="text-[#6E5AA6] hover:underline">Mystic Corner</Link> — all symbolic tools on BornClock</li>
+            <li><Link to="/how-it-works/" className="text-[#6E5AA6] hover:underline">How it works</Link> — our methodology and data sources</li>
           </ul>
         </div>
       </section>

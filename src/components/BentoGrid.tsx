@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { celebYearsForDisplay } from '@/lib/celebrityFacts';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Crown, ArrowRight } from 'lucide-react';

@@ -12,7 +12,7 @@
  * preserved. WhatsApp share (reused) at the result moment.
  */
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { PajPage } from '@/components/central';
 import { DobInput, type DobValue, parseDob } from '@/components/DobInput';
@@ -161,7 +161,7 @@ export default function MysticCornerLanding() {
             <div><span className="eyebrow">Show the workings</span><h2>Your date, through three lenses.</h2></div>
             <p>Computed from {dateLabel}. Change the date above to explore another — it recalculates locally.</p>
           </div>
-          <TrustStrip claim="Calculated from your actual birth date, every time — not a generic daily horoscope." href="/how-it-works#zodiac" />
+          <TrustStrip claim="Calculated from your actual birth date, every time — not a generic daily horoscope." href="/how-it-works/#zodiac" />
           <div className="tabs" role="tablist" aria-label="Explore the output">
             {(['numerology', 'western', 'chinese'] as Tab[]).map(t => (
               <button key={t} type="button" role="tab" aria-selected={tab === t} onClick={() => setTab(t)}>
@@ -201,7 +201,7 @@ export default function MysticCornerLanding() {
                 <div>
                   <h3>A Sun sign is not a whole chart.</h3>
                   <p>These are conventional date ranges. Births near a boundary need the actual Sun position, birth time and timezone. The interpretation is cultural and reflective, not a scientifically validated personality assessment.</p>
-                  <p><Link to="/western-birth-chart" className="text-button">Build your full Western birth chart (Sun, Moon, Rising &amp; houses) →</Link></p>
+                  <p><Link to="/western-birth-chart/" className="text-button">Build your full Western birth chart (Sun, Moon, Rising &amp; houses) →</Link></p>
                 </div>
               </div>
               <div className="zodiac-select" aria-label="Browse zodiac traditions">
@@ -260,10 +260,10 @@ export default function MysticCornerLanding() {
         <section className="section white" id="explore">
           <div className="section-head"><div><span className="eyebrow">Keep exploring</span><h2>Follow a different thread.</h2></div><p>Choose the kind of discovery you came for.</p></div>
           <div className="crosslinks">
-            <Link className="crosslink" to="/vedic-astrology">
+            <Link className="crosslink" to="/vedic-astrology/">
               <div><span className="eyebrow">For a deeper chart</span><h3>Explore Vedic Astrology</h3><p>Sidereal positions, birth-time detail and traditional chart interpretation — actually computed.</p></div><span aria-hidden="true">↗</span>
             </Link>
-            <Link className="crosslink" to="/celebrity-birthday">
+            <Link className="crosslink" to="/celebrity-birthday/">
               <div><span className="eyebrow">For a lighter discovery</span><h3>Meet your birthday twins</h3><p>Famous company and calendar connections worth sharing.</p></div><span aria-hidden="true">↗</span>
             </Link>
           </div>

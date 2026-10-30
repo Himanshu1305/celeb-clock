@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { CollectionLayout } from '@/components/central';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,13 +6,15 @@ import { ArrowRight } from 'lucide-react';
 
 // Index of every /answers/* page. Question labels mirror the ANSWERS map in
 // scripts/prerender-titles.mjs. Grouped by theme for scannability.
-const GROUPS: Array<{ theme: string; items: Array<{ slug: string; q: string }> }> = [
+// `to` overrides /answers/<slug>/ when the question is answered by a tool page (Batch 11:
+// "who shares my birthday" is answered by the finder at /celebrity-birthday/).
+const GROUPS: Array<{ theme: string; items: Array<{ slug: string; q: string; to?: string }> }> = [
   {
     theme: 'Age & birthday',
     items: [
       { slug: 'how-to-calculate-age', q: 'How to calculate your exact age' },
       { slug: 'how-many-days-until-my-birthday', q: 'How many days until my birthday?' },
-      { slug: 'who-shares-my-birthday', q: 'Which famous people share my birthday?' },
+      { slug: 'who-shares-my-birthday', q: 'Who shares my birthday?', to: '/celebrity-birthday/' },
       { slug: 'how-old-am-i-on-mars', q: 'How old am I on Mars and other planets?' },
       { slug: 'what-generation-am-i', q: 'What generation am I?' },
     ],
@@ -66,7 +68,7 @@ export default function AnswersIndex() {
               <h2 className="text-lg font-semibold text-foreground mb-3">{group.theme}</h2>
               <div className="grid gap-3 sm:grid-cols-2">
                 {group.items.map(item => (
-                  <Link key={item.slug} to={`/answers/${item.slug}`}>
+                  <Link key={item.slug} to={item.to ?? `/answers/${item.slug}/`}>
                     <Card className="glass-card h-full hover:border-primary/50 transition-all group">
                       <CardContent className="p-4 flex items-center justify-between gap-3">
                         <span className="text-sm font-medium text-foreground">{item.q}</span>

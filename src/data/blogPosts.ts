@@ -184,7 +184,7 @@ There's something almost magical about sharing a birthday with someone famous:
 
 ## How to Find YOUR Celebrity Birthday Twins
 
-Our [Celebrity Birthday Match](/celebrity-birthday) tool instantly reveals:
+Our [Celebrity Birthday Match](/celebrity-birthday/) tool instantly reveals:
 
 - 🌟 **Hollywood Stars** — Actors, directors, entertainers
 - 🎵 **Musicians** — Singers, bands, composers
@@ -221,7 +221,7 @@ Curious which dates have the most famous people?
 
 Ready to discover your famous birthday twins?
 
-👉 **[Find My Celebrity Birthday Twins](/celebrity-birthday)** 👈
+👉 **[Find My Celebrity Birthday Twins](/celebrity-birthday/)** 👈
 
 Enter your birth date and join the exclusive club of people who share your special day with legends!
 
@@ -472,7 +472,7 @@ Pisces live in a world of imagination, empathy, and artistic expression.
 
 ## Find Your Zodiac Sign Now!
 
-Not sure which sign you are? Our [free Zodiac Calculator](/zodiac) tells you instantly!
+Not sure which sign you are? Our [free Zodiac Calculator](/zodiac/) tells you instantly!
 
 You'll discover:
 - 🌟 Your sun sign
@@ -481,7 +481,7 @@ You'll discover:
 - 💕 Compatible signs
 - ⚡ Key personality traits
 
-👉 **[Find My Zodiac Sign](/zodiac)** 👈
+👉 **[Find My Zodiac Sign](/zodiac/)** 👈
 
 ---
 
@@ -697,7 +697,7 @@ One of the oldest gemstones, treasured by cultures worldwide for millennia.
 
 Discover your birth month gem and its special meaning!
 
-👉 **[Find My Birthstone](/birthstone)** 👈
+👉 **[Find My Birthstone](/birthstone/)** 👈
 
 Learn the history, healing properties, and perfect jewelry styles for YOUR birthstone.
 
@@ -934,7 +934,7 @@ People with a strong sense of purpose live longer. This is one of the key findin
 
 Curious how your lifestyle affects your estimated lifespan?
 
-👉 **[Try Our Life Expectancy Calculator](/life-expectancy)** 👈
+👉 **[Try Our Life Expectancy Calculator](/life-expectancy/)** 👈
 
 Enter your habits and see how different choices impact your estimated years!
 
@@ -953,7 +953,7 @@ A: Genetics account for about 25% of lifespan variation. Lifestyle choices influ
 
 ---
 
-*Ready to see your estimated life expectancy? Try our [free calculator](/life-expectancy) and discover which changes could add the most years to YOUR life!*
+*Ready to see your estimated life expectancy? Try our [free calculator](/life-expectancy/) and discover which changes could add the most years to YOUR life!*
     `
   },
   {
@@ -1338,7 +1338,7 @@ Other indicators of chronic sleep debt:
 
 Your biological age — the age your body is actually functioning at — is meaningfully different from your chronological age. Sleep is one of the few lifestyle factors where the science clearly shows it directly influences the rate at which you age at a cellular level.
 
-How old does your body think it is? Use our **[Biological Age Calculator](/biological-age)** to estimate your functional biological age based on your lifestyle, and see how sleep figures into the picture.
+How old does your body think it is? Use our **[Biological Age Calculator](/biological-age/)** to estimate your functional biological age based on your lifestyle, and see how sleep figures into the picture.
 
 ---
 
@@ -1750,10 +1750,10 @@ Research suggests genetics accounts for approximately 20-30% of lifespan variati
 
 **Explore more at BornClock:**
 
-- [Biological Age Calculator — free 15-question lifestyle and fitness estimate](/biological-age)
-- [Calculate Your Longevity Forecast — Personalized to Your Country and Habits](/life-expectancy)
-- [Compare Life Expectancy Across 57 Countries — Why Japan Outperforms](/country-comparison)
-- [Exercise and Longevity: The 150-Minute Rule Explained](/life-expectancy)
+- [Biological Age Calculator — free 15-question lifestyle and fitness estimate](/biological-age/)
+- [Calculate Your Longevity Forecast — Personalized to Your Country and Habits](/life-expectancy/)
+- [Compare Life Expectancy Across 57 Countries — Why Japan Outperforms](/country-comparison/)
+- [Exercise and Longevity: The 150-Minute Rule Explained](/life-expectancy/)
 
 ---
 
@@ -2028,7 +2028,7 @@ Movement is medicine. Even chair exercises, light walking, and balance work exte
 
 See how your activity level impacts your estimated lifespan:
 
-👉 **[Try Our Life Expectancy Calculator](/life-expectancy)** 👈
+👉 **[Try Our Life Expectancy Calculator](/life-expectancy/)** 👈
 
 Enter your exercise habits and get personalized projections!
 
@@ -2287,7 +2287,7 @@ See a doctor or therapist if:
 
 See how your stress level impacts your estimated lifespan:
 
-👉 **[Try Our Life Expectancy Calculator](/life-expectancy)** 👈
+👉 **[Try Our Life Expectancy Calculator](/life-expectancy/)** 👈
 
 Enter your lifestyle factors and get personalized projections!
 
@@ -2546,7 +2546,7 @@ Don't overlook this! Being too thin also shortens life:
 
 See how your weight and BMI affect your estimated lifespan:
 
-👉 **[Try Our Life Expectancy Calculator](/life-expectancy)** 👈
+👉 **[Try Our Life Expectancy Calculator](/life-expectancy/)** 👈
 
 Enter your BMI, lifestyle factors, and get personalized projections!
 
@@ -2817,7 +2817,7 @@ Calculate your savings:
 
 See the personalized impact of smoking on your lifespan:
 
-👉 **[Try Our Life Expectancy Calculator](/life-expectancy)** 👈
+👉 **[Try Our Life Expectancy Calculator](/life-expectancy/)** 👈
 
 Enter your smoking status and see how quitting could add years!
 
@@ -3105,7 +3105,7 @@ Even starting at 60, you can add years by:
 
 See how your lifestyle compares to centenarians:
 
-👉 **[Try Our Life Expectancy Calculator](/life-expectancy)** 👈
+👉 **[Try Our Life Expectancy Calculator](/life-expectancy/)** 👈
 
 Enter your habits and see your personalized projection!
 
@@ -3238,7 +3238,7 @@ A 2019 study published in *Frontiers in Psychology* found that spending just 20 
 
 ## Check Your Own Stress Impact
 
-Curious how your stress levels might be affecting your projected lifespan? Our [Life Expectancy Calculator](/life-expectancy) factors in stress, sleep, exercise, and social connection to give you a personalized estimate — along with what-if scenarios showing exactly how much time you could gain by changing specific habits.
+Curious how your stress levels might be affecting your projected lifespan? Our [Life Expectancy Calculator](/life-expectancy/) factors in stress, sleep, exercise, and social connection to give you a personalized estimate — along with what-if scenarios showing exactly how much time you could gain by changing specific habits.
 
 ## The Bottom Line
 
@@ -3248,7 +3248,7 @@ Start with one thing. Move your body. Breathe deliberately. Sleep like it matter
 
 ---
 
-*What's your biggest source of chronic stress? Understanding the enemy is the first step. Try our [Life Expectancy Calculator](/life-expectancy) to see how your habits shape your projected lifespan.*
+*What's your biggest source of chronic stress? Understanding the enemy is the first step. Try our [Life Expectancy Calculator](/life-expectancy/) to see how your habits shape your projected lifespan.*
     `
   },
   {
@@ -3358,7 +3358,7 @@ Say hello to your neighbors. Chat with the cashier. These aren't trivial acts �
 
 ## Check Your Social Connection Impact
 
-Want to see how your social habits affect your projected lifespan? Our [Life Expectancy Calculator](/life-expectancy) includes social connection as a key factor. Adjust the what-if scenarios to see exactly how strengthening your relationships could add years to your life.
+Want to see how your social habits affect your projected lifespan? Our [Life Expectancy Calculator](/life-expectancy/) includes social connection as a key factor. Adjust the what-if scenarios to see exactly how strengthening your relationships could add years to your life.
 
 ## The Takeaway
 
@@ -3370,7 +3370,7 @@ Frank didn't have to die the way he did. None of us do.
 
 ---
 
-*How connected are you? Take a moment to assess your social health, then try our [Life Expectancy Calculator](/life-expectancy) to see how it shapes your projected lifespan.*
+*How connected are you? Take a moment to assess your social health, then try our [Life Expectancy Calculator](/life-expectancy/) to see how it shapes your projected lifespan.*
     `
   },
   {
@@ -3490,7 +3490,7 @@ Five minutes daily, 365 days per year, compounds into measurable neurological an
 
 ## What the Research Suggests About Long-Term Impact
 
-Our [Life Expectancy Calculator](/life-expectancy) quantifies how lifestyle factors affect projected lifespan. Users who input daily stress management practices and regular light physical activity consistently project **2-5 additional healthy years** compared to sedentary, high-stress baseline profiles.
+Our [Life Expectancy Calculator](/life-expectancy/) quantifies how lifestyle factors affect projected lifespan. Users who input daily stress management practices and regular light physical activity consistently project **2-5 additional healthy years** compared to sedentary, high-stress baseline profiles.
 
 Run your own scenario. Input your current habits. Then use the what-if sliders to see what moving stress management from "high" to "moderate" does to your projection. The numbers are not dramatic — but compounded across decades, they are real.
 
@@ -3506,7 +3506,7 @@ Five minutes before the internet gets access to your nervous system. That is the
 
 ---
 
-*How does your morning affect how long you'll live? Our [Life Expectancy Calculator](/life-expectancy) lets you model the impact of daily habits — including stress, sleep, exercise, and more — on your projected lifespan.*
+*How does your morning affect how long you'll live? Our [Life Expectancy Calculator](/life-expectancy/) lets you model the impact of daily habits — including stress, sleep, exercise, and more — on your projected lifespan.*
     `
   },
   {
@@ -3626,7 +3626,7 @@ You don't need to meal-prep every Sunday like an Instagram influencer. Research 
 
 ## See the Impact on Your Lifespan
 
-Curious how your diet might be affecting your projected lifespan? Our [Life Expectancy Calculator](/life-expectancy) includes dietary factors in its calculations. Plug in your current eating habits, then use the what-if scenarios to see how shifting toward whole foods could add years to your projection.
+Curious how your diet might be affecting your projected lifespan? Our [Life Expectancy Calculator](/life-expectancy/) includes dietary factors in its calculations. Plug in your current eating habits, then use the what-if scenarios to see how shifting toward whole foods could add years to your projection.
 
 ## The Bottom Line
 
@@ -3638,7 +3638,7 @@ Your body isn't broken. The food has been re-engineered.
 
 ---
 
-*How does your diet affect your life expectancy? Find out with our [Life Expectancy Calculator](/life-expectancy) — model what-if scenarios for different dietary patterns and see the years add up.*
+*How does your diet affect your life expectancy? Find out with our [Life Expectancy Calculator](/life-expectancy/) — model what-if scenarios for different dietary patterns and see the years add up.*
     `
   },
   {
@@ -3769,7 +3769,7 @@ Notice that even the "optimized" plan is modest by fitness-culture standards. Th
 
 ## Model Your Exercise Impact
 
-Want to see exactly how your exercise habits affect your projected lifespan? Our [Life Expectancy Calculator](/life-expectancy) factors in physical activity level and lets you model what-if scenarios. See the difference between your current routine and the evidence-based targets above.
+Want to see exactly how your exercise habits affect your projected lifespan? Our [Life Expectancy Calculator](/life-expectancy/) factors in physical activity level and lets you model what-if scenarios. See the difference between your current routine and the evidence-based targets above.
 
 ## The Real Answer
 
@@ -3783,7 +3783,7 @@ The research is unambiguous on one point: the single worst exercise choice for l
 
 ---
 
-*How many years could your exercise habits be adding — or costing — you? Find out with our [Life Expectancy Calculator](/life-expectancy) and explore the what-if scenarios.*
+*How many years could your exercise habits be adding — or costing — you? Find out with our [Life Expectancy Calculator](/life-expectancy/) and explore the what-if scenarios.*
     `
   },
 
@@ -3891,7 +3891,7 @@ Using a screen for two hours before bed can push your sleep onset back by one to
 
 Sleep is one of twelve modifiable lifestyle factors in the BornClock Life Expectancy Calculator. The ±2.3 year impact range for sleep quality comes directly from the mortality data in the Cappuccio et al. (2010) meta-analysis, adjusted for the specific age and sex demographics of each user.
 
-If you want to see exactly how your current sleep habits are affecting your longevity estimate — and what would change if you consistently slept 7-8 hours — the What-If Simulator on the Life Expectancy page lets you adjust this factor and see the result in real time. [Try the Life Expectancy Calculator →](/life-expectancy)
+If you want to see exactly how your current sleep habits are affecting your longevity estimate — and what would change if you consistently slept 7-8 hours — the What-If Simulator on the Life Expectancy page lets you adjust this factor and see the result in real time. [Try the Life Expectancy Calculator →](/life-expectancy/)
 
 ---
 
@@ -3905,7 +3905,7 @@ If you want to see exactly how your current sleep habits are affecting your long
 
 *Medical disclaimer: This article is for informational purposes only and does not constitute medical advice. If you suspect a sleep disorder, consult a qualified healthcare professional.*
 
-*Explore stress and its effect on longevity →* [Read: Stress, Mental Health and Longevity](/blog/stress-mental-health-longevity)
+*Explore stress and its effect on longevity →* [Read: Stress, Mental Health and Longevity](/blog/stress-mental-health-longevity/)
     `,
   },
 
@@ -4037,7 +4037,7 @@ The body responds to exercise at every age. The benefits are larger for those wh
 
 *Medical disclaimer: This article is for informational and educational purposes only. Consult a healthcare professional before starting a new exercise programme, particularly if you have existing health conditions.*
 
-*Read next: [The Longevity Diet — What Decades of Research Says About Food](/blog/longevity-diet-guide)*
+*Read next: [The Longevity Diet — What Decades of Research Says About Food](/blog/longevity-diet-guide/)*
     `,
   },
 
@@ -4167,7 +4167,7 @@ The single most impactful shift most people can make: **eat more legumes** (bean
 
 *Medical disclaimer: This article is for informational and educational purposes only and does not constitute nutritional or medical advice. Consult a registered dietitian or physician before making significant dietary changes.*
 
-*Read next: [Stress, Mental Health and Longevity](/blog/stress-mental-health-longevity)*
+*Read next: [Stress, Mental Health and Longevity](/blog/stress-mental-health-longevity/)*
     `,
   },
 
@@ -4288,7 +4288,7 @@ You do not need a meditation retreat. A consistent daily practice of 10-20 minut
 
 *Medical disclaimer: This article is for informational and educational purposes only and does not constitute mental health advice. If you are experiencing significant stress, anxiety, or depression, please consult a qualified healthcare professional or mental health specialist.*
 
-*Read next: [Community, Social Bonds and Longevity](/blog/community-social-longevity)*
+*Read next: [Community, Social Bonds and Longevity](/blog/community-social-longevity/)*
     `,
   },
 
@@ -4448,7 +4448,7 @@ Age matters for screening recommendations because risk profiles change over time
 
 *Medical disclaimer: This article is for informational and educational purposes only. It does not constitute medical advice. Screening recommendations vary by country, age, personal risk factors, and medical history. Consult a qualified healthcare professional before making decisions about health screening.*
 
-*Read next: [Community, Social Bonds and Longevity](/blog/community-social-longevity)*
+*Read next: [Community, Social Bonds and Longevity](/blog/community-social-longevity/)*
     `,
   },
 
@@ -4586,7 +4586,7 @@ The mechanisms are partly physical (dogs require walking), partly psychological 
 
 *Medical disclaimer: This article is for informational and educational purposes only. If you are experiencing significant loneliness or isolation that is affecting your mental health, please speak with a healthcare professional or mental health specialist.*
 
-*Calculate how your social connections factor into your longevity estimate →* [Life Expectancy Calculator](/life-expectancy)
+*Calculate how your social connections factor into your longevity estimate →* [Life Expectancy Calculator](/life-expectancy/)
     `,
   },
   {
@@ -4666,7 +4666,7 @@ One of the most powerful motivators for habit change is **seeing the concrete ou
 
 BornClock's What-If Simulator shows you the precise year-impact of changing each lifestyle factor — smoking, diet, exercise, sleep, stress, social connection. Seeing that quitting smoking could add 7 years makes the 66-day habit formation timeline feel worth every day.
 
-*See exactly how each habit change affects your life expectancy →* [Life Expectancy Calculator](/life-expectancy)
+*See exactly how each habit change affects your life expectancy →* [Life Expectancy Calculator](/life-expectancy/)
     `,
     author: 'BornClock Health Team',
     authorBio: 'The BornClock Health Team synthesises peer-reviewed research on longevity, behaviour change, and preventive health for a general audience.',
@@ -4760,7 +4760,7 @@ The most India-specific interventions with the highest evidence base:
 3. **Prioritise sleep** — urban India shows some of the world's lowest sleep durations
 4. **Air quality awareness** — for Delhi NCR residents, indoor air filtration can recover 1–2 years of life expectancy
 
-*Calculate your personalised life expectancy →* [Life Expectancy Calculator](/life-expectancy) · [Compare across 57 countries →](/country-comparison)
+*Calculate your personalised life expectancy →* [Life Expectancy Calculator](/life-expectancy/) · [Compare across 57 countries →](/country-comparison/)
     `,
     author: 'BornClock Health Team',
     authorBio: 'The BornClock Health Team synthesises peer-reviewed research on longevity, behaviour change, and preventive health for a general audience.',
@@ -4979,7 +4979,7 @@ It is never too late to quit — but the earlier, the larger the benefit.
 
 BornClock's What-If Simulator lets you move the smoking slider from "heavy" to "quit 5+ years ago" and see the precise year-impact on your personal life expectancy forecast in real time.
 
-*See how quitting smoking changes your personal forecast →* [Life Expectancy Calculator](/life-expectancy)
+*See how quitting smoking changes your personal forecast →* [Life Expectancy Calculator](/life-expectancy/)
     `,
     author: 'BornClock Health Team',
     authorBio: 'The BornClock Health Team synthesises peer-reviewed research on longevity, behaviour change, and preventive health for a general audience.',
@@ -5004,7 +5004,7 @@ BornClock's What-If Simulator lets you move the smoking slider from "heavy" to "
     content: `
 # Numerology Life Path Numbers 1–9: Complete Guide to Meaning, Career and Love
 
-*This is the long-read on the Western Life Path — career, love and the 2026 Personal Year for each number. To calculate your numbers, use the [numerology calculator](/numerology); for the Indian Mulank and Bhagyank and how they differ from the Life Path, read the [India guide](/articles/numerology-by-date-of-birth).*
+*This is the long-read on the Western Life Path — career, love and the 2026 Personal Year for each number. To calculate your numbers, use the [numerology calculator](/numerology/); for the Indian Mulank and Bhagyank and how they differ from the Life Path, read the [India guide](/articles/numerology-by-date-of-birth/).*
 
 ## How to Calculate Your Life Path Number
 
@@ -5118,7 +5118,7 @@ The Pythagorean method used above is the most widely accepted in Western numerol
 
 Add your birth month + birth day + 2026, then reduce to a single digit. Example: Born June 15 → 6+1+5+2+0+2+6 = 22 → 2+2 = 4. Personal Year 4 in 2026 is a year for building solid foundations and disciplined effort.
 
-*Calculate your Life Path and Personal Year 2026 →* [Numerology Calculator](/numerology)
+*Calculate your Life Path and Personal Year 2026 →* [Numerology Calculator](/numerology/)
     `,
     author: 'BornClock Numerology Team',
     authorBio: 'The BornClock Numerology Team covers Pythagorean numerology, Chaldean traditions, and the intersection of number symbolism with modern psychology.',
@@ -5214,7 +5214,7 @@ India's traditional vegetarian cuisine is actually closer to the Blue Zone ideal
 
 Returning to traditional Indian food patterns — while reducing refined carbohydrates — may be the most culturally appropriate longevity diet available.
 
-*Calculate how your current diet affects your life expectancy →* [Life Expectancy Calculator](/life-expectancy) · [Test your biological age →](/biological-age)
+*Calculate how your current diet affects your life expectancy →* [Life Expectancy Calculator](/life-expectancy/) · [Test your biological age →](/biological-age/)
     `,
     author: 'BornClock Health Team',
     authorBio: 'The BornClock Health Team synthesises peer-reviewed research on longevity, behaviour change, and preventive health for a general audience.',
@@ -5318,7 +5318,7 @@ Indians develop coronary artery disease an average of **10 years earlier** than 
 
 5. **Sleep 7–9 hours:** Both too little and too much sleep are associated with 45% higher CVD mortality.
 
-*See how your cardiovascular risk factors affect your life expectancy →* [Life Expectancy Calculator](/life-expectancy) · [Test your biological age →](/biological-age)
+*See how your cardiovascular risk factors affect your life expectancy →* [Life Expectancy Calculator](/life-expectancy/) · [Test your biological age →](/biological-age/)
     `,
     author: 'BornClock Health Team',
     authorBio: 'The BornClock Health Team synthesises peer-reviewed research on longevity, behaviour change, and preventive health for a general audience.',
@@ -5435,7 +5435,7 @@ It's delivered as a beautiful, shareable web link — the most personal gift you
 
 The psychology of why this works: personalised gifts that reference something specific and unrepeatable about a person — their exact birthday, their exact year, their exact time of birth — create a sense of being truly seen that generic gifts, however expensive, cannot replicate.
 
-*Create a Birthday Intelligence Report →* [Birthday Report](/birthday-report)
+*Create a Birthday Intelligence Report →* [Birthday Report](/birthday-report/)
     `,
     author: 'BornClock Team',
     authorBio: 'The BornClock team helps people explore the meaning behind their birthdays through astrology, numerology, longevity science, and personalised insights.',

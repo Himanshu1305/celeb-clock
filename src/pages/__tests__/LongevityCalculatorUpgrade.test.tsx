@@ -32,7 +32,7 @@ describe('LongevityCalculatorPage — Task 31 upgrade blocks', () => {
     renderPage();
     const cta = document.querySelector('[data-testid="longevity-pdf-cta"]');
     expect(cta).toBeTruthy();
-    expect(cta?.getAttribute('href')).toBe('/birthday-report');
+    expect(cta?.getAttribute('href')).toBe('/birthday-report/');
   });
 
   it('TC-UP-03: comparison teaser is present with the expected copy', () => {

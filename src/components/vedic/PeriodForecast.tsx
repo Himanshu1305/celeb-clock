@@ -4,7 +4,7 @@
  * and reasoned (Rule 7). Date-dependent: computed in the browser against `now`.
  */
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { buildPeriodForecast, type ForecastPeriod, type MahaPeriod, type NodePlacements } from '@/lib/vedic/periodForecast';
 
 type Tab = 'yearly' | 'quarterly' | 'monthly';
@@ -56,8 +56,8 @@ export function PeriodForecast({ dashaTimeline, lagnaSignIndex, planets }: {
       </div>
       <p className="text-xs text-muted-foreground mt-3">
         For the transit side of timing — Saturn, Jupiter and Rahu–Ketu by year, and Sade Sati — see the{' '}
-        <Link to="/transit" className="text-primary hover:underline">transit pages</Link> and{' '}
-        <Link to="/sade-sati" className="text-primary hover:underline">Sade Sati</Link>.
+        <Link to="/transit/" className="text-primary hover:underline">transit pages</Link> and{' '}
+        <Link to="/sade-sati/" className="text-primary hover:underline">Sade Sati</Link>.
       </p>
     </div>
   );

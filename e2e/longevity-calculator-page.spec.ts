@@ -234,7 +234,7 @@ test.describe('Longevity Calculator Page', () => {
   });
 
   test('TC-E2E-25: page appears in sitemap.xml', async ({ page }) => {
-    const res = await page.request.get(`${BASE}/sitemap.xml`);
+    const res = await page.request.get(`${BASE}/sitemap-core.xml`); // Batch 11: section sitemap
     const xml = await res.text();
     expect(xml).toContain('/longevity-calculator');
   });

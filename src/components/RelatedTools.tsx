@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowRight } from 'lucide-react';
 
@@ -9,14 +9,14 @@ interface Tool {
 }
 
 const ALL: Record<string, Tool> = {
-  age: { label: 'Best Age Calculator', path: '/age-calculator', emoji: '⏱️' },
-  life: { label: 'Best Life Expectancy Calculator', path: '/life-expectancy', emoji: '❤️‍🩹' },
-  celeb: { label: 'Best Celebrity Birthday Match', path: '/celebrity-birthday', emoji: '🌟' },
-  today: { label: 'Famous Birthdays Today', path: '/todays-birthdays', emoji: '🎂' },
-  zodiac: { label: 'Best Zodiac Sign Calculator', path: '/zodiac', emoji: '♈' },
-  birthstone: { label: 'Best Birthstone Finder', path: '/birthstone', emoji: '💎' },
-  numerology: { label: 'Best Free Numerology Calculator', path: '/numerology', emoji: '🔢' },
-  planet: { label: 'Best Planetary Age Calculator', path: '/planetary-age', emoji: '🪐' },
+  age: { label: 'Best Age Calculator', path: '/age-calculator/', emoji: '⏱️' },
+  life: { label: 'Best Life Expectancy Calculator', path: '/life-expectancy/', emoji: '❤️‍🩹' },
+  celeb: { label: 'Best Celebrity Birthday Match', path: '/celebrity-birthday/', emoji: '🌟' },
+  today: { label: 'Famous Birthdays Today', path: '/todays-birthdays/', emoji: '🎂' },
+  zodiac: { label: 'Best Zodiac Sign Calculator', path: '/zodiac/', emoji: '♈' },
+  birthstone: { label: 'Best Birthstone Finder', path: '/birthstone/', emoji: '💎' },
+  numerology: { label: 'Best Free Numerology Calculator', path: '/numerology/', emoji: '🔢' },
+  planet: { label: 'Best Planetary Age Calculator', path: '/planetary-age/', emoji: '🪐' },
 };
 
 interface Props {

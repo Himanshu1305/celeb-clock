@@ -3,7 +3,7 @@
  * result (Batch 6). Explains the "both signs" rule so a user comparing with
  * AstroSage / Drik Panchang understands why two may be shown.
  */
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 
 export function DateOnlyMoonNote({
   ambiguous,
@@ -24,7 +24,7 @@ export function DateOnlyMoonNote({
         : ambiguous
           ? ' The Moon moved on during that day, so more than one is possible and your birth time decides which. '
           : ' The Moon stayed there all day, so it does not depend on your birth time. '}
-      For your exact chart with birth time and place, use the <Link to="/kundali" className="underline">free Kundali</Link>.
+      For your exact chart with birth time and place, use the <Link to="/kundali/" className="underline">free Kundali</Link>.
     </p>
   );
 }

@@ -1,4 +1,5 @@
-import { useParams, useLocation, Navigate, Link } from 'react-router-dom';
+import { useParams, useLocation, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { CollectionLayout } from '@/components/central';
 import { indianCelebrities } from '@/data/indianCelebrities';
@@ -57,14 +58,14 @@ export function CelebrityHubPage() {
           <JsonLd data={breadcrumbSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity' }], current: cfg.label }}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity/' }], current: cfg.label }}
       footer={{
         tagline: cfg.desc,
         nav: [
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Birthdays Today', to: '/todays-birthdays' },
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Birthdays Today', to: '/todays-birthdays/' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Celebrity birthdays.',
       }}

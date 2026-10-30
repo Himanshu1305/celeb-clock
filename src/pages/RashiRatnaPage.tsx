@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
@@ -35,15 +35,15 @@ export default function RashiRatnaPage() {
           canonicalUrl="/rashi-ratna"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Rashi Ratna', edition: 'Ratna · gemstone by Rashi' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Rashi Ratna', edition: 'Ratna · gemstone by Rashi' }}
       footer={{
         tagline: 'Rashi Ratna — the Indian Vedic birthstone for your zodiac sign and its ruling planet.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Gemstone Recommendation', to: '/gemstones' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Gemstone Recommendation', to: '/gemstones/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Moon Sign', to: '/moon-sign/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -59,7 +59,7 @@ export default function RashiRatnaPage() {
         <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
           <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
           <span>›</span>
-          <Link to="/birthstone" className="hover:text-[#6E5AA6]">Birthstone</Link>
+          <Link to="/birthstone/" className="hover:text-[#6E5AA6]">Birthstone</Link>
           <span>›</span>
           <span className="text-gray-600">Rashi Ratna</span>
         </nav>
@@ -67,7 +67,7 @@ export default function RashiRatnaPage() {
         <h1 className="text-3xl font-black text-gray-900 mb-1">Rashi Ratna — Indian Vedic Birthstones</h1>
         <PageTagline />
 
-        <TrustStrip claim="A general guide by Moon sign and its ruling planet — the Gemstone tool is the precise, full-chart version." href="/how-it-works#vedic" />
+        <TrustStrip claim="A general guide by Moon sign and its ruling planet — the Gemstone tool is the precise, full-chart version." href="/how-it-works/#vedic" />
         <div className="bg-orange-50 border-l-4 border-orange-500 rounded-r-xl p-5 my-6">
           <p className="text-base font-semibold text-orange-900 leading-relaxed">
             In the Indian Vedic tradition, your birthstone is determined not by your birth month but by your Rashi (zodiac sign) and its ruling planet. These gemstones — drawn from the sacred <TermTip id="navratna">Navratna</TermTip> system — have been used for over 2,000 years to strengthen planetary energies, protect against <TermTip id="malefic">malefic</TermTip> influences, and bring prosperity and clarity — traditional associations, not medical claims.
@@ -78,7 +78,7 @@ export default function RashiRatnaPage() {
         <div data-testid="rashi-ratna-crossref" className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-5 my-6">
           <p className="text-sm text-[#6E5AA6] leading-relaxed">
             <strong>This is a general, Moon-sign-based starting point.</strong> It gives one stone per Rashi from the ruling planet alone — a quick, popular reference. For the <strong>precise recommendation based on your full birth chart</strong> — your Ascendant (Lagna), functional benefics, and which planets are actually weak or strong in your chart — use the{' '}
-            <Link to="/gemstones" className="underline font-semibold hover:text-[#6E5AA6]">Gemstone Recommendation tool</Link>. The two can suggest different stones: this page reads only your Moon sign, while the full-chart method is more tailored, so if they differ, the full-chart result is the more personalised one.
+            <Link to="/gemstones/" className="underline font-semibold hover:text-[#6E5AA6]">Gemstone Recommendation tool</Link>. The two can suggest different stones: this page reads only your Moon sign, while the full-chart method is more tailored, so if they differ, the full-chart result is the more personalised one.
           </p>
         </div>
 
@@ -210,11 +210,11 @@ export default function RashiRatnaPage() {
           <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
           <div className="grid grid-cols-2 gap-2">
             {[
-              { text: 'Gemstone Recommendation (full chart)', href: '/gemstones' },
-              { text: 'Western Birthstones', href: '/birthstone' },
-              { text: 'Vedic Zodiac (Rashi)', href: '/vedic-zodiac' },
-              { text: 'Moon Sign Calculator', href: '/moon-sign' },
-              { text: 'Numerology Calculator', href: '/numerology' },
+              { text: 'Gemstone Recommendation (full chart)', href: '/gemstones/' },
+              { text: 'Western Birthstones', href: '/birthstone/' },
+              { text: 'Vedic Zodiac (Rashi)', href: '/vedic-zodiac/' },
+              { text: 'Moon Sign Calculator', href: '/moon-sign/' },
+              { text: 'Numerology Calculator', href: '/numerology/' },
             ].map(item => (
               <Link key={item.href} to={item.href}
                 className="p-3 rounded-xl border border-gray-200 hover:border-orange-300 hover:bg-orange-50 text-sm text-gray-700 hover:text-orange-700 transition-colors">

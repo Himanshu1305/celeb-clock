@@ -7,7 +7,7 @@
  */
 import { useState } from 'react';
 import { resolveForPlace } from '@/lib/timezone/clientBirth';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -187,7 +187,7 @@ function ChartResult({ chart, name }: { chart: WesternChart; name: string }) {
 
       <div className="rounded-lg bg-muted/40 p-5 text-sm text-muted-foreground">
         Want the Indian (Vedic) view of the same birth?{' '}
-        <Link to="/kundali" className="underline text-foreground">Generate your Kundli →</Link>
+        <Link to="/kundali/" className="underline text-foreground">Generate your Kundli →</Link>
       </div>
     </div>
   );
@@ -225,15 +225,15 @@ export default function WesternBirthChart() {
           ogImage="https://bornclock.com/og/zodiac.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Zodiac', to: '/zodiac' }], current: 'Western Birth Chart' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Zodiac', to: '/zodiac/' }], current: 'Western Birth Chart' }}
       footer={{
         tagline: 'Your full Western natal chart — Sun, Moon, Rising, planets, houses and aspects, calculated from your exact birth details.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Zodiac Signs', to: '/zodiac' },
-          { label: 'Chinese Zodiac', to: '/chinese-zodiac' },
-          { label: 'Kundli (Vedic)', to: '/kundali' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Zodiac Signs', to: '/zodiac/' },
+          { label: 'Chinese Zodiac', to: '/chinese-zodiac/' },
+          { label: 'Kundli (Vedic)', to: '/kundali/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}

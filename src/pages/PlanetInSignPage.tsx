@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -27,8 +28,8 @@ export default function PlanetInSignPage() {
         theme="vedic"
         testId="planet-in-sign-hub"
         seo={<SEO title="Planet in Sign — All 9 Planets Through 12 Rashis | BornClock" description="What each of the 9 Vedic planets means in each of the 12 signs — dignity (exalted, debilitated, own), strength and a graded, plain-language reading. 108 placements." canonicalUrl="/planet-in-sign" ogImage="https://bornclock.com/og/vedic.png" />}
-        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Planet in sign' }}
-        footer={{ tagline: 'Every planet in every sign, with real dignity.', nav: [{ label: 'Planet in house', to: '/planet-in-house' }, { label: 'Free Kundli', to: '/kundali' }] }}
+        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Planet in sign' }}
+        footer={{ tagline: 'Every planet in every sign, with real dignity.', nav: [{ label: 'Planet in house', to: '/planet-in-house/' }, { label: 'Free Kundli', to: '/kundali/' }] }}
         eyebrow="Vedic placements"
         h1="Planet in Sign — all 108 placements"
         lead="Choose a planet and sign to see its dignity (exalted, own, friendly, debilitated), its strength, and what the tradition reads into it."
@@ -73,8 +74,8 @@ export default function PlanetInSignPage() {
       theme="vedic"
       testId="planet-in-sign"
       seo={<SEO title={title} description={description} canonicalUrl={`/planet-in-sign/${planet.slug}/${sign.slug}`} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Planet in sign', to: '/planet-in-sign' }], current: data.headline }}
-      footer={{ tagline: 'Traditional Vedic placements, read honestly.', nav: [{ label: 'All placements', to: '/planet-in-sign' }, { label: 'Planet in house', to: '/planet-in-house' }, { label: 'Free Kundli', to: '/kundali' }], note: 'A general, tradition-based reading — modified in your chart by house, aspects and Dasha. Not a fixed prediction.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Planet in sign', to: '/planet-in-sign/' }], current: data.headline }}
+      footer={{ tagline: 'Traditional Vedic placements, read honestly.', nav: [{ label: 'All placements', to: '/planet-in-sign/' }, { label: 'Planet in house', to: '/planet-in-house/' }, { label: 'Free Kundli', to: '/kundali/' }], note: 'A general, tradition-based reading — modified in your chart by house, aspects and Dasha. Not a fixed prediction.' }}
       eyebrow="Vedic placement"
       h1={data.headline}
       lead={data.dignityLine}
@@ -95,7 +96,7 @@ export default function PlanetInSignPage() {
 
           <p className="text-xs text-muted-foreground my-6">
             Dignity is computed from the classical exaltation table and natural (<TermTip id="grahaMaitri">graha maitri</TermTip>) friendships.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           <h2 className="font-semibold text-foreground mb-2">{planet.name} in other signs</h2>
@@ -116,7 +117,7 @@ export default function PlanetInSignPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-foreground mb-3">See where {planet.name} actually sits in <em>your</em> chart — sign, house and Dasha.</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
       </section>

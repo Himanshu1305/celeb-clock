@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { ReportLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
@@ -786,7 +786,7 @@ const BiologicalAge = () => {
           </Helmet>
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Biological Age' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Biological Age' }}
       eyebrow="Biological Age"
       h1="Biological Age Calculator — How Old Is Your Body?"
       lead={(
@@ -1279,7 +1279,7 @@ const BiologicalAge = () => {
                   country and adjusts for your habits.
                 </p>
                 <Link
-                  to="/life-expectancy"
+                  to="/life-expectancy/"
                   className="inline-block bg-white text-[#2F6FB0] font-semibold px-6 py-3 rounded-xl hover:bg-[#2F6FB0]/10 transition-colors"
                 >
                   Calculate My Life Expectancy →
@@ -1357,11 +1357,11 @@ const BiologicalAge = () => {
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Related Topics</h2>
           <div className="flex flex-wrap gap-2">
             {[
-              { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-              { path: '/country-comparison', label: 'Country Comparison' },
-              { path: '/coach', label: 'Longevity Coach' },
-              { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
-              { path: '/answers/what-is-my-biological-age', label: 'What Is My Biological Age?' },
+              { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+              { path: '/country-comparison/', label: 'Country Comparison' },
+              { path: '/coach/', label: 'Longevity Coach' },
+              { path: '/biological-age-vs-chronological-age/', label: 'Biological vs Chronological Age' },
+              { path: '/answers/what-is-my-biological-age/', label: 'What Is My Biological Age?' },
             ].map((t) => (
               <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-gray-700 hover:text-[#2F6FB0] transition-colors">{t.label}</Link>
             ))}

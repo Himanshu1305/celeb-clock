@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -74,15 +74,15 @@ export default function ChineseZodiac() {
           ogImage="https://bornclock.com/og/zodiac.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Chinese Zodiac' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'Chinese Zodiac' }}
       footer={{
         tagline: 'Discover your Chinese Zodiac animal, element, and yin/yang energy from your date of birth.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -172,7 +172,7 @@ export default function ChineseZodiac() {
           </h2>
           <p className="text-sm text-muted-foreground text-center max-w-2xl mx-auto mb-6">
             Each year runs from Chinese New Year to the day before the next one — so a birthday in January or early February
-            often belongs to the previous animal. Full list: <Link to="/articles/chinese-zodiac-by-year" className="underline">Chinese zodiac by year (1924–2031)</Link>.
+            often belongs to the previous animal. Full list: <Link to="/articles/chinese-zodiac-by-year/" className="underline">Chinese zodiac by year (1924–2031)</Link>.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {ALL_ANIMALS.map(animal => {
@@ -225,10 +225,10 @@ export default function ChineseZodiac() {
         <section className="text-center pb-8">
           <h2 className="text-xl font-bold text-foreground mb-4">Explore More</h2>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/vedic-zodiac" className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl font-medium hover:opacity-90 transition-opacity">
+            <Link to="/vedic-zodiac/" className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl font-medium hover:opacity-90 transition-opacity">
               🕉️ Vedic Zodiac (Rashi)
             </Link>
-            <Link to="/zodiac" className="px-5 py-2.5 bg-accent/10 text-accent rounded-xl font-medium hover:bg-accent/20 transition-colors border border-accent/30">
+            <Link to="/zodiac/" className="px-5 py-2.5 bg-accent/10 text-accent rounded-xl font-medium hover:bg-accent/20 transition-colors border border-accent/30">
               ♈ Western Zodiac
             </Link>
             <Link to="/" className="px-5 py-2.5 bg-muted text-muted-foreground rounded-xl font-medium hover:bg-muted/80 transition-colors">

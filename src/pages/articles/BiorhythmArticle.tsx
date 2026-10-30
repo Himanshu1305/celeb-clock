@@ -147,7 +147,7 @@ function BiorhythmCalculator() {
           <p className="text-xs text-gray-400 mt-4 mb-4">
             Biorhythms are a self-reflection tool, not a scientifically proven prediction.
           </p>
-          <a href={`/birthday-report?dob=${dob}`}
+          <a href={`/birthday-report/?dob=${dob}`}
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-[#0E2238] transition-colors">
             See my complete birthday profile →
@@ -199,15 +199,15 @@ export function BiorhythmArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Biorhythm Calculator' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Biorhythm Calculator' }}
       footer={{
         tagline: 'Track your physical, emotional and intellectual cycles from your date of birth.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -270,7 +270,7 @@ export function BiorhythmArticle() {
             <li><strong>Critical (near 0%):</strong> the cycle is crossing the midline and is considered unstable — a day to be a little more careful.</li>
           </ul>
           <p className="text-gray-700 leading-relaxed mb-6">
-            Many people combine the reading with their <a href="/birthday-report" className="text-[#6E5AA6] underline font-semibold">birthday report</a>{' '}
+            Many people combine the reading with their <a href="/birthday-report/" className="text-[#6E5AA6] underline font-semibold">birthday report</a>{' '}
             and astrology profile to build a fuller picture of the day ahead. The
             physical (23-day), emotional (28-day) and intellectual (33-day) rhythms make a
             handy daily journaling prompt, especially when paired with your ruling planet and
@@ -305,7 +305,7 @@ export function BiorhythmArticle() {
               Western zodiac, Nakshatra, Life Path number and more — all from your date of
               birth, alongside your astrology chart.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Generate My Free Birthday Profile →
@@ -316,7 +316,7 @@ export function BiorhythmArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/numerology-by-date-of-birth" className="text-[#6E5AA6] underline font-semibold">
+                <a href="/articles/numerology-by-date-of-birth/" className="text-[#6E5AA6] underline font-semibold">
                   Numerology by Date of Birth — Find Your Life Path Number
                 </a>
               </li>

@@ -9,7 +9,8 @@
  * body-rendered via JsonLd (never Helmet). The ticking clock is NOT an ARIA live region.
  */
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { Navigation } from '@/components/Navigation';
 import { AuthNav } from '@/components/AuthNav';
@@ -91,7 +92,7 @@ function BornToday() {
           </div>
         </div>
       ))}
-      <Link to="/todays-birthdays" className="bt" style={{ animationDelay: '.55s', fontSize: 12.5, fontWeight: 700, color: '#B5432A' }}>{moreLabel}</Link>
+      <Link to="/todays-birthdays/" className="bt" style={{ animationDelay: '.55s', fontSize: 12.5, fontWeight: 700, color: '#B5432A' }}>{moreLabel}</Link>
     </div>
   );
 }
@@ -99,40 +100,40 @@ function BornToday() {
 // ── Directory tool columns (every link a real route) ─────────────────────────
 type Tool = { label: string; tag: string; to: string };
 const VEDIC_TOOLS: Tool[] = [
-  { label: 'Kundli Chart', tag: 'free', to: '/kundali' },
-  { label: 'Daily Rashifal', tag: 'today', to: '/rashifal' },
-  { label: 'Kundali Matching', tag: '36-point', to: '/kundali-match' },
-  { label: 'Dasha Timing', tag: 'to Pratyantar', to: '/kundali' },
-  { label: 'Yoga Detection', tag: 'graded', to: '/kundali' },
-  { label: 'Sade Sati Checker', tag: 'real transit', to: '/sade-sati' },
-  { label: 'Muhurat Finder', tag: 'by city', to: '/muhurat' },
-  { label: 'Gemstone Recommendation', tag: 'Lagna-based', to: '/gemstones' },
-  { label: 'Rashi Ratna', tag: 'by Rashi', to: '/rashi-ratna' },
-  { label: 'Career Report', tag: '10th house', to: '/career-report' },
-  { label: 'AI Astrologer', tag: 'chat', to: '/astrologer' },
+  { label: 'Kundli Chart', tag: 'free', to: '/kundali/' },
+  { label: 'Daily Rashifal', tag: 'today', to: '/rashifal/' },
+  { label: 'Kundali Matching', tag: '36-point', to: '/kundali-match/' },
+  { label: 'Dasha Timing', tag: 'to Pratyantar', to: '/kundali/' },
+  { label: 'Yoga Detection', tag: 'graded', to: '/kundali/' },
+  { label: 'Sade Sati Checker', tag: 'real transit', to: '/sade-sati/' },
+  { label: 'Muhurat Finder', tag: 'by city', to: '/muhurat/' },
+  { label: 'Gemstone Recommendation', tag: 'Lagna-based', to: '/gemstones/' },
+  { label: 'Rashi Ratna', tag: 'by Rashi', to: '/rashi-ratna/' },
+  { label: 'Career Report', tag: '10th house', to: '/career-report/' },
+  { label: 'AI Astrologer', tag: 'chat', to: '/astrologer/' },
 ];
 const BIRTHDAY_TOOLS: Tool[] = [
-  { label: 'Celebrity Birthday Twins', tag: 'real profiles', to: '/celebrity-birthday' },
-  { label: "Today's Birthdays", tag: 'live', to: '/todays-birthdays' },
-  { label: 'Age Calculator', tag: 'to the second', to: '/age-calculator' },
-  { label: 'Birthstone', tag: 'by month', to: '/birthstone' },
-  { label: 'Indian Celebrities by Date', tag: 'daily', to: '/born-on/india' },
-  { label: 'Birthday Blueprint', tag: '8-page PDF', to: '/birthday-report' },
+  { label: 'Who Shares My Birthday?', tag: 'celebrity twins', to: '/celebrity-birthday/' },
+  { label: "Today's Birthdays", tag: 'live', to: '/todays-birthdays/' },
+  { label: 'Age Calculator', tag: 'to the second', to: '/age-calculator/' },
+  { label: 'Birthstone', tag: 'by month', to: '/birthstone/' },
+  { label: 'Indian Celebrities by Date', tag: 'daily', to: '/born-on/india/' },
+  { label: 'Birthday Blueprint', tag: '8-page PDF', to: '/birthday-report/' },
 ];
 const MYSTIC_TOOLS: Tool[] = [
-  { label: 'Numerology', tag: 'Life Path + Name', to: '/numerology' },
-  { label: 'Western Zodiac', tag: 'sun sign', to: '/zodiac' },
-  { label: 'Chinese Zodiac', tag: 'lunar year', to: '/chinese-zodiac' },
-  { label: 'Tarot by Birthday', tag: 'birth card', to: '/tarot-card-by-birthday' },
-  { label: 'Compatibility', tag: 'names + dates', to: '/compatibility' },
-  { label: 'Biorhythm', tag: 'daily cycles', to: '/biorhythm' },
+  { label: 'Numerology', tag: 'Life Path + Name', to: '/numerology/' },
+  { label: 'Western Zodiac', tag: 'sun sign', to: '/zodiac/' },
+  { label: 'Chinese Zodiac', tag: 'lunar year', to: '/chinese-zodiac/' },
+  { label: 'Tarot by Birthday', tag: 'birth card', to: '/tarot-card-by-birthday/' },
+  { label: 'Compatibility', tag: 'names + dates', to: '/compatibility/' },
+  { label: 'Biorhythm', tag: 'daily cycles', to: '/biorhythm/' },
 ];
 const SCIENCE_TOOLS: Tool[] = [
-  { label: 'Life Expectancy', tag: 'WHO / NIH-informed', to: '/life-expectancy' },
-  { label: 'Biological Age', tag: 'lifestyle estimate', to: '/biological-age' },
-  { label: 'Country Comparison', tag: '57 countries', to: '/country-comparison' },
-  { label: 'Planetary Age', tag: 'orbital periods', to: '/planetary-age' },
-  { label: 'Planetary Weight', tag: 'NASA 2023', to: '/weight-on-planets' },
+  { label: 'Life Expectancy', tag: 'WHO / NIH-informed', to: '/life-expectancy/' },
+  { label: 'Biological Age', tag: 'lifestyle estimate', to: '/biological-age/' },
+  { label: 'Country Comparison', tag: '57 countries', to: '/country-comparison/' },
+  { label: 'Planetary Age', tag: 'orbital periods', to: '/planetary-age/' },
+  { label: 'Planetary Weight', tag: 'NASA 2023', to: '/weight-on-planets/' },
 ];
 function ToolList({ tools }: { tools: Tool[] }) {
   return <div className="tools">{tools.map(t => <Link key={t.label + t.to} to={t.to}>{t.label} <span>{t.tag}</span></Link>)}</div>;
@@ -254,10 +255,10 @@ export default function Index() {
             </div>
             {exampleLabel && <div style={{ fontSize: 11.5, fontWeight: 600, color: '#B5432A' }}>{exampleLabel}</div>}
             <div className="doors" data-testid="choose-your-path">
-              <Link className="door" to="/vedic-astrology" style={{ ['--ac' as string]: '#C6A15B' }}><b>Vedic Astrology</b><span>Kundli · Matching · Sade Sati</span></Link>
-              <Link className="door" to="/celebrity-birthday" style={{ ['--ac' as string]: '#F0715A' }}><b>Birthday &amp; Celebrity</b><span>Celebrity twins · Today's birthdays</span></Link>
-              <Link className="door" to="/mystic-corner" style={{ ['--ac' as string]: '#6E5AA6' }}><b>Mystic Corner</b><span>Numerology · Zodiac · Tarot</span></Link>
-              <Link className="door" to="/life-expectancy" style={{ ['--ac' as string]: '#2F6FB0' }}><b>Science &amp; Longevity</b><span>Life expectancy · Biological age</span></Link>
+              <Link className="door" to="/vedic-astrology/" style={{ ['--ac' as string]: '#C6A15B' }}><b>Vedic Astrology</b><span>Kundli · Matching · Sade Sati</span></Link>
+              <Link className="door" to="/celebrity-birthday/" style={{ ['--ac' as string]: '#F0715A' }}><b>Birthday &amp; Celebrity</b><span>Celebrity twins · Today's birthdays</span></Link>
+              <Link className="door" to="/mystic-corner/" style={{ ['--ac' as string]: '#6E5AA6' }}><b>Mystic Corner</b><span>Numerology · Zodiac · Tarot</span></Link>
+              <Link className="door" to="/life-expectancy/" style={{ ['--ac' as string]: '#2F6FB0' }}><b>Science &amp; Longevity</b><span>Life expectancy · Biological age</span></Link>
             </div>
           </div>
           {/* Live clock panel */}
@@ -339,7 +340,7 @@ export default function Index() {
             <h2>Traditional systems, computed.</h2>
             <div className="teaser"><span>Your real Kundli — Lagna, Nakshatra and Dasha — free. <span style={{ color: '#5B6472', fontSize: 11 }}>House 1 (Lagna) sits at the top, as in the classical North-Indian chart.</span></span></div>
             <ToolList tools={VEDIC_TOOLS} />
-            <Link className="explore" to="/vedic-astrology" style={{ color: '#74571E' }}>Explore Vedic Astrology →</Link>
+            <Link className="explore" to="/vedic-astrology/" style={{ color: '#74571E' }}>Explore Vedic Astrology →</Link>
           </div>
           <div className="col" id="birthday" style={{ ['--ac' as string]: '#F0715A' }}>
             <div className="eyebrow" style={{ color: '#B5432A' }}>
@@ -347,7 +348,7 @@ export default function Index() {
             <h2>Specific beats generic.</h2>
             <div className="teaser">{isBirthdayToday ? 'Your birthday is today — see who else celebrates it.' : <>Next birthday in <b>{nextIn}</b> days — see who else celebrates it.</>}</div>
             <ToolList tools={BIRTHDAY_TOOLS} />
-            <Link className="explore" to="/celebrity-birthday" style={{ color: '#B5432A' }}>Explore Birthdays →</Link>
+            <Link className="explore" to="/celebrity-birthday/" style={{ color: '#B5432A' }}>Explore Birthdays →</Link>
           </div>
           <div className="col" id="mystic" style={{ ['--ac' as string]: '#6E5AA6' }}>
             <div className="eyebrow" style={{ color: '#6E5AA6' }}>
@@ -359,7 +360,7 @@ export default function Index() {
               <span className="chip">Each system has its own rules — we say which</span>
               <span className="chip">Western ≠ Vedic sign</span>
             </div>
-            <Link className="explore" to="/mystic-corner" style={{ color: '#6E5AA6' }}>Explore Mystic Corner →</Link>
+            <Link className="explore" to="/mystic-corner/" style={{ color: '#6E5AA6' }}>Explore Mystic Corner →</Link>
           </div>
           <div className="col" id="science" style={{ ['--ac' as string]: '#2F6FB0', background: '#FFFFFF' }}>
             <div className="eyebrow" style={{ color: '#2F6FB0' }}>
@@ -371,7 +372,7 @@ export default function Index() {
               {['WHO', 'Harvard', 'NIH', 'UN WPP 2024', 'NASA 2023'].map(s => <span className="chip" key={s}>{s}</span>)}
             </div>
             <div style={{ fontSize: 11, color: '#237A60', fontWeight: 600 }}>Estimates, not predictions — limits stated on every page.</div>
-            <Link className="explore" to="/life-expectancy" style={{ color: '#2F6FB0' }}>Explore Science &amp; Longevity →</Link>
+            <Link className="explore" to="/life-expectancy/" style={{ color: '#2F6FB0' }}>Explore Science &amp; Longevity →</Link>
           </div>
         </div>
 
@@ -379,7 +380,7 @@ export default function Index() {
         <div style={{ background: '#0E2238', padding: '22px 24px 16px' }}>
           <div className="foot" style={{ display: 'flex', gap: 28 }}>
             <FootCol color="#D9BC82" title="VEDIC" links={[['Kundli', '/kundali'], ['Matching', '/kundali-match'], ['Sade Sati', '/sade-sati'], ['Muhurat', '/muhurat'], ['Gemstones', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'], ['Career', '/career-report'], ['AI Astrologer', '/astrologer']]} />
-            <FootCol color="#F7A08E" title="BIRTHDAY" links={[['Celebrity Twins', '/celebrity-birthday'], ["Today's Birthdays", '/todays-birthdays'], ['Age Calculator', '/age-calculator'], ['Birthstone', '/birthstone'], ['Indian Celebrities', '/born-on/india'], ['Blueprint', '/birthday-report']]} />
+            <FootCol color="#F7A08E" title="BIRTHDAY" links={[['Who Shares My Birthday?', '/celebrity-birthday/'], ["Today's Birthdays", '/todays-birthdays'], ['Age Calculator', '/age-calculator'], ['Birthstone', '/birthstone'], ['Indian Celebrities', '/born-on/india'], ['Blueprint', '/birthday-report']]} />
             <FootCol color="#B3A4DE" title="MYSTIC" links={[['Numerology', '/numerology'], ['Name Numerology', '/name-numerology'], ['Western Zodiac', '/zodiac'], ['Chinese Zodiac', '/chinese-zodiac'], ['Tarot', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'], ['Biorhythm', '/biorhythm']]} />
             <FootCol color="#8FC1E6" title="SCIENCE" links={[['Life Expectancy', '/life-expectancy'], ['Biological Age', '/biological-age'], ['Country Comparison', '/country-comparison'], ['Planetary Age', '/planetary-age'], ['Planetary Weight', '/weight-on-planets']]} />
             <FootCol color="#FFFFFF" title="BORNCLOCK" links={[['How it works', '/how-it-works'], ['Accuracy', '/accuracy'], ['Answers', '/answers'], ['Articles', '/articles'], ['About', '/about'], ['Editorial Policy', '/editorial-policy'], ['Pricing', '/pricing'], ['Privacy', '/privacy'], ['Contact', '/contact']]} />

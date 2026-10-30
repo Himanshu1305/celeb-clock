@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Gift, Check } from 'lucide-react';
@@ -70,12 +70,12 @@ export function BirthdayReportShowcase() {
               </div>
               <div className="flex flex-wrap gap-3 pt-1">
                 <Button asChild size="lg" className="gap-2">
-                  <Link to="/birthday-report">
+                  <Link to="/birthday-report/">
                     Create a Birthday Blueprint <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>
                 <Button asChild size="lg" variant="secondary">
-                  <Link to="/pricing">See what's included</Link>
+                  <Link to="/pricing/">See what's included</Link>
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground pt-1">

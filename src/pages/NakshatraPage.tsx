@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { NAKSHATRA_PADA_AKSHARAS } from '@/data/nakshatraAksharas';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -53,7 +54,7 @@ export default function NakshatraPage() {
         theme="vedic"
         testId="nakshatra-page"
         seo={<SEO title="27 Nakshatras — Vedic Birth Stars | BornClock" description="Explore all 27 Nakshatras (lunar mansions) — deity, symbol, ruling planet, meaning and name sounds." canonicalUrl="/nakshatra" />}
-        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Nakshatra' }}
+        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Nakshatra' }}
         eyebrow="Nakshatra"
         h1="Nakshatra not found"
       >
@@ -102,8 +103,8 @@ export default function NakshatraPage() {
       theme="vedic"
       testId="nakshatra-page"
       seo={<SEO title={title} description={description} canonicalUrl={`/nakshatra/${extra.slug}`} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Nakshatras', to: '/nakshatra' }], current: extra.name }}
-      footer={{ tagline: 'The 27 Nakshatras, computed from your real birth Moon.', nav: [{ label: 'All Nakshatras', to: '/nakshatra' }, { label: 'Free Kundli', to: '/kundali' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Nakshatras', to: '/nakshatra/' }], current: extra.name }}
+      footer={{ tagline: 'The 27 Nakshatras, computed from your real birth Moon.', nav: [{ label: 'All Nakshatras', to: '/nakshatra/' }, { label: 'Free Kundli', to: '/kundali/' }] }}
       eyebrow={`Nakshatra ${number} of 27`}
       h1={`${extra.name} Nakshatra`}
       lead={`${meaning.meaning}`}
@@ -148,7 +149,7 @@ export default function NakshatraPage() {
               <li><strong className="text-foreground"><TermTip id="nadi">Nadi</TermTip>:</strong> {NADI_NOTE[extra.nadi]} The heaviest koota in Kundali matching.</li>
             </ul>
             <p className="text-xs text-muted-foreground mt-2">
-              These feed the 36-point <Link to="/kundali-match" className="underline">Kundali matching</Link> score.
+              These feed the 36-point <Link to="/kundali-match/" className="underline">Kundali matching</Link> score.
             </p>
           </div>
 
@@ -177,7 +178,7 @@ export default function NakshatraPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Find your own Nakshatra exactly, from your birth date, time and place.</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
       </section>

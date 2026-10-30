@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -14,7 +15,7 @@ export default function BlueZonesFactor() {
         theme="science"
         testId="bluezones-factor"
         seo={<SEO title="Blue Zones Power 9 — Habits of the World's Longest-Lived People | BornClock" description="The nine habits shared by the world's longevity hotspots." canonicalUrl="/blue-zones" />}
-        breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Blue Zones' }}
+        breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Blue Zones' }}
         eyebrow="Blue Zones"
         h1="Power 9 factor not found"
       >
@@ -47,8 +48,8 @@ export default function BlueZonesFactor() {
         description={`${data.whatItIs} How it works, where it's seen (${data.regions}), and how to apply it — with honest sources.`}
         canonicalUrl={`/blue-zones/${data.slug}`}
       />}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }, { label: 'Blue Zones', to: '/blue-zones' }], current: data.title }}
-      footer={{ tagline: 'The Power 9 habits of the world\'s longest-lived communities.', nav: [{ label: 'All Power 9', to: '/blue-zones' }, { label: 'Life expectancy', to: '/life-expectancy' }] }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }, { label: 'Blue Zones', to: '/blue-zones/' }], current: data.title }}
+      footer={{ tagline: 'The Power 9 habits of the world\'s longest-lived communities.', nav: [{ label: 'All Power 9', to: '/blue-zones/' }, { label: 'Life expectancy', to: '/life-expectancy/' }] }}
       eyebrow="Blue Zones · Power 9"
       h1={data.title}
       lead={data.whatItIs}
@@ -93,7 +94,7 @@ export default function BlueZonesFactor() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">See how your own habits add up.</p>
-            <Link to="/life-expectancy" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life expectancy calculator →</Link>
+            <Link to="/life-expectancy/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Life expectancy calculator →</Link>
           </div>
         </div>
       </section>

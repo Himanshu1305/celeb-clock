@@ -10,7 +10,7 @@
  * emoji icons aria-hidden; language selector is a real labelled control.
  */
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import type { LucideIcon } from 'lucide-react';
 import { ArrowRight } from 'lucide-react';
 import { HubLayout } from '@/components/central';

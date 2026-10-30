@@ -8,7 +8,7 @@ import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { BirthDetailsForm, type BirthDetails } from '@/components/BirthDetailsForm';
 import { useSavedProfile } from '@/hooks/useSavedProfile';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { WEARING_RITUAL, sizingRuleForAge, MINOR_SIZING_NOTE } from '@/lib/vedic/gemstones';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -72,15 +72,15 @@ export default function GemstonePage() {
           description="Informational Vedic gemstone suggestions based on your Ascendant lord and computed planetary strength — a traditional association, not a medical or guaranteed-effect claim. No sales."
           canonicalUrl="/gemstones" ogType="website" />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Gemstones', edition: 'Ratna · Ascendant-lord stone' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Gemstones', edition: 'Ratna · Ascendant-lord stone' }}
       footer={{
         tagline: 'Informational Vedic gemstone guidance from your Ascendant lord — no sales, no guarantees.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Rashi Ratna', to: '/rashi-ratna' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Sade Sati', to: '/sade-sati' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Rashi Ratna', to: '/rashi-ratna/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Sade Sati', to: '/sade-sati/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -90,7 +90,7 @@ export default function GemstonePage() {
             <div><span className="eyebrow"><TermTip id="ratna">Ratna</TermTip></span><h1>Gemstone Suggestions.</h1></div>
             <p>A traditional, informational suggestion based on your Ascendant lord and computed planetary strength — classical association only, not a medical claim or guarantee, and we sell nothing.</p>
           </div>
-          <TrustStrip claim="We show you the method — the ruler of your rising sign and your chart's computed planetary strengths — and why each stone is suggested." href="/how-it-works#vedic" />
+          <TrustStrip claim="We show you the method — the ruler of your rising sign and your chart's computed planetary strengths — and why each stone is suggested." href="/how-it-works/#vedic" />
           <div className="form-band" style={{ marginTop: 16 }}>
             <div><h3>Your birth details</h3><p className="small muted">The stone is matched to your Ascendant lord.</p></div>
             <BirthDetailsForm initial={initial} submitLabel="Suggest my gemstone" loadingLabel="Analysing…" loading={loading} onSubmit={run} showSaveOption saveChecked={saveChecked} onSaveCheckedChange={setSaveChecked} testIdPrefix="gemstone" />
@@ -126,7 +126,7 @@ export default function GemstonePage() {
 
             {/* Part AI — honest cross-reference to the simpler Rashi Ratna tool. */}
             <p data-testid="gem-rashiratna-crossref" className="text-sm text-muted-foreground">
-              Looking for the quick, Moon-sign version instead? The <Link to="/rashi-ratna" className="text-primary hover:underline font-medium">Rashi Ratna</Link> <TermTip id="rashiRatna" iconOnly /> page gives one stone per zodiac sign from the ruling planet alone — a general starting point. This page is the more precise, full-chart recommendation, so if the two differ, this one is the more personalised.
+              Looking for the quick, Moon-sign version instead? The <Link to="/rashi-ratna/" className="text-primary hover:underline font-medium">Rashi Ratna</Link> <TermTip id="rashiRatna" iconOnly /> page gives one stone per zodiac sign from the ruling planet alone — a general starting point. This page is the more precise, full-chart recommendation, so if the two differ, this one is the more personalised.
             </p>
 
             {report.avoid.length > 0 && (

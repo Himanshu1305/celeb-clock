@@ -12,7 +12,7 @@
  * gets the static, sourced local guide (CityLocalGuide, Hindi text).
  */
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { AutoTranslatedNotice } from '@/components/AutoTranslatedNotice';
@@ -57,8 +57,8 @@ export default function HindiPanchangPage() {
       theme="vedic"
       testId="hi-panchang-page"
       seo={<SEO title={meta.title} description={meta.description} canonicalUrl={path} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'राशिफल', to: '/hi/rashifal' }], current: `पंचांग · ${cityName}` }}
-      footer={{ tagline: 'वास्तविक सूर्योदय और सूर्यास्त से गणना किया गया दैनिक पंचांग।', nav: [{ label: 'राशिफल', to: '/hi/rashifal' }, { label: 'Panchang (English)', to: '/panchang' }, { label: 'मुहूर्त', to: '/muhurat' }] }}
+      breadcrumb={{ trail: [{ label: 'राशिफल', to: '/hi/rashifal/' }], current: `पंचांग · ${cityName}` }}
+      footer={{ tagline: 'वास्तविक सूर्योदय और सूर्यास्त से गणना किया गया दैनिक पंचांग।', nav: [{ label: 'राशिफल', to: '/hi/rashifal/' }, { label: 'Panchang (English)', to: '/panchang/' }, { label: 'मुहूर्त', to: '/muhurat/' }] }}
       eyebrow="पंचांग"
       h1={<DailyH1 entry={entry} fallback={meta.h1} />}
       lead={<span data-testid="hi-panchang-date">{isIndex || isCustom ? `${cityName} · ` : ''}<DailyDate entry={entry} fallback={formatLongDateHi(dateKey)} /></span>}
@@ -113,12 +113,12 @@ export default function HindiPanchangPage() {
             <h2 className="font-semibold text-foreground">यह पंचांग कैसे बनता है</h2>
             <p>पंचांग ("पाँच अंग") किसी दिन की तिथि, नक्षत्र, योग, करण और वार बताता है। ये पाँचों अंग स्थानीय सूर्योदय के समय पढ़े जाते हैं, और निरयण (लाहिड़ी अयनांश) सूर्य-चंद्र से गणना होते हैं — वही इंजन जो आपकी कुंडली के पीछे है।</p>
             <p>सूर्योदय-सूर्यास्त {cityName} के अक्षांश-देशांतर के लिए सूर्य की वास्तविक स्थिति से निकाले गए हैं। राहु काल, गुलिक और यमगण्ड दिन के आठ बराबर भागों में से एक-एक भाग हैं; अभिजित, दुर्मुहूर्त और ब्रह्म मुहूर्त दिन या रात के पंद्रहवें भाग हैं; अमृत काल और वर्ज्यम् दिन के नक्षत्र के तय हिस्से हैं। समय निकटतम मिनट तक गोल किए गए हैं।</p>
-            <p><Link to={ctl.linkTo('panchang')} className="underline" data-testid="hi-panchang-english-link">View in English ({place.name}) →</Link> · <Link to="/glossary" className="underline">शब्दकोश (Glossary) →</Link></p>
+            <p><Link to={ctl.linkTo('panchang')} className="underline" data-testid="hi-panchang-english-link">View in English ({place.name}) →</Link> · <Link to="/glossary/" className="underline">शब्दकोश (Glossary) →</Link></p>
           </div>
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">कोई महत्वपूर्ण कार्य के लिए तिथि चुन रहे हैं? शुभ मुहूर्त खोजें।</p>
-            <Link to="/muhurat" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">मुहूर्त खोजें →</Link>
+            <Link to="/muhurat/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">मुहूर्त खोजें →</Link>
           </div>
         </div>
       </section>

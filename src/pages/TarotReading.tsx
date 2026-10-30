@@ -8,7 +8,8 @@
  * (evergreen — no prerendered page per date).
  */
 import { useState, useMemo } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { TermTip } from '@/components/vedic/TermTip';
 import { SEO, FAQSchema } from '@/components/SEO';
@@ -72,16 +73,16 @@ export default function TarotReading() {
           ogImage="https://bornclock.com/og/zodiac.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Tarot Reading' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'Tarot Reading' }}
       footer={{
         tagline: 'Draw your own tarot — a daily card, a yes/no answer, and a 3-card love spread, free.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Tarot by Birthday', to: '/tarot-card-by-birthday' },
-          { label: 'All 78 Cards', to: '/tarot/cards' },
-          { label: 'Zodiac Signs', to: '/zodiac' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Tarot by Birthday', to: '/tarot-card-by-birthday/' },
+          { label: 'All 78 Cards', to: '/tarot/cards/' },
+          { label: 'Zodiac Signs', to: '/zodiac/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · A reflective tool, not a prediction.',
       }}
@@ -213,10 +214,10 @@ export default function TarotReading() {
           {/* Links + FAQ */}
           <div className="rounded-lg bg-muted/40 p-5 text-sm text-muted-foreground mt-8">
             Prefer a reading tied to your birth date?{' '}
-            <Link to="/tarot-card-by-birthday" className="underline text-foreground">Find your birth-card →</Link>
+            <Link to="/tarot-card-by-birthday/" className="underline text-foreground">Find your birth-card →</Link>
             <br />
             Want to look a card up?{' '}
-            <Link to="/tarot/cards" className="underline text-foreground" data-testid="tarot-all-cards-link">All 78 tarot card meanings →</Link>
+            <Link to="/tarot/cards/" className="underline text-foreground" data-testid="tarot-all-cards-link">All 78 tarot card meanings →</Link>
           </div>
 
           <Card className="glass-card mt-8">

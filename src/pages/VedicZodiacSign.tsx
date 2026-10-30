@@ -1,4 +1,5 @@
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -23,10 +24,10 @@ export default function VedicZodiacSign() {
   const rashiName = RASHI_SLUG_TO_NAME[slug];
   const data = VEDIC_SIGN_EXTENDED[slug];
 
-  if (!data || !rashiName) return <Navigate to="/vedic-zodiac" replace />;
+  if (!data || !rashiName) return <Navigate to="/vedic-zodiac/" replace />;
 
   const signInfo = VEDIC_SIGNS.find((s) => s.name === rashiName);
-  if (!signInfo) return <Navigate to="/vedic-zodiac" replace />;
+  if (!signInfo) return <Navigate to="/vedic-zodiac/" replace />;
   const engineRashi = RASHI_NAMES[VEDIC_SIGNS.indexOf(signInfo)];
   const moonExamples = (RASHI_MOON_EXAMPLES as Record<string, { global: { name: string; slug: string; born: number }[] }>)[engineRashi]?.global ?? [];
 
@@ -57,15 +58,15 @@ export default function VedicZodiacSign() {
           ogImage="https://bornclock.com/og/zodiac.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Indian Zodiac (Vedic)', to: '/vedic-zodiac' }], current: `${rashiName} Rashi` }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Indian Zodiac (Vedic)', to: '/vedic-zodiac/' }], current: `${rashiName} Rashi` }}
       footer={{
         tagline: `${rashiName} Rashi in Jyotish — personality, ruling planet, and Ayurveda connection.`,
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Gemstones (chart-based)', to: '/gemstones' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Moon Sign', to: '/moon-sign/' },
+          { label: 'Gemstones (chart-based)', to: '/gemstones/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -180,7 +181,7 @@ export default function VedicZodiacSign() {
                 rule helpful houses, and the running Dasha — not from a Sun sign or a single Rashi. A stone that
                 suits one {rashiName} native can be wrong for another, so we don't give a {rashiName} gemstone here.
               </p>
-              <Link to="/gemstones" className="inline-block mt-3 text-sm font-semibold text-yellow-900 underline">
+              <Link to="/gemstones/" className="inline-block mt-3 text-sm font-semibold text-yellow-900 underline">
                 Get chart-based gemstone guidance from your birth details →
               </Link>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -281,7 +282,7 @@ export default function VedicZodiacSign() {
             >
               ← {prevSign?.emoji} {prevName}
             </Link>
-            <Link to="/vedic-zodiac" className="text-sm text-muted-foreground hover:text-foreground">
+            <Link to="/vedic-zodiac/" className="text-sm text-muted-foreground hover:text-foreground">
               All Vedic Rashis
             </Link>
             <Link

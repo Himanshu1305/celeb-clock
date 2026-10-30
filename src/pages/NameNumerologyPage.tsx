@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { JsonLd } from '@/components/JsonLd';
@@ -70,15 +70,15 @@ export default function NameNumerologyPage() {
           canonicalUrl="/name-numerology"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Name Numerology', edition: 'Chaldean name number · Western Expression / Soul Urge / Personality' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'Name Numerology', edition: 'Chaldean name number · Western Expression / Soul Urge / Personality' }}
       footer={{
         tagline: "Your Chaldean name number and compound meaning first, then the Western Expression, Soul Urge and Personality numbers — computed from your name's letters.",
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Tarot by Birthday', to: '/tarot-card-by-birthday' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Tarot by Birthday', to: '/tarot-card-by-birthday/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -99,7 +99,7 @@ export default function NameNumerologyPage() {
         }} />
         <div className="max-w-2xl mx-auto px-4 py-10">
           <PageTagline />
-          <TrustStrip claim="Calculated from the letters of your actual name — Chaldean (Indian) and Pythagorean (Western) values, both labelled." href="/how-it-works#numerology" />
+          <TrustStrip claim="Calculated from the letters of your actual name — Chaldean (Indian) and Pythagorean (Western) values, both labelled." href="/how-it-works/#numerology" />
 
           <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
             <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
@@ -181,7 +181,7 @@ export default function NameNumerologyPage() {
                       </div>
                     ))}
                   </div>
-                  <p className="text-xs text-gray-500 mt-3">Chart: {CHALDEAN_LETTER_TABLE.map(r => `${r.value} = ${r.letters}`).join(' · ')}. <Link to="/chaldean-numerology" className="text-[#6E5AA6] underline">How the Chaldean chart and compound numbers work</Link>.</p>
+                  <p className="text-xs text-gray-500 mt-3">Chart: {CHALDEAN_LETTER_TABLE.map(r => `${r.value} = ${r.letters}`).join(' · ')}. <Link to="/chaldean-numerology/" className="text-[#6E5AA6] underline">How the Chaldean chart and compound numbers work</Link>.</p>
                 </div>
               )}
 
@@ -268,7 +268,7 @@ export default function NameNumerologyPage() {
               <div className="bg-[#0E2238] rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get your complete Birthday Intelligence Report</p>
                 <p className="text-[#6E5AA6] text-sm mb-4">Your name numerology + moon sign + tarot card + 12 more sections — personalised to your exact birthday.</p>
-                <Link to="/birthday-report" className="inline-block bg-white text-[#6E5AA6] px-8 py-3 rounded-xl font-semibold hover:bg-[#6E5AA6]/10 transition-colors">
+                <Link to="/birthday-report/" className="inline-block bg-white text-[#6E5AA6] px-8 py-3 rounded-xl font-semibold hover:bg-[#6E5AA6]/10 transition-colors">
                   Generate My Report → {reportPriceLabel}
                 </Link>
               </div>
@@ -318,12 +318,12 @@ export default function NameNumerologyPage() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { text: 'Numerology Calculator (Mulank & Bhagyank)', href: '/numerology' },
-                { text: 'Chaldean chart & compound numbers', href: '/chaldean-numerology' },
-                { text: 'Name correction (compare spellings)', href: '/name-correction' },
-                { text: 'Tarot by Birthday', href: '/tarot-card-by-birthday' },
-                { text: 'Moon Sign Calculator', href: '/moon-sign' },
-                { text: 'Biorhythm Calculator', href: '/biorhythm' },
+                { text: 'Numerology Calculator (Mulank & Bhagyank)', href: '/numerology/' },
+                { text: 'Chaldean chart & compound numbers', href: '/chaldean-numerology/' },
+                { text: 'Name correction (compare spellings)', href: '/name-correction/' },
+                { text: 'Tarot by Birthday', href: '/tarot-card-by-birthday/' },
+                { text: 'Moon Sign Calculator', href: '/moon-sign/' },
+                { text: 'Biorhythm Calculator', href: '/biorhythm/' },
               ].map(item => (
                 <Link key={item.href} to={item.href}
                   className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { CollectionLayout } from '@/components/central';
 import { TrustStrip } from '@/components/paj/TrustStrip';
@@ -48,15 +48,15 @@ export default function NumerologyPage() {
           canonicalUrl="/numerology"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Numerology', edition: 'Mulank · Bhagyank · Name number · Life Path' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'Numerology', edition: 'Mulank · Bhagyank · Name number · Life Path' }}
       footer={{
         tagline: 'Mulank, Bhagyank, name number and Western Life Path — computed from your actual birth date and name, with the working shown.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Name Numerology', to: '/name-numerology' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Name Numerology', to: '/name-numerology/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -74,14 +74,14 @@ export default function NumerologyPage() {
       </Helmet>
 
       <PageTagline />
-      <TrustStrip claim="Calculated from your actual birth date and name — Indian and Western methods side by side, never a generic horoscope." href="/how-it-works#numerology" />
+      <TrustStrip claim="Calculated from your actual birth date and name — Indian and Western methods side by side, never a generic horoscope." href="/how-it-works/#numerology" />
 
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Calculator — date input always visible and editable (Batch 9) */}
         <section className="mb-8">
           <NumerologyCalculator initialDate={birthDate} onDateChange={setBirthDate} />
           <p className="text-xs text-muted-foreground mt-3">
-            Indian numbers (Mulank, Bhagyank, name number) are reduced to 1–9, as Indian calculators do; a Western master number (11, 22, 33) is shown separately and labelled. New to these terms? Read the <Link to="/articles/numerology-by-date-of-birth" className="text-primary hover:underline">India guide to Mulank, Bhagyank and Life Path</Link>, or use the <Link to="/name-numerology" className="text-primary hover:underline">full name calculator</Link>.
+            Indian numbers (Mulank, Bhagyank, name number) are reduced to 1–9, as Indian calculators do; a Western master number (11, 22, 33) is shown separately and labelled. New to these terms? Read the <Link to="/articles/numerology-by-date-of-birth/" className="text-primary hover:underline">India guide to Mulank, Bhagyank and Life Path</Link>, or use the <Link to="/name-numerology/" className="text-primary hover:underline">full name calculator</Link>.
           </p>
         </section>
 
@@ -223,18 +223,18 @@ export default function NumerologyPage() {
         <div className="rounded-xl border border-border p-6 mb-8">
           <p className="font-semibold text-foreground mb-3">More numerology tools</p>
           <div className="grid sm:grid-cols-2 gap-3 text-sm">
-            <Link to="/name-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Name numerology (Expression & Soul Urge)</Link>
-            <Link to="/chaldean-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Chaldean numerology</Link>
-            <Link to="/name-correction" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Name correction (Chaldean)</Link>
-            <Link to="/business-name-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Business name numerology</Link>
-            <Link to="/mobile-number-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Mobile number numerology</Link>
-            <Link to="/house-number-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">House number numerology</Link>
-            <Link to="/vehicle-number-numerology" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Vehicle number numerology</Link>
-            <Link to="/lo-shu-grid-calculator" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Lo Shu grid</Link>
-            <Link to="/kua-number-calculator" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Kua number (Feng Shui)</Link>
-            <Link to="/love-calculator" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Love calculator by name (for fun)</Link>
-            <Link to="/attitude-number" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Birthday & attitude number</Link>
-            <Link to="/personal-year-number" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Personal year number</Link>
+            <Link to="/name-numerology/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Name numerology (Expression & Soul Urge)</Link>
+            <Link to="/chaldean-numerology/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Chaldean numerology</Link>
+            <Link to="/name-correction/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Name correction (Chaldean)</Link>
+            <Link to="/business-name-numerology/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Business name numerology</Link>
+            <Link to="/mobile-number-numerology/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Mobile number numerology</Link>
+            <Link to="/house-number-numerology/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">House number numerology</Link>
+            <Link to="/vehicle-number-numerology/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Vehicle number numerology</Link>
+            <Link to="/lo-shu-grid-calculator/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Lo Shu grid</Link>
+            <Link to="/kua-number-calculator/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Kua number (Feng Shui)</Link>
+            <Link to="/love-calculator/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Love calculator by name (for fun)</Link>
+            <Link to="/attitude-number/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Birthday & attitude number</Link>
+            <Link to="/personal-year-number/" className="rounded-lg border border-border px-3 py-2 hover:border-primary">Personal year number</Link>
           </div>
         </div>
 
@@ -242,11 +242,11 @@ export default function NumerologyPage() {
         <div className="bg-muted/50 rounded-xl p-6 text-center mb-8">
           <p className="text-muted-foreground text-sm mb-4">Explore more BornClock tools</p>
           <div className="flex flex-wrap gap-3 justify-center text-sm">
-            <Link to="/zodiac" className="text-primary hover:underline">Zodiac Signs</Link>
+            <Link to="/zodiac/" className="text-primary hover:underline">Zodiac Signs</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/birthstone" className="text-primary hover:underline">Birthstone Finder</Link>
+            <Link to="/birthstone/" className="text-primary hover:underline">Birthstone Finder</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/generation" className="text-primary hover:underline">Which Generation Are You?</Link>
+            <Link to="/generation/" className="text-primary hover:underline">Which Generation Are You?</Link>
           </div>
         </div>
 

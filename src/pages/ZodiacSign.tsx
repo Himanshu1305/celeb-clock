@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -37,15 +38,15 @@ export default function ZodiacSign() {
             ogImage="https://bornclock.com/og/zodiac.png"
           />
         )}
-        breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Zodiac Signs', to: '/zodiac' }], current: 'Sign Not Found' }}
+        breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Zodiac Signs', to: '/zodiac/' }], current: 'Sign Not Found' }}
         footer={{
           tagline: 'Explore all 12 Western zodiac signs — dates, traits and compatibility.',
           nav: [
-            { label: 'Mystic Corner', to: '/mystic-corner' },
-            { label: 'Numerology', to: '/numerology' },
-            { label: 'Zodiac', to: '/zodiac' },
-            { label: 'Compatibility', to: '/compatibility' },
-            { label: 'Privacy', to: '/privacy' },
+            { label: 'Mystic Corner', to: '/mystic-corner/' },
+            { label: 'Numerology', to: '/numerology/' },
+            { label: 'Zodiac', to: '/zodiac/' },
+            { label: 'Compatibility', to: '/compatibility/' },
+            { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock · Calculated, not templated.',
         }}
@@ -56,7 +57,7 @@ export default function ZodiacSign() {
           <div className="text-center py-24">
             <p className="text-5xl mb-6">🔍</p>
             <p className="text-muted-foreground mb-8">That zodiac sign doesn't exist in our database.</p>
-            <Link to="/zodiac" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
+            <Link to="/zodiac/" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
               Back to All Signs
             </Link>
           </div>
@@ -94,15 +95,15 @@ export default function ZodiacSign() {
           ogImage="https://bornclock.com/og/zodiac.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Zodiac Signs', to: '/zodiac' }], current: `${data.name} Zodiac` }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Zodiac Signs', to: '/zodiac/' }], current: `${data.name} Zodiac` }}
       footer={{
         tagline: `${data.name} (${data.dateRange}) — traits, compatibility and famous ${data.name} personalities.`,
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -324,11 +325,11 @@ export default function ZodiacSign() {
         <div className="bg-muted/50 rounded-xl p-6 text-center">
           <p className="text-muted-foreground text-sm mb-4">Explore more BornClock tools</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link to="/zodiac" className="text-sm text-primary hover:underline">All Zodiac Signs</Link>
+            <Link to="/zodiac/" className="text-sm text-primary hover:underline">All Zodiac Signs</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/birthstone" className="text-sm text-primary hover:underline">Birthstone Finder</Link>
+            <Link to="/birthstone/" className="text-sm text-primary hover:underline">Birthstone Finder</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/numerology" className="text-sm text-primary hover:underline">Numerology</Link>
+            <Link to="/numerology/" className="text-sm text-primary hover:underline">Numerology</Link>
             <span className="text-muted-foreground">·</span>
             <Link to="/" className="text-sm text-primary hover:underline">Age Calculator</Link>
           </div>

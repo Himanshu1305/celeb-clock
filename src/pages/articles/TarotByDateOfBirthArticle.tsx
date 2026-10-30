@@ -108,7 +108,7 @@ function TarotCalculator() {
               to <strong>{profile.tarot_card}</strong> — {profile.tarot_meaning.charAt(0).toLowerCase() + profile.tarot_meaning.slice(1)}.
             </p>
           )}
-          <a href={`/birthday-report?dob=${dob}`}
+          <a href={`/birthday-report/?dob=${dob}`}
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-[#0E2238]">
             See my full birthday profile →
@@ -160,15 +160,15 @@ export function TarotByDateOfBirthArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Tarot by Date of Birth' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Tarot by Date of Birth' }}
       footer={{
         tagline: 'Find your tarot birth card by date of birth — month + day + year, reduced to the Major Arcana.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -299,7 +299,7 @@ export function TarotByDateOfBirthArticle() {
               BornClock reads your date of birth for your tarot birth card, zodiac sign, Life Path
               number, Vedic Rashi, lucky stone and more — all in one free profile.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-[#6E5AA6] font-black px-6 py-2.5
                           rounded-full hover:bg-[#6E5AA6]/10 transition-colors">
               Get My Free Birthday Profile →
@@ -331,12 +331,12 @@ export function TarotByDateOfBirthArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
           <ul className="list-disc pl-6 text-[#6E5AA6] mb-10 space-y-1">
             <li>
-              <a href="/articles/numerology-by-date-of-birth" className="hover:underline">
+              <a href="/articles/numerology-by-date-of-birth/" className="hover:underline">
                 Numerology by Date of Birth — Find Your Life Path Number
               </a>
             </li>
             <li>
-              <a href="/articles/moon-sign-by-date-of-birth" className="hover:underline">
+              <a href="/articles/moon-sign-by-date-of-birth/" className="hover:underline">
                 Moon Sign by Date of Birth — Find Your Vedic Rashi
               </a>
             </li>
@@ -349,7 +349,7 @@ export function TarotByDateOfBirthArticle() {
               Your tarot cards are one layer. BornClock also shows your Western zodiac, Vedic
               Rashi, Nakshatra, Life Path number, lucky stone and more — all from your date of birth.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Generate My Free Birthday Profile →

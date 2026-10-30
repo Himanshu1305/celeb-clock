@@ -153,7 +153,7 @@ export function LongevitySupplementsArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: "Longevity Supplements — Which Supplement Actually Works, and What's Just Hype" }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: "Longevity Supplements — Which Supplement Actually Works, and What's Just Hype" }}
       eyebrow="Longevity"
       h1="Longevity Supplements — Which Supplement Actually Works, and What's Just Hype"
       lead={'Walk into any pharmacy or scroll any wellness feed in India and you will be promised a longer life in a bottle. NMN, resveratrol, "cellular anti-aging" capsules, exotic mushroom blends — the marketing is relentless and the prices are high. The honest truth is that only a handful of supplements have real, repeatable science behind them, and most of the popular ones are hype. This guide ranks the best-known longevity supplements strictly by the strength of their evidence, notes availability and cost in India, and keeps one message at the centre: food first, supplements only to fill genuine gaps.'}
@@ -252,7 +252,7 @@ export function LongevitySupplementsArticle() {
               Supplements are a small lever. Sleep, movement, diet and stress matter far more.
               See how your habits shape your lifespan with our free longevity calculator.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Try the Longevity Calculator →
             </a>
@@ -273,7 +273,7 @@ export function LongevitySupplementsArticle() {
               Curious what really moves the needle on how long you live? Your daily habits
               outweigh any pill.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Estimate My Lifespan Free →
             </a>
@@ -281,12 +281,12 @@ export function LongevitySupplementsArticle() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Related Articles</h2>
           <div className="grid gap-3 mb-6">
-            <a href="/articles/longevity-foods-india"
+            <a href="/articles/longevity-foods-india/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-[#2F6FB0]/30 transition-colors">
               <div className="font-bold text-gray-900">Longevity Foods in India</div>
               <div className="text-sm text-gray-600">The food-first foundation these supplements are meant to support.</div>
             </a>
-            <a href="/articles/how-to-live-to-100"
+            <a href="/articles/how-to-live-to-100/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-[#2F6FB0]/30 transition-colors">
               <div className="font-bold text-gray-900">How to Live to 100</div>
               <div className="text-sm text-gray-600">The habits and lifestyle patterns of the world's longest-lived people.</div>

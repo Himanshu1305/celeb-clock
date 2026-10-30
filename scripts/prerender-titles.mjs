@@ -168,7 +168,6 @@ const ANSWER_DESC = {
 const ANSWERS = {
   'how-long-will-i-live':                  'How Long Will I Live? A Science-Based Answer | BornClock',
   'what-is-my-biological-age':             'What Is My Biological Age? The Short Answer + Free Test | BornClock',
-  'who-shares-my-birthday':                'Which Famous People Share My Birthday? | BornClock',
   'how-old-am-i-on-mars':                  'How Old Am I on Mars and Other Planets? | BornClock',
   'what-is-my-zodiac-sign':                'What Is My Zodiac Sign? Western, Vedic and Chinese Explained | BornClock',
   'what-is-my-life-path-number':           'What Is My Life Path Number and What Does It Mean? | BornClock',
@@ -233,7 +232,8 @@ const STATIC = {
   '/life-expectancy':       { title: 'Life Expectancy Calculator — How Long Will I Live? | BornClock', desc: 'Science-based life expectancy calculator using WHO, CDC, and Harvard longevity research. Get your personalised lifespan estimate and longevity score.' },
   '/longevity-calculator':  { title: 'Longevity Calculator — How Long Will You Live? | BornClock', desc: 'Free longevity calculator using WHO, Harvard and NIH research. 8-factor quiz gives your personalised life expectancy and 90-day action plan. Takes 3 minutes.' },
   '/how-long-will-i-live': { title: 'How Long Will I Live? Life Expectancy Quiz | BornClock', desc: 'Answer 8 questions to get your personalised life expectancy based on WHO, Harvard and NIH research. Free instant result with a 90-day action plan.' },
-  '/celebrity-birthday':    { title: 'Everything Your Birthday Reveals — Celebrity Twins | BornClock', desc: 'Enter your birthday: see your celebrity birthday twins, Western zodiac and numerology Life Path, and unlock the full Birthday Blueprint. Real celebrities, real dates, real math.' },
+  // Batch 11 (GSC): the target page for "who do i share a birthday with" / "what famous person shares my birthday".
+  '/celebrity-birthday':    { title: 'Who Shares My Birthday? Celebrities Born on Your Day | BornClock', desc: "Who shares your birthday? Enter your date to see the famous people born on the same day — real profiles ranked by recognition — plus today's celebrity birthdays." },
   '/birthday':              { title: 'Birthday Personality by Date — All 365 Days | BornClock', desc: 'Explore birthday personality profiles for every day of the year. Zodiac sign, life path number, famous people, and personality traits for your exact birthday.' },
   '/blog':                  { title: 'Health & Longevity Blog — Science-Backed Articles | BornClock', desc: 'Science-backed articles on longevity, life expectancy, birthday science, zodiac, and healthy ageing. Written by BornClock editorial team with sourced references.' },
   '/about':                 { title: 'About BornClock — Built in India, Designed for the World | BornClock', desc: 'BornClock is a science-first birthday and longevity platform. Learn about our data sources, methodology, editorial standards, and the team behind the product.' },

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { AgeCalculator } from '@/components/AgeCalculator';
 import { ShareableCard } from '@/components/ShareableCard';
@@ -89,14 +89,14 @@ const AgeCalculatorPage = () => {
               on the page. The single FAQPage comes from the visible <PageFAQ> below. */}
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday' }], current: 'Age Calculator' }}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday/' }], current: 'Age Calculator' }}
       footer={{
         tagline: 'Your exact age in years, months, days, hours and seconds — live.',
         nav: [
-          { label: 'Age Calculator', to: '/age-calculator' },
-          { label: 'Birthday Countdown', to: '/birthday-countdown' },
-          { label: "Today's Birthdays", to: '/todays-birthdays' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Age Calculator', to: '/age-calculator/' },
+          { label: 'Birthday Countdown', to: '/birthday-countdown/' },
+          { label: "Today's Birthdays", to: '/todays-birthdays/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Age & birthday tools.',
       }}
@@ -153,10 +153,10 @@ const AgeCalculatorPage = () => {
         <section className="max-w-3xl mx-auto mb-12 px-4">
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">Related Questions</h2>
           <div className="grid sm:grid-cols-2 gap-2">
-            <Link to="/answers/how-many-days-until-my-birthday" className="text-sm text-primary hover:underline">→ How many days until my birthday?</Link>
-            <Link to="/answers/how-to-calculate-age" className="text-sm text-primary hover:underline">→ How do I calculate my exact age?</Link>
-            <Link to="/answers/how-old-am-i-on-mars" className="text-sm text-primary hover:underline">→ How old am I on Mars?</Link>
-            <Link to="/answers/who-shares-my-birthday" className="text-sm text-primary hover:underline">→ Which famous people share my birthday?</Link>
+            <Link to="/answers/how-many-days-until-my-birthday/" className="text-sm text-primary hover:underline">→ How many days until my birthday?</Link>
+            <Link to="/answers/how-to-calculate-age/" className="text-sm text-primary hover:underline">→ How do I calculate my exact age?</Link>
+            <Link to="/answers/how-old-am-i-on-mars/" className="text-sm text-primary hover:underline">→ How old am I on Mars?</Link>
+            <Link to="/celebrity-birthday/" className="text-sm text-primary hover:underline">→ Who shares my birthday?</Link>
           </div>
         </section>
 
@@ -165,11 +165,11 @@ const AgeCalculatorPage = () => {
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Related Topics</h2>
           <div className="flex flex-wrap gap-2">
             {[
-              { path: '/age-in-days', label: 'Age in Days' },
-              { path: '/age-in-seconds', label: 'Age in Seconds' },
-              { path: '/birthday-countdown', label: 'Birthday Countdown' },
-              { path: '/biological-age', label: 'Biological Age Test' },
-              { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
+              { path: '/age-in-days/', label: 'Age in Days' },
+              { path: '/age-in-seconds/', label: 'Age in Seconds' },
+              { path: '/birthday-countdown/', label: 'Birthday Countdown' },
+              { path: '/biological-age/', label: 'Biological Age Test' },
+              { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
             ].map((t) => (
               <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground transition-colors">{t.label}</Link>
             ))}

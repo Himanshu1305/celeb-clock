@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -32,8 +32,8 @@ export default function NakshatraIndex() {
         canonicalUrl="/nakshatra"
         ogImage="https://bornclock.com/og/vedic.png"
       />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Nakshatras' }}
-      footer={{ tagline: 'The 27 Nakshatras of Vedic astrology.', nav: [{ label: 'Free Kundli', to: '/kundali' }, { label: 'Kundali matching', to: '/kundali-match' }] }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Nakshatras' }}
+      footer={{ tagline: 'The 27 Nakshatras of Vedic astrology.', nav: [{ label: 'Free Kundli', to: '/kundali/' }, { label: 'Kundali matching', to: '/kundali-match/' }] }}
       eyebrow="Nakshatra"
       h1="The 27 Nakshatras"
       lead="The 27 lunar mansions of Vedic astrology — each a finer read of character than the sign alone. Tap any birth star for its meaning, ruling planet, matching attributes and name sounds."
@@ -56,14 +56,14 @@ export default function NakshatraIndex() {
 
           <p className="text-xs text-muted-foreground mt-6 mb-10">
             Each Nakshatra is a <TermTip id="nakshatra">lunar mansion</TermTip>. Your birth star is computed from your exact birth Moon.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           <PageFAQ items={faqItems} />
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Find your birth Nakshatra and pada, free.</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
       </section>

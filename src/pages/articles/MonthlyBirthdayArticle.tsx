@@ -327,7 +327,7 @@ export function MonthlyBirthdayArticle({ month }: { month: number }) {
             <p className="text-[#6E5AA6] font-bold mb-3">
               Born in {monthName}? Discover your complete birthday profile in seconds.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3
                           rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Generate My Free Birthday Profile →
@@ -403,7 +403,7 @@ export function MonthlyBirthdayArticle({ month }: { month: number }) {
               Vedic Rashi, Nakshatra, Chinese zodiac, Life Path number, lucky stone and more —
               all free, from your date of birth.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Generate My Free Birthday Profile →
@@ -414,19 +414,19 @@ export function MonthlyBirthdayArticle({ month }: { month: number }) {
             <h2 className="text-xl font-black text-gray-900 mb-3">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href={`/articles/famous-indians-born-in-${MONTH_NAMES[relatedA - 1].toLowerCase()}`}
+                <a href={`/articles/famous-indians-born-in-${MONTH_NAMES[relatedA - 1].toLowerCase()}/`}
                    className="text-[#6E5AA6] hover:underline">
                   Famous Indians Born in {MONTH_NAMES[relatedA - 1]}
                 </a>
               </li>
               <li>
-                <a href={`/articles/famous-indians-born-in-${MONTH_NAMES[relatedB - 1].toLowerCase()}`}
+                <a href={`/articles/famous-indians-born-in-${MONTH_NAMES[relatedB - 1].toLowerCase()}/`}
                    className="text-[#6E5AA6] hover:underline">
                   Famous Indians Born in {MONTH_NAMES[relatedB - 1]}
                 </a>
               </li>
               <li>
-                <a href="/articles/numerology-by-date-of-birth"
+                <a href="/articles/numerology-by-date-of-birth/"
                    className="text-[#6E5AA6] hover:underline">
                   Numerology by Date of Birth — Find Your Life Path Number
                 </a>

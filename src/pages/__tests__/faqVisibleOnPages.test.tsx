@@ -34,7 +34,6 @@ import WhatIsMyLifePathNumber from '../answers/WhatIsMyLifePathNumber';
 import WhatIsMyMoonSign from '../answers/WhatIsMyMoonSign';
 import WhatIsMyZodiacSign from '../answers/WhatIsMyZodiacSign';
 import WhatIsVedicAstrology from '../answers/WhatIsVedicAstrology';
-import WhoSharesMyBirthday from '../answers/WhoSharesMyBirthday';
 
 afterEach(cleanup);
 
@@ -75,7 +74,6 @@ const PAGES: Array<[string, ComponentType]> = [
   ['WhatIsMyMoonSign', WhatIsMyMoonSign],
   ['WhatIsMyZodiacSign', WhatIsMyZodiacSign],
   ['WhatIsVedicAstrology', WhatIsVedicAstrology],
-  ['WhoSharesMyBirthday', WhoSharesMyBirthday],
 ];
 
 describe('FAQPage Q&As are visible on the page', () => {

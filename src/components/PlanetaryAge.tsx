@@ -1,5 +1,5 @@
 import { useRef, useMemo, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { format } from 'date-fns';
@@ -674,7 +674,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             <div className="border border-[#6E5AA6]/30 rounded-xl p-4 bg-[#6E5AA6]/40 text-center max-w-sm mx-auto mb-4">
               <p className="font-semibold text-white mb-1">Save your Cosmic Profile</p>
               <p className="text-sm text-slate-300 mb-3">Sign in to save your planetary ages and get birthday reminders</p>
-              <Link to="/auth?redirect=/planetary-age" className="inline-block bg-[#0E2238] text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#0E2238] transition-colors text-sm">
+              <Link to="/auth/?redirect=/planetary-age" className="inline-block bg-[#0E2238] text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#0E2238] transition-colors text-sm">
                 Sign In to Save →
               </Link>
             </div>

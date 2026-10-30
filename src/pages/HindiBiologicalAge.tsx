@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 import BioAgeQuizHindi from '@/components/biological-age/BioAgeQuizHindi';
 import { HINDI_BIO_AGE_TITLE, HINDI_BIO_AGE_DESC } from '@/content/biologicalAgeMeta';
 
 const RELATED = [
-  { path: '/biological-age', label: 'Biological Age Calculator' },
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/biological-age-vs-chronological-age', label: 'Biological vs Chronological Age' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/biological-age/', label: 'Biological Age Calculator' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/biological-age-vs-chronological-age/', label: 'Biological vs Chronological Age' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const HindiBiologicalAge = () => {
@@ -31,7 +31,7 @@ const HindiBiologicalAge = () => {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Biological Age (Hindi)' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Biological Age (Hindi)' }}
       eyebrow="Biological Age"
       h1="Biological Age Calculator हिंदी में — आपका शरीर कितना पुराना है?"
       lead={<>15 आसान सवालों से जानें कि आपकी फ़िटनेस, वज़न, ब्लड प्रेशर, नींद और आदतें आपकी उम्र के हिसाब से कैसी हैं। यह प्रकाशित शोध पर आधारित एक lifestyle और fitness अंदाज़ा है — कोई लैब टेस्ट या epigenetic clock नहीं।</>}
@@ -45,7 +45,7 @@ const HindiBiologicalAge = () => {
           <p className="text-xs text-amber-800 bg-amber-50 border border-amber-300 rounded-lg p-3 mt-6">
             ⚕️ केवल सामान्य जानकारी के लिए। यह आपके अपने जवाबों से बना अंदाज़ा है — लैब टेस्ट, epigenetic clock, बीमारी की जाँच या डॉक्टरी सलाह नहीं। किसी भी स्वास्थ्य चिंता के लिए डॉक्टर से बात करें।
           </p>
-          <p className="text-sm text-center mt-4"><Link to="/biological-age" className="text-primary underline">English version और पूरी sources सूची →</Link></p>
+          <p className="text-sm text-center mt-4"><Link to="/biological-age/" className="text-primary underline">English version और पूरी sources सूची →</Link></p>
         </section>
 
         <article className="max-w-3xl mx-auto mb-16 px-4 space-y-10">

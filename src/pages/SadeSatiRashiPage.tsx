@@ -9,7 +9,8 @@
  * shows the right phase. The prerendered HTML labels it with its date; every other block
  * (tables, FAQ, JSON-LD) is phrased as fixed date ranges, which never go stale.
  */
-import { useParams, Link, Navigate } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ScrollTable } from '@/components/ScrollTable';
 import { PajPage } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
@@ -141,8 +142,8 @@ export default function SadeSatiRashiPage({ lang = 'en' }: { lang?: Lang }) {
       )}
       breadcrumb={{
         trail: lang === 'hi'
-          ? [{ label: t.crumbVedic, to: '/hi/rashifal' }]
-          : [{ label: t.crumbVedic, to: '/vedic-astrology' }, { label: t.crumbSS, to: '/sade-sati' }],
+          ? [{ label: t.crumbVedic, to: '/hi/rashifal/' }]
+          : [{ label: t.crumbVedic, to: '/vedic-astrology/' }, { label: t.crumbSS, to: '/sade-sati/' }],
         current: lang === 'hi' ? `${me} साढ़ेसाती` : `${me} Sade Sati`,
         edition: t.eyebrow,
       }}
@@ -215,7 +216,7 @@ export default function SadeSatiRashiPage({ lang = 'en' }: { lang?: Lang }) {
         <div className="mt-6 rounded-xl border border-primary/20 bg-primary/10 p-5 text-center">
           <p className="text-muted-foreground mb-3">{t.personal2}</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link to="/sade-sati" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-5 py-2.5 font-semibold">{t.calc}</Link>
+            <Link to="/sade-sati/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-5 py-2.5 font-semibold">{t.calc}</Link>
             <Link to={rashifalPath} className="inline-flex items-center gap-2 border border-border rounded-lg px-5 py-2.5 font-semibold text-foreground">{me} {t.rashifal}</Link>
           </div>
         </div>

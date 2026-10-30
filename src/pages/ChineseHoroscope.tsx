@@ -6,7 +6,8 @@
  * relationship to each year's ruling animal (see chineseYearlyForecast.ts).
  */
 import { useMemo } from 'react';
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -121,14 +122,14 @@ export default function ChineseHoroscope() {
             ogImage="https://bornclock.com/og/zodiac.png"
           />
         )}
-        breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Chinese Zodiac', to: '/chinese-zodiac' }], current: 'Yearly Horoscope' }}
+        breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Chinese Zodiac', to: '/chinese-zodiac/' }], current: 'Yearly Horoscope' }}
         footer={{
           tagline: `Chinese zodiac yearly forecast for ${thisYear} and ${nextYear} — career, finance, love and health for every animal.`,
           nav: [
-            { label: 'Chinese Zodiac', to: '/chinese-zodiac' },
-            { label: 'Mystic Corner', to: '/mystic-corner' },
-            { label: 'Western Birth Chart', to: '/western-birth-chart' },
-            { label: 'Privacy', to: '/privacy' },
+            { label: 'Chinese Zodiac', to: '/chinese-zodiac/' },
+            { label: 'Mystic Corner', to: '/mystic-corner/' },
+            { label: 'Western Birth Chart', to: '/western-birth-chart/' },
+            { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock · Calculated, not templated.',
         }}
@@ -149,7 +150,7 @@ export default function ChineseHoroscope() {
               </dl>
               <p className="text-sm text-muted-foreground mt-4 leading-relaxed">
                 The animal year begins at Chinese New Year, not on 1 January. The next year, the {nxt.element} {nxt.animal}, runs {nxt.rangeLabel}.
-                {' '}Find any year's animal in the <Link to="/articles/chinese-zodiac-by-year" className="underline text-foreground">Chinese zodiac by year table</Link>.
+                {' '}Find any year's animal in the <Link to="/articles/chinese-zodiac-by-year/" className="underline text-foreground">Chinese zodiac by year table</Link>.
               </p>
             </CardContent>
           </Card>
@@ -179,7 +180,7 @@ export default function ChineseHoroscope() {
   }
 
   const slug = animal.toLowerCase();
-  if (!ANIMALS_ORDER.includes(slug)) return <Navigate to="/chinese-horoscope" replace />;
+  if (!ANIMALS_ORDER.includes(slug)) return <Navigate to="/chinese-horoscope/" replace />;
   const cap = slug.charAt(0).toUpperCase() + slug.slice(1);
   const fThis = getYearForecast(cap, thisYear);
   const fNext = getYearForecast(cap, nextYear);
@@ -203,14 +204,14 @@ export default function ChineseHoroscope() {
           ogImage="https://bornclock.com/og/zodiac.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Chinese Zodiac', to: '/chinese-zodiac' }, { label: 'Yearly Horoscope', to: '/chinese-horoscope' }], current: `${cap} Horoscope` }}
+      breadcrumb={{ trail: [{ label: 'Chinese Zodiac', to: '/chinese-zodiac/' }, { label: 'Yearly Horoscope', to: '/chinese-horoscope/' }], current: `${cap} Horoscope` }}
       footer={{
         tagline: `${cap} Chinese zodiac yearly forecast for ${thisYear} and ${nextYear}.`,
         nav: [
-          { label: 'All Animals', to: '/chinese-horoscope' },
+          { label: 'All Animals', to: '/chinese-horoscope/' },
           { label: `${cap} Sign Guide`, to: `/chinese-zodiac/${slug}` },
-          { label: 'Chinese Zodiac', to: '/chinese-zodiac' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Chinese Zodiac', to: '/chinese-zodiac/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · A reflective tradition, not a prediction.',
       }}

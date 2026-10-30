@@ -300,3 +300,56 @@ describe('Batch 9b — one Article and one FAQPage per page', () => {
     expect(headStats(finalizeHead(`<html><head></head><body>${faq('One?')}${faq('Two?')}</body></html>`, '/x').html).entityBlocks.FAQPage).toBe(2);
   });
 });
+
+// Batch 11 (GSC): the prerender safety net for internal links without the trailing slash.
+describe('canonicalizeInternalLinks / nonCanonicalInternalLinks', async () => {
+  // @ts-expect-error — plain ESM build script, no type declarations
+  const { canonicalizeInternalLinks, nonCanonicalInternalLinks } = await import('../lib/headDedupe.mjs');
+  const body = `<a href="/privacy">p</a><a class="x" href="/kundali?x=1&amp;y=2#faq">k</a><a href='/terms'>t</a>
+<a href="/zodiac/">ok</a><a href="/">home</a><a href="#top">top</a><a href="/sitemap.xml">sm</a><a href="/api/geo">api</a>
+<a href="https://www.bornclock.com/planetary-age">www</a><a href="https://bornclock.com/faq">abs</a><a href="https://en.wikipedia.org/wiki/X">wiki</a>
+<a data-href="/raw" href="/about/">about</a><link rel="alternate" hreflang="hi" href="https://bornclock.com/hi/rashifal"><link rel="stylesheet" href="/assets/app">
+<script type="application/json">{"html":"<a href=\\"/nope\\">"}</script>`;
+
+  it('rewrites only internal page hrefs, keeps query/hash, exempts files, /api/, anchors, other sites', () => {
+    const { html, rewritten } = canonicalizeInternalLinks(body);
+    expect(rewritten).toBe(6);
+    expect(html).toContain('href="/privacy/"');
+    expect(html).toContain('href="/kundali/?x=1&amp;y=2#faq"');
+    expect(html).toContain("href='/terms/'");
+    expect(html).toContain('href="https://bornclock.com/planetary-age/"');
+    expect(html).toContain('href="https://bornclock.com/faq/"');
+    expect(html).toContain('hreflang="hi" href="https://bornclock.com/hi/rashifal/"');
+    for (const keep of ['href="/zodiac/"', 'href="/"', 'href="#top"', 'href="/sitemap.xml"', 'href="/api/geo"', 'href="https://en.wikipedia.org/wiki/X"', 'data-href="/raw"', 'href="/assets/app"', '\\"/nope\\"']) {
+      expect(html, keep).toContain(keep);
+    }
+    expect(nonCanonicalInternalLinks(html)).toEqual([]);
+  });
+
+  it('nonCanonicalInternalLinks lists what validate-dist fails on', () => {
+    expect(nonCanonicalInternalLinks(body)).toEqual(['/privacy', '/kundali?x=1&y=2#faq', '/terms', 'https://www.bornclock.com/planetary-age', 'https://bornclock.com/faq']);
+  });
+
+  it('finalizeHead applies it and reports the count', () => {
+    const r = finalizeHead(`<html><head><title>x</title></head><body><a href="/privacy">p</a></body></html>`, '/x');
+    expect(r.html).toContain('href="/privacy/"');
+    expect(r.linksRewritten).toBe(1);
+  });
+});
+
+describe('dropStaleWebPages (Batch 11)', async () => {
+  // @ts-expect-error — plain ESM build script, no type declarations
+  const { dropStaleWebPages } = await import('../lib/headDedupe.mjs');
+  const wp = (url: string, name: string) => `<script type="application/ld+json" data-rh="true">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebPage', name, url })}</script>`;
+  it('keeps only the WebPage of the canonical URL when a stale one from an earlier render is left', () => {
+    const html = `<head>${wp('https://bornclock.com/compatibility/', 'Hub')}${wp('https://bornclock.com/compatibility/libra/virgo', 'Pair')}</head>`;
+    const out = dropStaleWebPages(html, 'https://bornclock.com/compatibility/libra/virgo/');
+    expect(out).not.toContain('"Hub"');
+    expect(out).toContain('"Pair"');
+    expect(headStats(out).entityBlocks.WebPage).toBe(1);
+  });
+  it('leaves the page alone when no WebPage matches the canonical (nothing to prefer)', () => {
+    const html = `<head>${wp('https://bornclock.com/a/', 'A')}${wp('https://bornclock.com/b/', 'B')}</head>`;
+    expect(dropStaleWebPages(html, 'https://bornclock.com/c/')).toBe(html);
+  });
+});

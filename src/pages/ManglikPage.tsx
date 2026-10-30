@@ -119,15 +119,15 @@ export default function ManglikPage() {
           ogType="website"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Manglik', edition: 'Mangal · Mars placement' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Manglik', edition: 'Mangal · Mars placement' }}
       footer={{
         tagline: 'Mangal Dosha from Mars\'s real house position — the same Lahiri-ayanamsa engine as the rest of BornClock.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Kundali Match', to: '/kundali-match' },
-          { label: 'How It Works', to: '/how-it-works' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Kundali Match', to: '/kundali-match/' },
+          { label: 'How It Works', to: '/how-it-works/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -138,7 +138,7 @@ export default function ManglikPage() {
           <div><span className="eyebrow">Mangal · Mars placement</span><h1>Manglik Dosha Calculator.</h1></div>
           <p>Find out whether your birth chart carries Mangal Dosha (Manglik), how strong it is, which reference points flag it, and — crucially — what the classical cancellations are. Calm, honest, non-fear-based.</p>
         </div>
-        <TrustStrip claim="Your Mars placement is worked out from your real birth chart, not guessed from your star sign — checked from the Lagna and from the Moon, each shown separately." href="/how-it-works#vedic" />
+        <TrustStrip claim="Your Mars placement is worked out from your real birth chart, not guessed from your star sign — checked from the Lagna and from the Moon, each shown separately." href="/how-it-works/#vedic" />
         <div className="form-band" style={{ marginTop: 16 }}>
           <div><h3>Your birth details</h3><p className="small muted">We check Mars's house from your Lagna and from your Moon.</p></div>
           <BirthDetailsForm
@@ -236,7 +236,7 @@ export default function ManglikPage() {
                 <li><strong className="text-foreground">Mars in the 1st house in certain signs</strong> — e.g. Mars in Aries or Scorpio in the Lagna is often treated as cancelled by several schools.</li>
               </ul>
               <p className="mt-3 text-xs text-muted-foreground">
-                A full assessment of cancellations requires reading the complete chart — see <a href="/kundali" className="text-primary hover:underline">your full Kundali</a> or explore <a href="/kundali-match" className="text-primary hover:underline">Kundali matching</a> for a comprehensive compatibility view.
+                A full assessment of cancellations requires reading the complete chart — see <a href="/kundali/" className="text-primary hover:underline">your full Kundali</a> or explore <a href="/kundali-match/" className="text-primary hover:underline">Kundali matching</a> for a comprehensive compatibility view.
               </p>
             </div>
 
@@ -247,7 +247,7 @@ export default function ManglikPage() {
                 Mars's house is computed from your birth data using the <TermTip id="ayanamsa">Lahiri ayanamsa (the traditional Indian sidereal calculation)</TermTip> and checked by the AstroSage convention: Mars in the 1st, 4th, 7th, 8th or 12th house (whole-sign) from the Lagna, and separately from the Moon. The 2nd house is not counted and Venus is not used. Positive from both checks is shown as High, from one as Low. The same check is used in Kundali matching. Treat it as a classical indicator, not a fixed prediction.
               </p>
               <p className="mt-2 text-xs text-muted-foreground">
-                Learn more at <a href="/how-it-works" className="text-primary hover:underline">How It Works</a> · <a href="/vedic-astrology" className="text-primary hover:underline">Vedic Astrology</a>.
+                Learn more at <a href="/how-it-works/" className="text-primary hover:underline">How It Works</a> · <a href="/vedic-astrology/" className="text-primary hover:underline">Vedic Astrology</a>.
               </p>
             </div>
 
@@ -260,7 +260,7 @@ export default function ManglikPage() {
 
             <p className="text-xs text-muted-foreground">
               Computed from Mars's real house position using the same <TermTip id="ayanamsa">Lahiri-ayanamsa engine</TermTip> as the rest of BornClock.
-              See also: <a href="/kundali" className="text-primary hover:underline">Full Kundali</a> · <a href="/kundali-match" className="text-primary hover:underline">Kundali Match</a> · <a href="/vedic-astrology" className="text-primary hover:underline">Vedic Astrology</a> · <a href="/how-it-works" className="text-primary hover:underline">How It Works</a>.
+              See also: <a href="/kundali/" className="text-primary hover:underline">Full Kundali</a> · <a href="/kundali-match/" className="text-primary hover:underline">Kundali Match</a> · <a href="/vedic-astrology/" className="text-primary hover:underline">Vedic Astrology</a> · <a href="/how-it-works/" className="text-primary hover:underline">How It Works</a>.
             </p>
           </div>
         )}

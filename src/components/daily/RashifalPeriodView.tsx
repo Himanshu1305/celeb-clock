@@ -4,7 +4,7 @@
  * Worker injects the CURRENT period's dates and text (precomputed per week / month /
  * year); this component renders the same entry (embedded data → period JSON → fallback).
  */
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { RASHIS, type RashifalPeriod, type RashiMeta } from '@/lib/vedic/rashifal';
@@ -34,8 +34,8 @@ export function RashifalPeriodView({ rashi, period }: { rashi: RashiMeta; period
         canonicalUrl={path}
         ogImage="https://bornclock.com/og/vedic.png"
       />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Rashifal', to: '/rashifal' }], current: `${rashi.sanskrit} · ${PERIOD_TAB[period]}` }}
-      footer={{ tagline: 'Computed Vedic horoscopes from your real Moon sign.', nav: [{ label: 'All rashis', to: '/rashifal' }, { label: 'Free Kundli', to: '/kundali' }], note: 'Readings are computed from sidereal planetary transits and attributed to the Vedic tradition — reflective guidance, not certainty.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Rashifal', to: '/rashifal/' }], current: `${rashi.sanskrit} · ${PERIOD_TAB[period]}` }}
+      footer={{ tagline: 'Computed Vedic horoscopes from your real Moon sign.', nav: [{ label: 'All rashis', to: '/rashifal/' }, { label: 'Free Kundli', to: '/kundali/' }], note: 'Readings are computed from sidereal planetary transits and attributed to the Vedic tradition — reflective guidance, not certainty.' }}
       eyebrow="Rashifal · by Moon sign"
       h1={<DailyH1 entry={entry} fallback={`${name} ${PERIOD_WORD[period]} Rashifal`} />}
       lead={<>{rashi.sanskrit} ({rashi.english}) Moon sign · ruled by {rashi.lord} · <DailyDate entry={entry} /></>}
@@ -71,7 +71,7 @@ export function RashifalPeriodView({ rashi, period }: { rashi: RashiMeta; period
 
           <p className="text-xs text-muted-foreground mb-6">
             Computed from the real sidereal (Lahiri) positions of the planets for this period with the same engine behind your Kundli, and read by classical gochar rules from your Moon sign.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           <h2 className="font-semibold text-foreground mb-2">Other rashis — {PERIOD_TAB[period]}</h2>
@@ -90,7 +90,7 @@ export function RashifalPeriodView({ rashi, period }: { rashi: RashiMeta; period
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Not sure of your Moon sign? Generate your free Kundli to find it — then your rashifal is read from the right sign.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+              <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
               <Link to={`/vedic-zodiac/${RASHI_SLUGS[idx]}`} className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">About {rashi.sanskrit} →</Link>
             </div>
           </div>

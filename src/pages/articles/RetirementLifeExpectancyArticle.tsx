@@ -97,7 +97,7 @@ function CorpusYearsCalculator() {
             your corpus for <strong>{bufferedYears} years</strong> using the (life expectancy + 10)
             rule of thumb.
           </p>
-          <a href="/longevity-calculator"
+          <a href="/longevity-calculator/"
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-[#0E2238] transition-colors">
             Estimate my real life expectancy →
@@ -149,7 +149,7 @@ export function RetirementLifeExpectancyArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Retirement Planning & Life Expectancy in India: How Long Must Your Money Last?' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Retirement Planning & Life Expectancy in India: How Long Must Your Money Last?' }}
       eyebrow="Longevity"
       h1="Retirement Planning & Life Expectancy in India: How Long Must Your Money Last?"
       lead={'Most retirement plans in India answer the wrong question. They ask "how much can I save?" when the question that actually determines whether you run out of money is "how long will I live?" Retirement planning and life expectancy are two halves of the same equation, and the number that connects them is deceptively simple: your years funded = life expectancy − retirement age. Get that number wrong and even a large corpus can be exhausted while you are still very much alive.'}
@@ -269,7 +269,7 @@ export function RetirementLifeExpectancyArticle() {
               The most important input to your retirement corpus is how long you will actually live.
               Estimate your personal, lifestyle-adjusted life expectancy — then size your money to match.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Estimate My Life Expectancy Free →
@@ -289,19 +289,19 @@ export function RetirementLifeExpectancyArticle() {
           <div className="border-t border-gray-200 pt-6 mb-4">
             <p className="text-gray-700 leading-relaxed mb-3">
               Ready to turn your lifespan into a number you can plan around? Start with our
-              <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold hover:underline"> life expectancy calculator</a> and
+              <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold hover:underline"> life expectancy calculator</a> and
               feed the result straight back into the years-funded rule above.
             </p>
             <h2 className="text-xl font-black text-gray-900 mb-3">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/how-long-will-i-live-in-india"
+                <a href="/articles/how-long-will-i-live-in-india/"
                    className="text-[#2F6FB0] font-semibold hover:underline">
                   How Long Will I Live in India? — Life Expectancy Explained
                 </a>
               </li>
               <li>
-                <a href="/articles/how-to-live-to-100"
+                <a href="/articles/how-to-live-to-100/"
                    className="text-[#2F6FB0] font-semibold hover:underline">
                   How to Live to 100 — Habits That Extend Your Lifespan
                 </a>

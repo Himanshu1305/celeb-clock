@@ -56,7 +56,7 @@ describe('CelebritySearch CTA — TC-CELFIX', () => {
     await waitFor(() => {
       const link = container.querySelector('a[href*="birthday-report"]') as HTMLAnchorElement;
       expect(link).toBeTruthy();
-      expect(link.getAttribute('href')).toContain('/birthday-report?dob=1996-09-01');
+      expect(link.getAttribute('href')).toContain('/birthday-report/?dob=1996-09-01');
     }, { timeout: 2000 });
   });
 
@@ -133,7 +133,7 @@ describe('CelebritySearch slug-aware CTA — TC-SEARCH', () => {
     await waitFor(() => {
       const link = container.querySelector('a[href*="birthday-report"]') as HTMLAnchorElement;
       expect(link).toBeTruthy();
-      expect(link.getAttribute('href')).toContain('/birthday-report?dob=1990-03-15');
+      expect(link.getAttribute('href')).toContain('/birthday-report/?dob=1990-03-15');
     }, { timeout: 2000 });
   });
 

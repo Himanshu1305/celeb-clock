@@ -5,7 +5,7 @@
  * Batch 10: `when="tomorrow"` renders /rashifal/:rashi/tomorrow — the next India date's
  * reading (daily kind 'rashifal-tomorrow'), with its own dated title and canonical.
  */
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { RASHIS, type RashiMeta } from '@/lib/vedic/rashifal';
@@ -38,8 +38,8 @@ export function RashifalDailyView({ rashi, when = 'today' }: { rashi: RashiMeta;
         canonicalUrl={path}
         ogImage="https://bornclock.com/og/vedic.png"
       />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Rashifal', to: '/rashifal' }], current: `${rashi.sanskrit} · ${Day}` }}
-      footer={{ tagline: 'Computed Vedic horoscopes from your real Moon sign.', nav: [{ label: 'All rashis', to: '/rashifal' }, { label: 'Free Kundli', to: '/kundali' }], note: 'Readings are computed from sidereal planetary positions and attributed to the Vedic tradition — reflective guidance, not certainty.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Rashifal', to: '/rashifal/' }], current: `${rashi.sanskrit} · ${Day}` }}
+      footer={{ tagline: 'Computed Vedic horoscopes from your real Moon sign.', nav: [{ label: 'All rashis', to: '/rashifal/' }, { label: 'Free Kundli', to: '/kundali/' }], note: 'Readings are computed from sidereal planetary positions and attributed to the Vedic tradition — reflective guidance, not certainty.' }}
       eyebrow={tomorrow ? 'Tomorrow’s rashifal · by Moon sign' : 'Daily rashifal · by Moon sign'}
       h1={<DailyH1 entry={entry} fallback={`${name} Rashifal ${Day}`} />}
       lead={<>{rashi.sanskrit} ({rashi.english}) Moon sign · ruled by {rashi.lord} · <DailyDate entry={entry} /></>}
@@ -81,7 +81,7 @@ export function RashifalDailyView({ rashi, when = 'today' }: { rashi: RashiMeta;
 
           <p className="text-xs text-muted-foreground mb-6">
             Computed for the India date from the real sidereal (Lahiri) positions of the planets with the same engine behind your Kundli, and read by classical gochar rules from your Moon sign.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           <h2 className="font-semibold text-foreground mb-2">Other rashis {tomorrow ? 'tomorrow' : 'today'}</h2>
@@ -105,7 +105,7 @@ export function RashifalDailyView({ rashi, when = 'today' }: { rashi: RashiMeta;
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Not sure of your Moon sign? Your free Kundli shows it — and your birth nakshatra for Tarabala.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+              <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
               <Link to={`/vedic-zodiac/${RASHI_SLUGS[idx]}`} className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">About {rashi.sanskrit} →</Link>
             </div>
           </div>

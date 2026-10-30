@@ -53,7 +53,7 @@ describe('year muhurat pages', () => {
     await waitFor(() => expect(getByTestId('muhurat-year-past')).toBeTruthy());
     const open = [...container.querySelectorAll(':scope [data-testid="muhurat-year-month"]')].filter(el => !el.closest('details'));
     expect(open.map(el => el.querySelector('h3')!.textContent!.split(' ')[0])).toEqual(['October', 'November', 'December']);
-    expect(getByTestId('muhurat-year-next').querySelector('a')!.getAttribute('href')).toBe('/muhurat/griha-pravesh/2027');
+    expect(getByTestId('muhurat-year-next').querySelector('a')!.getAttribute('href')).toBe('/muhurat/griha-pravesh/2027/');
   });
 
   it('choosing another city recomputes the list', async () => {

@@ -10,7 +10,8 @@
  */
 import type { ReactNode } from 'react';
 import TAROT_IMAGES from '@/data/tarotCards/images.json';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -39,10 +40,10 @@ const LEAN_STYLE = {
 const FOOTER = {
   tagline: 'Every tarot card, explained plainly — a reflective tool, not a prediction.',
   nav: [
-    { label: 'All 78 cards', to: '/tarot/cards' },
-    { label: 'Free tarot reading', to: '/tarot-reading' },
-    { label: 'Tarot by birthday', to: '/tarot-card-by-birthday' },
-    { label: 'Mystic Corner', to: '/mystic-corner' },
+    { label: 'All 78 cards', to: '/tarot/cards/' },
+    { label: 'Free tarot reading', to: '/tarot-reading/' },
+    { label: 'Tarot by birthday', to: '/tarot-card-by-birthday/' },
+    { label: 'Mystic Corner', to: '/mystic-corner/' },
   ],
   note: 'Meanings are paraphrased from A. E. Waite, The Pictorial Key to the Tarot (1910, public domain). Tarot is for reflection; it does not predict events.',
 };
@@ -128,7 +129,7 @@ function TarotIndex() {
       theme="mystic"
       testId="tarot-cards-index"
       seo={<SEO title={TAROT_INDEX_META.title} description={TAROT_INDEX_META.description} canonicalUrl="/tarot/cards" ogImage="https://bornclock.com/og/zodiac.png" />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Tarot Reading', to: '/tarot-reading' }], current: 'All 78 tarot cards' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Tarot Reading', to: '/tarot-reading/' }], current: 'All 78 tarot cards' }}
       footer={FOOTER}
       eyebrow="Tarot card meanings"
       h1="All 78 Tarot Cards and Their Meanings"
@@ -137,7 +138,7 @@ function TarotIndex() {
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-5xl">
           <div className="rounded-lg bg-muted/40 p-4 text-sm text-muted-foreground mb-6">
-            Have a question in mind? <Link to="/tarot-reading?spread=yes-no" className="underline text-foreground">Draw one card for a yes / no answer →</Link>
+            Have a question in mind? <Link to="/tarot-reading/?spread=yes-no" className="underline text-foreground">Draw one card for a yes / no answer →</Link>
           </div>
 
           <h2 className="text-xl font-bold text-foreground mb-1">The <TermTip id="majorArcana">Major Arcana</TermTip> (22 cards)</h2>
@@ -197,7 +198,7 @@ function TarotCardDetail({ card }: { card: TarotCardEntry }) {
       theme="mystic"
       testId="tarot-card-page"
       seo={<SEO title={tarotCardTitle(card)} description={tarotCardDescription(card)} canonicalUrl={path} ogImage="https://bornclock.com/og/zodiac.png" />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Tarot cards', to: '/tarot/cards' }], current: card.name }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Tarot cards', to: '/tarot/cards/' }], current: card.name }}
       footer={FOOTER}
       eyebrow={card.arcana === 'major' ? `Major Arcana · ${card.label}` : `Minor Arcana · ${SUIT_META[card.suit!].name}`}
       h1={`${card.name} Tarot Card Meaning`}
@@ -240,7 +241,7 @@ function TarotCardDetail({ card }: { card: TarotCardEntry }) {
             <p className="text-sm text-muted-foreground leading-relaxed"><strong className="text-foreground">Upright: {LEAN_LABEL[card.yesNo]}.</strong> {card.yesNoWhy}</p>
             <p className="text-sm text-muted-foreground leading-relaxed mt-1" data-testid="tarot-card-reversed-lean"><strong className="text-foreground">Reversed:</strong> {reversedLeanText(card)}</p>
             <p className="text-xs text-muted-foreground mt-2">The yes/no lean is BornClock’s reading convention drawn from the card’s meaning — Waite himself did not assign one.</p>
-            <Link to="/tarot-reading?spread=yes-no" className="inline-block mt-3 text-sm underline text-foreground">Ask your own question — draw one card →</Link>
+            <Link to="/tarot-reading/?spread=yes-no" className="inline-block mt-3 text-sm underline text-foreground">Ask your own question — draw one card →</Link>
           </Section>
 
           <Section title={`Symbolism in the ${card.name} card`} id="symbolism">
@@ -265,14 +266,14 @@ function TarotCardDetail({ card }: { card: TarotCardEntry }) {
             {related.map((r) => (
               <Link key={r.slug} to={tarotCardPath(r.slug)} className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-primary/5">{r.emoji} {r.name}</Link>
             ))}
-            <Link to="/tarot/cards" className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-primary/5">All 78 cards</Link>
+            <Link to="/tarot/cards/" className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-primary/5">All 78 cards</Link>
           </div>
 
           <PageFAQ items={faq} />
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center mb-6">
             <p className="text-muted-foreground mb-3">Draw your own card — a daily card, a yes/no answer or a love spread.</p>
-            <Link to="/tarot-reading" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free tarot reading →</Link>
+            <Link to="/tarot-reading/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free tarot reading →</Link>
           </div>
         </div>
       </section>

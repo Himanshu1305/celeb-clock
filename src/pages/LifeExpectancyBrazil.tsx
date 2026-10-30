@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -12,10 +12,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyBrazil = () => {
@@ -40,7 +40,7 @@ const LifeExpectancyBrazil = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Brazil Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Brazil Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Brazil — Progress, Inequality, and the Regional Divide"
       lead={`Brazil's average life expectancy is approximately ${leYears('Brazil')} years (${LE_CITATION}). Women average ${leYears('Brazil', 'female')} years; men average ${leYears('Brazil', 'male')} years — a large ${leGap('Brazil')}-year gender gap driven significantly by high male homicide and accident rates. Brazil has improved substantially since 1960 (when life expectancy was ${WPP2024_HISTORY.Brazil[1960]} years) but inequality remains the central challenge.`}
@@ -71,7 +71,7 @@ const LifeExpectancyBrazil = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">What's Actually Improving</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Childhood immunisation rates are among the highest globally, Brazil's HIV-treatment programme is internationally recognised, and infant mortality has fallen from 60 per 1,000 in 1990 to 13 in 2023.</p>
-            <p className="text-muted-foreground leading-relaxed">Cardiovascular mortality is declining, diabetes management is improving in urban areas, and cancer screening is expanding. See how your own habits change your forecast with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
+            <p className="text-muted-foreground leading-relaxed">Cardiovascular mortality is declining, diabetes management is improving in urban areas, and cancer screening is expanding. See how your own habits change your forecast with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
 
@@ -79,7 +79,7 @@ const LifeExpectancyBrazil = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Compare Brazil Against 57 Countries</h2>
             <p className="text-sm text-muted-foreground mb-4">See how Brazil ranks globally — and how much your own habits could shift your personal forecast.</p>
-            <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Open the Country Comparison Tool →
             </Link>
           </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { correctCelebDates, ageAtDeath, livingAge } from '@/lib/celebrityFacts';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

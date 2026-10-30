@@ -104,7 +104,7 @@ export function DeathClockAlternativeArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'The Best Death Clock Alternative — A Science-Backed Longevity Tool' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'The Best Death Clock Alternative — A Science-Backed Longevity Tool' }}
       eyebrow="Longevity"
       h1="The Best Death Clock Alternative — A Science-Backed Longevity Tool"
       lead={'If you have ever typed "death clock" into a search engine, you already know what you get: a stark little tool that asks your age, maybe your mood or whether you smoke, and then spits out a countdown to your supposed date of death. It is designed to be unsettling. What it is not designed to be is accurate, useful, or actionable. This article explains why a traditional Death Clock is a poor way to think about your lifespan — and why a factor-based longevity estimate is a far better alternative.'}
@@ -181,7 +181,7 @@ export function DeathClockAlternativeArticle() {
             <p className="text-[#2F6FB0] mb-4 text-sm">
               Get a science-backed life expectancy estimate from 8 real factors — in about 3 minutes, free.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-6 py-3 rounded-full text-base hover:bg-[#2F6FB0]/10 transition-colors">
               Try the Longevity Calculator →
             </a>
@@ -210,7 +210,7 @@ export function DeathClockAlternativeArticle() {
             account for roughly 70-75% of longevity variance. That is the entire reason a
             factor-based estimate is worth trusting over a countdown: it is built from the
             things that actually move the needle. Ready to see your own number? Run the free{' '}
-            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">
+            <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline">
               BornClock longevity calculator
             </a>.
           </p>
@@ -231,7 +231,7 @@ export function DeathClockAlternativeArticle() {
               Trade the morbid countdown for a science-backed estimate you can actually
               improve. 8 factors, WHO baselines, a personalised 90-day plan — all free.
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Calculate My Life Expectancy →
             </a>
@@ -241,12 +241,12 @@ export function DeathClockAlternativeArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/how-long-will-i-live-in-india" className="text-[#2F6FB0] font-semibold hover:underline">
+                <a href="/articles/how-long-will-i-live-in-india/" className="text-[#2F6FB0] font-semibold hover:underline">
                   How Long Will I Live in India? →
                 </a>
               </li>
               <li>
-                <a href="/articles/longevity-quiz" className="text-[#2F6FB0] font-semibold hover:underline">
+                <a href="/articles/longevity-quiz/" className="text-[#2F6FB0] font-semibold hover:underline">
                   The Longevity Quiz — Test Your Life Expectancy →
                 </a>
               </li>

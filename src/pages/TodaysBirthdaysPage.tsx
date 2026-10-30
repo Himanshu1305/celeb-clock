@@ -3,7 +3,7 @@ import { TodaysBirthdays } from '@/components/TodaysBirthdays';
 import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
@@ -30,14 +30,14 @@ const TodaysBirthdaysPage = () => {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday' }], current: "Today's Birthdays" }}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday/' }], current: "Today's Birthdays" }}
       footer={{
         tagline: 'The best daily list of notable people born today.',
         nav: [
-          { label: 'Birthdays', to: '/birthday' },
-          { label: "Today's Birthdays", to: '/todays-birthdays' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthdays', to: '/birthday/' },
+          { label: "Today's Birthdays", to: '/todays-birthdays/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Birthdays.',
       }}
@@ -67,10 +67,10 @@ const TodaysBirthdaysPage = () => {
         </section>
 
         <section className="text-center mb-16">
-          <p className="text-muted-foreground mb-4">Want to find celebrities who share YOUR birthday?</p>
+          <p className="text-muted-foreground mb-4">Not born today? See which famous people share your own birthday.</p>
           <Button asChild size="lg" className="gap-2">
-            <Link to="/celebrity-birthday">
-              Search Celebrity Birthdays <ArrowRight className="w-4 h-4" />
+            <Link to="/celebrity-birthday/">
+              Who shares my birthday? <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
         </section>

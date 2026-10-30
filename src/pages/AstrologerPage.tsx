@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { KundaliTabs } from '@/components/KundaliTabs';
@@ -26,15 +26,15 @@ export default function AstrologerPage() {
           ogType="website"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Ask Your Astrologer', edition: 'AI Vedic chat' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Ask Your Astrologer', edition: 'AI Vedic chat' }}
       footer={{
         tagline: 'A private conversation grounded in your own Vedic birth chart.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Sade Sati', to: '/sade-sati' },
-          { label: 'Gemstones', to: '/gemstones' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Sade Sati', to: '/sade-sati/' },
+          { label: 'Gemstones', to: '/gemstones/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -61,7 +61,7 @@ export default function AstrologerPage() {
                   ? `We have your birth date (${profile.dob}) saved. Your astrologer answers from your full chart, so it also needs your birth time and place — add them once on the Kundali page and come back here.`
                   : 'Your astrologer answers from your real chart, so it needs your date, time and place of birth. Add them once on the Kundali page (you choose whether to save them) and come back here.'}
               </p>
-              <Link to="/kundali" data-testid="astrologer-add-details"
+              <Link to="/kundali/" data-testid="astrologer-add-details"
                     className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-lg px-6 py-3 font-semibold hover:bg-[#0E2238]">
                 {profile ? 'Complete my birth details →' : 'Add my birth details →'}
               </Link>

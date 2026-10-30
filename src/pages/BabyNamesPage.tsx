@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { NAKSHATRA_PADA_AKSHARAS, NAKSHATRA_LIST } from '@/data/nakshatraAksharas';
@@ -187,7 +187,7 @@ export default function BabyNamesPage() {
 
         <div className="mt-10 bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
           <p className="text-muted-foreground mb-3">Want your baby's full Vedic birth chart?</p>
-          <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">
+          <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">
             Generate the Kundali →
           </Link>
         </div>

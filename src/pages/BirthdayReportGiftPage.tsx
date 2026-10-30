@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ReportLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -50,14 +51,14 @@ export default function BirthdayReportGiftPage() {
           ogType="website"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report' }], current: 'Gift a Report' }}
+      breadcrumb={{ trail: [{ label: 'Birthday Report', to: '/birthday-report/' }], current: 'Gift a Report' }}
       footer={{
         tagline: 'Gift a personalised Birthday Report — delivered with your own message.',
         nav: [
-          { label: 'Birthday Report', to: '/birthday-report' },
-          { label: 'Results', to: '/results' },
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Birthday Report', to: '/birthday-report/' },
+          { label: 'Results', to: '/results/' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',
       }}
@@ -156,7 +157,7 @@ export default function BirthdayReportGiftPage() {
 
         <p className="text-sm text-muted-foreground text-center mt-6">
           Prefer to buy for yourself?{' '}
-          <Link to="/birthday-report" className="text-primary hover:underline">Get your own Birthday Blueprint →</Link>
+          <Link to="/birthday-report/" className="text-primary hover:underline">Get your own Birthday Blueprint →</Link>
         </p>
       </div>
     </ReportLayout>

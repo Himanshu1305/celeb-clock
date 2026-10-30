@@ -1,5 +1,6 @@
 import { useState, useRef, Component, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ReportLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
@@ -43,6 +44,7 @@ import PageTagline from '@/components/PageTagline';
 import { buildActionPlanPhases } from '@/utils/actionPlanBuilder';
 import { buildLongevityBlueprintHtml } from './longevityBlueprintHtml';
 import { leYears } from '@/data/lifeExpectancyFacts';
+import { canonicalPath } from '@/lib/seo/canonicalPath'; // Batch 11: trailing-slash internal links
 
 // ── ErrorBoundary ────────────────────────────────────────────────────────────
 class ReportErrorBoundary extends Component<
@@ -75,16 +77,16 @@ type Phase = 'quiz' | 'result' | 'report';
 // Country longevity pages (SEO Batch 2) — surfaced here so all 10 are discoverable
 // from the main life-expectancy tool. Figures: UN World Population Prospects 2023.
 const COUNTRY_PAGES = [
-  { path: '/life-expectancy-india', label: '🇮🇳 India', stat: `${leYears('India')} years` },
-  { path: '/life-expectancy-usa', label: '🇺🇸 United States', stat: `${leYears('United States')} years` },
-  { path: '/life-expectancy-japan', label: '🇯🇵 Japan', stat: `${leYears('Japan')} years` },
-  { path: '/life-expectancy-uk', label: '🇬🇧 United Kingdom', stat: `${leYears('United Kingdom')} years` },
-  { path: '/life-expectancy-australia', label: '🇦🇺 Australia', stat: `${leYears('Australia')} years` },
-  { path: '/life-expectancy-canada', label: '🇨🇦 Canada', stat: `${leYears('Canada')} years` },
-  { path: '/life-expectancy-germany', label: '🇩🇪 Germany', stat: `${leYears('Germany')} years` },
-  { path: '/life-expectancy-china', label: '🇨🇳 China', stat: `${leYears('China')} years` },
-  { path: '/life-expectancy-singapore', label: '🇸🇬 Singapore', stat: `${leYears('Singapore')} years` },
-  { path: '/life-expectancy-brazil', label: '🇧🇷 Brazil', stat: `${leYears('Brazil')} years` },
+  { path: '/life-expectancy-india/', label: '🇮🇳 India', stat: `${leYears('India')} years` },
+  { path: '/life-expectancy-usa/', label: '🇺🇸 United States', stat: `${leYears('United States')} years` },
+  { path: '/life-expectancy-japan/', label: '🇯🇵 Japan', stat: `${leYears('Japan')} years` },
+  { path: '/life-expectancy-uk/', label: '🇬🇧 United Kingdom', stat: `${leYears('United Kingdom')} years` },
+  { path: '/life-expectancy-australia/', label: '🇦🇺 Australia', stat: `${leYears('Australia')} years` },
+  { path: '/life-expectancy-canada/', label: '🇨🇦 Canada', stat: `${leYears('Canada')} years` },
+  { path: '/life-expectancy-germany/', label: '🇩🇪 Germany', stat: `${leYears('Germany')} years` },
+  { path: '/life-expectancy-china/', label: '🇨🇳 China', stat: `${leYears('China')} years` },
+  { path: '/life-expectancy-singapore/', label: '🇸🇬 Singapore', stat: `${leYears('Singapore')} years` },
+  { path: '/life-expectancy-brazil/', label: '🇧🇷 Brazil', stat: `${leYears('Brazil')} years` },
 ];
 
 // ── Page component ────────────────────────────────────────────────────────────
@@ -387,7 +389,7 @@ const LifeExpectancy = () => {
               on the page. The single FAQPage comes from the visible <PageFAQ> below. */}
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Life Expectancy Calculator' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Life Expectancy Calculator' }}
       eyebrow="Life Expectancy"
       h1="How long could you live — and why."
       lead={(
@@ -403,7 +405,7 @@ const LifeExpectancy = () => {
             {sharedResult.age > 0 && ` They are ${sharedResult.age} years old`}
             {sharedResult.forecast > 0 && ` with a ${sharedResult.forecast}-year life expectancy forecast.`}
             {' '}
-            <a href="/life-expectancy" className="underline font-bold ml-1">Calculate yours →</a>
+            <a href="/life-expectancy/" className="underline font-bold ml-1">Calculate yours →</a>
           </p>
         </div>
       )}
@@ -474,15 +476,15 @@ const LifeExpectancy = () => {
                 <div className="font-semibold text-foreground">Life Expectancy Estimate</div>
                 <div className="mt-1 text-sm text-muted-foreground">Your projection from WHO life tables and research-backed factors.</div>
               </a>
-              <Link to="/biological-age" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
+              <Link to="/biological-age/" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
                 <div className="font-semibold text-foreground">Biological Age</div>
                 <div className="mt-1 text-sm text-muted-foreground">How old your body may be vs. your calendar age.</div>
               </Link>
-              <Link to="/articles/longevity-quiz" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
+              <Link to="/articles/longevity-quiz/" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
                 <div className="font-semibold text-foreground">Longevity Quiz</div>
                 <div className="mt-1 text-sm text-muted-foreground">A quick, research-based look at your habits.</div>
               </Link>
-              <Link to="/life-expectancy/factors" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
+              <Link to="/life-expectancy/factors/" className="block rounded-lg border border-border p-4 hover:bg-muted/40 transition-colors">
                 <div className="font-semibold text-foreground">What affects life expectancy</div>
                 <div className="mt-1 text-sm text-muted-foreground">Factor by factor — the years each adds or subtracts, with the evidence.</div>
               </Link>
@@ -501,7 +503,7 @@ const LifeExpectancy = () => {
 
           {/* Light cross-links (one soft line, not a heavy funnel) */}
           <p className="text-sm text-muted-foreground">
-            Curious about the rest of your birth date? See your <Link to="/vedic-astrology" className="text-primary hover:underline">Vedic chart</Link>, find your <Link to="/celebrity-birthday" className="text-primary hover:underline">celebrity birthday twins</Link>, or explore <Link to="/mystic-corner" className="text-primary hover:underline">numerology &amp; zodiac</Link>.
+            Curious about the rest of your birth date? See your <Link to="/vedic-astrology/" className="text-primary hover:underline">Vedic chart</Link>, find your <Link to="/celebrity-birthday/" className="text-primary hover:underline">celebrity birthday twins</Link>, or explore <Link to="/mystic-corner/" className="text-primary hover:underline">numerology &amp; zodiac</Link>.
           </p>
         </section>
 
@@ -666,7 +668,7 @@ const LifeExpectancy = () => {
                   <p className="text-sm text-amber-900 dark:text-amber-200 leading-relaxed">
                     The What-If Simulator below shows exactly which lifestyle changes would have the highest impact from here.
                   </p>
-                  <a href="/blog/conditional-life-expectancy" className="inline-flex items-center text-sm text-amber-700 dark:text-amber-400 font-semibold hover:underline">
+                  <a href="/blog/conditional-life-expectancy/" className="inline-flex items-center text-sm text-amber-700 dark:text-amber-400 font-semibold hover:underline">
                     Learn about survivor selection effect →
                   </a>
                 </div>
@@ -832,7 +834,7 @@ const LifeExpectancy = () => {
               ) : (
                 <p className="text-xs text-muted-foreground text-center">
                   🔒 Export Longevity Blueprint and Copy Summary are premium features.{' '}
-                  <a href="/upgrade" className="text-primary underline font-semibold">Upgrade →</a>
+                  <a href="/upgrade/" className="text-primary underline font-semibold">Upgrade →</a>
                 </p>
               )}
             </div>
@@ -989,7 +991,7 @@ const LifeExpectancy = () => {
                         Plus: AI Longevity Coach, Leaderboard, and Longevity Blueprint PDF.
                       </p>
                       <a
-                        href="/upgrade"
+                        href="/upgrade/"
                         className="inline-block bg-white text-[#2F6FB0] font-black text-sm px-6 py-2.5 rounded-xl hover:bg-gray-100 transition-colors"
                       >
                         Upgrade to Premium →
@@ -1139,7 +1141,7 @@ const LifeExpectancy = () => {
 
         <p className="text-sm text-muted-foreground text-center max-w-2xl mx-auto mb-8 px-4">
           Looking for more context?{' '}
-          <Link to="/longevity-calculator" className="text-primary hover:underline">
+          <Link to="/longevity-calculator/" className="text-primary hover:underline">
             Read our complete longevity calculator guide →
           </Link>
         </p>
@@ -1149,7 +1151,7 @@ const LifeExpectancy = () => {
           <h2 className="text-2xl font-bold text-center mb-6 gradient-text-primary">Life Expectancy by Country</h2>
           <div className="grid grid-cols-2 gap-3">
             {COUNTRY_PAGES.map((c) => (
-              <a key={c.path} href={c.path} className="flex items-center justify-between rounded-xl border border-border p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors">
+              <a key={c.path} href={canonicalPath(c.path)} className="flex items-center justify-between rounded-xl border border-border p-4 hover:border-primary/50 hover:bg-primary/5 transition-colors">
                 <span className="font-medium text-foreground">{c.label}</span>
                 <span className="text-sm text-muted-foreground tabular-nums">{c.stat}</span>
               </a>
@@ -1163,15 +1165,15 @@ const LifeExpectancy = () => {
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Related Topics</h2>
           <div className="flex flex-wrap gap-2">
             {[
-              { path: '/biological-age', label: 'Biological Age Test' },
-              { path: '/country-comparison', label: 'Country Comparison' },
-              { path: '/coach', label: 'Longevity Coach' },
-              { path: '/life-expectancy-india', label: 'Life Expectancy in India' },
-              { path: '/life-expectancy-usa', label: 'Life Expectancy in USA' },
-              { path: '/life-expectancy-japan', label: 'Life Expectancy in Japan' },
-              { path: '/how-it-works', label: 'How It Works' },
+              { path: '/biological-age/', label: 'Biological Age Test' },
+              { path: '/country-comparison/', label: 'Country Comparison' },
+              { path: '/coach/', label: 'Longevity Coach' },
+              { path: '/life-expectancy-india/', label: 'Life Expectancy in India' },
+              { path: '/life-expectancy-usa/', label: 'Life Expectancy in USA' },
+              { path: '/life-expectancy-japan/', label: 'Life Expectancy in Japan' },
+              { path: '/how-it-works/', label: 'How It Works' },
             ].map((t) => (
-              <a key={t.path} href={t.path} className="text-sm px-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground transition-colors">{t.label}</a>
+              <a key={t.path} href={canonicalPath(t.path)} className="text-sm px-3 py-1.5 rounded-full border border-border hover:border-primary/50 hover:bg-primary/5 text-foreground transition-colors">{t.label}</a>
             ))}
           </div>
         </section>

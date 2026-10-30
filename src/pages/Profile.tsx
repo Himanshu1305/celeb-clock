@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -77,7 +78,7 @@ export default function Profile() {
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/auth/" replace />;
   }
 
   const handleSave = async () => {
@@ -143,7 +144,7 @@ export default function Profile() {
               Back to Home
             </Button>
           </Link>
-          <Link to="/dashboard">
+          <Link to="/dashboard/">
             <Button variant="outline" size="sm" className="gap-2">
               <Sparkles className="h-4 w-4" />
               Your day
@@ -249,7 +250,7 @@ export default function Profile() {
                       Premium
                     </Badge>
                   ) : (
-                    <Link to="/upgrade">
+                    <Link to="/upgrade/">
                       <Button size="sm" className="gap-2">
                         <Crown className="h-4 w-4" />
                         Upgrade
@@ -274,7 +275,7 @@ export default function Profile() {
                         </p>
                       </div>
                     </div>
-                    <Link to="/birthday-report">
+                    <Link to="/birthday-report/">
                       <Button size="sm" variant="outline" className="gap-1.5">
                         <Gift className="h-4 w-4" /> Use
                       </Button>
@@ -292,7 +293,7 @@ export default function Profile() {
                         </p>
                       </div>
                     </div>
-                    <Link to="/upgrade">
+                    <Link to="/upgrade/">
                       <Button size="sm" className="gap-1.5">
                         <Gift className="h-4 w-4" /> Upgrade
                       </Button>

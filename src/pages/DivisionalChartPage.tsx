@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -16,8 +17,8 @@ export default function DivisionalChartPage() {
         theme="vedic"
         testId="divisional-hub"
         seo={<SEO title="Divisional Charts (Vargas) — D1 to D60 Explained | BornClock" description="The Vedic divisional charts (vargas) explained plainly — D9 Navamsa (marriage), D10 Dasamsa (career), D7 Saptamsha (children), D4 (property), D24 (education) and more." canonicalUrl="/divisional-charts" ogImage="https://bornclock.com/og/vedic.png" />}
-        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Divisional charts' }}
-        footer={{ tagline: 'Every varga, explained plainly.', nav: [{ label: 'Free Kundli', to: '/kundali' }, { label: 'Vedic yogas', to: '/yoga' }] }}
+        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Divisional charts' }}
+        footer={{ tagline: 'Every varga, explained plainly.', nav: [{ label: 'Free Kundli', to: '/kundali/' }, { label: 'Vedic yogas', to: '/yoga/' }] }}
         eyebrow="Vedic charts"
         h1="Divisional charts (Vargas) — D1 to D60"
         lead="A divisional chart zooms into one area of life by subdividing each sign. Here is what each varga shows, how it is built, and how to read it."
@@ -55,8 +56,8 @@ export default function DivisionalChartPage() {
       theme="vedic"
       testId="divisional-chart"
       seo={<SEO title={title} description={description} canonicalUrl={`/divisional-charts/${varga.slug}`} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Divisional charts', to: '/divisional-charts' }], current: varga.label }}
-      footer={{ tagline: 'Vedic divisional charts, explained.', nav: [{ label: 'All vargas', to: '/divisional-charts' }, { label: 'Free Kundli', to: '/kundali' }], note: 'Divisional charts refine the main chart; a result is trusted only when the D1 agrees. Very high divisions need an accurate birth time.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Divisional charts', to: '/divisional-charts/' }], current: varga.label }}
+      footer={{ tagline: 'Vedic divisional charts, explained.', nav: [{ label: 'All vargas', to: '/divisional-charts/' }, { label: 'Free Kundli', to: '/kundali/' }], note: 'Divisional charts refine the main chart; a result is trusted only when the D1 agrees. Very high divisions need an accurate birth time.' }}
       eyebrow={`Varga · ${varga.label}`}
       h1={`${varga.label}`}
       lead={`For ${varga.lifeArea}`}
@@ -81,7 +82,7 @@ export default function DivisionalChartPage() {
 
           <p className="text-xs text-muted-foreground mb-6">
             A <TermTip id="varga">varga</TermTip> is read against your main (<TermTip id="d1">Rashi / D1</TermTip>) chart — never alone.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
           <h2 className="font-semibold text-foreground mb-2">Other divisional charts</h2>
@@ -95,7 +96,7 @@ export default function DivisionalChartPage() {
 
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">{varga.dNumber === 60 ? 'See your D60 chart in your free Kundli, with its disclaimer and birth-time check.' : varga.computedByBornClock ? `See your ${varga.name} chart in your free Kundli.` : 'See all sixteen divisional charts in your free Kundli.'}</p>
-            <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+            <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
       </section>

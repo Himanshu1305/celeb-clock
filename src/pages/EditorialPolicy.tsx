@@ -38,7 +38,7 @@ const EditorialPolicy = () => (
           </section>
           <section>
             <h2 className="text-xl font-semibold text-foreground mb-2">Corrections</h2>
-            <p>Spotted an error? Email us via the <a href="/contact" className="text-primary hover:underline">contact page</a> and we will investigate within 5 business days. Confirmed corrections are applied promptly and noted in the page footer.</p>
+            <p>Spotted an error? Email us via the <a href="/contact/" className="text-primary hover:underline">contact page</a> and we will investigate within 5 business days. Confirmed corrections are applied promptly and noted in the page footer.</p>
           </section>
           <section>
             <h2 className="text-xl font-semibold text-foreground mb-2">Independence</h2>
@@ -54,7 +54,7 @@ const EditorialPolicy = () => (
           </section>
           <section>
             <h2 className="text-xl font-semibold text-foreground mb-2">Calculator methodology</h2>
-            <p>Every calculator on BornClock has a dedicated methodology page explaining the data sources, calculation method, and known limitations. We publish our methodology so users can evaluate our approach. Calculators are tested against known cases before launch and re-verified when underlying data sources update. See <a href="/how-it-works" className="text-primary hover:underline">/how-it-works</a> for full methodology details.</p>
+            <p>Every calculator on BornClock has a dedicated methodology page explaining the data sources, calculation method, and known limitations. We publish our methodology so users can evaluate our approach. Calculators are tested against known cases before launch and re-verified when underlying data sources update. See <a href="/how-it-works/" className="text-primary hover:underline">/how-it-works</a> for full methodology details.</p>
           </section>
           <section>
             <h2 className="text-xl font-semibold text-foreground mb-2">Update policy</h2>

@@ -1,13 +1,13 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
 import { leYears } from '@/data/lifeExpectancyFacts';
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/biological-age', label: 'Biological Age Calculator' },
-  { path: '/life-expectancy-india', label: 'Life Expectancy in India' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/biological-age/', label: 'Biological Age Calculator' },
+  { path: '/life-expectancy-india/', label: 'Life Expectancy in India' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const HindiLifeExpectancy = () => {
@@ -30,7 +30,7 @@ const HindiLifeExpectancy = () => {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'जीवन काल Calculator' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'जीवन काल Calculator' }}
       eyebrow="Life Expectancy"
       h1="आप कितने साल जिएंगे?"
       lead={<>आपका जीवन काल आपकी जन्म तिथि नहीं, आपकी lifestyle तय करती है। Harvard के एक अध्ययन में 1.23 लाख लोगों को 30 साल तक track किया गया। नतीजा: 5 healthy habits अपनाने वाले लोग औसतन 14 साल ज्यादा जीते हैं।</>}
@@ -41,7 +41,7 @@ const HindiLifeExpectancy = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">अपना जीवन काल अभी calculate करें</h2>
             <p className="text-sm text-muted-foreground mb-4">UN WPP 2024 baselines और peer-reviewed research के आधार पर — आपकी habits के हिसाब से personalised forecast।</p>
-            <Link to="/life-expectancy" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/life-expectancy/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Life Expectancy Calculator खोलें →
             </Link>
           </div>

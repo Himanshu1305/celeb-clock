@@ -3,7 +3,7 @@
  * Formula, year boundary (exact Lichun) and direction table + sources: src/lib/kuaNumber.ts.
  */
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -60,8 +60,8 @@ export default function KuaNumberPage() {
       seo={<SEO title={KUA_META.title} description={KUA_META.description}
         keywords="kua number calculator, gua number, feng shui lucky directions, kua number female, kua number male, east west group"
         canonicalUrl={KUA_PATH} />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: 'Kua number' }}
-      footer={{ tagline: 'Feng Shui Kua number, for reflection only.', nav: [{ label: 'Lo Shu grid', to: '/lo-shu-grid-calculator' }, { label: 'Chinese zodiac', to: '/chinese-zodiac' }, { label: 'Numerology', to: '/numerology' }] }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: 'Kua number' }}
+      footer={{ tagline: 'Feng Shui Kua number, for reflection only.', nav: [{ label: 'Lo Shu grid', to: '/lo-shu-grid-calculator/' }, { label: 'Chinese zodiac', to: '/chinese-zodiac/' }, { label: 'Numerology', to: '/numerology/' }] }}
       eyebrow="Feng Shui"
       h1="Kua Number Calculator & Lucky Directions"
       lead={<>Your <TermTip id="kuaNumber">Kua number</TermTip> comes from your birth year and gender, and names your four best directions for work, health, love and personal growth.</>}
@@ -119,7 +119,7 @@ export default function KuaNumberPage() {
             { label: 'South China Morning Post — Head right direction', href: 'https://www.scmp.com/article/709737/head-right-direction', note: 'year counted from the solar new year; Kua 5 → 2 for men, 8 for women' },
             { label: 'Lichun = Sun at 315° ecliptic longitude', note: 'computed for each year with astronomy-engine; checked against the Hong Kong Observatory tables' },
           ]} />
-          <p className="text-sm text-muted-foreground mb-8">Also from your date: <Link to="/lo-shu-grid-calculator" className="underline">Lo Shu grid</Link> · <Link to="/chinese-zodiac" className="underline">Chinese zodiac animal</Link>.</p>
+          <p className="text-sm text-muted-foreground mb-8">Also from your date: <Link to="/lo-shu-grid-calculator/" className="underline">Lo Shu grid</Link> · <Link to="/chinese-zodiac/" className="underline">Chinese zodiac animal</Link>.</p>
         </div>
       </section>
     </ToolLayout>

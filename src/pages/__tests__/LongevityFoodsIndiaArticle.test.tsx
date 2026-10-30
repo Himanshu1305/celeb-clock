@@ -59,13 +59,13 @@ describe('LongevityFoodsIndiaArticle', () => {
   it('TC-LFI-P-09: links to /longevity-calculator', () => {
     renderArticle();
     const links = Array.from(document.querySelectorAll('a'));
-    expect(links.filter(l => l.getAttribute('href') === '/longevity-calculator').length).toBeGreaterThanOrEqual(2);
+    expect(links.filter(l => l.getAttribute('href') === '/longevity-calculator/').length).toBeGreaterThanOrEqual(2);
   });
   it('TC-LFI-P-10: related article cross-links present', () => {
     renderArticle();
     const links = Array.from(document.querySelectorAll('a')).map(l => l.getAttribute('href'));
-    expect(links).toContain('/articles/blue-zones-diet');
-    expect(links).toContain('/articles/how-to-live-to-100');
+    expect(links).toContain('/articles/blue-zones-diet/');
+    expect(links).toContain('/articles/how-to-live-to-100/');
   });
   it('TC-LFI-N-01: no undefined or [object Object]', () => {
     renderArticle();

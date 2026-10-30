@@ -11,6 +11,7 @@
  *            six SEO-MAGNET-2 articles). Overrides the default CORE list.
  * Manual: submit the sitemap once in Bing Webmaster Tools (see docs/SEO-MAGNET-REPORT.md).
  */
+import { readSitemapUrls } from './lib/sitemap.mjs';
 import { readFileSync } from 'node:fs';
 
 const KEY = '45894fcfd9f370d9927aaa9bfdf01d65';
@@ -18,11 +19,9 @@ const HOST = 'bornclock.com';
 const KEY_LOCATION = `https://${HOST}/${KEY}.txt`;
 const ALL = process.argv.includes('--all');
 
+// Batch 11: dist/sitemap.xml is a sitemap index — read the page URLs from its section sitemaps.
 function sitemapUrls() {
-  try {
-    const xml = readFileSync('dist/sitemap.xml', 'utf8');
-    return [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-  } catch { return []; }
+  try { return readSitemapUrls('dist'); } catch { return []; }
 }
 
 const CORE = [

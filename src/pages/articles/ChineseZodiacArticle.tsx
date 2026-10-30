@@ -110,7 +110,7 @@ function ChineseZodiacCalculator() {
               <span key={s} className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">{s}</span>
             ))}
           </div>
-          <a href={`/birthday-report?year=${dobYear}`}
+          <a href={`/birthday-report/?year=${dobYear}`}
              className="inline-block bg-red-600 text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-red-700 transition-colors">
             See my complete birthday report →
@@ -163,15 +163,15 @@ export function ChineseZodiacArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Chinese Zodiac by Year' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Chinese Zodiac by Year' }}
       footer={{
         tagline: 'Find your Chinese zodiac animal by birth year — personality, luck and compatibility for all 12 animals.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -257,7 +257,7 @@ export function ChineseZodiacArticle() {
                     <td className="px-3 py-1.5 whitespace-nowrap text-gray-700">{formatIsoDateShort(r.start)}</td>
                     <td className="px-3 py-1.5 whitespace-nowrap text-gray-700">{formatIsoDateShort(r.end)}</td>
                     <td className="px-3 py-1.5 text-gray-900">
-                      <a href={`/chinese-zodiac/${r.animal.toLowerCase()}`} className="hover:underline">{r.animal}</a>
+                      <a href={`/chinese-zodiac/${r.animal.toLowerCase()}/`} className="hover:underline">{r.animal}</a>
                     </td>
                     <td className="px-3 py-1.5 text-gray-700">{r.element}</td>
                     <td className="px-3 py-1.5 text-gray-700">{r.yinYang}</td>
@@ -277,7 +277,7 @@ export function ChineseZodiacArticle() {
                   {p.emoji} {p.animal}
                 </h3>
                 <div className="text-xs text-gray-500 mb-2">
-                  Fixed element: {p.element_fixed} · {p.yin_yang} · <a href={`/chinese-zodiac/${name.toLowerCase()}`} className="underline">Full {p.animal} guide</a>
+                  Fixed element: {p.element_fixed} · {p.yin_yang} · <a href={`/chinese-zodiac/${name.toLowerCase()}/`} className="underline">Full {p.animal} guide</a>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed mb-3">
                   {p.personality_summary}
@@ -327,7 +327,7 @@ export function ChineseZodiacArticle() {
             and the need for extra care, often marked by wearing red for protection. Understanding
             your sign gives you a window into a living cultural tradition shared by well over a
             billion people. To see your Chinese zodiac animal alongside your other birth signs,
-            <a href="/birthday-report" className="text-red-700 font-semibold hover:underline"> generate
+            <a href="/birthday-report/" className="text-red-700 font-semibold hover:underline"> generate
             your free birthday report</a> from your full date of birth.
           </p>
 
@@ -343,7 +343,7 @@ export function ChineseZodiacArticle() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
           <ul className="list-disc pl-6 text-red-700 mb-10 space-y-1">
-            <li><a href="/articles/moon-sign-by-date-of-birth" className="hover:underline">Moon Sign by Date of Birth — Find Your Vedic Rashi</a></li>
+            <li><a href="/articles/moon-sign-by-date-of-birth/" className="hover:underline">Moon Sign by Date of Birth — Find Your Vedic Rashi</a></li>
             <li><a href="/planetary-age/" className="hover:underline">Planetary Age Calculator — Your Age on Every Planet</a></li>
           </ul>
 
@@ -354,7 +354,7 @@ export function ChineseZodiacArticle() {
               Your Chinese zodiac animal is just one piece. BornClock also shows your Western zodiac,
               Vedic Rashi, Life Path number, days lived and more — all from your date of birth.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-red-700 font-black px-8 py-3
                           rounded-full text-lg hover:bg-red-50 transition-colors">
               Generate My Free Birthday Report →

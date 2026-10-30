@@ -72,15 +72,15 @@ export default function LifeReportPage() {
         title="Life Report (Vedic) — Wealth, Education, Foreign & Health | BornClock"
         description="A graded Vedic life report: wealth & finances, education & learning, foreign travel & settlement, and health & wellbeing — each read from your real chart, honestly."
         canonicalUrl="/life-report" ogType="website" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Life Report', edition: 'Wealth · Education · Foreign · Health' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Life Report', edition: 'Wealth · Education · Foreign · Health' }}
       footer={{
         tagline: 'Wealth, education, foreign and wellbeing readings from your real chart — graded, honest, computed.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Career Report', to: '/career-report' },
-          { label: "What's Ahead", to: '/kundali' },
-          { label: 'How It Works', to: '/how-it-works' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Career Report', to: '/career-report/' },
+          { label: "What's Ahead", to: '/kundali/' },
+          { label: 'How It Works', to: '/how-it-works/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -90,7 +90,7 @@ export default function LifeReportPage() {
           <div><span className="eyebrow">Life areas · graded</span><h1>Your Vedic life report.</h1></div>
           <p>Four life areas read from your real birth chart — wealth & finances, education & learning, foreign travel & settlement, and health & wellbeing — each with a clear answer, the reason from your chart, and what it means. Every indication is graded strong, moderate or mild.</p>
         </div>
-        <TrustStrip claim="Each area is read from the relevant house lords in your real chart and their classical strength — a graded indication, never a verdict." href="/how-it-works#vedic" />
+        <TrustStrip claim="Each area is read from the relevant house lords in your real chart and their classical strength — a graded indication, never a verdict." href="/how-it-works/#vedic" />
 
         <div className="form-band" style={{ marginTop: 16 }}>
           <div><h3>Your birth details</h3><p className="small muted">We need the house lords and their strengths from your chart.</p></div>

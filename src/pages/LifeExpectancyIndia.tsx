@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -12,10 +12,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyIndia = () => {
@@ -40,7 +40,7 @@ const LifeExpectancyIndia = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'India Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'India Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in India — What the Numbers Actually Mean"
       lead={`India's average life expectancy is ${leYears('India')} years (${LE_CITATION}). Women average ${leYears('India', 'female')} years; men average ${leYears('India', 'male')} years. India has gained more than 26 years of life expectancy since 1960 (${WPP2024_HISTORY.India[1960]} years then) — one of the fastest improvements of any large nation in history.`}
@@ -72,7 +72,7 @@ const LifeExpectancyIndia = () => {
         <section>
           <h2 className="text-2xl font-bold text-foreground mb-4">What This Means for You Personally</h2>
           <p className="text-muted-foreground leading-relaxed mb-4">A national average describes a population, not a person. Twin studies suggest lifestyle accounts for roughly 70-80% of the variation in how long individuals live — which means your habits and your biological age matter far more than your nationality.</p>
-          <p className="text-muted-foreground leading-relaxed">A health-conscious Indian adult can comfortably outlive the national average by a decade or more. Run the numbers on your own life with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>, then check how your body is actually ageing with the <Link to="/biological-age" className="text-primary underline">Biological Age Test</Link>.</p>
+          <p className="text-muted-foreground leading-relaxed">A health-conscious Indian adult can comfortably outlive the national average by a decade or more. Run the numbers on your own life with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>, then check how your body is actually ageing with the <Link to="/biological-age/" className="text-primary underline">Biological Age Test</Link>.</p>
         </section>
       </article>
 
@@ -80,7 +80,7 @@ const LifeExpectancyIndia = () => {
         <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
           <h2 className="text-xl font-bold text-foreground mb-2">Compare India Against 57 Countries</h2>
           <p className="text-sm text-muted-foreground mb-4">See how India's life expectancy stacks up globally — and how much your own habits could shift your personal forecast.</p>
-          <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+          <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
             Open the Country Comparison Tool →
           </Link>
         </div>

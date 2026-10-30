@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -12,10 +12,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyJapan = () => {
@@ -40,7 +40,7 @@ const LifeExpectancyJapan = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Japan Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Japan Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Japan — Why the Japanese Live Longest and What Science Says About It"
       lead={`Japan's average life expectancy is ${leYears('Japan')} years — the highest of any large nation on Earth (${LE_CITATION}). Women average ${leYears('Japan', 'female')} years; men average ${leYears('Japan', 'male')} years. Japan has held this position for decades, and the reasons are specific and well-studied.`}
@@ -71,7 +71,7 @@ const LifeExpectancyJapan = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">What Anyone Can Take From the Japanese Model</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">The most useful finding is that the drivers are habits, not genetics. Walking more, eating more fish and fermented foods, keeping strong social ties, and holding a clear sense of purpose all travel across borders.</p>
-            <p className="text-muted-foreground leading-relaxed">Hara hachi bu — stopping at 80% full — is achievable at any dinner table in the world. See how these levers change your own forecast with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
+            <p className="text-muted-foreground leading-relaxed">Hara hachi bu — stopping at 80% full — is achievable at any dinner table in the world. See how these levers change your own forecast with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
 
@@ -79,7 +79,7 @@ const LifeExpectancyJapan = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Compare Japan Against 57 Countries</h2>
             <p className="text-sm text-muted-foreground mb-4">See how Japan's world-leading life expectancy compares globally — and how much your own habits could shift your personal forecast.</p>
-            <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Open the Country Comparison Tool →
             </Link>
           </div>

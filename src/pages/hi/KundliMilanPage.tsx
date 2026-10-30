@@ -6,7 +6,7 @@
  * The boy/girl choice is explicit: the first box is always the boy (groom = A).
  */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -127,10 +127,10 @@ export default function HindiKundliMilanPage() {
       testId="hi-kundli-milan-page"
       seo={<SEO title={HINDI_MILAN_META.title} description={HINDI_MILAN_META.description} canonicalUrl="/hi/kundli-milan" ogType="website"
                 hreflang={[{ lang: 'en', url: `${SITE}/kundali-match/` }, { lang: 'hi', url: `${SITE}/hi/kundli-milan/` }]} />}
-      breadcrumb={{ trail: [{ label: 'राशिफल', to: '/hi/rashifal' }], current: 'कुंडली मिलान', edition: 'अष्टकूट · 36 गुण मिलान' }}
+      breadcrumb={{ trail: [{ label: 'राशिफल', to: '/hi/rashifal/' }], current: 'कुंडली मिलान', edition: 'अष्टकूट · 36 गुण मिलान' }}
       footer={{
         tagline: 'पारंपरिक 36 गुण (अष्टकूट) कुंडली मिलान — हर कूट गणना के साथ।',
-        nav: [{ label: 'नाम से कुंडली मिलान', to: '/hi/naam-se-kundli-milan' }, { label: 'राशिफल', to: '/hi/rashifal' }, { label: 'पंचांग', to: '/hi/panchang' }, { label: 'उपाय', to: '/hi/upay' }, { label: 'English', to: '/kundali-match' }],
+        nav: [{ label: 'नाम से कुंडली मिलान', to: '/hi/naam-se-kundli-milan/' }, { label: 'राशिफल', to: '/hi/rashifal/' }, { label: 'पंचांग', to: '/hi/panchang/' }, { label: 'उपाय', to: '/hi/upay/' }, { label: 'English', to: '/kundali-match/' }],
       }}
     >
       <FAQSchema items={HINDI_MILAN_FAQ} />
@@ -141,8 +141,8 @@ export default function HindiKundliMilanPage() {
         </div>
         <AutoTranslatedNotice lang="hi" />
         <p className="text-sm text-muted-foreground" style={{ marginBottom: 12 }}>
-          वही गणना जो हमारे अंग्रेज़ी <Link to="/kundali-match" className="textlink" lang="en">Kundali Matching</Link> पेज पर है; अक्टूबर 2026 के हमारे परीक्षण में 7 में से 7 जोड़ों का कुल AstroSage से मेल खाया (<Link to="/accuracy" className="textlink">हम सटीकता कैसे जाँचते हैं</Link>)।
-          जन्म समय नहीं पता? <Link to="/hi/naam-se-kundli-milan" className="textlink">नाम से कुंडली मिलान</Link> (अनुमान) देखें।
+          वही गणना जो हमारे अंग्रेज़ी <Link to="/kundali-match/" className="textlink" lang="en">Kundali Matching</Link> पेज पर है; अक्टूबर 2026 के हमारे परीक्षण में 7 में से 7 जोड़ों का कुल AstroSage से मेल खाया (<Link to="/accuracy/" className="textlink">हम सटीकता कैसे जाँचते हैं</Link>)।
+          जन्म समय नहीं पता? <Link to="/hi/naam-se-kundli-milan/" className="textlink">नाम से कुंडली मिलान</Link> (अनुमान) देखें।
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
@@ -180,7 +180,7 @@ export default function HindiKundliMilanPage() {
               </div>
             )}
             <p className="text-sm text-muted-foreground">
-              विवाह के अनुकूल समय की अवधि और दक्षिण भारतीय 10-पोरुथम के लिए <Link to="/kundali-match" className="textlink" lang="en">English Kundali Matching</Link> पेज देखें।
+              विवाह के अनुकूल समय की अवधि और दक्षिण भारतीय 10-पोरुथम के लिए <Link to="/kundali-match/" className="textlink" lang="en">English Kundali Matching</Link> पेज देखें।
             </p>
           </div>
         )}

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -12,10 +12,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancySingapore = () => {
@@ -40,7 +40,7 @@ const LifeExpectancySingapore = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Singapore Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Singapore Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Singapore — How a City-State Built One of the World's Healthiest Populations"
       lead={`Singapore's average life expectancy is approximately ${leYears('Singapore')} years (${LE_CITATION}) — one of the highest of any nation. Women average ${leYears('Singapore', 'female')} years; men average ${leYears('Singapore', 'male')} years. Singapore achieved this with no natural resources and a population of only 5.9 million — through deliberate, evidence-based public health policy sustained over 60 years.`}
@@ -71,7 +71,7 @@ const LifeExpectancySingapore = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">What Singapore Shows About Intentional Public Health</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">The lesson is that longevity doesn't require natural wealth or a large land area — it requires consistent, evidence-based policy sustained over decades.</p>
-            <p className="text-muted-foreground leading-relaxed">Singapore's experience is studied worldwide as a model for what deliberate health investment can achieve regardless of starting conditions. See how your own habits move your forecast with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
+            <p className="text-muted-foreground leading-relaxed">Singapore's experience is studied worldwide as a model for what deliberate health investment can achieve regardless of starting conditions. See how your own habits move your forecast with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
 
@@ -79,7 +79,7 @@ const LifeExpectancySingapore = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Compare Singapore Against 57 Countries</h2>
             <p className="text-sm text-muted-foreground mb-4">See how Singapore ranks globally — and how much your own habits could shift your personal forecast.</p>
-            <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Open the Country Comparison Tool →
             </Link>
           </div>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { MoneyLayout } from '@/components/central';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -78,7 +78,7 @@ export default function GiftReport() {
           say <em>I pay attention to you</em> — a gift built entirely around them, so they open it and
           feel noticed, valued and cared for. A keepsake and conversation starter, never a prediction.
         </p>
-        <Link to="/birthday-report" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-7 py-3.5 font-semibold hover:bg-[#0E2238] transition-colors">
+        <Link to="/birthday-report/" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-7 py-3.5 font-semibold hover:bg-[#0E2238] transition-colors">
           <ArrowRightCircle className="w-5 h-5" /> Create their Blueprint — {reportPrice}
         </Link>
         <div className="mt-6"><SharePageBar path="/gift" title="Gift a Birthday Blueprint" text="A birthday gift that makes them feel truly seen — a personalised keepsake from BornClock" className="justify-center" /></div>
@@ -130,7 +130,7 @@ export default function GiftReport() {
       <section className="max-w-2xl mx-auto px-4 py-8 text-center">
         <div className="rounded-2xl bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border border-[#6E5AA6]/30 p-8">
           <p className="text-sm text-gray-600 mb-3">Every Blueprint is a designed, shareable keepsake — a private web page plus a downloadable PDF.</p>
-          <Link to="/birthday-report" className="text-[#6E5AA6] font-semibold hover:underline">See what's inside a Birthday Blueprint →</Link>
+          <Link to="/birthday-report/" className="text-[#6E5AA6] font-semibold hover:underline">See what's inside a Birthday Blueprint →</Link>
         </div>
       </section>
 
@@ -180,7 +180,7 @@ export default function GiftReport() {
       <section className="max-w-2xl mx-auto px-4 py-8 text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-3">Give a gift only you could give</h2>
         <p className="text-gray-600 mb-5">One-time {reportPrice}. No subscription. Delivered instantly.</p>
-        <Link to="/birthday-report" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-7 py-3.5 font-semibold hover:bg-[#0E2238] transition-colors">
+        <Link to="/birthday-report/" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-7 py-3.5 font-semibold hover:bg-[#0E2238] transition-colors">
           <ArrowRightCircle className="w-5 h-5" /> Create their Blueprint — {reportPrice}
         </Link>
       </section>
@@ -197,8 +197,8 @@ export default function GiftReport() {
           {meshPosts.map(p => (
             <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ {p.title}</Link>
           ))}
-          <Link to="/birthday-report" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Create a Birthday Report</Link>
-          <Link to="/celebrity-birthday" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Celebrity birthday match</Link>
+          <Link to="/birthday-report/" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Create a Birthday Report</Link>
+          <Link to="/celebrity-birthday/" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Celebrity birthday match</Link>
         </div>
       </div>
     </MoneyLayout>

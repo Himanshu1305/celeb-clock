@@ -156,7 +156,7 @@ function BioAgeCalculator() {
             Illustrative only. BornClock&apos;s full calculator asks 15 questions on fitness, body
             size, blood pressure, sleep and habits — still a rough estimate, not a lab test.
           </p>
-          <a href="/biological-age"
+          <a href="/biological-age/"
              className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
                         rounded-full text-sm hover:bg-[#0E2238] transition-colors">
             Get my full biological age estimate →
@@ -204,7 +204,7 @@ export function BiologicalAgeArticle() {
           <JsonLd data={faqSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'Biological Age vs Chronological Age — The Real Science' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'Biological Age vs Chronological Age — The Real Science' }}
       eyebrow="Science & Longevity"
       h1="Biological Age vs Chronological Age — The Real Science"
       lead="You have two ages, and they rarely match. Your chronological age is the easy one: the number of calendar years since the day you were born. It ticks up by exactly one year every year, for everyone, no exceptions. Your biological age is the interesting one — an estimate of how old your body actually is, measured at the level of your cells, tissues, and physiology. Two people born on the same day can have biological ages a decade apart, and that gap is where nearly all of the modern longevity science lives."
@@ -216,7 +216,7 @@ export function BiologicalAgeArticle() {
             changed the field, which markers actually matter, and the five lifestyle changes with
             the strongest evidence for lowering your biological age. If you want a quick,
             illustrative estimate right now, you can try the mini-calculator further down, or use
-            the full <a href="/biological-age" className="text-[#2F6FB0] font-semibold underline">biological age calculator</a>.
+            the full <a href="/biological-age/" className="text-[#2F6FB0] font-semibold underline">biological age calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">
@@ -370,9 +370,9 @@ export function BiologicalAgeArticle() {
             It is a starting point, not a diagnosis. But it points at exactly the same
             interventions the epigenetic science highlights, in a form you can act on today. To
             see your own number, use the{' '}
-            <a href="/biological-age" className="text-[#2F6FB0] font-semibold underline">biological age calculator</a>{' '}
+            <a href="/biological-age/" className="text-[#2F6FB0] font-semibold underline">biological age calculator</a>{' '}
             — and to see how those habits translate into a projected lifespan, try the{' '}
-            <a href="/longevity-calculator" className="text-[#2F6FB0] font-semibold underline">longevity calculator</a>.
+            <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline">longevity calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Frequently Asked Questions</h2>
@@ -388,7 +388,7 @@ export function BiologicalAgeArticle() {
           <section className="mb-10 bg-gray-50 rounded-2xl border border-gray-200 p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Related Articles</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <a href="/articles/epigenetics-and-longevity"
+              <a href="/articles/epigenetics-and-longevity/"
                  className="block p-4 bg-white rounded-xl border border-gray-200
                             hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors">
                 <div className="font-semibold text-sm text-gray-900 mb-0.5">
@@ -398,7 +398,7 @@ export function BiologicalAgeArticle() {
                   How your genes are switched on and off — and what it means for how long you live.
                 </div>
               </a>
-              <a href="/articles/how-to-live-to-100"
+              <a href="/articles/how-to-live-to-100/"
                  className="block p-4 bg-white rounded-xl border border-gray-200
                             hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors">
                 <div className="font-semibold text-sm text-gray-900 mb-0.5">
@@ -418,7 +418,7 @@ export function BiologicalAgeArticle() {
               See how your lifestyle stacks up against the science, and get a personalised
               estimate of your biological age in a few minutes.
             </p>
-            <a href="/biological-age"
+            <a href="/biological-age/"
                className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
               Calculate My Biological Age →

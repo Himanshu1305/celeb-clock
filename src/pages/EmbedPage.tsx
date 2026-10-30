@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 
 const EMBED_CODE = '<iframe src="https://bornclock.com/widget/age-calculator" width="100%" height="220" frameborder="0" style="border-radius:12px;border:1px solid #e5e7eb;" title="Age Calculator"></iframe>';
 
 const RELATED = [
-  { path: '/age-calculator', label: 'Age Calculator' },
-  { path: '/age-in-days', label: 'Age in Days' },
-  { path: '/birthday-countdown', label: 'Birthday Countdown' },
+  { path: '/age-calculator/', label: 'Age Calculator' },
+  { path: '/age-in-days/', label: 'Age in Days' },
+  { path: '/birthday-countdown/', label: 'Birthday Countdown' },
 ];
 
 const EmbedPage = () => {

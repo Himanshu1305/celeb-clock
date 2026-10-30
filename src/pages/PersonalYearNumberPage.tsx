@@ -8,7 +8,7 @@
  */
 import { useState } from 'react';
 import { PageFAQ } from '@/components/PageFAQ';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TrustStrip } from '@/components/paj/TrustStrip';
@@ -132,18 +132,18 @@ export default function PersonalYearNumberPage() {
         />
       )}
       breadcrumb={{
-        trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }],
+        trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }],
         current: 'Personal Year Number',
         edition: 'Pythagorean · Nine-year cycle',
       }}
       footer={{
         tagline: 'Personal year numbers from the Pythagorean method — computed in your browser at view time.',
         nav: [
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Life Path 7', to: '/numerology/7' },
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'How It Works', to: '/how-it-works' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Life Path 7', to: '/numerology/7/' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'How It Works', to: '/how-it-works/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Symbolic tradition, presented honestly.',
       }}
@@ -162,7 +162,7 @@ export default function PersonalYearNumberPage() {
           </p>
         </div>
 
-        <TrustStrip claim="Worked out in your browser from today's date — so it's always current, never baked in months ago." href="/how-it-works#numerology" />
+        <TrustStrip claim="Worked out in your browser from today's date — so it's always current, never baked in months ago." href="/how-it-works/#numerology" />
 
         {/* Honest framing — renders on first paint */}
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 mb-6 text-sm text-amber-900">
@@ -279,11 +279,11 @@ export default function PersonalYearNumberPage() {
           <div className="rounded-xl border border-border p-4">
             <div className="font-semibold text-foreground mb-2">Continue exploring</div>
             <ul className="text-sm space-y-1">
-              <li><Link to="/numerology" className="text-[#6E5AA6] hover:underline">Numerology overview</Link> — Life Path, Expression and other core numbers</li>
-              <li><Link to="/numerology/7" className="text-[#6E5AA6] hover:underline">Life Path 7</Link> — example of a life path number reading</li>
-              <li><Link to="/angel-numbers" className="text-[#6E5AA6] hover:underline">Angel Numbers</Link> — meaning of repeating sequences like 111, 222, 333</li>
-              <li><Link to="/mystic-corner" className="text-[#6E5AA6] hover:underline">Mystic Corner</Link> — all symbolic tools on BornClock</li>
-              <li><Link to="/how-it-works" className="text-[#6E5AA6] hover:underline">How it works</Link> — our methodology and data sources</li>
+              <li><Link to="/numerology/" className="text-[#6E5AA6] hover:underline">Numerology overview</Link> — Life Path, Expression and other core numbers</li>
+              <li><Link to="/numerology/7/" className="text-[#6E5AA6] hover:underline">Life Path 7</Link> — example of a life path number reading</li>
+              <li><Link to="/angel-numbers/" className="text-[#6E5AA6] hover:underline">Angel Numbers</Link> — meaning of repeating sequences like 111, 222, 333</li>
+              <li><Link to="/mystic-corner/" className="text-[#6E5AA6] hover:underline">Mystic Corner</Link> — all symbolic tools on BornClock</li>
+              <li><Link to="/how-it-works/" className="text-[#6E5AA6] hover:underline">How it works</Link> — our methodology and data sources</li>
             </ul>
           </div>
         </div>

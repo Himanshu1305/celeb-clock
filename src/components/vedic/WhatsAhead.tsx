@@ -19,7 +19,7 @@
  * such windows as "a period of heightened possibility, not a fixed certainty".
  */
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import {
   windowsFor, lifeAreas, timeHorizons, type AheadWindow, type MahaPeriod, type LifeArea,
 } from '@/lib/vedic/whatsAhead';
@@ -113,7 +113,7 @@ export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free, marit
       {open && !isFree && (
         <div data-testid="whats-ahead-locked" style={{ marginTop: 10, border: '1px solid var(--line,#e4dcc8)', borderRadius: 10, padding: 14, fontSize: 13, color: 'var(--ink)' }}>
           "What’s ahead" is part of the full report. It re-presents your real Dasha timeline by life area and time horizon.
-          <div style={{ marginTop: 8 }}><Link className="btn" to="/birthday-report/gift">See the full report →</Link></div>
+          <div style={{ marginTop: 8 }}><Link className="btn" to="/birthday-report/gift/">See the full report →</Link></div>
         </div>
       )}
 

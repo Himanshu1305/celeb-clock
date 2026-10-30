@@ -86,7 +86,7 @@ export function HindiLifeExpectancyArticle() {
           articleSchema={false}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles' }], current: 'जीवन प्रत्याशा कैलकुलेटर' }}
+      breadcrumb={{ trail: [{ label: 'Articles', to: '/articles/' }], current: 'जीवन प्रत्याशा कैलकुलेटर' }}
       eyebrow="Articles"
       h1={<>जीवन प्रत्याशा कैलकुलेटर — आप कितने साल जिएंगे?</>}
     >
@@ -115,7 +115,7 @@ export function HindiLifeExpectancyArticle() {
             <p className="text-emerald-700 mb-5">
               अपनी जन्मतिथि और जीवनशैली दर्ज करें और तुरंत जानें कि आप कितने साल जी सकते हैं।
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-emerald-600 text-white font-black px-8 py-3
                           rounded-full text-lg hover:bg-emerald-700 transition-colors">
               मुफ्त जीवन प्रत्याशा कैलकुलेटर खोलें →
@@ -169,7 +169,7 @@ export function HindiLifeExpectancyArticle() {
               कुछ ही सेकंड में जानें कि आपकी जीवनशैली आपकी आयु को कैसे प्रभावित कर रही है
               और स्वस्थ लंबा जीवन जीने के लिए क्या बदलें।
             </p>
-            <a href="/longevity-calculator"
+            <a href="/longevity-calculator/"
                className="inline-block bg-white text-emerald-700 font-black px-8 py-3
                           rounded-full text-lg hover:bg-emerald-50 transition-colors">
               मुफ्त कैलकुलेटर शुरू करें →

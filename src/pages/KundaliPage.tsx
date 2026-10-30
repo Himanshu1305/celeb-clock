@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo, lazy, Suspense } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 // TBT fix: the chart + the reading render only AFTER the visitor generates a chart
@@ -221,17 +222,17 @@ export default function KundaliPage() {
           ogType="website"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Kundali', edition: 'Sidereal · Lahiri' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Kundali', edition: 'Sidereal · Lahiri' }}
       footer={{
         tagline: 'Your Vedic birth chart, computed with care — accurate sidereal (Lahiri) astronomy.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Glossary', to: '/glossary' },
-          { label: 'Kundali Matching', to: '/kundali-match' },
-          { label: 'Sade Sati', to: '/sade-sati' },
-          { label: 'Muhurat', to: '/muhurat' },
-          { label: 'AI Astrologer', to: '/astrologer' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Glossary', to: '/glossary/' },
+          { label: 'Kundali Matching', to: '/kundali-match/' },
+          { label: 'Sade Sati', to: '/sade-sati/' },
+          { label: 'Muhurat', to: '/muhurat/' },
+          { label: 'AI Astrologer', to: '/astrologer/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -246,7 +247,7 @@ export default function KundaliPage() {
           </div>
 
           {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts). */}
-          <TrustStrip claim="Calculated from your exact birth date, time and place — not a template. In our tests (October 2026), Lagna and planet positions for 22 test births were within 1 arc-minute of the Swiss Ephemeris." href="/accuracy" linkLabel="How we check accuracy" />
+          <TrustStrip claim="Calculated from your exact birth date, time and place — not a template. In our tests (October 2026), Lagna and planet positions for 22 test births were within 1 arc-minute of the Swiss Ephemeris." href="/accuracy/" linkLabel="How we check accuracy" />
           <KundaliTabs active="kundali" />
 
           {loaded && isFull && (
@@ -378,7 +379,7 @@ export default function KundaliPage() {
                 <div data-testid="kundali-divisional" style={{ marginTop: 20 }}>
                   <h3 style={{ marginBottom: 4 }}><TermTip id="navamsa">Navamsa (D9)</TermTip> and <TermTip id="dasamsa">Dasamsa (D10)</TermTip></h3>
                   <p className="text-sm text-muted-foreground" style={{ marginBottom: 8 }}>
-                    <TermTip id="varga">Divisional charts</TermTip> refine the main chart: the <Link to="/divisional-charts/d9-navamsa" className="underline">Navamsa</Link> for marriage and inner strength, the <Link to="/divisional-charts/d10-dasamsa" className="underline">Dasamsa</Link> for career. The first house is each chart’s own Lagna. They are sensitive to birth time — a few minutes can move the Lagna.
+                    <TermTip id="varga">Divisional charts</TermTip> refine the main chart: the <Link to="/divisional-charts/d9-navamsa/" className="underline">Navamsa</Link> for marriage and inner strength, the <Link to="/divisional-charts/d10-dasamsa/" className="underline">Dasamsa</Link> for career. The first house is each chart’s own Lagna. They are sensitive to birth time — a few minutes can move the Lagna.
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {([['d9', 'Navamsa (D9)'], ['d10', 'Dasamsa (D10)']] as const).map(([key, title]) => {
@@ -459,7 +460,7 @@ export default function KundaliPage() {
                   onClick={() => void downloadPdf()}>
                   Download Kundli (PDF) — free
                 </button>
-                <Link className="btn secondary" to="/birthday-report/gift">Gift a Birthday Blueprint ({price}) →</Link>
+                <Link className="btn secondary" to="/birthday-report/gift/">Gift a Birthday Blueprint ({price}) →</Link>
               </div>
               <Suspense fallback={null}>
                 <KundaliShareCard data={data} chartStyle={chartStyle} birth={shareBirth} shareText={shareText} whatsappHref={whatsappHref} />
@@ -515,8 +516,8 @@ export default function KundaliPage() {
           <div><span className="eyebrow">Paid report · {price}</span><h2>The Birthday Blueprint.</h2></div>
           <p>A personalised birthday report — Western, Chinese and Vedic zodiac profiles, numerology and life path, and celebrity birthday twins — for yourself or as a gift. Your Kundali above (chart, doshas and reading) stays free; the Blueprint is a different report and does not add remedies or extra predictions.</p>
           <div className="report-actions">
-            <Link className="btn light" to="/birthday-report">Get the Birthday Blueprint →</Link>
-            <p className="small"><Link className="textlink" to="/birthday-report/gift">Gift a Birthday Blueprint ({price}) →</Link></p>
+            <Link className="btn light" to="/birthday-report/">Get the Birthday Blueprint →</Link>
+            <p className="small"><Link className="textlink" to="/birthday-report/gift/">Gift a Birthday Blueprint ({price}) →</Link></p>
           </div>
         </section>
     </PajPage>

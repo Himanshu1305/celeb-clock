@@ -1,5 +1,6 @@
 import React from 'react';
-import { useParams, Navigate, Link } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { ReportLayout } from '@/components/central';
 import celebritiesData from '@/data/celebrities.json';
@@ -280,14 +281,14 @@ export function CelebrityPage() {
           <JsonLd data={breadcrumbSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity' }, { label: 'Celebrity Profiles', to: '/celebrity' }], current: name }}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity/' }, { label: 'Celebrity Profiles', to: '/celebrity/' }], current: name }}
       footer={{
         tagline: `${name} — birthday, zodiac, numerology and life path, calculated from date of birth.`,
         nav: [
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Birthdays Today', to: '/todays-birthdays' },
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Birthdays Today', to: '/todays-birthdays/' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Celebrity birthdays.',
       }}
@@ -923,7 +924,7 @@ export function CelebrityPage() {
           {/* Internal link to the compatibility tool (Task 19) */}
           <p className="text-sm text-gray-600 my-4">
             Curious how you match with {name}?{' '}
-            <Link to="/compatibility" className="text-[#6E5AA6] font-medium hover:underline">
+            <Link to="/compatibility/" className="text-[#6E5AA6] font-medium hover:underline">
               Check your birthday compatibility →
             </Link>
           </p>

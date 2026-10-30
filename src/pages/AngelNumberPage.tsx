@@ -8,7 +8,8 @@
  * page. Popular belief — never a prediction.
  */
 import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -25,11 +26,11 @@ const ACCENT = '#6E5AA6';
 const FOOTER = {
   tagline: 'Angel numbers explained honestly — a modern spiritual belief, not numerology from a birthday.',
   nav: [
-    { label: 'All angel numbers', to: '/angel-numbers' },
-    { label: 'Numerology calculator', to: '/numerology' },
-    { label: 'Personal Year Number', to: '/personal-year-number' },
-    { label: 'Mystic Corner', to: '/mystic-corner' },
-    { label: 'Privacy', to: '/privacy' },
+    { label: 'All angel numbers', to: '/angel-numbers/' },
+    { label: 'Numerology calculator', to: '/numerology/' },
+    { label: 'Personal Year Number', to: '/personal-year-number/' },
+    { label: 'Mystic Corner', to: '/mystic-corner/' },
+    { label: 'Privacy', to: '/privacy/' },
   ],
   note: '© 2026 BornClock · Popular belief, presented honestly — not a prediction.',
 };
@@ -72,7 +73,7 @@ function LifePathCheck({ a }: { a: AngelNumber }) {
         </div>
       )}
       <p className="text-xs text-muted-foreground mt-2">
-        Uses the same Life Path method as our <Link to="/numerology" className="underline">numerology calculator</Link> (day, month and year reduced separately, keeping 11, 22 and 33). Your date stays in your browser.
+        Uses the same Life Path method as our <Link to="/numerology/" className="underline">numerology calculator</Link> (day, month and year reduced separately, keeping 11, 22 and 33). Your date stays in your browser.
       </p>
     </div>
   );
@@ -85,7 +86,7 @@ function NotFound() {
       variant="editorial"
       testId="angel-number-not-found"
       seo={<SEO title="Angel Number Not Found | BornClock" description="See all the angel numbers BornClock explains — 000, 111, 222, 333 and more." canonicalUrl="/angel-numbers" />}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Angel Numbers', to: '/angel-numbers' }], current: 'Not found' }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Angel Numbers', to: '/angel-numbers/' }], current: 'Not found' }}
       footer={FOOTER}
     >
       <section className="section">
@@ -129,7 +130,7 @@ export default function AngelNumberPage() {
       testId="angel-number-page"
       seo={<SEO title={angelTitle(seq)} description={ANGEL_SEO[seq]} canonicalUrl={`/angel-numbers/${seq}`} ogType="article" />}
       breadcrumb={{
-        trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Angel Numbers', to: '/angel-numbers' }],
+        trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Angel Numbers', to: '/angel-numbers/' }],
         current: seq,
         edition: 'Popular belief · Not a prediction',
       }}
@@ -154,7 +155,7 @@ export default function AngelNumberPage() {
 
         <TrustStrip
           claim={`Meanings are paraphrased from the popular sources listed at the bottom of this page — a spiritual belief, not a forecast. Numerology here is calculated, not written by hand.`}
-          href="/how-it-works#numerology"
+          href="/how-it-works/#numerology"
           linkLabel="How it works"
         />
 
@@ -239,7 +240,7 @@ export default function AngelNumberPage() {
           {ANGEL_NUMBERS.filter(x => x.sequence !== seq && !a.related.includes(x.sequence)).map(x => (
             <Link key={x.sequence} to={`/angel-numbers/${x.sequence}`} className="px-2.5 py-1 rounded-lg border border-border text-xs text-foreground hover:bg-primary/5">{x.sequence}</Link>
           ))}
-          <Link to="/angel-numbers" className="px-2.5 py-1 rounded-lg border border-border text-xs text-foreground hover:bg-primary/5">All angel numbers →</Link>
+          <Link to="/angel-numbers/" className="px-2.5 py-1 rounded-lg border border-border text-xs text-foreground hover:bg-primary/5">All angel numbers →</Link>
         </div>
 
         <PageFAQ items={faqItems} title={`Angel number ${seq}: questions people ask`} />
@@ -256,7 +257,7 @@ export default function AngelNumberPage() {
 
         <div className="rounded-xl p-6 text-center border" style={{ borderColor: ACCENT, background: 'rgba(110,90,166,0.07)' }}>
           <p className="text-muted-foreground mb-3">Want a number that is actually calculated for you? Your Life Path comes from your birth date.</p>
-          <Link to="/numerology" className="inline-flex items-center gap-2 rounded-lg px-6 py-3 font-semibold text-white" style={{ background: ACCENT }}>Free numerology calculator →</Link>
+          <Link to="/numerology/" className="inline-flex items-center gap-2 rounded-lg px-6 py-3 font-semibold text-white" style={{ background: ACCENT }}>Free numerology calculator →</Link>
         </div>
       </section>
     </PajPage>

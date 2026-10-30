@@ -3,7 +3,8 @@
  * One page per finding BornClock detects, plus a hub — Batch 5, goal d.
  * Content comes from src/lib/vedic/remedies (sourced, calm, free remedies first).
  */
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -64,8 +65,8 @@ export default function RemediesPage({ lang = 'en' }: { lang?: Lang }) {
         testId="remedies-hub"
         seo={<SEO title={title} description={description} canonicalUrl={hubPath} ogImage="https://bornclock.com/og/vedic.png"
           hreflang={[{ lang: 'en', url: `${SITE}/remedies/` }, { lang: 'hi', url: `${SITE}/hi/upay/` }]} />}
-        breadcrumb={{ trail: [{ label: lang === 'hi' ? 'वैदिक ज्योतिष' : 'Vedic Astrology', to: '/vedic-astrology' }], current: lang === 'hi' ? 'उपाय' : 'Remedies' }}
-        footer={{ tagline: lang === 'hi' ? 'शांत, स्रोत-सहित उपाय।' : 'Calm, sourced remedies.', nav: [{ label: lang === 'hi' ? 'निःशुल्क कुंडली' : 'Free Kundli', to: '/kundali' }, { label: lang === 'hi' ? 'कुंडली मिलान' : 'Kundali Match', to: lang === 'hi' ? '/hi/kundli-milan' : '/kundali-match' }, { label: lang === 'hi' ? 'रत्न' : 'Gemstones', to: '/gemstones' }] }}
+        breadcrumb={{ trail: [{ label: lang === 'hi' ? 'वैदिक ज्योतिष' : 'Vedic Astrology', to: '/vedic-astrology/' }], current: lang === 'hi' ? 'उपाय' : 'Remedies' }}
+        footer={{ tagline: lang === 'hi' ? 'शांत, स्रोत-सहित उपाय।' : 'Calm, sourced remedies.', nav: [{ label: lang === 'hi' ? 'निःशुल्क कुंडली' : 'Free Kundli', to: '/kundali/' }, { label: lang === 'hi' ? 'कुंडली मिलान' : 'Kundali Match', to: lang === 'hi' ? '/hi/kundli-milan' : '/kundali-match' }, { label: lang === 'hi' ? 'रत्न' : 'Gemstones', to: '/gemstones/' }] }}
         eyebrow={lang === 'hi' ? 'उपाय' : 'Remedies'}
         h1={lang === 'hi' ? 'ज्योतिषीय उपाय — सरल, शांत और स्रोत-सहित' : 'Vedic remedies — plain, calm and sourced'}
         lead={lang === 'hi'
@@ -127,8 +128,8 @@ export default function RemediesPage({ lang = 'en' }: { lang?: Lang }) {
       testId="remedy-page"
       seo={<SEO title={meta.title} description={meta.description} canonicalUrl={path} ogImage="https://bornclock.com/og/vedic.png" ogType="article"
         hreflang={[{ lang: 'en', url: `${SITE}/remedies/${entry.slug}/` }, { lang: 'hi', url: `${SITE}/hi/upay/${entry.slug}/` }]} />}
-      breadcrumb={{ trail: [{ label: lang === 'hi' ? 'वैदिक ज्योतिष' : 'Vedic Astrology', to: '/vedic-astrology' }, { label: lang === 'hi' ? 'उपाय' : 'Remedies', to: hubPath }], current: entry.name[lang] }}
-      footer={{ tagline: lang === 'hi' ? 'शांत, स्रोत-सहित उपाय।' : 'Calm, sourced remedies.', nav: [{ label: lang === 'hi' ? 'सभी उपाय' : 'All remedies', to: hubPath }, { label: lang === 'hi' ? 'निःशुल्क कुंडली' : 'Free Kundli', to: '/kundali' }], note: lang === 'hi' ? 'उपाय पारंपरिक प्रथाएँ हैं — कभी पक्की नहीं। BornClock कोई पूजा या रत्न नहीं बेचता।' : 'Remedies are traditional customs — never guaranteed. BornClock sells no pujas or gemstones.' }}
+      breadcrumb={{ trail: [{ label: lang === 'hi' ? 'वैदिक ज्योतिष' : 'Vedic Astrology', to: '/vedic-astrology/' }, { label: lang === 'hi' ? 'उपाय' : 'Remedies', to: hubPath }], current: entry.name[lang] }}
+      footer={{ tagline: lang === 'hi' ? 'शांत, स्रोत-सहित उपाय।' : 'Calm, sourced remedies.', nav: [{ label: lang === 'hi' ? 'सभी उपाय' : 'All remedies', to: hubPath }, { label: lang === 'hi' ? 'निःशुल्क कुंडली' : 'Free Kundli', to: '/kundali/' }], note: lang === 'hi' ? 'उपाय पारंपरिक प्रथाएँ हैं — कभी पक्की नहीं। BornClock कोई पूजा या रत्न नहीं बेचता।' : 'Remedies are traditional customs — never guaranteed. BornClock sells no pujas or gemstones.' }}
       eyebrow={lang === 'hi' ? `उपाय · ${KIND_LABEL[entry.kind].hi}` : `Remedies · ${KIND_LABEL[entry.kind].en}`}
       h1={lang === 'hi' ? `${entry.name.hi} — अर्थ और उपाय` : `${entry.name.en} — meaning and remedies`}
       lead={entry.meaning.plain[lang]}

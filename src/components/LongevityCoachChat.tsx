@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Send, Lock, Bot } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Button } from '@/components/ui/button';
@@ -108,7 +108,7 @@ export function LongevityCoachChat({ result, userName, isPremium }: LongevityCoa
             Upgrade to chat with your personal AI health advisor who knows your exact forecast and health profile.
           </p>
           <Button asChild size="lg" className="gap-2">
-            <Link to="/upgrade">Upgrade to Premium →</Link>
+            <Link to="/upgrade/">Upgrade to Premium →</Link>
           </Button>
         </div>
       )}

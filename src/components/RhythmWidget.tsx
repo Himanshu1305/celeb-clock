@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { calculateBiorhythm, getBiorhythmStatus } from '@/data/biorhythmData';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { checkInPrompt, nextUpswing, validateDob } from '@/data/rhythmFraming';
@@ -116,9 +116,9 @@ export function RhythmWidget({ variant = 'today', ctaLabel = 'Calculate my rhyth
 
           {/* Internal links, incl. the born-on page for the entered DOB */}
           <div className="flex flex-wrap gap-3 text-sm">
-            <Link to="/biorhythm" className={`text-teal-700 hover:underline`}>Full biorhythm chart →</Link>
+            <Link to="/biorhythm/" className={`text-teal-700 hover:underline`}>Full biorhythm chart →</Link>
             <Link to={bornSlug} className={`text-teal-700 hover:underline`}>Who shares your birthday →</Link>
-            <Link to="/birthday-report" className={`text-teal-700 hover:underline`}>Your Birthday Report →</Link>
+            <Link to="/birthday-report/" className={`text-teal-700 hover:underline`}>Your Birthday Report →</Link>
           </div>
         </div>
       )}

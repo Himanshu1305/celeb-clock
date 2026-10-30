@@ -151,7 +151,7 @@ export function BirthMonthPersonalityArticle() {
               your numerology Life Path number, then combines numerology and astrology into a
               single, personalised birthday profile.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
                           rounded-full text-sm hover:bg-[#0E2238] transition-colors">
               Generate my free birthday profile →
@@ -170,8 +170,8 @@ export function BirthMonthPersonalityArticle() {
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
           <ul className="list-disc pl-6 text-[#6E5AA6] mb-10 space-y-1">
-            <li><a href="/articles/numerology-by-date-of-birth" className="hover:underline">Numerology by Date of Birth — Find Your Life Path Number</a></li>
-            <li><a href="/articles/moon-sign-by-date-of-birth" className="hover:underline">Moon Sign by Date of Birth — Your Emotional Blueprint</a></li>
+            <li><a href="/articles/numerology-by-date-of-birth/" className="hover:underline">Numerology by Date of Birth — Find Your Life Path Number</a></li>
+            <li><a href="/articles/moon-sign-by-date-of-birth/" className="hover:underline">Moon Sign by Date of Birth — Your Emotional Blueprint</a></li>
           </ul>
 
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
@@ -181,7 +181,7 @@ export function BirthMonthPersonalityArticle() {
               Go beyond your birth month. BornClock reads your full date of birth for your
               precise zodiac sign, Rashi, Nakshatra, Life Path number, and more.
             </p>
-            <a href="/birthday-report"
+            <a href="/birthday-report/"
                className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
                           rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
               Generate My Free Birthday Profile →

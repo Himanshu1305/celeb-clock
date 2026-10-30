@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Helmet } from 'react-helmet-async';
 import { SEO } from '@/components/SEO';
 import { ArticleLayout } from '@/components/central';
@@ -367,18 +367,18 @@ export default function FAQ() {
           <p className="text-muted-foreground text-sm mb-6">In-depth science-backed answers to the questions we hear most</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { to: '/answers/how-long-will-i-live', label: 'How long will I live?' },
-              { to: '/answers/what-is-my-biological-age', label: 'What is my biological age?' },
-              { to: '/answers/how-to-live-longer', label: 'How to live longer' },
-              { to: '/answers/what-is-life-expectancy', label: 'What is life expectancy?' },
-              { to: '/answers/how-does-stress-affect-life-expectancy', label: 'How does stress affect life expectancy?' },
-              { to: '/answers/what-is-bmi', label: 'What is BMI?' },
-              { to: '/answers/what-is-my-zodiac-sign', label: 'What is my zodiac sign?' },
-              { to: '/answers/how-to-calculate-age', label: 'How old am I in days?' },
-              { to: '/answers/what-generation-am-i', label: 'What generation am I?' },
-              { to: '/birthstone', label: 'What is my birthstone?' },
-              { to: '/answers/what-is-my-life-path-number', label: 'What is my numerology life path number?' },
-              { to: '/answers/how-many-days-until-my-birthday', label: 'How many days until my birthday?' },
+              { to: '/answers/how-long-will-i-live/', label: 'How long will I live?' },
+              { to: '/answers/what-is-my-biological-age/', label: 'What is my biological age?' },
+              { to: '/answers/how-to-live-longer/', label: 'How to live longer' },
+              { to: '/answers/what-is-life-expectancy/', label: 'What is life expectancy?' },
+              { to: '/answers/how-does-stress-affect-life-expectancy/', label: 'How does stress affect life expectancy?' },
+              { to: '/answers/what-is-bmi/', label: 'What is BMI?' },
+              { to: '/answers/what-is-my-zodiac-sign/', label: 'What is my zodiac sign?' },
+              { to: '/answers/how-to-calculate-age/', label: 'How old am I in days?' },
+              { to: '/answers/what-generation-am-i/', label: 'What generation am I?' },
+              { to: '/birthstone/', label: 'What is my birthstone?' },
+              { to: '/answers/what-is-my-life-path-number/', label: 'What is my numerology life path number?' },
+              { to: '/answers/how-many-days-until-my-birthday/', label: 'How many days until my birthday?' },
             ].map(({ to, label }) => (
               <Link
                 key={to}
@@ -406,9 +406,9 @@ export default function FAQ() {
           </a>
           <div className="mt-4 text-sm text-muted-foreground">
             or see our{' '}
-            <Link to="/how-it-works" className="text-blue-500 hover:underline">How It Works</Link>
+            <Link to="/how-it-works/" className="text-blue-500 hover:underline">How It Works</Link>
             {' '}and{' '}
-            <Link to="/privacy" className="text-blue-500 hover:underline">Privacy Policy</Link>
+            <Link to="/privacy/" className="text-blue-500 hover:underline">Privacy Policy</Link>
           </div>
         </div>
       </div>

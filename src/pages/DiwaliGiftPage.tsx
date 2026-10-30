@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { MoneyLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { useReportPrice } from '@/hooks/useCurrency';
@@ -58,7 +58,7 @@ export default function DiwaliGiftPage() {
         </div>
 
         <p className="text-center text-sm text-gray-500">
-          Prefer to shop the regular <Link to="/birthday-report/gift" className="text-orange-700 underline">gift options</Link>?
+          Prefer to shop the regular <Link to="/birthday-report/gift/" className="text-orange-700 underline">gift options</Link>?
         </p>
       </div>
     </MoneyLayout>

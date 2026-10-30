@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -14,12 +14,12 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/kundali', label: 'Free Kundli (find your Rising sign / Lagna)' },
-  { path: '/vedic-astrology', label: 'Vedic Astrology' },
-  { path: '/moon-sign', label: 'Moon Sign Calculator' },
-  { path: '/zodiac', label: 'Zodiac Signs' },
-  { path: '/compatibility', label: 'Compatibility' },
-  { path: '/vedic-zodiac', label: 'Vedic Zodiac' },
+  { path: '/kundali/', label: 'Free Kundli (find your Rising sign / Lagna)' },
+  { path: '/vedic-astrology/', label: 'Vedic Astrology' },
+  { path: '/moon-sign/', label: 'Moon Sign Calculator' },
+  { path: '/zodiac/', label: 'Zodiac Signs' },
+  { path: '/compatibility/', label: 'Compatibility' },
+  { path: '/vedic-zodiac/', label: 'Vedic Zodiac' },
 ];
 
 const SunVsMoonSign = () => {
@@ -34,14 +34,14 @@ const SunVsMoonSign = () => {
           canonicalUrl="/sun-vs-moon-sign"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Sun vs Moon Sign' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Sun vs Moon Sign' }}
       footer={{
         tagline: 'Sun sign, moon sign and rising — the three pieces of your astrological "Big Three."',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Moon Sign', to: '/moon-sign/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -81,7 +81,7 @@ const SunVsMoonSign = () => {
             <h2 className="text-2xl font-bold text-foreground mb-4">The third piece: your rising sign (the "Big Three")</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Sun and Moon are two of three. The third is your <TermTip id="risingSign">rising sign</TermTip> (also called the Ascendant, or <TermTip id="lagna">Lagna</TermTip> in Vedic astrology) — <strong className="text-foreground">the mask you meet the world with, and the frame the rest of your chart is read from.</strong> Together, Sun + Moon + Rising are what astrologers call your "Big Three."</p>
             <p className="text-muted-foreground leading-relaxed mb-4">The reason most sun-vs-moon explainers stop at two is that the rising sign needs your <em>exact birth time and place</em>, not just the date — it changes roughly every two hours. Once you have it, you can see all three at once.</p>
-            <p className="text-muted-foreground leading-relaxed">BornClock computes your real rising sign (Lagna) from your birth details on the Kundli tool. See it alongside your Moon sign and Nakshatra: <Link to="/kundali" className="text-primary hover:underline font-medium">generate your free Kundli (birth chart)</Link>, or explore the full <Link to="/vedic-astrology" className="text-primary hover:underline font-medium">Vedic Astrology</Link> suite.</p>
+            <p className="text-muted-foreground leading-relaxed">BornClock computes your real rising sign (Lagna) from your birth details on the Kundli tool. See it alongside your Moon sign and Nakshatra: <Link to="/kundali/" className="text-primary hover:underline font-medium">generate your free Kundli (birth chart)</Link>, or explore the full <Link to="/vedic-astrology/" className="text-primary hover:underline font-medium">Vedic Astrology</Link> suite.</p>
           </section>
 
           <section>

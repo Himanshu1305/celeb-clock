@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
 import { Crown, Star, ExternalLink, Calendar, Users } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 
 interface PremiumCelebrity {
   id: string;
@@ -136,7 +136,7 @@ export const PremiumCelebrityMatch = ({ birthDate, onCelebritiesChange }: Props)
               <span>Social Links</span>
             </div>
           </div>
-          <Link to="/upgrade">
+          <Link to="/upgrade/">
             <Button className="w-full">
               <Crown className="w-4 h-4 mr-2" />
               Upgrade to Premium

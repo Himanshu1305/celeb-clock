@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Sparkles, Star, Calendar, Hash } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { lifePathFromDate } from '@/lib/lifePath';
 
 interface Props {
@@ -199,7 +199,7 @@ export const ZodiacAndFacts = ({ birthDate }: Props) => {
       {/* Three Cards Row: Zodiac, Birthstone, Numerology */}
       <div className="grid gap-4 md:grid-cols-3">
         {/* Zodiac Sign - Clickable Link */}
-        <Link to="/zodiac" className="block group">
+        <Link to="/zodiac/" className="block group">
           <Card className="backdrop-blur-sm bg-background/80 border-accent/30 hover:border-accent/50 hover:shadow-lg transition-all h-full">
             <CardHeader className="text-center pb-2">
               <div className="text-4xl mb-2">{zodiacSigns[zodiacSign as keyof typeof zodiacSigns].emoji}</div>
@@ -221,7 +221,7 @@ export const ZodiacAndFacts = ({ birthDate }: Props) => {
         </Link>
 
         {/* Birthstone - Clickable Link */}
-        <Link to="/birthstone" className="block group">
+        <Link to="/birthstone/" className="block group">
           <Card className="backdrop-blur-sm bg-background/80 border-primary/30 hover:border-primary/50 hover:shadow-lg transition-all h-full">
             <CardHeader className="text-center pb-2">
               <div className="text-4xl mb-2">💎</div>
@@ -243,7 +243,7 @@ export const ZodiacAndFacts = ({ birthDate }: Props) => {
         </Link>
 
         {/* Numerology - Clickable Link */}
-        <Link to="/numerology" className="block group">
+        <Link to="/numerology/" className="block group">
           <Card className="backdrop-blur-sm bg-background/80 border-[#6E5AA6]/30 hover:border-[#6E5AA6]/50 hover:shadow-lg transition-all h-full">
             <CardHeader className="text-center pb-2">
               <div className="text-4xl mb-2 font-bold text-[#6E5AA6]">{lifePath.number}</div>

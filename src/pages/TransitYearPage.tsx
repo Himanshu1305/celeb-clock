@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -58,7 +59,7 @@ export default function TransitYearPage() {
         theme="vedic"
         testId="transit-year"
         seo={<SEO title="Planetary Transits by Year — Saturn, Jupiter, Rahu & Ketu | BornClock" description="Pick a planet and year for its computed Vedic transit: real ingress dates and the effect on each Moon sign." canonicalUrl="/transit" />}
-        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Transits' }}
+        breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Transits' }}
         eyebrow="Gochar · planetary transits"
         h1="Planetary transits by year"
       >
@@ -111,8 +112,8 @@ export default function TransitYearPage() {
       theme="vedic"
       testId="transit-year"
       seo={<SEO title={title} description={description} canonicalUrl={`/transit/${planet}/${year}`} ogImage="https://bornclock.com/og/vedic.png" />}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }, { label: 'Transits', to: '/transit' }], current: `${meta.label.split(' ')[0]} ${year}` }}
-      footer={{ tagline: 'Computed Vedic transits from real sidereal positions.', nav: [{ label: 'All transits', to: '/transit' }, { label: 'Rashifal', to: '/rashifal' }, { label: 'Free Kundli', to: '/kundali' }], note: 'Transit readings are computed and attributed to the Vedic tradition — reflective guidance, not certainty.' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Transits', to: '/transit/' }], current: `${meta.label.split(' ')[0]} ${year}` }}
+      footer={{ tagline: 'Computed Vedic transits from real sidereal positions.', nav: [{ label: 'All transits', to: '/transit/' }, { label: 'Rashifal', to: '/rashifal/' }, { label: 'Free Kundli', to: '/kundali/' }], note: 'Transit readings are computed and attributed to the Vedic tradition — reflective guidance, not certainty.' }}
       eyebrow="Gochar · planetary transit"
       h1={`${meta.label} Transit ${year}`}
       lead={sameSign ? `In ${data.startSign} through ${year}` : `${sequence} during ${year}`}
@@ -161,7 +162,7 @@ export default function TransitYearPage() {
           {/* Per Moon sign */}
           <h2 className="font-semibold text-foreground mb-2">Effect on each Moon sign in {year}</h2>
           <p className="text-xs text-muted-foreground mb-3">
-            Read by the <TermTip id="houseFromMoon">house from your Moon sign</TermTip>; the <TermTip id="transitGrade">grade</TermTip> on each card shows how strong the influence is, and <TermTip id="sadeSati">Sade Sati</TermTip> / <TermTip id="dhaiya">Dhaiya</TermTip> tags mark Saturn’s longer phases. Find your Moon sign free with a <Link to="/kundali" className="underline">Kundli</Link>.
+            Read by the <TermTip id="houseFromMoon">house from your Moon sign</TermTip>; the <TermTip id="transitGrade">grade</TermTip> on each card shows how strong the influence is, and <TermTip id="sadeSati">Sade Sati</TermTip> / <TermTip id="dhaiya">Dhaiya</TermTip> tags mark Saturn’s longer phases. Find your Moon sign free with a <Link to="/kundali/" className="underline">Kundli</Link>.
           </p>
           <div className="grid sm:grid-cols-2 gap-4 mb-6" data-testid="transit-persign">
             {data.perSign.map(s => (
@@ -192,8 +193,8 @@ export default function TransitYearPage() {
 
           <p className="text-xs text-muted-foreground mb-8">
             <span data-testid="transit-tz">Dates are shown in {zoneLabel(viewerTz)}.</span> Computed from the real sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) position of {meta.label.split(' ')[0]} for {year} and read by classical <TermTip id="gochar">gochar</TermTip> rules — the same engine behind your Kundli.{' '}
-            <Link to="/how-it-works#vedic" className="underline">How we calculate this →</Link>
-            {planet === 'saturn' && <> · <Link to="/sade-sati" className="underline">Check your Sade Sati →</Link></>}
+            <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
+            {planet === 'saturn' && <> · <Link to="/sade-sati/" className="underline">Check your Sade Sati →</Link></>}
           </p>
 
           <PageFAQ items={faqItems} />
@@ -201,8 +202,8 @@ export default function TransitYearPage() {
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">See how this transit lands in your own chart, from your real Moon sign.</p>
             <div className="flex flex-wrap gap-3 justify-center">
-              <Link to="/kundali" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
-              <Link to="/rashifal" className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">Daily Rashifal →</Link>
+              <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
+              <Link to="/rashifal/" className="inline-flex items-center gap-2 border border-border rounded-lg px-6 py-3 font-semibold text-foreground">Daily Rashifal →</Link>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { CookiePreferencesModal } from '@/components/CookiePreferencesModal';
@@ -74,21 +74,21 @@ export const Footer = () => {
               <li><Link to="/celebrity/business/" className="text-muted-foreground hover:text-primary transition-colors">Business Leaders</Link></li>
               <li><Link to="/celebrity/music/" className="text-muted-foreground hover:text-primary transition-colors">Music Celebrities</Link></li>
               <li><Link to="/celebrity/sports/" className="text-muted-foreground hover:text-primary transition-colors">Sports Celebrities</Link></li>
-              <li><Link to="/born-in" className="text-muted-foreground hover:text-primary transition-colors">Born in Each Month</Link></li>
-              <li><Link to="/birthday" className="text-muted-foreground hover:text-primary transition-colors">Birthday Personalities</Link></li>
-              <li><Link to="/biorhythm-workout-calculator" className="text-muted-foreground hover:text-primary transition-colors">Biorhythm Workout</Link></li>
-              <li><Link to="/energy-forecast" className="text-muted-foreground hover:text-primary transition-colors">Energy Forecast</Link></li>
-              <li><Link to="/born-on/india" className="text-muted-foreground hover:text-primary transition-colors">Indian Celebrities by Date</Link></li>
-              <li><Link to="/celebrity-birthday" className="text-muted-foreground hover:text-primary transition-colors">Celebrity Birthdays</Link></li>
-              <li><Link to="/todays-birthdays" className="text-muted-foreground hover:text-primary transition-colors">Today's Birthdays</Link></li>
-              <li><Link to="/zodiac" className="text-muted-foreground hover:text-primary transition-colors">Zodiac Signs</Link></li>
-              <li><Link to="/chinese-zodiac" className="text-muted-foreground hover:text-primary transition-colors">Chinese Zodiac</Link></li>
-              <li><Link to="/rashi-ratna" className="text-muted-foreground hover:text-primary transition-colors">Rashi Ratna</Link></li>
-              <li><Link to="/numerology" className="text-muted-foreground hover:text-primary transition-colors">Numerology</Link></li>
-              <li><Link to="/compatibility" className="text-muted-foreground hover:text-primary transition-colors">Compatibility</Link></li>
-              <li><Link to="/weight-on-planets" className="text-muted-foreground hover:text-primary transition-colors">Weight on Planets</Link></li>
-              <li><Link to="/answers" className="text-muted-foreground hover:text-primary transition-colors">Answers</Link></li>
-              <li><Link to="/birthstone" className="text-muted-foreground hover:text-primary transition-colors">Birthstone Finder</Link></li>
+              <li><Link to="/born-in/" className="text-muted-foreground hover:text-primary transition-colors">Born in Each Month</Link></li>
+              <li><Link to="/birthday/" className="text-muted-foreground hover:text-primary transition-colors">Birthday Personalities</Link></li>
+              <li><Link to="/biorhythm-workout-calculator/" className="text-muted-foreground hover:text-primary transition-colors">Biorhythm Workout</Link></li>
+              <li><Link to="/energy-forecast/" className="text-muted-foreground hover:text-primary transition-colors">Energy Forecast</Link></li>
+              <li><Link to="/born-on/india/" className="text-muted-foreground hover:text-primary transition-colors">Indian Celebrities by Date</Link></li>
+              <li><Link to="/celebrity-birthday/" className="text-muted-foreground hover:text-primary transition-colors">Who Shares My Birthday?</Link></li>
+              <li><Link to="/todays-birthdays/" className="text-muted-foreground hover:text-primary transition-colors">Today's Birthdays</Link></li>
+              <li><Link to="/zodiac/" className="text-muted-foreground hover:text-primary transition-colors">Zodiac Signs</Link></li>
+              <li><Link to="/chinese-zodiac/" className="text-muted-foreground hover:text-primary transition-colors">Chinese Zodiac</Link></li>
+              <li><Link to="/rashi-ratna/" className="text-muted-foreground hover:text-primary transition-colors">Rashi Ratna</Link></li>
+              <li><Link to="/numerology/" className="text-muted-foreground hover:text-primary transition-colors">Numerology</Link></li>
+              <li><Link to="/compatibility/" className="text-muted-foreground hover:text-primary transition-colors">Compatibility</Link></li>
+              <li><Link to="/weight-on-planets/" className="text-muted-foreground hover:text-primary transition-colors">Weight on Planets</Link></li>
+              <li><Link to="/answers/" className="text-muted-foreground hover:text-primary transition-colors">Answers</Link></li>
+              <li><Link to="/birthstone/" className="text-muted-foreground hover:text-primary transition-colors">Birthstone Finder</Link></li>
             </ul>
           </div>
 
@@ -96,19 +96,19 @@ export const Footer = () => {
           <div>
             <h3 className="font-heading font-semibold text-foreground mb-3 text-sm">Tools</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/life-expectancy" className="text-muted-foreground hover:text-primary transition-colors">Life Expectancy Calculator</Link></li>
-              <li><Link to="/planetary-age" className="text-muted-foreground hover:text-primary transition-colors">Planetary Age Calculator</Link></li>
-              <li><Link to="/life-expectancy#simulator" className="text-muted-foreground hover:text-primary transition-colors">What-If Simulator</Link></li>
-              <li><Link to="/age-calculator" className="text-muted-foreground hover:text-primary transition-colors">Age Calculator</Link></li>
-              <li><Link to="/answers/how-many-days-until-my-birthday" className="text-muted-foreground hover:text-primary transition-colors">Days Until My Birthday</Link></li>
-              <li><Link to="/answers/how-long-will-i-live" className="text-muted-foreground hover:text-primary transition-colors">How Long Will I Live?</Link></li>
-              <li><Link to="/leaderboard" className="text-muted-foreground hover:text-primary transition-colors">Longevity Leaderboard</Link></li>
-              <li><Link to="/family" className="text-muted-foreground hover:text-primary transition-colors">Family Dashboard</Link></li>
-              <li><Link to="/gift" className="text-muted-foreground hover:text-primary transition-colors">Gift a Report</Link></li>
-              <li><Link to="/coach" className="text-muted-foreground hover:text-primary transition-colors">Longevity Coach</Link></li>
-              <li><Link to="/biological-age" className="text-muted-foreground hover:text-primary transition-colors">Biological Age Calculator</Link></li>
-              <li><Link to="/country-comparison" className="text-muted-foreground hover:text-primary transition-colors">Country Comparison</Link></li>
-              <li><Link to="/birthday-report" className="text-muted-foreground hover:text-primary transition-colors">Birthday Report</Link></li>
+              <li><Link to="/life-expectancy/" className="text-muted-foreground hover:text-primary transition-colors">Life Expectancy Calculator</Link></li>
+              <li><Link to="/planetary-age/" className="text-muted-foreground hover:text-primary transition-colors">Planetary Age Calculator</Link></li>
+              <li><Link to="/life-expectancy/#simulator" className="text-muted-foreground hover:text-primary transition-colors">What-If Simulator</Link></li>
+              <li><Link to="/age-calculator/" className="text-muted-foreground hover:text-primary transition-colors">Age Calculator</Link></li>
+              <li><Link to="/answers/how-many-days-until-my-birthday/" className="text-muted-foreground hover:text-primary transition-colors">Days Until My Birthday</Link></li>
+              <li><Link to="/answers/how-long-will-i-live/" className="text-muted-foreground hover:text-primary transition-colors">How Long Will I Live?</Link></li>
+              <li><Link to="/leaderboard/" className="text-muted-foreground hover:text-primary transition-colors">Longevity Leaderboard</Link></li>
+              <li><Link to="/family/" className="text-muted-foreground hover:text-primary transition-colors">Family Dashboard</Link></li>
+              <li><Link to="/gift/" className="text-muted-foreground hover:text-primary transition-colors">Gift a Report</Link></li>
+              <li><Link to="/coach/" className="text-muted-foreground hover:text-primary transition-colors">Longevity Coach</Link></li>
+              <li><Link to="/biological-age/" className="text-muted-foreground hover:text-primary transition-colors">Biological Age Calculator</Link></li>
+              <li><Link to="/country-comparison/" className="text-muted-foreground hover:text-primary transition-colors">Country Comparison</Link></li>
+              <li><Link to="/birthday-report/" className="text-muted-foreground hover:text-primary transition-colors">Birthday Report</Link></li>
             </ul>
           </div>
 
@@ -116,28 +116,28 @@ export const Footer = () => {
           <div>
             <h3 className="font-heading font-semibold text-foreground mb-3 text-sm">Company</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">About</Link></li>
-              <li><Link to="/pricing" className="text-muted-foreground hover:text-primary transition-colors">Pricing</Link></li>
-              <li><Link to="/how-it-works" className="text-muted-foreground hover:text-primary transition-colors">How It Works</Link></li>
-              <li><Link to="/accuracy" className="text-muted-foreground hover:text-primary transition-colors">How We Check Accuracy</Link></li>
-              <li><Link to="/articles" className="text-muted-foreground hover:text-primary transition-colors">Articles</Link></li>
-              <li><Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
+              <li><Link to="/about/" className="text-muted-foreground hover:text-primary transition-colors">About</Link></li>
+              <li><Link to="/pricing/" className="text-muted-foreground hover:text-primary transition-colors">Pricing</Link></li>
+              <li><Link to="/how-it-works/" className="text-muted-foreground hover:text-primary transition-colors">How It Works</Link></li>
+              <li><Link to="/accuracy/" className="text-muted-foreground hover:text-primary transition-colors">How We Check Accuracy</Link></li>
+              <li><Link to="/articles/" className="text-muted-foreground hover:text-primary transition-colors">Articles</Link></li>
+              <li><Link to="/faq/" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
               {/* Popular guides — ensures every article has ≥2 internal inbound links (site-wide footer) */}
-              <li><Link to="/articles/how-to-live-to-100" className="text-muted-foreground hover:text-primary transition-colors">How to Live to 100</Link></li>
-              <li><Link to="/articles/death-clock-alternative" className="text-muted-foreground hover:text-primary transition-colors">Death Clock Alternative</Link></li>
-              <li><Link to="/articles/zodiac-compatibility" className="text-muted-foreground hover:text-primary transition-colors">Zodiac Compatibility</Link></li>
-              <li><Link to="/articles/tarot-card-by-date-of-birth" className="text-muted-foreground hover:text-primary transition-colors">Tarot by Date of Birth</Link></li>
-              <li><Link to="/articles/bryan-johnson-blueprint-alternative" className="text-muted-foreground hover:text-primary transition-colors">Bryan Johnson Blueprint</Link></li>
-              <li><Link to="/articles/longevity-habits-of-indian-billionaires" className="text-muted-foreground hover:text-primary transition-colors">Billionaire Longevity Habits</Link></li>
-              <li><Link to="/articles/life-expectancy-how-it-is-calculated" className="text-muted-foreground hover:text-primary transition-colors">How Life Expectancy Is Calculated</Link></li>
-              <li><Link to="/articles/age-in-days-hours-minutes" className="text-muted-foreground hover:text-primary transition-colors">Age in Days & Hours</Link></li>
-              <li><Link to="/articles/retirement-age-india-life-expectancy" className="text-muted-foreground hover:text-primary transition-colors">Retirement Age in India</Link></li>
-              <li><Link to="/articles/longevity-supplements" className="text-muted-foreground hover:text-primary transition-colors">Longevity Supplements</Link></li>
-              <li><Link to="/articles/famous-people-lived-to-100" className="text-muted-foreground hover:text-primary transition-colors">Famous People Who Lived to 100</Link></li>
-              <li><Link to="/articles/birth-month-personality" className="text-muted-foreground hover:text-primary transition-colors">Birth Month Personality</Link></li>
-              <li><Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link></li>
-              <li><Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">Contact</Link></li>
+              <li><Link to="/articles/how-to-live-to-100/" className="text-muted-foreground hover:text-primary transition-colors">How to Live to 100</Link></li>
+              <li><Link to="/articles/death-clock-alternative/" className="text-muted-foreground hover:text-primary transition-colors">Death Clock Alternative</Link></li>
+              <li><Link to="/articles/zodiac-compatibility/" className="text-muted-foreground hover:text-primary transition-colors">Zodiac Compatibility</Link></li>
+              <li><Link to="/articles/tarot-card-by-date-of-birth/" className="text-muted-foreground hover:text-primary transition-colors">Tarot by Date of Birth</Link></li>
+              <li><Link to="/articles/bryan-johnson-blueprint-alternative/" className="text-muted-foreground hover:text-primary transition-colors">Bryan Johnson Blueprint</Link></li>
+              <li><Link to="/articles/longevity-habits-of-indian-billionaires/" className="text-muted-foreground hover:text-primary transition-colors">Billionaire Longevity Habits</Link></li>
+              <li><Link to="/articles/life-expectancy-how-it-is-calculated/" className="text-muted-foreground hover:text-primary transition-colors">How Life Expectancy Is Calculated</Link></li>
+              <li><Link to="/articles/age-in-days-hours-minutes/" className="text-muted-foreground hover:text-primary transition-colors">Age in Days & Hours</Link></li>
+              <li><Link to="/articles/retirement-age-india-life-expectancy/" className="text-muted-foreground hover:text-primary transition-colors">Retirement Age in India</Link></li>
+              <li><Link to="/articles/longevity-supplements/" className="text-muted-foreground hover:text-primary transition-colors">Longevity Supplements</Link></li>
+              <li><Link to="/articles/famous-people-lived-to-100/" className="text-muted-foreground hover:text-primary transition-colors">Famous People Who Lived to 100</Link></li>
+              <li><Link to="/articles/birth-month-personality/" className="text-muted-foreground hover:text-primary transition-colors">Birth Month Personality</Link></li>
+              <li><Link to="/privacy/" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms/" className="text-muted-foreground hover:text-primary transition-colors">Terms of Service</Link></li>
+              <li><Link to="/contact/" className="text-muted-foreground hover:text-primary transition-colors">Contact</Link></li>
               <li>
                 <button
                   onClick={() => setShowCookiePrefs(true)}
@@ -207,7 +207,7 @@ export const Footer = () => {
               Create a free account to unlock the Life Expectancy Calculator, save your results, and get celebrity birthday matches.
             </p>
             <Button asChild size="sm" className="gap-1">
-              <Link to="/auth?signup=true">
+              <Link to="/auth/?signup=true">
                 Sign Up Free
                 <ArrowRight className="w-3 h-3" />
               </Link>

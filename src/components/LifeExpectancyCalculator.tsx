@@ -15,7 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { Heart, Coffee, Brain, Dumbbell, User, ShieldCheck, Info, Activity, Moon, Users, Dna, TreePine, Lock, ChevronDown, ChevronUp } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import {
   HealthQuizData,
   Pillar1Data, FamilyMemberData,
@@ -648,7 +648,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
               <ShieldCheck className="h-4 w-4 text-accent" />
               <AlertDescription className="text-sm text-muted-foreground">
                 🔒 Your health data is used only to calculate your personalized forecast. We do not store your health inputs on our servers.
-                <Link to="/privacy" className="text-blue-500 underline ml-1">Privacy Policy →</Link>
+                <Link to="/privacy/" className="text-blue-500 underline ml-1">Privacy Policy →</Link>
               </AlertDescription>
             </Alert>
             <div className="space-y-3">

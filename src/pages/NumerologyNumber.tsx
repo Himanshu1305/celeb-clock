@@ -1,4 +1,5 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { PageFAQ } from '@/components/PageFAQ';
@@ -22,15 +23,15 @@ export default function NumerologyNumber() {
             canonicalUrl="/numerology"
           />
         )}
-        breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }], current: 'Number Not Found' }}
+        breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }], current: 'Number Not Found' }}
         footer={{
           tagline: 'Discover the meaning of every Life Path number — calculated, not templated.',
           nav: [
-            { label: 'Mystic Corner', to: '/mystic-corner' },
-            { label: 'Numerology', to: '/numerology' },
-            { label: 'Zodiac', to: '/zodiac' },
-            { label: 'Compatibility', to: '/compatibility' },
-            { label: 'Privacy', to: '/privacy' },
+            { label: 'Mystic Corner', to: '/mystic-corner/' },
+            { label: 'Numerology', to: '/numerology/' },
+            { label: 'Zodiac', to: '/zodiac/' },
+            { label: 'Compatibility', to: '/compatibility/' },
+            { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock · Calculated, not templated.',
         }}
@@ -42,7 +43,7 @@ export default function NumerologyNumber() {
             <div className="text-center py-24">
               <p className="text-5xl mb-6">🔢</p>
               <p className="text-muted-foreground mb-8">Valid Life Path numbers are 1–9, 11, 22, and 33.</p>
-              <Link to="/numerology" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
+              <Link to="/numerology/" className="inline-block bg-primary text-primary-foreground rounded-lg px-6 py-3 text-sm font-medium hover:opacity-90 transition-opacity">
                 Back to Numerology
               </Link>
             </div>
@@ -78,15 +79,15 @@ export default function NumerologyNumber() {
           canonicalUrl={`/numerology/${data.number}`}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner' }, { label: 'Numerology', to: '/numerology' }], current: `Life Path ${data.number}` }}
+      breadcrumb={{ trail: [{ label: 'Mystic Corner', to: '/mystic-corner/' }, { label: 'Numerology', to: '/numerology/' }], current: `Life Path ${data.number}` }}
       footer={{
         tagline: 'Discover the meaning of every Life Path number — calculated, not templated.',
         nav: [
-          { label: 'Mystic Corner', to: '/mystic-corner' },
-          { label: 'Numerology', to: '/numerology' },
-          { label: 'Zodiac', to: '/zodiac' },
-          { label: 'Compatibility', to: '/compatibility' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Mystic Corner', to: '/mystic-corner/' },
+          { label: 'Numerology', to: '/numerology/' },
+          { label: 'Zodiac', to: '/zodiac/' },
+          { label: 'Compatibility', to: '/compatibility/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
@@ -159,7 +160,7 @@ export default function NumerologyNumber() {
               <p className="text-sm text-muted-foreground leading-relaxed"><strong className="text-foreground">{NAME_NUMBER_INDIAN_MEANINGS[data.number].title}.</strong> {NAME_NUMBER_INDIAN_MEANINGS[data.number].text}</p>
             </div>
             <p className="md:col-span-2 text-xs text-muted-foreground">
-              The same digit can turn up as your Life Path, your Mulank or your name number — each is read a little differently. Work out all three on the <Link to="/numerology" className="text-primary hover:underline">numerology calculator</Link> or the <Link to="/name-numerology" className="text-primary hover:underline">name number calculator</Link>.
+              The same digit can turn up as your Life Path, your Mulank or your name number — each is read a little differently. Work out all three on the <Link to="/numerology/" className="text-primary hover:underline">numerology calculator</Link> or the <Link to="/name-numerology/" className="text-primary hover:underline">name number calculator</Link>.
             </p>
           </section>
         )}
@@ -263,14 +264,14 @@ export default function NumerologyNumber() {
         <div className="bg-muted/50 rounded-xl p-6 text-center">
           <p className="text-muted-foreground text-sm mb-4">Find your Life Path Number</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link to="/numerology" className="inline-block bg-primary text-primary-foreground rounded-lg px-5 py-2 text-sm font-medium hover:opacity-90 transition-opacity">
+            <Link to="/numerology/" className="inline-block bg-primary text-primary-foreground rounded-lg px-5 py-2 text-sm font-medium hover:opacity-90 transition-opacity">
               Calculate My Life Path
             </Link>
           </div>
           <div className="mt-4 flex flex-wrap gap-3 justify-center text-sm">
-            <Link to="/zodiac" className="text-primary hover:underline">Zodiac Signs</Link>
+            <Link to="/zodiac/" className="text-primary hover:underline">Zodiac Signs</Link>
             <span className="text-muted-foreground">·</span>
-            <Link to="/birthstone" className="text-primary hover:underline">Birthstone Finder</Link>
+            <Link to="/birthstone/" className="text-primary hover:underline">Birthstone Finder</Link>
             <span className="text-muted-foreground">·</span>
             <Link to="/" className="text-primary hover:underline">Age Calculator</Link>
           </div>

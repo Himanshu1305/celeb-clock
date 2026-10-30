@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
 import { Card, CardContent } from '@/components/ui/card';
@@ -58,15 +58,15 @@ export default function VedicZodiac() {
           ogImage="https://bornclock.com/og/zodiac.png"
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology' }], current: 'Indian Zodiac (Vedic)' }}
+      breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Indian Zodiac (Vedic)' }}
       footer={{
         tagline: 'Calculate your Indian zodiac sign (Rashi) using the ancient Jyotish sidereal system.',
         nav: [
-          { label: 'Vedic Astrology', to: '/vedic-astrology' },
-          { label: 'Kundali', to: '/kundali' },
-          { label: 'Moon Sign', to: '/moon-sign' },
-          { label: 'Gemstones (chart-based)', to: '/gemstones' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+          { label: 'Kundali', to: '/kundali/' },
+          { label: 'Moon Sign', to: '/moon-sign/' },
+          { label: 'Gemstones (chart-based)', to: '/gemstones/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
@@ -161,7 +161,7 @@ export default function VedicZodiac() {
                     {result.moonRashis.length > 1
                       ? 'The Moon changed sign during your birth date (00:00–23:59 IST), so your birth time decides which one is yours. '
                       : 'The Moon stayed in this sign for the whole of your birth date (00:00–23:59 IST), so it does not depend on your birth time. '}
-                    For the exact chart with birth time and place, use the <Link to="/kundali" className="underline">free Kundali</Link>.
+                    For the exact chart with birth time and place, use the <Link to="/kundali/" className="underline">free Kundali</Link>.
                   </p>
                 </CardContent>
               </Card>
@@ -263,10 +263,10 @@ export default function VedicZodiac() {
         <section className="text-center pb-8">
           <h2 className="text-xl font-bold text-foreground mb-4">Explore More</h2>
           <div className="flex flex-wrap justify-center gap-3">
-            <Link to="/chinese-zodiac" className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl font-medium hover:opacity-90 transition-opacity">
+            <Link to="/chinese-zodiac/" className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl font-medium hover:opacity-90 transition-opacity">
               🐉 Chinese Zodiac
             </Link>
-            <Link to="/zodiac" className="px-5 py-2.5 bg-accent/10 text-accent rounded-xl font-medium hover:bg-accent/20 transition-colors border border-accent/30">
+            <Link to="/zodiac/" className="px-5 py-2.5 bg-accent/10 text-accent rounded-xl font-medium hover:bg-accent/20 transition-colors border border-accent/30">
               ♈ Western Zodiac
             </Link>
             <Link to="/" className="px-5 py-2.5 bg-muted text-muted-foreground rounded-xl font-medium hover:bg-muted/80 transition-colors">

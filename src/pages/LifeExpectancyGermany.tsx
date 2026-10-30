@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ArticleLayout } from '@/components/central';
 import { SEO, WebApplicationSchema, FAQSchema } from '@/components/SEO';
 import { EEATBadges } from '@/components/EEATBadges';
@@ -12,10 +12,10 @@ const FAQ_ITEMS = [
 ];
 
 const RELATED = [
-  { path: '/life-expectancy', label: 'Life Expectancy Calculator' },
-  { path: '/country-comparison', label: 'Country Comparison' },
-  { path: '/biological-age', label: 'Biological Age Test' },
-  { path: '/coach', label: 'Longevity Coach' },
+  { path: '/life-expectancy/', label: 'Life Expectancy Calculator' },
+  { path: '/country-comparison/', label: 'Country Comparison' },
+  { path: '/biological-age/', label: 'Biological Age Test' },
+  { path: '/coach/', label: 'Longevity Coach' },
 ];
 
 const LifeExpectancyGermany = () => {
@@ -40,7 +40,7 @@ const LifeExpectancyGermany = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity' }], current: 'Germany Life Expectancy' }}
+      breadcrumb={{ trail: [{ label: 'Science & Longevity', to: '/science-longevity/' }], current: 'Germany Life Expectancy' }}
       eyebrow="Life Expectancy"
       h1="Life Expectancy in Germany — Strong Healthcare, But Below Its European Neighbours"
       lead={`Germany's average life expectancy is approximately ${leYears('Germany')} years (${LE_CITATION}). Women average ${leYears('Germany', 'female')} years; men average ${leYears('Germany', 'male')} years. Despite having one of the world's most advanced healthcare systems, Germany ranks below most Western European neighbours — largely due to higher smoking rates, higher alcohol consumption, and a rising obesity rate.`}
@@ -71,7 +71,7 @@ const LifeExpectancyGermany = () => {
           <section>
             <h2 className="text-2xl font-bold text-foreground mb-4">Improving Trends</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">Smoking rates are declining, cancer-screening uptake is increasing, and cardiovascular mortality has fallen significantly since 1990.</p>
-            <p className="text-muted-foreground leading-relaxed">Life expectancy at 65 is competitive with European peers — the underperformance is concentrated in working-age mortality from preventable causes. See how your own habits change your forecast with the <Link to="/life-expectancy" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
+            <p className="text-muted-foreground leading-relaxed">Life expectancy at 65 is competitive with European peers — the underperformance is concentrated in working-age mortality from preventable causes. See how your own habits change your forecast with the <Link to="/life-expectancy/" className="text-primary underline">Life Expectancy Calculator</Link>.</p>
           </section>
         </article>
 
@@ -79,7 +79,7 @@ const LifeExpectancyGermany = () => {
           <div className="rounded-2xl border border-primary/30 bg-primary/5 p-6 text-center">
             <h2 className="text-xl font-bold text-foreground mb-2">Compare Germany Against 57 Countries</h2>
             <p className="text-sm text-muted-foreground mb-4">See how Germany ranks globally — and how much your own habits could shift your personal forecast.</p>
-            <Link to="/country-comparison" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
+            <Link to="/country-comparison/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Open the Country Comparison Tool →
             </Link>
           </div>

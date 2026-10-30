@@ -22,7 +22,7 @@ describe('NumerologyArticle', () => {
   it('TC-NUM-P-03: links to the /numerology calculator', () => {
     renderArticle();
     const cta = document.querySelector('[data-testid="article-calc-cta"] a');
-    expect(cta?.getAttribute('href')).toBe('/numerology');
+    expect(cta?.getAttribute('href')).toBe('/numerology/');
   });
   it('TC-NUM-P-04: worked example 28-03-1973 → Mulank 1, Bhagyank 6, Life Path 6', () => {
     renderArticle();

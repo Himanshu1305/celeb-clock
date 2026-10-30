@@ -1,5 +1,5 @@
 import { useState, useEffect, Component, type ReactNode, type ErrorInfo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { Users, Plus, Trash2, Lock, ArrowRight } from 'lucide-react';
 
 // ── Error Boundary ────────────────────────────────────────────────────────────
@@ -112,14 +112,14 @@ function FamilyDashboardInner() {
       <ToolLayout
         theme="birthday"
         testId="family-dashboard-coming-soon"
-        breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'Family Dashboard' }}
+        breadcrumb={{ trail: [{ label: 'Answers', to: '/answers/' }], current: 'Family Dashboard' }}
         footer={{
           tagline: 'Track your family’s birthdays and longevity in one place.',
           nav: [
-            { label: 'Age Calculator', to: '/age-calculator' },
-            { label: 'Birthday Countdown', to: '/birthday-countdown' },
-            { label: "Today's Birthdays", to: '/todays-birthdays' },
-            { label: 'Privacy', to: '/privacy' },
+            { label: 'Age Calculator', to: '/age-calculator/' },
+            { label: 'Birthday Countdown', to: '/birthday-countdown/' },
+            { label: "Today's Birthdays", to: '/todays-birthdays/' },
+            { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock · Age & birthday tools.',
         }}
@@ -321,14 +321,14 @@ function FamilyDashboardInner() {
         theme="birthday"
         testId="family-dashboard-signed-out"
         seo={<SEO title="Family Longevity Dashboard | BornClock Premium" description="Compare longevity forecasts for your family." noindex={true} />}
-        breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'Family Dashboard' }}
+        breadcrumb={{ trail: [{ label: 'Answers', to: '/answers/' }], current: 'Family Dashboard' }}
         footer={{
           tagline: 'Track longevity forecasts for your whole family in one place.',
           nav: [
-            { label: 'Answers', to: '/answers' },
-            { label: 'Age Calculator', to: '/age-calculator' },
-            { label: 'Birthdays', to: '/birthday' },
-            { label: 'Privacy', to: '/privacy' },
+            { label: 'Answers', to: '/answers/' },
+            { label: 'Age Calculator', to: '/age-calculator/' },
+            { label: 'Birthdays', to: '/birthday/' },
+            { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock.',
         }}
@@ -339,7 +339,7 @@ function FamilyDashboardInner() {
         <section className="section">
           <div className="max-w-md mx-auto text-center py-20">
             <Lock className="w-12 h-12 text-primary mx-auto mb-4" />
-            <Button asChild><Link to="/auth">Sign In</Link></Button>
+            <Button asChild><Link to="/auth/">Sign In</Link></Button>
           </div>
         </section>
       </ToolLayout>
@@ -354,7 +354,7 @@ function FamilyDashboardInner() {
           <div className="text-4xl mb-4">👨‍👩‍👧</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Family Dashboard</h1>
           <p className="text-gray-500 mb-6">Track longevity forecasts for up to 10 family members. Compare results side by side. Start important conversations about health.</p>
-          <Link to="/upgrade" className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+          <Link to="/upgrade/" className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
             Unlock Family Dashboard →
           </Link>
           <p className="text-xs text-gray-400 mt-3">Included in all premium plans from ₹299/month</p>
@@ -374,14 +374,14 @@ function FamilyDashboardInner() {
           noindex={true}
         />
       )}
-      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers' }], current: 'Family Dashboard' }}
+      breadcrumb={{ trail: [{ label: 'Answers', to: '/answers/' }], current: 'Family Dashboard' }}
       footer={{
         tagline: 'Track longevity forecasts for your whole family in one place.',
         nav: [
-          { label: 'Answers', to: '/answers' },
-          { label: 'Age Calculator', to: '/age-calculator' },
-          { label: 'Birthdays', to: '/birthday' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Answers', to: '/answers/' },
+          { label: 'Age Calculator', to: '/age-calculator/' },
+          { label: 'Birthdays', to: '/birthday/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',
       }}

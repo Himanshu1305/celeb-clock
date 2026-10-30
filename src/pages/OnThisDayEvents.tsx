@@ -5,7 +5,8 @@
  * deaths are fetched at request time from Wikipedia's "On this day" feed with
  * CC BY-SA attribution (see WikimediaOnThisDay / wikimediaOnThisDay.ts).
  */
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { WikimediaOnThisDay } from '@/components/WikimediaOnThisDay';
@@ -31,10 +32,10 @@ function parseParams(
 const footer = {
   tagline: 'What happened on any date in history — events, births and deaths from Wikipedia.',
   nav: [
-    { label: 'Famous birthdays', to: '/born-on' },
-    { label: 'Birthday report', to: '/birthday-report' },
-    { label: 'Celebrities', to: '/celebrity' },
-    { label: 'Privacy', to: '/privacy' },
+    { label: 'Famous birthdays', to: '/born-on/' },
+    { label: 'Birthday report', to: '/birthday-report/' },
+    { label: 'Celebrities', to: '/celebrity/' },
+    { label: 'Privacy', to: '/privacy/' },
   ],
   note: '© 2026 BornClock · Historical highlights, licensed from Wikipedia (CC BY-SA 4.0).',
 };
@@ -72,7 +73,7 @@ export default function OnThisDayEvents() {
         />
       )}
       breadcrumb={{
-        trail: [{ label: 'Famous birthdays', to: '/born-on' }],
+        trail: [{ label: 'Famous birthdays', to: '/born-on/' }],
         current: isDated ? `On this day: ${dateLabel}` : 'On this day',
       }}
       footer={footer}
@@ -92,7 +93,7 @@ export default function OnThisDayEvents() {
               See the famous people born on {dateLabel} →
             </Link>
             {' '}or{' '}
-            <Link to="/birthday-report" className="underline text-foreground">build your free birthday report →</Link>
+            <Link to="/birthday-report/" className="underline text-foreground">build your free birthday report →</Link>
           </div>
         </div>
       </section>

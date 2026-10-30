@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Lock, TrendingUp, Crown, Info, ChevronDown, ChevronUp } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { leYears } from '@/data/lifeExpectancyFacts';
 import {
   LongevityResult, recalcWithOverrides, EPIGENETIC_HABITS, HABIT_DETAILS, HealthQuizData,
@@ -437,7 +437,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                     }
                   </span>
                   {!isPremium && (
-                    <a href="/upgrade" className="absolute inset-0 flex items-center justify-center text-xs font-bold">
+                    <a href="/upgrade/" className="absolute inset-0 flex items-center justify-center text-xs font-bold">
                       🔒 Unlock
                     </a>
                   )}
@@ -811,7 +811,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                   ⚡ +{delta} yrs
                 </span>
                 {!isPremium && (
-                  <a href="/upgrade" className="absolute inset-0 flex items-center justify-center text-xs font-bold">
+                  <a href="/upgrade/" className="absolute inset-0 flex items-center justify-center text-xs font-bold">
                     🔒 Unlock
                   </a>
                 )}
@@ -836,14 +836,14 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
                 return (
                   <div className="rounded-lg px-4 py-2.5 text-xs font-medium bg-green-50 text-green-800 border border-green-200">
                     🔒 Your optimized potential is <strong>significant</strong>. Unlock your full blueprint to see exactly how many years these changes could add — and get your personalised 90-Day Action Plan.{' '}
-                    <a href="/upgrade" className="underline font-bold cursor-pointer">Upgrade →</a>
+                    <a href="/upgrade/" className="underline font-bold cursor-pointer">Upgrade →</a>
                   </div>
                 );
               } else if (gain > 0) {
                 return (
                   <div className="rounded-lg px-4 py-2.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
                     🔒 These changes could meaningfully extend your healthy years. Unlock your full blueprint to see the exact number and your 90-Day Action Plan.{' '}
-                    <a href="/upgrade" className="underline font-bold cursor-pointer">Upgrade →</a>
+                    <a href="/upgrade/" className="underline font-bold cursor-pointer">Upgrade →</a>
                   </div>
                 );
               } else if (gain === 0) {
@@ -1014,7 +1014,7 @@ export const WhatIfSimulator = ({ result, isPremium, onSimChange, onHabitsChange
             <p className="text-xs text-muted-foreground max-w-sm mx-auto">
               See exact scores, your comparison against WHO and HALE baselines, and download your complete Longevity Blueprint.
             </p>
-            <Link to="/upgrade">
+            <Link to="/upgrade/">
               <Button className="bg-accent text-accent-foreground hover:bg-accent/90 font-semibold px-6">
                 Unlock Premium →
               </Button>

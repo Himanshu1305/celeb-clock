@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/seo/CanonicalLink';
 import { SEO } from '@/components/SEO';
 import { CollectionLayout } from '@/components/central';
 import { indianCelebrities } from '@/data/indianCelebrities';
@@ -54,14 +54,14 @@ export function CelebrityIndexPage() {
           <JsonLd data={breadcrumbSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity' }], current: 'Celebrity Profiles' }}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity/' }], current: 'Celebrity Profiles' }}
       footer={{
         tagline: 'Birthday, age, zodiac and numerology profiles for Indian celebrities — every fact calculated from date of birth.',
         nav: [
-          { label: 'Celebrities', to: '/celebrity' },
-          { label: 'Birthdays Today', to: '/todays-birthdays' },
-          { label: 'Born On', to: '/born-on' },
-          { label: 'Privacy', to: '/privacy' },
+          { label: 'Celebrities', to: '/celebrity/' },
+          { label: 'Birthdays Today', to: '/todays-birthdays/' },
+          { label: 'Born On', to: '/born-on/' },
+          { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock · Celebrity birthdays.',
       }}

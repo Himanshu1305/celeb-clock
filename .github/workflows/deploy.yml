@@ -244,6 +244,10 @@ jobs:
       - name: Merge shards + check SEO coverage (blocks deploy if too low)
         run: node scripts/prerender-merge.mjs prerender-shards
 
+      # Batch 11: must run AFTER the merge — lastmod comes from the prerendered HTML (content
+      # hash vs the live https://bornclock.com/sitemap-manifest.json, fetched here; on a fetch
+      # failure the commit date is used). Writes the sitemap.xml index + sitemap-<section>.xml
+      # + sitemap-manifest.json into dist/, which validate-dist then checks (V12).
       - name: Generate sitemap
         run: node scripts/generate-sitemap.mjs
 

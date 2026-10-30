@@ -89,7 +89,7 @@ export const LongevityCountdown = ({ forecast, currentAge, birthDate }: Props) =
       {isSharedView && (
         <div className="flex items-center gap-2 bg-[#0E2238]/60 border border-[#6E5AA6]/40 rounded-xl px-4 py-3 text-sm text-[#6E5AA6]">
           <Gift className="w-4 h-4 text-[#6E5AA6] shrink-0" />
-          <span>Someone shared their BornClock countdown with you. <a href="/life-expectancy" className="underline text-[#6E5AA6] hover:text-white">Calculate yours →</a></span>
+          <span>Someone shared their BornClock countdown with you. <a href="/life-expectancy/" className="underline text-[#6E5AA6] hover:text-white">Calculate yours →</a></span>
         </div>
       )}
       <div className="text-center space-y-1">
