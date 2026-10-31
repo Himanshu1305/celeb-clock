@@ -128,7 +128,7 @@ export default function GiftReport() {
 
       {/* 4 — VISUAL / LIVE EXAMPLE */}
       <section className="max-w-2xl mx-auto px-4 py-8 text-center">
-        <div className="rounded-2xl bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border border-[#6E5AA6]/30 p-8">
+        <div className="rounded-2xl bg-gradient-to-br from-[#6E5AA6]/10 to-[#6E5AA6]/10 border border-[#6E5AA6]/30 p-8">
           <p className="text-sm text-gray-600 mb-3">Every Blueprint is a designed, shareable keepsake — a private web page plus a downloadable PDF.</p>
           <Link to="/birthday-report/" className="text-[#6E5AA6] font-semibold hover:underline">See what's inside a Birthday Blueprint →</Link>
         </div>
@@ -149,7 +149,7 @@ export default function GiftReport() {
 
       {/* 6 — TESTIMONIALS (PLACEHOLDER — founder to fill) */}
       <section className="max-w-2xl mx-auto px-4 py-8">
-        <div className="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center text-gray-400">
+        <div className="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center text-gray-500">
           <p className="text-sm font-semibold uppercase tracking-wide mb-1">Testimonials — placeholder</p>
           <p className="text-sm">Founder to add real customer quotes here. (No invented testimonials.)</p>
         </div>

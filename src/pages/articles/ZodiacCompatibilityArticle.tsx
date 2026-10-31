@@ -273,10 +273,10 @@ export function ZodiacCompatibilityArticle() {
             );
           })}
 
-          <div className="bg-gradient-to-r from-pink-600 to-rose-600 rounded-2xl
+          <div className="bg-gradient-to-r from-pink-700 to-rose-700 rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Check Your Own Cosmic Match</h2>
-            <p className="text-pink-100 mb-6">
+            <p className="text-white mb-6">
               Your sun sign is only the beginning. A full BornClock birthday report reveals your
               Western zodiac, Vedic Rashi, moon sign, Life Path number, and more — everything you
               need to understand your relationships in depth.
@@ -296,7 +296,7 @@ export function ZodiacCompatibilityArticle() {
             you differ, so you can meet each other with patience instead of surprise. Sun-sign
             compatibility is a starting point; your moon signs, rising signs, and life paths add
             far richer detail. Curious how deep it goes? Generate a full{' '}
-            <a href="/birthday-report/" className="text-pink-600 font-semibold underline">
+            <a href="/birthday-report/" className="text-pink-700 font-semibold underline">
               free birthday report
             </a>{' '}
             for you and your partner and compare the two side by side.
@@ -317,13 +317,13 @@ export function ZodiacCompatibilityArticle() {
             <ul className="space-y-2">
               <li>
                 <a href="/articles/moon-sign-by-date-of-birth/"
-                   className="text-pink-600 font-semibold hover:underline">
+                   className="text-pink-700 font-semibold hover:underline">
                   Moon Sign by Date of Birth — Find Your Vedic Rashi →
                 </a>
               </li>
               <li>
                 <a href="/articles/life-path-number-compatibility/"
-                   className="text-pink-600 font-semibold hover:underline">
+                   className="text-pink-700 font-semibold hover:underline">
                   Life Path Number Compatibility — Numerology in Love →
                 </a>
               </li>

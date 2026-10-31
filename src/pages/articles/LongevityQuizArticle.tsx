@@ -231,7 +231,7 @@ export function LongevityQuizArticle() {
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Ready to Take the Longevity Quiz?</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               8 science-backed factors. 3 minutes. Free personalised 90-day action plan and
               biological age estimate.
             </p>

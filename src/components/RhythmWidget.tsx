@@ -46,7 +46,7 @@ export function RhythmWidget({ variant = 'today', ctaLabel = 'Calculate my rhyth
         <div className="flex-1">
           <DobInput label="" onValidChange={d => setDob(d ? toISODate(d) : '')} />
         </div>
-        <button onClick={run} className="bg-teal-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-700 transition-colors">
+        <button onClick={run} className="bg-teal-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-800 transition-colors">
           {ctaLabel}
         </button>
       </div>
@@ -65,10 +65,10 @@ export function RhythmWidget({ variant = 'today', ctaLabel = 'Calculate my rhyth
               const s = getBiorhythmStatus(value);
               return (
                 <div key={label} className={`rounded-xl p-3 text-center ${s.bgColor}`}>
-                  <p className="text-xs text-gray-500">{label}</p>
+                  <p className="text-xs text-gray-600">{label}</p>
                   <p className="text-2xl font-black text-gray-900">{value > 0 ? '+' : ''}{value}%</p>
                   <span className={`text-xs font-semibold ${s.color}`}>{s.label}</span>
-                  <p className="text-[10px] text-gray-400 mt-0.5">{cycle}</p>
+                  <p className="text-[10px] text-gray-600 mt-0.5">{cycle}</p>
                 </div>
               );
             })}
@@ -106,7 +106,7 @@ export function RhythmWidget({ variant = 'today', ctaLabel = 'Calculate my rhyth
                     <div key={i} className="flex items-center justify-between text-xs">
                       <span className="text-gray-600 w-24">{i === 0 ? 'Today' : f.d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric' })}</span>
                       <span className={`font-semibold ${s.color} w-20`}>{s.label}</span>
-                      <span className="text-gray-400">P {f.physical > 0 ? '+' : ''}{f.physical} · E {f.emotional > 0 ? '+' : ''}{f.emotional} · M {f.intellectual > 0 ? '+' : ''}{f.intellectual}</span>
+                      <span className="text-gray-500">P {f.physical > 0 ? '+' : ''}{f.physical} · E {f.emotional > 0 ? '+' : ''}{f.emotional} · M {f.intellectual > 0 ? '+' : ''}{f.intellectual}</span>
                     </div>
                   );
                 })}

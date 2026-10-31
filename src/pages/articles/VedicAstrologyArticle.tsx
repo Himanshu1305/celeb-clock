@@ -132,8 +132,8 @@ function VedicCalculator() {
             {rashi.personality_summary}
           </p>
           <a href={`/birthday-report/?dob=${dob}`}
-             className="inline-block bg-orange-600 text-white font-bold px-5 py-2.5
-                        rounded-full text-sm hover:bg-orange-700">
+             className="inline-block bg-orange-700 text-white font-bold px-5 py-2.5
+                        rounded-full text-sm hover:bg-orange-800">
             See my full birthday profile →
           </a>
         </div>
@@ -340,10 +340,10 @@ export function VedicAstrologyArticle() {
             <li><a href="/articles/nakshatra-by-date-of-birth/" className="hover:underline">Nakshatra by Date of Birth — Your Lunar Mansion</a></li>
           </ul>
 
-          <div className="bg-gradient-to-r from-orange-600 to-amber-600 rounded-2xl
+          <div className="bg-gradient-to-r from-orange-700 to-amber-700 rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Discover Your Complete Birthday Profile</h2>
-            <p className="text-orange-100 mb-6">
+            <p className="text-white mb-6">
               Your Rashi and Nakshatra are just the start. BornClock also shows your Western
               zodiac, Life Path number, lucky stone, mantra and more — all from your date of birth.
             </p>

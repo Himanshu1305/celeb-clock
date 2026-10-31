@@ -87,7 +87,7 @@ export default function About() {
           </div>
           <p className="text-muted-foreground text-sm mt-6">
             Every source and formula is publicly documented on our{' '}
-            <a href="/how-it-works/" className="text-blue-500 hover:underline">How It Works page</a>.
+            <a href="/how-it-works/" className="text-blue-700 hover:underline">How It Works page</a>.
           </p>
         </section>
 
@@ -148,7 +148,7 @@ export default function About() {
             ].map(({ label, email, desc }) => (
               <div key={email} className="bg-card border border-border rounded-xl p-5">
                 <p className="font-semibold text-foreground text-sm mb-1">{label}</p>
-                <a href={`mailto:${email}`} className="text-blue-500 hover:underline text-sm block mb-2">{email}</a>
+                <a href={`mailto:${email}`} className="text-blue-700 hover:underline text-sm block mb-2">{email}</a>
                 <p className="text-muted-foreground text-xs">{desc}</p>
               </div>
             ))}

@@ -141,8 +141,8 @@ export function EpigeneticsArticle() {
               personalised estimate of how your habits are shaping your ageing.
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-emerald-600 text-white font-bold px-5 py-2.5
-                          rounded-full text-sm hover:bg-emerald-700 transition-colors">
+               className="inline-block bg-emerald-700 text-white font-bold px-5 py-2.5
+                          rounded-full text-sm hover:bg-emerald-800 transition-colors">
               Try the free longevity calculator →
             </a>
           </div>
@@ -163,10 +163,10 @@ export function EpigeneticsArticle() {
             <li><a href="/articles/how-to-live-to-100/" className="hover:underline">How to Live to 100 — Habits of the World's Longest-Lived People</a></li>
           </ul>
 
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl
+          <div className="bg-gradient-to-r from-emerald-700 to-teal-700 rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">See How Your Lifestyle Shapes Your Longevity</h2>
-            <p className="text-emerald-100 mb-6">
+            <p className="text-white mb-6">
               Your genes are not your destiny. Measure the eight lifestyle factors that
               influence your biological age with BornClock's free longevity calculator.
             </p>

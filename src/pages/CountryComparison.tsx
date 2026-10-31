@@ -320,13 +320,13 @@ const CountryComparison = () => {
             <p className="text-2xl md:text-4xl font-black leading-tight">
               In 1800, no country on Earth had a life expectancy above 40 years.
             </p>
-            <p className="text-[#2F6FB0] text-xl mt-4 font-semibold">
+            <p className="text-[#7FB0E0] text-xl mt-4 font-semibold">
               Today, 50+ countries exceed 75 years.
             </p>
             <p className="text-slate-300 text-lg mt-2">
               What changed? Everything. And it's still changing.
             </p>
-            <p className="text-slate-500 text-xs mt-6">
+            <p className="text-slate-400 text-xs mt-6">
               [Our World in Data — Life Expectancy, 2024]
             </p>
           </div>
@@ -479,7 +479,7 @@ const CountryComparison = () => {
               <p className="text-sm text-gray-700 leading-relaxed mb-3">
                 After World War II, Japan dramatically improved nutrition, built universal healthcare, and maintained their traditional diet of fish, fermented foods, and vegetables. Their obesity rate today: just 3.6% — vs 36% in the USA.
               </p>
-              <p className="text-xs text-gray-400 italic mb-2">
+              <p className="text-xs text-gray-500 italic mb-2">
                 [European Journal of Clinical Nutrition, Nature, 2021] [WHO Global Health Data, 2024]
               </p>
               <Link to="/blog/best-foods-to-eat-to-live-longer-longevity-diet/" className="text-[#2F6FB0] text-xs underline hover:text-[#2F6FB0]">
@@ -497,7 +497,7 @@ const CountryComparison = () => {
               <p className="text-sm text-gray-700 leading-relaxed mb-3">
                 US life expectancy is {leYears('United States')} years, against {leYears('Canada')} in Canada, {leYears('United Kingdom')} in the UK and {leYears('Japan')} in Japan ({LE_CITATION}). The gap is driven by diet, gun violence, overdose deaths, and healthcare inequality rather than access to medical technology.
               </p>
-              <p className="text-xs text-gray-400 italic">
+              <p className="text-xs text-gray-500 italic">
                 [Scientific American, Feb 2026] [Peterson-KFF Health System Tracker, 2026]
               </p>
             </div>
@@ -512,7 +512,7 @@ const CountryComparison = () => {
               <p className="text-sm text-gray-700 leading-relaxed mb-3">
                 Okinawan elders eat an average of 1,800 calories per day vs the US average of 2,500. They have dramatically lower rates of heart disease, diabetes, and cancer. Not because of any superfood — but because of how they eat, and how much.
               </p>
-              <p className="text-xs text-gray-400 italic mb-2">
+              <p className="text-xs text-gray-500 italic mb-2">
                 [Blue Zones Research, Buettner, 2023] [ScienceInsights, 2026]
               </p>
               <Link to="/blog/secrets-of-people-who-live-to-100-centenarian-habits/" className="text-green-700 text-xs underline hover:text-green-900">
@@ -530,7 +530,7 @@ const CountryComparison = () => {
               <p className="text-sm text-gray-700 leading-relaxed mb-3">
                 The challenge: a 15-year gap between India's top and bottom states. Kerala performs comparably to many European nations. The opportunity: India's improvement trajectory is accelerating.
               </p>
-              <p className="text-xs text-gray-400 italic">
+              <p className="text-xs text-gray-500 italic">
                 [UN World Population Prospects, 2024] [India National Health Survey, 2021]
               </p>
             </div>
@@ -545,7 +545,7 @@ const CountryComparison = () => {
               <p className="text-sm text-gray-700 leading-relaxed mb-3">
                 This means a health-conscious person in India can outlive a sedentary person in Japan. <strong>Your habits matter more than your passport.</strong>
               </p>
-              <p className="text-xs text-gray-400 italic mb-2">
+              <p className="text-xs text-gray-500 italic mb-2">
                 [Khaw et al., PLOS Medicine, 2008 — 4 health behaviors and 14 years longevity]
               </p>
               <Link to="/life-expectancy/" className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#0E2238] text-white text-xs rounded-lg hover:bg-[#0E2238] transition-colors">
@@ -563,12 +563,12 @@ const CountryComparison = () => {
 
               {[
                 { idx: 0, gradient: 'from-[#2F6FB0] to-[#2F6FB0]', icon: '🎯', title: 'The Monaco Effect', body: `Monaco has one of the world's highest life expectancies — ${leYears('Monaco')} years. Tiny, wealthy, universal healthcare, Mediterranean climate. But wealth alone doesn't explain it — neighboring France still reaches ${leYears('France')} years with far more people.`, cite: '[UN WPP 2024, 2023 estimate]' },
-                { idx: 1, gradient: 'from-emerald-600 to-emerald-800', icon: '🍵', title: 'The Green Tea Effect', body: 'Japan\'s per-capita green tea consumption: ~700g per person per year. Green tea contains EGCG — a polyphenol that reduces inflammation. Japanese adults who drink 5+ cups per day show 26% lower risk of heart disease mortality.', cite: '[Japan Public Health Center Study, 2006]' },
+                { idx: 1, gradient: 'from-emerald-700 to-emerald-800', icon: '🍵', title: 'The Green Tea Effect', body: 'Japan\'s per-capita green tea consumption: ~700g per person per year. Green tea contains EGCG — a polyphenol that reduces inflammation. Japanese adults who drink 5+ cups per day show 26% lower risk of heart disease mortality.', cite: '[Japan Public Health Center Study, 2006]' },
                 { idx: 2, gradient: 'from-blue-600 to-blue-800', icon: '🏥', title: 'The Healthcare Gap', body: 'The US spends $12,000+ per person on healthcare annually — nearly double comparable countries. Yet Americans live shorter lives than citizens in 50+ countries who spend far less. Healthcare spending and life expectancy are surprisingly weakly correlated.', cite: '[OECD Health Statistics, 2024]' },
                 { idx: 3, gradient: 'from-[#2F6FB0] to-[#2F6FB0]', icon: '🌍', title: 'The 200-Year Miracle', body: 'In 1800, the global average life expectancy was around 30 years. By 2024 it exceeded 73 years. Humanity effectively gained 43 years of average lifespan in 200 years — primarily through sanitation, vaccines, and antibiotics.', cite: '[Our World in Data, 2024]' },
-                { idx: 4, gradient: 'from-rose-600 to-rose-800', icon: '💃', title: 'The Dancing Sardinians', body: 'Sardinia, Italy is a Blue Zone with the world\'s highest concentration of centenarians. Sardinian men specifically outlive men from all other Blue Zones — daily walking, red wine, pecorino cheese (high omega-3s), and tight-knit multigenerational families.', cite: '[Buettner, D. — Blue Zones, 2023]' },
-                { idx: 5, gradient: 'from-amber-600 to-amber-800', icon: '🏃', title: 'The Exercise Equation', body: 'A landmark study of 650,000 adults found that 75 minutes of vigorous exercise per week added 3.4 years to life expectancy — regardless of country of birth. 150 minutes/week added 3.5 years. Marginal return decreases quickly after 150 minutes.', cite: '[Moore et al., PLOS Medicine, 2012]' },
-                { idx: 6, gradient: 'from-teal-600 to-teal-800', icon: '👥', title: 'The Loneliness Penalty', body: 'Social isolation reduces life expectancy by 26% — comparable to smoking 15 cigarettes per day. Countries with stronger social bonds consistently rank higher in longevity. Japan\'s "moai" (lifelong friend groups) and Sardinia\'s village culture are key factors.', cite: '[Holt-Lunstad et al., PLOS Medicine, 2010]' },
+                { idx: 4, gradient: 'from-rose-700 to-rose-800', icon: '💃', title: 'The Dancing Sardinians', body: 'Sardinia, Italy is a Blue Zone with the world\'s highest concentration of centenarians. Sardinian men specifically outlive men from all other Blue Zones — daily walking, red wine, pecorino cheese (high omega-3s), and tight-knit multigenerational families.', cite: '[Buettner, D. — Blue Zones, 2023]' },
+                { idx: 5, gradient: 'from-amber-700 to-amber-800', icon: '🏃', title: 'The Exercise Equation', body: 'A landmark study of 650,000 adults found that 75 minutes of vigorous exercise per week added 3.4 years to life expectancy — regardless of country of birth. 150 minutes/week added 3.5 years. Marginal return decreases quickly after 150 minutes.', cite: '[Moore et al., PLOS Medicine, 2012]' },
+                { idx: 6, gradient: 'from-teal-700 to-teal-800', icon: '👥', title: 'The Loneliness Penalty', body: 'Social isolation reduces life expectancy by 26% — comparable to smoking 15 cigarettes per day. Countries with stronger social bonds consistently rank higher in longevity. Japan\'s "moai" (lifelong friend groups) and Sardinia\'s village culture are key factors.', cite: '[Holt-Lunstad et al., PLOS Medicine, 2010]' },
                 { idx: 7, gradient: 'from-slate-600 to-slate-800', icon: '🇮🇳', title: 'India\'s 30-Year Miracle', body: `India's life expectancy rose from ${INDIA_LE.historical1947} years at independence (1947) to ${INDIA_LE.overall} years today — an increase of ${INDIA_LE.overall - INDIA_LE.historical1947} years in less than 80 years. One of the fastest sustained improvements in human history, driven by vaccination, sanitation, maternal care, and economic development.`, cite: `[UN WPP ${INDIA_LE.refYear}; India NHFS 2021]` },
               ].map(fact => (
                 <div key={fact.idx} className={`min-w-64 max-w-64 bg-gradient-to-br ${fact.gradient} rounded-xl p-4 text-white flex-shrink-0`}>
@@ -585,7 +585,7 @@ const CountryComparison = () => {
                     </button>
                     <button
                       onClick={() => handleShareWhatsApp(`${fact.title}: ${fact.body} ${fact.cite}`)}
-                      className="text-[10px] px-2 py-1 rounded-lg bg-green-500/80 hover:bg-green-500 transition-colors"
+                      className="text-[10px] px-2 py-1 rounded-lg bg-green-700 hover:bg-green-500 transition-colors"
                     >
                       📱 WA
                     </button>
@@ -751,7 +751,7 @@ const CountryComparison = () => {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-2">
                   <div className="text-3xl">{bestRow?.flag ?? '🌍'}</div>
-                  <button onClick={() => setExpandedWhatif(expandedWhatif === 'best' ? null : 'best')} className="text-green-600 hover:text-green-800 text-xs flex items-center gap-1 mt-1">
+                  <button onClick={() => setExpandedWhatif(expandedWhatif === 'best' ? null : 'best')} className="text-green-700 hover:text-green-800 text-xs flex items-center gap-1 mt-1">
                     {expandedWhatif === 'best' ? <><ChevronUp className="w-3 h-3" />Less</> : <><ChevronDown className="w-3 h-3" />Details</>}
                   </button>
                 </div>
@@ -941,7 +941,7 @@ const CountryComparison = () => {
                   <h3 className="font-semibold text-sm text-gray-900 mb-1 leading-tight">{post.title}</h3>
                   <p className="text-xs text-gray-600 mt-1 flex-1 leading-relaxed">{post.teaser}</p>
                   <div className="mt-3 flex items-center justify-between">
-                    <span className="text-[10px] text-gray-400">{post.readTime} min read</span>
+                    <span className="text-[10px] text-gray-500">{post.readTime} min read</span>
                     <span className="text-[#2F6FB0] text-xs font-medium">Read →</span>
                   </div>
                 </div>
@@ -1035,7 +1035,7 @@ const CountryComparison = () => {
             <p><strong>Japan Paradox:</strong> Willcox, D.C. et al. (2021). The Okinawan diet: health implications of a low-calorie, nutrient-dense, antioxidant-rich dietary pattern. <em>Journal of the American College of Nutrition</em>.</p>
             <p><strong>Blue Zones:</strong> Buettner, D. (2023). <em>The Blue Zones: Lessons for Living Longer From the People Who've Lived the Longest</em>. National Geographic Society.</p>
             <p><strong>India Data:</strong> National Family Health Survey NFHS-5 (2019–21). Ministry of Health and Family Welfare, India.</p>
-            <p className="text-gray-400 italic">All baselines are population-level statistical estimates. Individual outcomes vary based on genetics, lifestyle, healthcare access, and factors not captured here. BornClock data is for educational purposes only.</p>
+            <p className="text-gray-500 italic">All baselines are population-level statistical estimates. Individual outcomes vary based on genetics, lifestyle, healthcare access, and factors not captured here. BornClock data is for educational purposes only.</p>
           </div>
         </section>
 

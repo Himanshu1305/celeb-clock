@@ -315,7 +315,7 @@ export default function CompatibilityPage() {
                 );
               })()}
 
-              <div className="bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl p-8 text-white text-center mb-6">
+              <div className="bg-gradient-to-br from-rose-700 to-pink-700 rounded-2xl p-8 text-white text-center mb-6">
                 <div className="flex justify-center items-center gap-6 mb-4">
                   <div className="text-center">
                     <div className="text-5xl mb-1">{SIGN_EMOJIS[calcSigns.s1]}</div>

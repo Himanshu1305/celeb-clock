@@ -347,10 +347,10 @@ export function ChineseZodiacArticle() {
             <li><a href="/planetary-age/" className="hover:underline">Planetary Age Calculator — Your Age on Every Planet</a></li>
           </ul>
 
-          <div className="bg-gradient-to-r from-red-600 to-orange-600 rounded-2xl
+          <div className="bg-gradient-to-r from-red-700 to-orange-700 rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Discover Your Complete Birthday Report</h2>
-            <p className="text-red-100 mb-6">
+            <p className="text-white mb-6">
               Your Chinese zodiac animal is just one piece. BornClock also shows your Western zodiac,
               Vedic Rashi, Life Path number, days lived and more — all from your date of birth.
             </p>

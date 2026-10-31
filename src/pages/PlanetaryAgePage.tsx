@@ -216,13 +216,13 @@ const PlanetaryAgePage = () => {
               <div className="max-w-3xl mx-auto text-center pb-16">
                 {/* Animated planet emoji row */}
                 <div
-                  className="text-3xl mb-8 tracking-widest"
+                  className="text-3xl mb-8 tracking-widest text-slate-200"
                   style={{ animation: 'emoji-drift 20s ease-in-out infinite' }}
                 >
                   ☿ &nbsp; ♀ &nbsp; 🌍 &nbsp; ♂ &nbsp; ♃ &nbsp; ♄ &nbsp; ⛢ &nbsp; ♆
                 </div>
 
-                <PageTagline />
+                <PageTagline tone="dark" />
 
                 <p className="text-lg text-amber-400 font-medium mb-6">
                   Enter your birthday to see your cosmic age across all 8 planets —
@@ -274,17 +274,17 @@ const PlanetaryAgePage = () => {
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-[#2F6FB0] text-sm shrink-0 mt-0.5">♃</span>
+                      <span className="text-[#7FB0E0] text-sm shrink-0 mt-0.5">♃</span>
                       <p className="text-sm text-slate-300 leading-relaxed">
                         Your age on Jupiter is probably a single digit.{' '}
-                        <span className="text-slate-500 italic">Enter your birthday above to find out.</span>
+                        <span className="text-slate-400 italic">Enter your birthday above to find out.</span>
                       </p>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-[#2F6FB0] text-sm shrink-0 mt-0.5">♆</span>
+                      <span className="text-[#7FB0E0] text-sm shrink-0 mt-0.5">♆</span>
                       <p className="text-sm text-slate-300 leading-relaxed">
                         The last time Neptune completed a full orbit, it was{' '}
-                        <span className="text-[#2F6FB0] font-bold">{neptuneLastYear}</span>
+                        <span className="text-[#7FB0E0] font-bold">{neptuneLastYear}</span>
                         {' '}— the year the American Civil War began.
                       </p>
                     </div>
@@ -293,7 +293,7 @@ const PlanetaryAgePage = () => {
 
                 {/* Scroll nudge */}
                 <div
-                  className="text-slate-500 text-sm"
+                  className="text-slate-400 text-sm"
                   style={{ animation: 'bounce-down 1.5s ease-in-out infinite' }}
                 >
                   Discover the facts ↓
@@ -302,27 +302,27 @@ const PlanetaryAgePage = () => {
             </div>
           </div>
 
-          {/* ── "Why Your Age Depends" narrative — on dark bg ──────────────── */}
+          {/* ── "Why Your Age Depends" narrative — on the page's light bg ───── */}
           <div className="container mx-auto px-4 py-14 max-w-2xl text-center">
-            <h2 className="text-2xl font-bold text-white mb-6">
+            <h2 className="text-2xl font-bold text-[#0E2238] mb-6">
               Why Your Age Depends on Where You Stand
             </h2>
-            <p className="text-slate-300 leading-relaxed mb-4">
+            <p className="text-slate-700 leading-relaxed mb-4">
               A year isn't a universal measure. It's just how long it takes your specific planet to orbit the Sun.
               Earth takes 365.25 days. Mercury takes 88 days. Neptune takes 60,189 days — nearly 165 Earth years.
               Same Sun. Completely different experience of time.
             </p>
-            <p className="text-slate-300 leading-relaxed mb-4">
+            <p className="text-slate-700 leading-relaxed mb-4">
               This isn't just a fun trick. It's a genuine consequence of Kepler's Third Law of Planetary Motion,
               published in 1619 — the relationship between a planet's orbital period and its distance from the Sun.
               The further you are from the Sun, the slower you orbit, and the longer your year.
             </p>
-            <p className="text-slate-300 leading-relaxed mb-4">
+            <p className="text-slate-700 leading-relaxed mb-4">
               The implications are mind-bending. A 30-year-old on Earth is simultaneously 124.5 years old on Mercury,
               48.9 on Venus, 15.9 on Mars, 2.5 on Jupiter, 1.0 on Saturn, 0.35 on Uranus, and barely 0.16 on Neptune.
               Same person. Eight completely different ages. Enter your birthday to find yours.
             </p>
-            <p className="text-xs text-slate-500 mt-4 italic">
+            <p className="text-xs text-slate-600 mt-4 italic">
               [NASA JPL Planetary Fact Sheets, 2024; Kepler, J., Harmonices Mundi, 1619]
             </p>
           </div>
@@ -336,7 +336,7 @@ const PlanetaryAgePage = () => {
             <div className="text-center py-4">
               <button
                 onClick={handleReset}
-                className="text-sm text-slate-400 hover:text-slate-200 underline transition-colors"
+                className="text-sm text-slate-600 hover:text-slate-900 underline transition-colors"
               >
                 ← Calculate for a different birthday
               </button>
@@ -357,8 +357,8 @@ const PlanetaryAgePage = () => {
 
       {/* ── SHOCKING FACTS CAROUSEL — always visible ─────────────────────── */}
       <div className="container mx-auto px-4 py-10 max-w-5xl">
-        <h2 className="text-xl font-bold text-white mb-2">🤯 Facts That Will Break Your Brain</h2>
-        <p className="text-sm text-slate-400 mb-5">Auto-scrolling · hover to pause</p>
+        <h2 className="text-xl font-bold text-[#0E2238] mb-2">🤯 Facts That Will Break Your Brain</h2>
+        <p className="text-sm text-slate-600 mb-5">Auto-scrolling · hover to pause</p>
         <div
           ref={carouselRef}
           tabIndex={0}
@@ -378,12 +378,12 @@ const PlanetaryAgePage = () => {
               <div className="text-3xl mb-3">{fact.icon}</div>
               <h3 className="font-black text-sm mb-2 leading-tight text-white">{fact.title}</h3>
               <p className="text-xs text-slate-300 leading-relaxed mb-3">{fact.body}</p>
-              <p className="text-[10px] text-slate-600 italic">[{fact.source}]</p>
+              <p className="text-[10px] text-slate-400 italic">[{fact.source}]</p>
             </div>
           ))}
         </div>
-        <div className="bg-[#0E2238]/50 border border-[#2F6FB0]/40 rounded-xl px-4 py-3 mt-4 text-sm text-[#2F6FB0]">
-          <span className="font-bold text-[#2F6FB0]">The science:</span> Each planet's year is governed by Kepler's Third Law (1619) — the further a planet is from the Sun, the slower it orbits. Neptune's year lasts 164.8 Earth years because it travels 30× further from the Sun than Earth, at 5.4 km/s vs Earth's 29.8 km/s.
+        <div className="bg-[#0E2238] border border-[#2F6FB0]/40 rounded-xl px-4 py-3 mt-4 text-sm text-slate-200">
+          <span className="font-bold text-[#7FB0E0]">The science:</span> Each planet's year is governed by Kepler's Third Law (1619) — the further a planet is from the Sun, the slower it orbits. Neptune's year lasts 164.8 Earth years because it travels 30× further from the Sun than Earth, at 5.4 km/s vs Earth's 29.8 km/s.
         </div>
       </div>
 
@@ -395,7 +395,7 @@ const PlanetaryAgePage = () => {
             Age is about orbits; <strong>weight</strong> is about gravity — a different question entirely. See your
             weight across all 8 planets and the Moon on the dedicated calculator →
           </p>
-          <span className="inline-block mt-3 text-sm font-semibold text-[#2F6FB0]">Open the Weight on Planets calculator →</span>
+          <span className="inline-block mt-3 text-sm font-semibold text-[#7FB0E0]">Open the Weight on Planets calculator →</span>
         </a>
       </div>
 

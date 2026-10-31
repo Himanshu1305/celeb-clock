@@ -99,7 +99,7 @@ export function SampleReportPage() {
             ].map(({ label, value }) => (
               <div key={label} className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-center">
                 <div className="text-xl font-black text-gray-900">{value}</div>
-                <div className="text-xs text-gray-400">{label}</div>
+                <div className="text-xs text-gray-500">{label}</div>
               </div>
             ))}
           </div>
@@ -131,16 +131,16 @@ export function SampleReportPage() {
             <div className="grid sm:grid-cols-2 gap-2 text-xs">
               {rashiRatna && (
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                  <div className="text-gray-400 mb-0.5">Rashi Ratna (Moon-sign stone)</div>
+                  <div className="text-gray-500 mb-0.5">Rashi Ratna (Moon-sign stone)</div>
                   <div className="font-semibold text-gray-900">{rashiRatna.primaryStone} ({rashiRatna.primaryStoneHindi})</div>
                 </div>
               )}
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                <div className="text-gray-400 mb-0.5">Vedic Ratna (from the birth chart)</div>
+                <div className="text-gray-500 mb-0.5">Vedic Ratna (from the birth chart)</div>
                 <div className="font-semibold text-gray-900">{SAMPLE_VEDIC.gem.gem} ({SAMPLE_VEDIC.gem.hindi}) — {SAMPLE_VEDIC.gem.planet}, {SAMPLE_VEDIC.gem.role}</div>
               </div>
             </div>
-            <p className="text-xs text-gray-400 mt-3">
+            <p className="text-xs text-gray-500 mt-3">
               Calculated for 6:30 am in New Delhi with the same engine as our Kundali (sidereal, Lahiri). Your report uses your own birth time and city; without a birth time it shows the Moon sign only when it is certain for the whole day. Consult a qualified astrologer before wearing any gemstone.
             </p>
           </section>
@@ -152,7 +152,7 @@ export function SampleReportPage() {
               <span className="text-sm font-normal text-gray-500 ml-2">({chinese.yin_yang})</span>
             </h2>
             <p className="text-sm text-gray-700 leading-relaxed">{chinese.description}</p>
-            <p className="text-xs text-gray-400 mt-2">Born before the Lunar New Year of {y}, so the sign belongs to the {chinese.year} lunar year.</p>
+            <p className="text-xs text-gray-500 mt-2">Born before the Lunar New Year of {y}, so the sign belongs to the {chinese.year} lunar year.</p>
           </section>
 
           {/* Life Path + Personal Year */}
@@ -164,7 +164,7 @@ export function SampleReportPage() {
               <div>
                 <h2 className="text-lg font-black text-gray-900">Life Path {lp.number}</h2>
                 <div className="text-[#6E5AA6] font-semibold text-sm">{lpData.archetype}</div>
-                <div className="text-xs text-gray-400">{lp.steps}</div>
+                <div className="text-xs text-gray-500">{lp.steps}</div>
               </div>
             </div>
             <p className="text-sm text-gray-700 leading-relaxed mb-3">{lpData.personality.split('\n\n')[0]}</p>

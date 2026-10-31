@@ -102,7 +102,7 @@ export const ShareableCard = ({ birthDate }: ShareableCardProps) => {
             ref={cardRef}
             className="w-full max-w-[600px] aspect-[1200/630] rounded-2xl p-8 flex flex-col justify-between"
             style={{
-              background: 'linear-gradient(135deg, hsl(214 84% 36%), hsl(174 44% 47%), hsl(214 84% 46%))',
+              background: 'linear-gradient(135deg, hsl(214 84% 36%), hsl(174 60% 28%), hsl(214 84% 46%))',
               color: 'white',
             }}
           >

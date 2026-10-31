@@ -228,7 +228,7 @@ export default function BirthdayMonthPage() {
             <ChevronLeft className="w-4 h-4" />
             {MONTH_NAMES[prevMonth]}
           </Link>
-          <Link to="/birthday/" className="text-xs text-gray-400 hover:text-[#6E5AA6] transition-colors">
+          <Link to="/birthday/" className="text-xs text-gray-500 hover:text-[#6E5AA6] transition-colors">
             All 12 Months
           </Link>
           <Link

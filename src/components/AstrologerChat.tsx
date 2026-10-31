@@ -71,7 +71,7 @@ export function AstrologerChat(
 
   return (
     <div data-testid="astrologer-chat" className="rounded-2xl border bg-white dark:bg-card shadow-sm overflow-hidden">
-      <div className="p-4 border-b bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] dark:from-[#6E5AA6]/20 dark:to-[#6E5AA6]/20">
+      <div className="p-4 border-b bg-gradient-to-r from-[#6E5AA6]/10 to-[#6E5AA6]/10 dark:from-[#6E5AA6]/20 dark:to-[#6E5AA6]/20">
         <div className="flex items-center gap-2 mb-1">
           <Bot className="w-5 h-5 text-[#6E5AA6]" />
           <h3 className="font-semibold text-foreground">Your Personal Astrologer</h3>

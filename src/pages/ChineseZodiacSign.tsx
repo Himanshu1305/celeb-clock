@@ -114,7 +114,7 @@ export default function ChineseZodiacSign() {
             className="block rounded-xl border border-red-200 bg-red-50 p-5 text-center hover:bg-red-100 transition-colors"
           >
             <span className="font-semibold text-red-700">📅 See the {capitalised}'s yearly horoscope →</span>
-            <span className="block text-sm text-red-600/80 mt-1">
+            <span className="block text-sm text-red-700 mt-1">
               Career, finance, love &amp; health in the Year of the {cur.element} {cur.animal} ({cur.rangeLabel}) and the year after.
             </span>
           </Link>

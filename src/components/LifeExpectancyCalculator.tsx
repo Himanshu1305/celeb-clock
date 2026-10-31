@@ -625,9 +625,9 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
             {currentAge !== null && step === 6 && (
               <div className="grid grid-cols-2 gap-3 mt-1">
                 <div className="bg-gray-50 rounded-xl p-3 text-center border border-gray-200">
-                  <p className="text-xs text-gray-400 mb-1">Your Age Now</p>
+                  <p className="text-xs text-gray-500 mb-1">Your Age Now</p>
                   <p className="text-xl font-black text-gray-800">{currentAge}</p>
-                  <p className="text-xs text-gray-400">years</p>
+                  <p className="text-xs text-gray-500">years</p>
                 </div>
                 <div className="bg-[#6E5AA6]/10 rounded-xl p-3 text-center border border-[#6E5AA6]/30">
                   <p className="text-xs text-[#6E5AA6] mb-1">Projected Age</p>
@@ -648,7 +648,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
               <ShieldCheck className="h-4 w-4 text-accent" />
               <AlertDescription className="text-sm text-muted-foreground">
                 🔒 Your health data is used only to calculate your personalized forecast. We do not store your health inputs on our servers.
-                <Link to="/privacy/" className="text-blue-500 underline ml-1">Privacy Policy →</Link>
+                <Link to="/privacy/" className="text-blue-700 underline ml-1">Privacy Policy →</Link>
               </AlertDescription>
             </Alert>
             <div className="space-y-3">
@@ -730,7 +730,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
                 </p>
               )}
               {!data.country && (
-                <p className="text-xs text-amber-600 dark:text-amber-400">
+                <p className="text-xs text-amber-700 dark:text-amber-400">
                   Country selection personalises your baseline life expectancy
                 </p>
               )}
@@ -1542,7 +1542,7 @@ export const LifeExpectancyCalculator = ({ birthDate, onComplete, onCompleteSkip
             <p className="text-sm text-blue-700 leading-relaxed mb-2">
               {STEP_EDUCATION[step].content}
             </p>
-            <p className="text-xs text-blue-400 italic">
+            <p className="text-xs text-blue-700 italic">
               📚 {STEP_EDUCATION[step].source}
             </p>
           </div>

@@ -236,7 +236,7 @@ export function BryanJohnsonArticle() {
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Build Your Own Longevity Plan — Free</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               You do not need a $2M budget to take ageing seriously. Use BornClock&apos;s free
               longevity calculator to see how the habits that matter reshape your projected
               lifespan.

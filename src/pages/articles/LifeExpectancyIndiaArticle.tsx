@@ -239,7 +239,7 @@ export function LifeExpectancyIndiaArticle() {
 
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Find Out How Long <em>You</em> Might Live</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               Stop guessing from a state average. The BornClock longevity calculator turns your
               own lifestyle into a personalised life-expectancy estimate — and shows how many
               years your habits could add.

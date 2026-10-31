@@ -124,7 +124,7 @@ export default function BiorhythmPage() {
               </div>
               <button
                 onClick={handleCalculate}
-                className="bg-teal-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-700 transition-colors"
+                className="bg-teal-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-teal-800 transition-colors"
               >
                 Calculate →
               </button>
@@ -142,7 +142,7 @@ export default function BiorhythmPage() {
                 {[
                   { label: 'Physical', value: result.physical, color: 'text-rose-600', cycle: '23-day cycle' },
                   { label: 'Emotional', value: result.emotional, color: 'text-blue-600', cycle: '28-day cycle' },
-                  { label: 'Intellectual', value: result.intellectual, color: 'text-amber-600', cycle: '33-day cycle' },
+                  { label: 'Intellectual', value: result.intellectual, color: 'text-amber-700', cycle: '33-day cycle' },
                 ].map(({ label, value, color, cycle }) => {
                   const status = getBiorhythmStatus(value);
                   return (
@@ -166,7 +166,7 @@ export default function BiorhythmPage() {
                       <XAxis dataKey="label" tick={{ fontSize: 9 }} interval={4} />
                       <YAxis domain={[-100, 100]} tick={{ fontSize: 9 }} />
                       <Tooltip formatter={(v: number) => [`${v > 0 ? '+' : ''}${v}%`]} />
-                      <Legend wrapperStyle={{ fontSize: 11 }} />
+                      <Legend wrapperStyle={{ fontSize: 11 }} formatter={(value) => <span style={{ color: "#1A2230" }}>{value}</span>} />
                       <ReferenceLine y={0} stroke="#ccc" strokeDasharray="4 2" />
                       <Line type="monotone" dataKey="physical" stroke="#f43f5e" strokeWidth={2} dot={false} name="Physical" />
                       <Line type="monotone" dataKey="emotional" stroke="#3b82f6" strokeWidth={2} dot={false} name="Emotional" />
@@ -185,7 +185,7 @@ export default function BiorhythmPage() {
                       <div className="flex gap-3 text-xs">
                         <span className="text-rose-600">P: {day.physical > 0 ? '+' : ''}{day.physical}%</span>
                         <span className="text-blue-600">E: {day.emotional > 0 ? '+' : ''}{day.emotional}%</span>
-                        <span className="text-amber-600">I: {day.intellectual > 0 ? '+' : ''}{day.intellectual}%</span>
+                        <span className="text-amber-700">I: {day.intellectual > 0 ? '+' : ''}{day.intellectual}%</span>
                       </div>
                     </div>
                   ))}
@@ -194,8 +194,8 @@ export default function BiorhythmPage() {
 
               <div className="bg-teal-700 rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get the complete Birthday Intelligence Report</p>
-                <p className="text-teal-200 text-sm mb-4">Your biorhythm analysis + moon sign + tarot card + name numerology + 12 more sections.</p>
-                <Link to="/birthday-report/" className="inline-block bg-white text-teal-600 px-8 py-3 rounded-xl font-semibold hover:bg-teal-50 transition-colors">
+                <p className="text-white text-sm mb-4">Your biorhythm analysis + moon sign + tarot card + name numerology + 12 more sections.</p>
+                <Link to="/birthday-report/" className="inline-block bg-white text-teal-700 px-8 py-3 rounded-xl font-semibold hover:bg-teal-50 transition-colors">
                   Generate My Report → {reportPriceLabel}
                 </Link>
               </div>

@@ -203,7 +203,7 @@ export default function Privacy() {
                 <ul className="space-y-3 text-muted-foreground leading-relaxed">
                   <li><strong className="text-foreground">Retention:</strong> Paid gift reports have permanent access — the link never expires. They are deleted with your account or on request. Unpaid previews stop being viewable after 7 days (30 days for premium accounts).</li>
                   <li><strong className="text-foreground">Recipient deletion rights:</strong> Recipients themselves may request deletion of a report about them by emailing{' '}
-                    <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>. We will process such requests within 30 days.
+                    <a href="mailto:privacy@bornclock.com" className="text-blue-700 hover:underline">privacy@bornclock.com</a>. We will process such requests within 30 days.
                   </li>
                   <li><strong className="text-foreground">Reports about minors:</strong> by creating a report about a person under 18, you confirm you are their parent or guardian, or have a parent or guardian's consent.</li>
                 </ul>
@@ -290,15 +290,15 @@ export default function Privacy() {
                   Regardless of where you are in the world, you have the following rights:
                 </p>
                 <ul className="space-y-3 text-muted-foreground leading-relaxed">
-                  <li><strong className="text-foreground">Access</strong> — see exactly what data we hold about you. Email <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>.</li>
+                  <li><strong className="text-foreground">Access</strong> — see exactly what data we hold about you. Email <a href="mailto:privacy@bornclock.com" className="text-blue-700 hover:underline">privacy@bornclock.com</a>.</li>
                   <li><strong className="text-foreground">Correction</strong> — update your name, email, or date of birth from your Profile page at any time.</li>
                   <li><strong className="text-foreground">Deletion</strong> — permanently delete your account and all associated data from your Profile page. No need to contact support. Data is purged within 30 days. Transaction records (payment IDs, amounts, dates) are retained in de-identified form as required by tax and accounting law, but are permanently unlinked from your profile and email on deletion.</li>
-                  <li><strong className="text-foreground">Export</strong> — request a copy of your data in a portable format by emailing <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>.</li>
+                  <li><strong className="text-foreground">Export</strong> — request a copy of your data in a portable format by emailing <a href="mailto:privacy@bornclock.com" className="text-blue-700 hover:underline">privacy@bornclock.com</a>.</li>
                   <li><strong className="text-foreground">Opt out</strong> — unsubscribe from all non-essential emails from your Profile page or via the unsubscribe link in any email we send.</li>
                   <li><strong className="text-foreground">Withdraw consent</strong> — if you gave consent for any specific processing, you can withdraw it at any time without affecting past processing.</li>
                 </ul>
                 <p className="text-muted-foreground text-sm mt-4">
-                  EU/UK residents have rights under GDPR/UK-GDPR (see <button onClick={() => scrollToSection('gdpr-rights')} className="text-blue-500 hover:underline">EU/UK Rights</button> below). Indian residents have rights under DPDPA 2023 (see <button onClick={() => scrollToSection('dpdpa-rights')} className="text-blue-500 hover:underline">Indian Law Rights</button> below). We honour all requests within 30 days.
+                  EU/UK residents have rights under GDPR/UK-GDPR (see <button onClick={() => scrollToSection('gdpr-rights')} className="text-blue-700 hover:underline">EU/UK Rights</button> below). Indian residents have rights under DPDPA 2023 (see <button onClick={() => scrollToSection('dpdpa-rights')} className="text-blue-700 hover:underline">Indian Law Rights</button> below). We honour all requests within 30 days.
                 </p>
               </section>
 
@@ -308,11 +308,11 @@ export default function Privacy() {
                   Under the <strong className="text-foreground">Digital Personal Data Protection Act 2023 (DPDPA)</strong>, Indian residents have the following rights:
                 </p>
                 <ul className="space-y-3 text-muted-foreground leading-relaxed mb-4">
-                  <li><strong className="text-foreground">Right to Access</strong> — request a copy of all personal data we hold about you. Email <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>.</li>
+                  <li><strong className="text-foreground">Right to Access</strong> — request a copy of all personal data we hold about you. Email <a href="mailto:privacy@bornclock.com" className="text-blue-700 hover:underline">privacy@bornclock.com</a>.</li>
                   <li><strong className="text-foreground">Right to Correction</strong> — update inaccurate or incomplete data from your Profile page or by emailing us.</li>
                   <li><strong className="text-foreground">Right to Erasure</strong> — request permanent deletion of all your personal data. We will process your request and confirm deletion within <strong className="text-foreground">30 days</strong>.</li>
                   <li><strong className="text-foreground">Right to Withdraw Consent</strong> — withdraw consent for any data processing at any time. This does not affect processing already completed.</li>
-                  <li><strong className="text-foreground">Right to Grievance Redressal</strong> — contact our data protection contact at <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a> for any concerns.</li>
+                  <li><strong className="text-foreground">Right to Grievance Redressal</strong> — contact our data protection contact at <a href="mailto:privacy@bornclock.com" className="text-blue-700 hover:underline">privacy@bornclock.com</a> for any concerns.</li>
                 </ul>
                 <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
                   <p className="text-sm text-muted-foreground leading-relaxed">
@@ -335,7 +335,7 @@ export default function Privacy() {
                   <li><strong className="text-foreground">Right to Object (Art. 21)</strong> — object to processing based on legitimate interests.</li>
                 </ul>
                 <p className="text-muted-foreground text-sm">
-                  To exercise any of these rights, email <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>. We will respond within 30 days. You also have the right to lodge a complaint with your national data protection authority.
+                  To exercise any of these rights, email <a href="mailto:privacy@bornclock.com" className="text-blue-700 hover:underline">privacy@bornclock.com</a>. We will respond within 30 days. You also have the right to lodge a complaint with your national data protection authority.
                 </p>
               </section>
 
@@ -356,7 +356,7 @@ export default function Privacy() {
                 <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Children's Privacy</h2>
                 <p className="text-muted-foreground leading-relaxed">
                   BornClock is not directed at children under 13 (or under 16 in the EU). We do not knowingly collect personal information from children. If you believe a child has provided us with personal data, please contact{' '}
-                  <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a>{' '}
+                  <a href="mailto:privacy@bornclock.com" className="text-blue-700 hover:underline">privacy@bornclock.com</a>{' '}
                   and we will delete it promptly.
                 </p>
               </section>
@@ -374,8 +374,8 @@ export default function Privacy() {
                   For any privacy-related questions, requests, or complaints:
                 </p>
                 <ul className="space-y-2 text-muted-foreground">
-                  <li>Privacy: <a href="mailto:privacy@bornclock.com" className="text-blue-500 hover:underline">privacy@bornclock.com</a></li>
-                  <li>General enquiries: <a href="mailto:hello@bornclock.com" className="text-blue-500 hover:underline">hello@bornclock.com</a></li>
+                  <li>Privacy: <a href="mailto:privacy@bornclock.com" className="text-blue-700 hover:underline">privacy@bornclock.com</a></li>
+                  <li>General enquiries: <a href="mailto:hello@bornclock.com" className="text-blue-700 hover:underline">hello@bornclock.com</a></li>
                 </ul>
                 <p className="text-muted-foreground text-sm mt-4">
                   We aim to respond to all privacy requests within 30 days.

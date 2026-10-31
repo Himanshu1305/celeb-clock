@@ -51,7 +51,7 @@ export default function DiwaliGiftPage() {
               Continue to gift checkout →
             </Link>
             <a data-testid="diwali-whatsapp-share" href={whatsappHref} target="_blank" rel="noopener noreferrer"
-               className="inline-flex items-center gap-2 bg-green-600 text-white rounded-lg px-5 py-3 font-semibold hover:bg-green-700">
+               className="inline-flex items-center gap-2 bg-green-700 text-white rounded-lg px-5 py-3 font-semibold hover:bg-green-800">
               Share on WhatsApp
             </a>
           </div>

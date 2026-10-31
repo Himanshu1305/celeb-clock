@@ -295,7 +295,7 @@ export function TarotByDateOfBirthArticle() {
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-6 text-center text-white my-8">
             <h2 className="text-xl font-black mb-2">Want both of your birth cards at once?</h2>
-            <p className="text-[#6E5AA6] mb-4 text-sm">
+            <p className="text-white/90 mb-4 text-sm">
               BornClock reads your date of birth for your tarot birth card, zodiac sign, Life Path
               number, Vedic Rashi, lucky stone and more — all in one free profile.
             </p>
@@ -345,7 +345,7 @@ export function TarotByDateOfBirthArticle() {
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Discover Your Complete Birthday Profile</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-white/90 mb-6">
               Your tarot cards are one layer. BornClock also shows your Western zodiac, Vedic
               Rashi, Nakshatra, Life Path number, lucky stone and more — all from your date of birth.
             </p>

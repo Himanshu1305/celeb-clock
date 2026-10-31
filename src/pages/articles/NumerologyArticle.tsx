@@ -212,7 +212,7 @@ export function NumerologyArticle() {
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Want the complete birthday report?</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-white/90 mb-6">
               Your Life Path is just one piece. BornClock also shows your Vedic Rashi,
               Western zodiac, Nakshatra, lucky stone, and more — all from your date of birth. Your
               Mulank, Bhagyank and Life Path stay free on the numerology calculator.

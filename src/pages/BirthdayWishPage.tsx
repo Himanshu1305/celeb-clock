@@ -129,7 +129,7 @@ export default function BirthdayWishPage() {
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-green-600 text-white rounded-lg px-5 py-3 font-semibold hover:bg-green-700 transition-colors"
+                className="inline-flex items-center gap-2 bg-green-700 text-white rounded-lg px-5 py-3 font-semibold hover:bg-green-800 transition-colors"
               >
                 Share on WhatsApp
               </a>

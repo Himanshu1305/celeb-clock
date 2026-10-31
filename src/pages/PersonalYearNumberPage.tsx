@@ -211,7 +211,7 @@ export default function PersonalYearNumberPage() {
             </div>
           </div>
 
-          {error && <p className="text-sm text-rose-600 mb-3" role="alert">{error}</p>}
+          {error && <p className="text-sm text-rose-700 mb-3" role="alert">{error}</p>}
 
           <button
             type="submit"

@@ -394,7 +394,7 @@ export function ArticlesIndexPage() {
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                           p-8 text-center text-white mt-12">
             <h2 className="text-2xl font-black mb-2">Start With Your Own Numbers</h2>
-            <p className="text-[#6E5AA6] mb-6 max-w-xl mx-auto">
+            <p className="text-white/90 mb-6 max-w-xl mx-auto">
               Reading is a great start — but the real insight comes from your own
               date of birth. Generate your free profile or estimate your life
               expectancy in seconds.

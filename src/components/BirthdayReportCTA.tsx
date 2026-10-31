@@ -30,7 +30,7 @@ export function BirthdayReportCTA({
       data-testid="birthday-report-cta"
       aria-label="Generate your Birthday Intelligence Report"
       className="mt-8 mb-6 rounded-2xl border border-[#6E5AA6]/30
-                 bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] p-4 sm:p-6
+                 bg-gradient-to-br from-[#6E5AA6]/10 to-[#6E5AA6]/10 p-4 sm:p-6
                  shadow-sm"
     >
       {/* ── Heading ── */}
@@ -41,7 +41,7 @@ export function BirthdayReportCTA({
         🎂 {heading}
       </h2>
 
-      <p className="text-sm text-gray-500 mb-5">
+      <p className="text-sm text-gray-600 mb-5">
         Your complete Birthday Intelligence Report includes:
       </p>
 
@@ -82,7 +82,7 @@ export function BirthdayReportCTA({
       {/* ── Reassurance ── */}
       <p
         data-testid="cta-reassurance"
-        className="text-center text-xs text-gray-400 mt-3"
+        className="text-center text-xs text-gray-600 mt-3"
         aria-label="No payment required"
       >
         Free · Instant · No credit card required

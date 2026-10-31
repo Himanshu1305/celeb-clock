@@ -313,7 +313,7 @@ const BirthdayReport = () => {
         <div className="max-w-3xl mx-auto">
           <button
             onClick={scrollToForm}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-2xl text-lg transition-colors shadow-lg"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-rose-700 hover:bg-rose-600 text-white font-bold rounded-2xl text-lg transition-colors shadow-lg"
           >
             Create Their Birthday Report 🎂
           </button>
@@ -370,7 +370,7 @@ const BirthdayReport = () => {
                 <div className="flex items-baseline justify-center gap-3">
                   <span className="text-4xl font-black text-rose-500">{reportPrice(currency)}</span>
                 </div>
-                <div className="text-xs text-gray-400 mt-1">
+                <div className="text-xs text-gray-500 mt-1">
                   {cardState.kind === 'trial_used'
                     ? 'Launch price · your free trial report has been used'
                     : cardState.kind === 'sub_nocredits'
@@ -390,11 +390,11 @@ const BirthdayReport = () => {
           </ul>
           <button
             onClick={scrollToForm}
-            className="w-full py-3 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition-colors"
+            className="w-full py-3 bg-rose-700 hover:bg-rose-600 text-white font-bold rounded-xl transition-colors"
           >
             {ctaLabel}
           </button>
-          <p className="text-xs text-center text-gray-400 mt-3">Instant web link · Shareable · 30-day access</p>
+          <p className="text-xs text-center text-gray-500 mt-3">Instant web link · Shareable · 30-day access</p>
           {!isFreeState && (
             <p className="text-xs text-center text-gray-500 mt-2">
               7-day money-back guarantee — full refund, no questions. <a href="mailto:hello@bornclock.com" className="underline hover:text-gray-700">hello@bornclock.com</a>
@@ -498,7 +498,7 @@ const BirthdayReport = () => {
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                     Personal Message (optional)
-                    <span className="text-gray-400 font-normal ml-2 text-xs">{personalMessage.length}/200</span>
+                    <span className="text-gray-500 font-normal ml-2 text-xs">{personalMessage.length}/200</span>
                   </label>
                   <textarea
                     placeholder="Write a birthday message that will appear at the top of their report..."
@@ -518,12 +518,12 @@ const BirthdayReport = () => {
                 <button
                   onClick={handleSubmit}
                   disabled={!recipientName.trim() || !dob}
-                  className="w-full py-4 bg-rose-500 hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-lg transition-colors shadow-md"
+                  className="w-full py-4 bg-rose-700 hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-xl text-lg transition-colors shadow-md"
                 >
                   Create Birthday Report 🎂
                 </button>
 
-                <p className="text-center text-xs text-gray-400">
+                <p className="text-center text-xs text-gray-500">
                   Generates instantly · Celebrity Twins always free · unlock the full Blueprint for {reportPrice(currency)}
                 </p>
 
@@ -551,7 +551,7 @@ const BirthdayReport = () => {
                   />
                 </div>
               </div>
-              <p className="text-xs text-gray-400">{Math.round(progress)}% complete</p>
+              <p className="text-xs text-gray-500">{Math.round(progress)}% complete</p>
             </div>
           )}
 
@@ -566,7 +566,7 @@ const BirthdayReport = () => {
 
               {/* Report URL */}
               <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-6">
-                <p className="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">Report Link</p>
+                <p className="text-xs text-gray-500 mb-2 font-medium uppercase tracking-wide">Report Link</p>
                 <p className="text-sm text-gray-700 font-mono break-all bg-white px-3 py-2 rounded-lg border border-gray-100">
                   {reportUrl}
                 </p>
@@ -658,7 +658,7 @@ const BirthdayReport = () => {
             ))}
           </div>
           <div className="text-center mt-6">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-500">
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-600">
               🔒 Generate a report to unlock the full view
             </span>
           </div>

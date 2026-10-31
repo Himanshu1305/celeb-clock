@@ -352,10 +352,10 @@ export function LifePathCompatibilityArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-rose-600 to-pink-600 rounded-2xl
+          <div className="bg-gradient-to-r from-rose-700 to-pink-700 rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">See Your Complete Birthday Profile</h2>
-            <p className="text-rose-100 mb-6">
+            <p className="text-white mb-6">
               Your Life Path is just one layer of the picture. BornClock reads your Vedic Rashi,
               Western zodiac, Nakshatra, lucky stone and more — all from your date of birth.
             </p>

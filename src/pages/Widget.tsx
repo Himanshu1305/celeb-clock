@@ -38,7 +38,7 @@ const WidgetInner = () => {
             <Cell value={age.totalSeconds} label="Seconds" />
           </div>
         ) : (
-          <p className="text-center text-xs text-gray-400 mt-4">Enter your date of birth to see your exact age.</p>
+          <p className="text-center text-xs text-gray-500 mt-4">Enter your date of birth to see your exact age.</p>
         )}
 
         <div className="text-right mt-3">
@@ -46,7 +46,7 @@ const WidgetInner = () => {
             href="https://bornclock.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-gray-400 hover:text-[#6E5AA6] transition-colors"
+            className="text-xs text-gray-500 hover:text-[#6E5AA6] transition-colors"
           >
             Powered by BornClock
           </a>

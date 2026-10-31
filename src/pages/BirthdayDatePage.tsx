@@ -249,7 +249,7 @@ export default function BirthdayDatePage() {
         {/* CTA */}
         <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-6 mb-8 text-white text-center">
           <h2 className="text-lg font-bold mb-2">Find who shares your {monthName} {day} birthday</h2>
-          <p className="text-sm text-[#6E5AA6] mb-4">
+          <p className="text-sm text-white/90 mb-4">
             Discover famous people born on your exact date — athletes, artists, scientists, and leaders.
           </p>
           <Button asChild className="bg-white text-[#6E5AA6] hover:bg-[#6E5AA6]/10 font-bold">
@@ -346,7 +346,7 @@ export default function BirthdayDatePage() {
           </Link>
           <Link
             to={`/birthday/${month}`}
-            className="text-xs text-gray-400 hover:text-[#6E5AA6] transition-colors"
+            className="text-xs text-gray-500 hover:text-[#6E5AA6] transition-colors"
           >
             All {monthName} Birthdays
           </Link>
