@@ -212,8 +212,43 @@ jobs:
           if-no-files-found: error
           retention-days: 3
 
+  # B13: readability gate. Runs the WCAG text-contrast audit (scripts/contrast-audit.mjs) on the
+  # built SPA for one URL per page template (scripts/contrast-urls.txt), desktop + mobile, before
+  # and after filling the calculator. ANY text below AA (or a page that fails to load) fails this
+  # job, and `production` needs it, so the deploy is blocked. It runs in parallel with the
+  # prerender shards (which take ~15-20 min), so it adds ~0 to the pipeline's wall-clock time
+  # (the job itself takes ~4-5 min: install ~1.5 min, audit ~3 min).
+  prod-contrast:
+    needs: prod-build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download build
+        uses: actions/download-artifact@v4
+        with:
+          name: prod-build
+          path: .
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Text-contrast audit (blocks deploy on any failure)
+        run: node scripts/contrast-audit.mjs --dist dist --urls scripts/contrast-urls.txt --fill --fail --concurrency 4
+
   production:
-    needs: [prod-build, prod-prerender]
+    needs: [prod-build, prod-prerender, prod-contrast]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

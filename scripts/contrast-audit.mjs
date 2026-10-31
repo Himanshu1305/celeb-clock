@@ -10,6 +10,8 @@
 //   npm run build:app
 //   node scripts/contrast-audit.mjs --dist dist --urls urls.txt [--fill] [--viewports desktop,mobile]
 //          [--out report.json] [--shots dir --shot /planetary-age] [--concurrency 4]
+//          [--fail]   exit 1 on ANY failing element or unloadable page (CI deploy gate)
+//          [--strict] exit 1 only on elements below 3:1
 //   node scripts/contrast-audit.mjs --base http://localhost:4173 /planetary-age /kundali
 //
 // --dist serves the built SPA itself (index.html fallback). External network is blocked so the
@@ -175,7 +177,19 @@ async function main() {
   if (opt.out) writeFileSync(opt.out, JSON.stringify(results, null, 1));
   const total = results.reduce((s, r) => s + (r.failing?.length || 0) + (r.filled?.length || 0), 0);
   const severe = results.reduce((s, r) => s + [...(r.failing || []), ...(r.filled || [])].filter(x => x.ratio < 3).length, 0);
-  console.log(`\n${results.length} page loads, ${total} failing elements, ${severe} below 3:1`);
+  const errored = results.filter(r => r.error);
+  console.log(`\n${results.length} page loads, ${total} failing elements, ${severe} below 3:1, ${errored.length} page errors`);
   if (opt.strict && severe) process.exit(1);
+  // --fail (CI deploy gate, B13): ANY text below WCAG AA, or any page that could not be
+  // audited, fails the run. Failing elements are listed so the log says what to fix.
+  if (opt.fail && (total || errored.length)) {
+    for (const r of results) {
+      for (const [state, list] of [['initial', r.failing], ['filled', r.filled]]) {
+        for (const x of list || []) console.log(`FAIL ${r.viewport} ${r.path} [${state}] ${x.ratio}:1 ${x.tag}.${x.cls} color=${x.color} bg=${x.bg} "${x.text}"`);
+      }
+      if (r.error) console.log(`ERROR ${r.viewport} ${r.path}: ${r.error}`);
+    }
+    process.exit(1);
+  }
 }
 main().catch(e => { console.error(e); process.exit(1); });
