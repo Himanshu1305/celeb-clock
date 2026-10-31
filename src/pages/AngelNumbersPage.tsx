@@ -129,7 +129,7 @@ export default function AngelNumbersPage() {
               id="angel-selector"
               defaultValue=""
               onChange={e => { if (e.target.value) navigate(`/angel-numbers/${e.target.value}`); }}
-              className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0E2238] bg-white"
+              className="flex-1 border border-gray-300 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-navy bg-white"
               aria-label="Select a number sequence to open its meaning"
             >
               <option value="">Choose a sequence…</option>
@@ -150,14 +150,14 @@ export default function AngelNumbersPage() {
               key={a.sequence}
               id={`a${a.sequence}`}
               to={`/angel-numbers/${a.sequence}`}
-              className="rounded-xl border border-border bg-background p-5 scroll-mt-20 hover:border-[#6E5AA6] transition-colors block"
+              className="rounded-xl border border-border bg-background p-5 scroll-mt-20 hover:border-brand-purple transition-colors block"
             >
               <div className="flex items-center gap-3 mb-2">
-                <span className="text-3xl font-black text-[#6E5AA6]">{a.sequence}</span>
+                <span className="text-3xl font-black text-brand-purple">{a.sequence}</span>
                 <span className="text-sm font-semibold text-foreground">{a.theme}</span>
               </div>
               <p className="text-sm text-foreground leading-relaxed">{a.answer.split('. ')[0]}.</p>
-              <span className="text-xs font-semibold text-[#6E5AA6] mt-2 inline-block">Love, career, twin flame &amp; what to do →</span>
+              <span className="text-xs font-semibold text-brand-purple mt-2 inline-block">Love, career, twin flame &amp; what to do →</span>
             </Link>
           ))}
         </div>
@@ -188,10 +188,10 @@ export default function AngelNumbersPage() {
         <div className="rounded-xl border border-border p-4 mb-8">
           <div className="font-semibold text-foreground mb-2">Continue exploring</div>
           <ul className="text-sm space-y-1">
-            <li><Link to="/numerology/" className="text-[#6E5AA6] hover:underline">Numerology overview</Link> — Life Path and other numbers calculated from your birthday</li>
-            <li><Link to="/personal-year-number/" className="text-[#6E5AA6] hover:underline">Personal Year Number Calculator</Link> — your nine-year cycle from birth month and day</li>
-            <li><Link to="/mystic-corner/" className="text-[#6E5AA6] hover:underline">Mystic Corner</Link> — all symbolic tools on BornClock</li>
-            <li><Link to="/how-it-works/" className="text-[#6E5AA6] hover:underline">How it works</Link> — our methodology and data sources</li>
+            <li><Link to="/numerology/" className="text-brand-purple hover:underline">Numerology overview</Link> — Life Path and other numbers calculated from your birthday</li>
+            <li><Link to="/personal-year-number/" className="text-brand-purple hover:underline">Personal Year Number Calculator</Link> — your nine-year cycle from birth month and day</li>
+            <li><Link to="/mystic-corner/" className="text-brand-purple hover:underline">Mystic Corner</Link> — all symbolic tools on BornClock</li>
+            <li><Link to="/how-it-works/" className="text-brand-purple hover:underline">How it works</Link> — our methodology and data sources</li>
           </ul>
         </div>
       </section>

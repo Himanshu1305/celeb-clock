@@ -65,8 +65,8 @@ export function TermTip({ id, children, lang = 'en', iconOnly = false }: TermTip
             if (hoverOpened.current && open) { e.preventDefault(); hoverOpened.current = false; }
           }}
           className={iconOnly
-            ? 'inline-flex items-center align-middle text-muted-foreground hover:text-foreground cursor-help rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6E5AA6]/60'
-            : 'inline underline decoration-dotted decoration-muted-foreground/60 underline-offset-2 cursor-help font-medium text-inherit text-left rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6E5AA6]/60'}
+            ? 'inline-flex items-center align-middle text-muted-foreground hover:text-foreground cursor-help rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/60'
+            : 'inline underline decoration-dotted decoration-muted-foreground/60 underline-offset-2 cursor-help font-medium text-inherit text-left rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple/60'}
         >
           {!iconOnly && children}
           <Info aria-hidden="true" className={iconOnly ? 'h-3.5 w-3.5' : 'inline h-3 w-3 ml-0.5 -mt-0.5 opacity-60'} />
@@ -88,8 +88,8 @@ export function TermTip({ id, children, lang = 'en', iconOnly = false }: TermTip
         {/* impact-first: plain-language impact leads */}
         <p className="mt-1 text-sm font-medium text-foreground">{body}</p>
         {!hi && def.why && <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{def.why}</p>}
-        {!hi && def.guidance && <p className="mt-2 text-xs text-[#6E5AA6]">{def.guidance}</p>}
-        <a href={glossaryHref(id)} className="mt-2 inline-block text-xs font-medium text-[#6E5AA6] hover:underline">
+        {!hi && def.guidance && <p className="mt-2 text-xs text-brand-purple">{def.guidance}</p>}
+        <a href={glossaryHref(id)} className="mt-2 inline-block text-xs font-medium text-brand-purple hover:underline">
           {hi ? 'शब्दकोश में और पढ़ें →' : 'More in the glossary →'}
         </a>
       </PopoverContent>

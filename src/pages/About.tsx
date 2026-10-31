@@ -67,8 +67,8 @@ export default function About() {
               </p>
             </div>
             <div className="bg-card border border-border rounded-xl p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/40 flex items-center justify-center mx-auto mb-4">
-                <FlaskConical className="w-6 h-6 text-[#6E5AA6] dark:text-[#6E5AA6]" />
+              <div className="w-12 h-12 rounded-full bg-brand-purple/10 dark:bg-brand-purple/40 flex items-center justify-center mx-auto mb-4">
+                <FlaskConical className="w-6 h-6 text-brand-purple dark:text-brand-purple" />
               </div>
               <h3 className="font-bold text-foreground mb-2">Pillar 1 — Your Genes</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">

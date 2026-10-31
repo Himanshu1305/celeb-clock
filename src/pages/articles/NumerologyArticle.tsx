@@ -115,9 +115,9 @@ export function NumerologyArticle() {
       <section className="section" data-testid="numerology-article">
         <article className="max-w-3xl mx-auto px-4 py-10">
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-5 mb-8" data-testid="article-calc-cta">
+          <div className="bg-brand-purple/10 border-2 border-brand-purple/30 rounded-2xl p-5 mb-8" data-testid="article-calc-cta">
             <p className="text-gray-800 mb-3">Just want your numbers? The free calculator shows your Mulank, Bhagyank, Western Life Path and name number with the working.</p>
-            <Link to="/numerology/" className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5 rounded-full text-sm">Open the numerology calculator →</Link>
+            <Link to="/numerology/" className="inline-block bg-brand-navy text-white font-bold px-5 py-2.5 rounded-full text-sm">Open the numerology calculator →</Link>
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Three numbers from one birth date</h2>
@@ -150,8 +150,8 @@ export function NumerologyArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-3">And your name number</h2>
           <p className="text-gray-700 leading-relaxed mb-6">
             Indian numerologists also read a <strong>name number</strong>, using the Chaldean letter chart
-            (values 1–8, no letter given 9). See the <Link to="/chaldean-numerology/" className="text-[#6E5AA6] underline">Chaldean chart</Link> or
-            work yours out on the <Link to="/name-numerology/" className="text-[#6E5AA6] underline">name number calculator</Link>.
+            (values 1–8, no letter given 9). See the <Link to="/chaldean-numerology/" className="text-brand-purple underline">Chaldean chart</Link> or
+            work yours out on the <Link to="/name-numerology/" className="text-brand-purple underline">name number calculator</Link>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-2">The Western Life Path numbers, with Indian examples</h2>
@@ -188,7 +188,7 @@ export function NumerologyArticle() {
                 <p className="text-sm text-gray-600 mb-2">
                   <strong>Career paths: </strong>{p.career_paths.join(', ')}.
                 </p>
-                <p className="text-sm text-[#6E5AA6] mb-3 italic">
+                <p className="text-sm text-brand-purple mb-3 italic">
                   <strong>Spiritual lesson: </strong>{p.spiritual_lesson}
                 </p>
                 <p className="text-sm text-gray-500">
@@ -209,7 +209,7 @@ export function NumerologyArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-brand-purple to-brand-purple rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Want the complete birthday report?</h2>
             <p className="text-white/90 mb-6">
@@ -218,8 +218,8 @@ export function NumerologyArticle() {
               Mulank, Bhagyank and Life Path stay free on the numerology calculator.
             </p>
             <a href="/birthday-report/"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-brand-purple font-black px-8 py-3
+                          rounded-full text-lg hover:bg-brand-purple/10 transition-colors">
               See the full Birthday Report →
             </a>
           </div>

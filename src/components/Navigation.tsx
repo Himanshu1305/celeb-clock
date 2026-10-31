@@ -136,8 +136,8 @@ export const Navigation = () => {
   const mobileLinkClass = (path: string) =>
     `flex items-center gap-3 px-4 py-3.5 min-h-[44px] rounded-lg text-sm font-medium transition-colors ${
       isActive(path)
-        ? 'bg-[#0E2238]/8 text-[#0E2238]'
-        : 'text-gray-700 hover:bg-[#FAF7F0]'
+        ? 'bg-brand-navy/8 text-brand-navy'
+        : 'text-gray-700 hover:bg-brand-ivory'
     }`;
 
   const mobileSectionLabel = (label: string) => (
@@ -220,7 +220,7 @@ export const Navigation = () => {
           {!loading && isPremium && !showTrialPill && (
             <Link
               to="/upgrade/"
-              className="text-[#5c4620] border border-[#C6A15B]/50 bg-[#C6A15B]/20 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-[#C6A15B]/30 transition-colors"
+              className="text-brand-gold-text border border-brand-gold/50 bg-brand-gold/20 px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-brand-gold/30 transition-colors"
             >
               ⭐ Premium
             </Link>
@@ -229,7 +229,7 @@ export const Navigation = () => {
           {!loading && !isPremium && !showTrialPill && (
             <Link
               to="/upgrade/"
-              className="bg-[#C6A15B] !text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
+              className="bg-brand-gold !text-brand-navy px-4 py-2 rounded-lg text-sm font-semibold hover:bg-brand-gold-hover transition-colors"
             >
               Upgrade
             </Link>
@@ -238,7 +238,7 @@ export const Navigation = () => {
           {!loading && showTrialPill && (
             <Link
               to="/upgrade/"
-              className="bg-[#C6A15B] !text-[#0E2238] px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
+              className="bg-brand-gold !text-brand-navy px-4 py-2 rounded-lg text-sm font-semibold hover:bg-brand-gold-hover transition-colors"
             >
               Trial: {trialDaysRemaining}d left
             </Link>
@@ -299,7 +299,7 @@ export const Navigation = () => {
                   <Link
                     to="/upgrade/"
                     onClick={closeMobile}
-                    className="flex items-center justify-center gap-2 w-full bg-[#C6A15B] !text-[#0E2238] py-3 rounded-lg text-sm font-semibold hover:bg-[#b8914b] transition-colors"
+                    className="flex items-center justify-center gap-2 w-full bg-brand-gold !text-brand-navy py-3 rounded-lg text-sm font-semibold hover:bg-brand-gold-hover transition-colors"
                   >
                     <Crown className="w-4 h-4" /> Upgrade to Premium
                   </Link>

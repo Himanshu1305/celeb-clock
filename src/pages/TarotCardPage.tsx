@@ -88,9 +88,9 @@ function CardTile({ card }: { card: TarotCardEntry }) {
   return (
     <div
       aria-hidden="true"
-      className="mx-auto w-28 h-44 rounded-xl border-2 border-[#6E5AA6]/40 bg-gradient-to-b from-[#1e1b4b] to-[#312e81] flex flex-col items-center justify-center text-center shadow-sm"
+      className="mx-auto w-28 h-44 rounded-xl border-2 border-brand-purple/40 bg-gradient-to-b from-indigo-950 to-indigo-900 flex flex-col items-center justify-center text-center shadow-sm"
     >
-      <span className="text-[10px] tracking-widest text-[#c9bff0] uppercase">{card.arcana === 'major' ? card.label : SUIT_META[card.suit!].name}</span>
+      <span className="text-[10px] tracking-widest text-brand-purple-pale uppercase">{card.arcana === 'major' ? card.label : SUIT_META[card.suit!].name}</span>
       <span className="text-4xl my-2">{card.emoji}</span>
       <span className="text-white text-xs font-semibold px-2 leading-tight">{card.name}</span>
     </div>
@@ -110,7 +110,7 @@ function Chips({ items, tone }: { items: string[]; tone: 'up' | 'down' }) {
   return (
     <div className="flex flex-wrap gap-1.5 mt-2">
       {items.map((k) => (
-        <span key={k} className={`px-2 py-0.5 rounded text-xs ${tone === 'up' ? 'bg-[#6E5AA6]/10 text-[#4b3d80]' : 'bg-muted text-muted-foreground'}`}>{k}</span>
+        <span key={k} className={`px-2 py-0.5 rounded text-xs ${tone === 'up' ? 'bg-brand-purple/10 text-brand-purple-ink' : 'bg-muted text-muted-foreground'}`}>{k}</span>
       ))}
     </div>
   );

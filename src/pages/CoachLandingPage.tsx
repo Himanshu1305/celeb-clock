@@ -76,10 +76,10 @@ export default function CoachLandingPage() {
 
       <section className="max-w-3xl mx-auto px-4 pt-6 pb-6 text-center">
         <div className="flex flex-wrap gap-3 justify-center">
-          <Link to="/life-expectancy/" className="inline-flex items-center gap-2 bg-[#0E2238] text-white rounded-xl px-6 py-3 font-semibold hover:bg-[#0E2238] transition-colors">
+          <Link to="/life-expectancy/" className="inline-flex items-center gap-2 bg-brand-navy text-white rounded-xl px-6 py-3 font-semibold hover:bg-brand-navy transition-colors">
             <ArrowRightCircle className="w-5 h-5" /> Get your forecast & meet the Coach
           </Link>
-          <Link to="/upgrade/" className="inline-flex items-center gap-2 border border-gray-300 rounded-xl px-6 py-3 font-semibold text-gray-700 hover:border-[#2F6FB0]/30 hover:text-[#2F6FB0] transition-colors">
+          <Link to="/upgrade/" className="inline-flex items-center gap-2 border border-gray-300 rounded-xl px-6 py-3 font-semibold text-gray-700 hover:border-brand-blue/30 hover:text-brand-blue transition-colors">
             See Premium pricing
           </Link>
         </div>
@@ -112,11 +112,11 @@ export default function CoachLandingPage() {
 
       {/* Prominent privacy guarantee — the zero-retention contract is real (in code) */}
       <section className="max-w-2xl mx-auto px-4 py-8">
-        <div className="border-2 border-[#2F6FB0]/30 bg-[#2F6FB0]/10 rounded-2xl p-6 flex items-start gap-4">
-          <Lock className="w-8 h-8 text-[#2F6FB0] shrink-0 mt-0.5" />
+        <div className="border-2 border-brand-blue/30 bg-brand-blue/10 rounded-2xl p-6 flex items-start gap-4">
+          <Lock className="w-8 h-8 text-brand-blue shrink-0 mt-0.5" />
           <div>
-            <p className="font-bold text-[#2F6FB0] mb-1">Your conversations are never stored</p>
-            <p className="text-sm text-[#2F6FB0] leading-relaxed">
+            <p className="font-bold text-brand-blue mb-1">Your conversations are never stored</p>
+            <p className="text-sm text-brand-blue leading-relaxed">
               Each message is processed just long enough to write a reply, then it’s gone — nothing is saved, logged
               or added to a profile. Close the tab and the conversation no longer exists anywhere. Talking about your
               health should feel private, so we built it that way rather than promising it in the fine print.
@@ -150,14 +150,14 @@ export default function CoachLandingPage() {
           <p className="text-gray-700 leading-relaxed">
             The Coach is part of the Premium experience and is available during your{' '}
             <strong>free trial</strong>. It lives inside your{' '}
-            <Link to="/life-expectancy/" className="text-[#2F6FB0] hover:underline">Life Expectancy results</Link>{' '}
+            <Link to="/life-expectancy/" className="text-brand-blue hover:underline">Life Expectancy results</Link>{' '}
             — generate a forecast, then open the Coach panel to ask your first question.
           </p>
           <p className="text-gray-700 leading-relaxed mt-3">
             Premium is <strong>{subscriptionPrice('annual', currency)}/year</strong> (about{' '}
             {annualPerMonth(currency)}/month) or <strong>{subscriptionPrice('monthly', currency)}/month</strong>,
             and includes the Coach plus report credits. See{' '}
-            <Link to="/upgrade/" className="text-[#2F6FB0] hover:underline">full Premium pricing</Link> for what’s included.
+            <Link to="/upgrade/" className="text-brand-blue hover:underline">full Premium pricing</Link> for what’s included.
           </p>
         </div>
       </section>
@@ -170,10 +170,10 @@ export default function CoachLandingPage() {
         <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {meshPosts.map(p => (
-            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ {p.title}</Link>
+            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 text-sm text-gray-700 hover:text-brand-blue transition-colors">→ {p.title}</Link>
           ))}
-          <Link to="/life-expectancy/" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Life Expectancy Calculator</Link>
-          <Link to="/biological-age/" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Biological Age</Link>
+          <Link to="/life-expectancy/" className="p-3 rounded-xl border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 text-sm text-gray-700 hover:text-brand-blue transition-colors">→ Life Expectancy Calculator</Link>
+          <Link to="/biological-age/" className="p-3 rounded-xl border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 text-sm text-gray-700 hover:text-brand-blue transition-colors">→ Biological Age</Link>
         </div>
       </div>
     </UtilityLayout>

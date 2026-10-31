@@ -2,11 +2,11 @@
  * Source: docs/design-reference/vedic-final.html <style> (identical across all four refs).
  * Every selector is scoped under .paj so it cannot affect the rest of the site.
  * Per-category accent + background overrides are appended below the generated block. */
-.paj{--bg:#FAF7F0;--paper:#FFFFFF;--navy:#0E2238;--ink:#1A2230;--muted:#5B6472;--line:#E4DCC8;--accent:#C6A15B;--accent-text:#74571E;--green:#C6A15B;--pad:clamp(16px,2.2vw,32px)}
+.paj{--bg:rgb(var(--brand-ivory));--paper:rgb(var(--brand-paper));--navy:rgb(var(--brand-navy));--ink:rgb(var(--brand-ink));--muted:rgb(var(--brand-muted));--line:rgb(var(--brand-line));--accent:rgb(var(--brand-gold));--accent-text:rgb(var(--brand-gold-ink));--green:rgb(var(--brand-gold));--pad:clamp(16px,2.2vw,32px)}
 .paj *{box-sizing:border-box}
 .paj{scroll-behavior:smooth;scroll-padding-top:84px}
 .paj{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 'Public Sans',sans-serif;-webkit-font-smoothing:antialiased}
-.paj[data-category="science"]{--bg:#FFFFFF;--line:#DDE4EA}
+.paj[data-category="science"]{--bg:rgb(var(--brand-paper));--line:rgb(var(--brand-line-cool))}
 .paj h1,.paj h2,.paj h3,.paj h4,.paj p,.paj figure{margin:0}
 :where(.paj) h1,:where(.paj) h2,:where(.paj) h3,:where(.paj) h4{color:var(--navy)}
 .paj h1,.paj h2,.paj .serif{font-family:'Fraunces',Georgia,serif;font-weight:500;font-optical-sizing:auto}
@@ -656,10 +656,10 @@
 .paj .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ── Per-category theme overrides (accent + science background) ───────────── */
-.paj[data-category="vedic"]{--accent:#C6A15B;--accent-text:#74571E;--green:#C6A15B}
-.paj[data-category="birthday"]{--accent:#F0715A;--accent-text:#0E2238;--green:#F0715A}
-.paj[data-category="mystic"]{--accent:#6E5AA6;--accent-text:#6E5AA6;--green:#6E5AA6}
-.paj[data-category="science"]{--accent:#2F6FB0;--accent-text:#2F6FB0;--green:#2E9E7B;--bg:#FFFFFF;--line:#DDE4EA}
+.paj[data-category="vedic"]{--accent:rgb(var(--brand-gold));--accent-text:rgb(var(--brand-gold-ink));--green:rgb(var(--brand-gold))}
+.paj[data-category="birthday"]{--accent:rgb(var(--brand-coral));--accent-text:rgb(var(--brand-navy));--green:rgb(var(--brand-coral))}
+.paj[data-category="mystic"]{--accent:rgb(var(--brand-purple));--accent-text:rgb(var(--brand-purple));--green:rgb(var(--brand-purple))}
+.paj[data-category="science"]{--accent:rgb(var(--brand-blue));--accent-text:rgb(var(--brand-blue));--green:rgb(var(--brand-green));--bg:rgb(var(--brand-paper));--line:rgb(var(--brand-line-cool))}
 
 /* The real Navigation + AuthNav header wraps to two rows on narrow viewports. Reserve its
    final height so font-swap / auth-state settling can't push the page down (keeps CLS low). */

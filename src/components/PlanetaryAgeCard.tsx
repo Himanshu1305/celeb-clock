@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import type { CSSProperties } from 'react';
+import { brandVar, ui } from '../theme/palette';
 
 interface PlanetaryAgeCardProps {
   userName: string;
@@ -108,7 +109,7 @@ export const PlanetaryAgeCard = forwardRef<HTMLDivElement, PlanetaryAgeCardProps
               style={{
                 fontSize: '18px',
                 letterSpacing: '0.2em',
-                color: '#6E5AA6',
+                color: brandVar.purple,
                 textTransform: 'uppercase',
                 marginBottom: '12px',
               }}
@@ -126,7 +127,7 @@ export const PlanetaryAgeCard = forwardRef<HTMLDivElement, PlanetaryAgeCardProps
             >
               {userName ? `${userName}'s Cosmic Age Report` : 'My Cosmic Age Report'}
             </div>
-            <div style={{ fontSize: '20px', color: '#94a3b8' }}>Born {formattedBirthDate}</div>
+            <div style={{ fontSize: '20px', color: ui.slate400 }}>Born {formattedBirthDate}</div>
           </div>
           <div style={{ fontSize: '80px', lineHeight: 1 }}>🌌</div>
         </div>
@@ -136,7 +137,7 @@ export const PlanetaryAgeCard = forwardRef<HTMLDivElement, PlanetaryAgeCardProps
           style={{
             height: '1px',
             background:
-              'linear-gradient(90deg, transparent, #6E5AA6, #6E5AA6, transparent)',
+              `linear-gradient(90deg, transparent, ${brandVar.purple}, ${brandVar.purple}, transparent)`,
             marginBottom: '32px',
             position: 'relative',
             zIndex: 1,
@@ -184,12 +185,12 @@ export const PlanetaryAgeCard = forwardRef<HTMLDivElement, PlanetaryAgeCardProps
                 }}
               >
                 <div style={{ fontSize: '32px', lineHeight: 1.2 }}>{emoji}</div>
-                <div style={{ fontSize: '14px', color: '#94a3b8', marginTop: '2px' }}>{name}</div>
+                <div style={{ fontSize: '14px', color: ui.slate400, marginTop: '2px' }}>{name}</div>
                 <div
                   style={{
                     fontSize: '28px',
                     fontWeight: 'bold',
-                    color: name === 'Earth' ? '#4fa3e0' : 'white',
+                    color: name === 'Earth' ? ui.earthBlue : 'white',
                     marginTop: '2px',
                   }}
                 >
@@ -230,7 +231,7 @@ export const PlanetaryAgeCard = forwardRef<HTMLDivElement, PlanetaryAgeCardProps
             zIndex: 1,
           }}
         >
-          <div style={{ fontSize: '14px', color: '#475569' }}>
+          <div style={{ fontSize: '14px', color: ui.slate600 }}>
             NASA JPL data · Kepler's Third Law (1619)
           </div>
           <div style={{ textAlign: 'right' }}>

@@ -6,6 +6,7 @@
 // IMPORTANT: this renders values already stored on the invoices row at issue
 // time. It never re-computes tax — the DB row is the immutable source of truth.
 import { BORNCLOCK_LOGO_B64 } from './invoice-logo';
+import { palette } from '../theme/palette';
 
 export interface InvoiceLineItem {
   desc: string;
@@ -150,7 +151,7 @@ export function splitGstInclusive(
   return { taxable: g, cgst: 0, sgst: 0, igst: 0 };
 }
 
-const INVOICE_CSS = `  :root{ --ink:#0C1A2B; --navy:#103A5C; --gold:#B8862F; --muted:#5A6A7A; --rule:#D8DEE5; }
+const INVOICE_CSS = `  :root{ --ink:#0C1A2B; --navy:${palette.blueDark}; --gold:${palette.goldDeep}; --muted:#5A6A7A; --rule:#D8DEE5; }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ background:#fff; color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;

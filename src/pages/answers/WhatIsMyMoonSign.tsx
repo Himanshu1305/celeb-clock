@@ -106,7 +106,7 @@ export default function WhatIsMyMoonSign() {
             <p className="text-lg font-bold text-gray-900 mb-2">Find My Moon Sign</p>
             <p className="text-sm text-gray-500 mb-4">Discover the sign the Moon was in when you were born</p>
             <Link to="/moon-sign/"
-              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+              className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
               Find my moon sign →
             </Link>
           </div>
@@ -115,7 +115,7 @@ export default function WhatIsMyMoonSign() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Tools</p>
             <div className="space-y-2">
               {RELATED.map((t) => (
-                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ {t.label}</Link>
+                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ {t.label}</Link>
               ))}
             </div>
           </div>

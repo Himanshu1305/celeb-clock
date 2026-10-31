@@ -183,12 +183,12 @@ export default function KundaliMatchPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 print:hidden" style={{ marginTop: 16 }}>
           {/* Person A — saved profile if present, else a form */}
           {usingSaved ? (
-            <div data-testid="kmatch-saved-a" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 p-4 space-y-2">
-              <div className="font-semibold text-[#6E5AA6]">You</div>
-              <div className="text-sm text-[#6E5AA6]">★ {profile!.dob}, {profile!.time}<br />{profile!.city.name}</div>
+            <div data-testid="kmatch-saved-a" className="rounded-xl border border-brand-purple/30 bg-brand-purple/10 p-4 space-y-2">
+              <div className="font-semibold text-brand-purple">You</div>
+              <div className="text-sm text-brand-purple">★ {profile!.dob}, {profile!.time}<br />{profile!.city.name}</div>
               <button data-testid="kmatch-use-different-a" type="button"
                       onClick={() => { setUsingDifferent(true); setResult(null); }}
-                      className="text-[#6E5AA6] underline text-sm hover:text-[#6E5AA6]">
+                      className="text-brand-purple underline text-sm hover:text-brand-purple">
                 Use different details
               </button>
             </div>
@@ -260,7 +260,7 @@ export default function KundaliMatchPage() {
           <div data-testid="kmatch-result" id="kmatch-report" className="space-y-5">
             <div className="flex justify-end print:hidden">
               <button data-testid="kmatch-print" type="button" onClick={() => window.print()}
-                      className="text-sm px-3 py-1.5 rounded-lg border border-[#6E5AA6]/30 text-[#6E5AA6] hover:bg-[#6E5AA6]/10">
+                      className="text-sm px-3 py-1.5 rounded-lg border border-brand-purple/30 text-brand-purple hover:bg-brand-purple/10">
                 ⤓ Download / Print PDF
               </button>
             </div>
@@ -274,7 +274,7 @@ export default function KundaliMatchPage() {
 
             <div className="text-center rounded-xl border border-border p-4">
               <div className="text-sm text-muted-foreground">Total <TermTip id="ashtakoota">Guna Milan</TermTip></div>
-              <div className="text-4xl font-black text-[#6E5AA6]">{result.gunaMilan.total} / 36</div>
+              <div className="text-4xl font-black text-brand-purple">{result.gunaMilan.total} / 36</div>
               <div className="font-semibold text-foreground">{result.gunaMilan.compatibility}</div>
               <NumberNote testid="kmatch-total-note">{gunaTotalNote(result.gunaMilan.total)}</NumberNote>
               <div data-testid="kmatch-people-line" className="text-xs text-muted-foreground mt-1">
@@ -307,8 +307,8 @@ export default function KundaliMatchPage() {
                 details below — same structure as the Kundali reading. Degrades
                 gracefully: if synthesis is absent, the factual breakdown still shows. */}
             {result.synthesis && (
-              <div data-testid="kmatch-synthesis" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4 space-y-2">
-                <div className="text-[10px] uppercase tracking-wide text-[#6E5AA6] font-semibold">Overall reading</div>
+              <div data-testid="kmatch-synthesis" className="rounded-xl border border-brand-purple/30 bg-brand-purple/40 p-4 space-y-2">
+                <div className="text-[10px] uppercase tracking-wide text-brand-purple font-semibold">Overall reading</div>
                 <p className="font-semibold text-foreground">{withNames(result.synthesis.verdict)}</p>
                 {result.synthesis.paragraphs.map((para, i) => (
                   <p key={i} className="text-sm text-muted-foreground">{withNames(para)}</p>
@@ -337,7 +337,7 @@ export default function KundaliMatchPage() {
                     <td className="px-3 py-1.5 text-right font-semibold text-foreground">{k.score} / {k.max}</td>
                   </tr>
                 ))}
-                <tr className="border-t border-border"><td className="px-3 py-1.5 font-semibold text-foreground">Total</td><td data-testid="kmatch-koota-total" className="px-3 py-1.5 text-right font-bold text-[#6E5AA6]">{result.gunaMilan.total} / 36</td></tr>
+                <tr className="border-t border-border"><td className="px-3 py-1.5 font-semibold text-foreground">Total</td><td data-testid="kmatch-koota-total" className="px-3 py-1.5 text-right font-bold text-brand-purple">{result.gunaMilan.total} / 36</td></tr>
               </tbody>
             </table>
 
@@ -346,13 +346,13 @@ export default function KundaliMatchPage() {
                 The eight parts of the <TermTip id="ashtakoota">Ashtakoota</TermTip> score — tap any name to see what it measures.
               </p>
               {result.gunaMilan.kootas.map(k => (
-                <div key={k.key} className={`rounded-lg border p-3 ${k.heavy ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/50' : 'border-border'}`}>
+                <div key={k.key} className={`rounded-lg border p-3 ${k.heavy ? 'border-brand-purple/30 bg-brand-purple/50' : 'border-border'}`}>
                   <div className="flex items-center justify-between">
                     <div className="font-semibold text-foreground">
-                      {k.heavy && <span title="Heaviest kootas" className="mr-1 text-[#6E5AA6]">★</span>}{KOOTA_TERM[k.key] ? <TermTip id={KOOTA_TERM[k.key]}>{k.label}</TermTip> : k.label}
-                      {k.heavy && <span className="ml-2 text-[10px] uppercase tracking-wide text-[#6E5AA6]">high weight</span>}
+                      {k.heavy && <span title="Heaviest kootas" className="mr-1 text-brand-purple">★</span>}{KOOTA_TERM[k.key] ? <TermTip id={KOOTA_TERM[k.key]}>{k.label}</TermTip> : k.label}
+                      {k.heavy && <span className="ml-2 text-[10px] uppercase tracking-wide text-brand-purple">high weight</span>}
                     </div>
-                    <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-[#6E5AA6]'}`}>{k.score} / {k.max}</div>
+                    <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-brand-purple'}`}>{k.score} / {k.max}</div>
                   </div>
                   <NumberNote testid={`kmatch-koota-note-${k.key}`}>{kootaScoreNote(k.key, k.score, k.max)}</NumberNote>
                   <div className="text-sm text-muted-foreground mt-1">{withNames(k.explanation)}</div>
@@ -379,7 +379,7 @@ export default function KundaliMatchPage() {
 
             {/* 10-Porutham (South Indian) view alongside the 36-guna Ashtakoota (P2-7 / GP2-10PORUTHAM) */}
             {result.porutham && (
-              <details data-testid="kmatch-porutham" className="rounded-xl border border-[#6E5AA6]/30 p-4">
+              <details data-testid="kmatch-porutham" className="rounded-xl border border-brand-purple/30 p-4">
                 <summary className="cursor-pointer font-semibold text-foreground">
                   South-Indian 10-Porutham view — {result.porutham.metCount}/10 met · {result.porutham.verdict}
                 </summary>
@@ -389,12 +389,12 @@ export default function KundaliMatchPage() {
                 <NumberNote testid="kmatch-porutham-note">{poruthamCountNote(result.porutham.metCount, result.porutham.poruthams.filter(p => p.essential).every(p => p.met))}</NumberNote>
                 <div className="mt-2 space-y-2">
                   {result.porutham.poruthams.map(p => (
-                    <div key={p.key} className={`rounded-lg border p-3 ${p.essential ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/10' : 'border-border'}`}>
+                    <div key={p.key} className={`rounded-lg border p-3 ${p.essential ? 'border-brand-purple/30 bg-brand-purple/10' : 'border-border'}`}>
                       <div className="flex items-center justify-between">
                         <div className="font-semibold text-foreground">
-                          {p.essential && <span title="Essential porutham" className="mr-1 text-[#6E5AA6]">★</span>}{PORUTHAM_TERM[p.key] ? <TermTip id={PORUTHAM_TERM[p.key]}>{p.label}</TermTip> : p.label}
+                          {p.essential && <span title="Essential porutham" className="mr-1 text-brand-purple">★</span>}{PORUTHAM_TERM[p.key] ? <TermTip id={PORUTHAM_TERM[p.key]}>{p.label}</TermTip> : p.label}
                         </div>
-                        <div className={`font-bold ${p.met ? 'text-[#6E5AA6]' : 'text-amber-600'}`}>{p.met ? '✓ met' : '✕ not met'}</div>
+                        <div className={`font-bold ${p.met ? 'text-brand-purple' : 'text-amber-600'}`}>{p.met ? '✓ met' : '✕ not met'}</div>
                       </div>
                       <div className="text-sm text-muted-foreground mt-1">{p.explanation}</div>
                     </div>
@@ -434,7 +434,7 @@ export default function KundaliMatchPage() {
               <p className="mt-2">{result.gunaMilan.methodology}</p>
             </details>
 
-            <Link to="/articles/kundali-compatibility/" className="text-[#6E5AA6] hover:underline text-sm print:hidden">Learn what each koota means →</Link>
+            <Link to="/articles/kundali-compatibility/" className="text-brand-purple hover:underline text-sm print:hidden">Learn what each koota means →</Link>
           </div>
         )}
 

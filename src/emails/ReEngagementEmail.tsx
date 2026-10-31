@@ -1,3 +1,4 @@
+import { palette } from '../theme/palette';
 interface ReEngagementEmailProps {
   firstName: string;
   appUrl?: string;
@@ -36,7 +37,7 @@ export function renderReEngagementEmail({ firstName, appUrl = 'https://cosmicage
 
               <!-- Birthday hook -->
               <div style="padding:20px;background:linear-gradient(135deg,#fdf4ff,#fae8ff);border-radius:10px;border:1px solid #e9d5ff;text-align:center;margin-bottom:24px;">
-                <p style="margin:0;color:#6E5AA6;font-size:16px;font-weight:600;">
+                <p style="margin:0;color:${palette.purple};font-size:16px;font-weight:600;">
                   🎂 Your next birthday is coming up!
                 </p>
                 <p style="margin:8px 0 0;color:#646b78;font-size:13px;">

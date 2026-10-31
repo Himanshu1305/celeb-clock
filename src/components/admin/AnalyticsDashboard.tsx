@@ -223,8 +223,8 @@ export const AnalyticsDashboard = () => {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-full bg-[#6E5AA6]/10">
-                <BookOpen className="h-6 w-6 text-[#6E5AA6]" />
+              <div className="p-3 rounded-full bg-brand-purple/10">
+                <BookOpen className="h-6 w-6 text-brand-purple" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{totals.blogReads}</p>

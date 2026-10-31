@@ -85,13 +85,13 @@ export default function Birthstone() {
               onClick={() => setActiveTab('western')}
               className={`flex flex-col items-start px-5 py-3 rounded-xl border-2 text-left transition-all min-w-[160px] ${
                 activeTab === 'western'
-                  ? 'bg-[#0E2238] border-[#6E5AA6]/30 text-white shadow-lg shadow-[#6E5AA6]/20'
-                  : 'bg-white border-gray-200 text-gray-600 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10'
+                  ? 'bg-brand-navy border-brand-purple/30 text-white shadow-lg shadow-brand-purple/20'
+                  : 'bg-white border-gray-200 text-gray-600 hover:border-brand-purple/30 hover:bg-brand-purple/10'
               }`}
             >
               <span className="text-xl mb-0.5">🌍</span>
               <span className="font-bold text-sm">Western</span>
-              <span className={`text-xs leading-tight ${activeTab === 'western' ? 'text-[#B4A6DB]' : 'text-gray-500'}`}>By birth month</span>
+              <span className={`text-xs leading-tight ${activeTab === 'western' ? 'text-brand-purple-light' : 'text-gray-500'}`}>By birth month</span>
             </button>
             <button
               onClick={() => setActiveTab('indian')}

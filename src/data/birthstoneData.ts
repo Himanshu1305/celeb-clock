@@ -1,3 +1,4 @@
+import { palette } from '../theme/palette';
 export interface BirthstoneData {
   month: string;
   slug: string;
@@ -69,7 +70,7 @@ export const BIRTHSTONE_DATA: BirthstoneData[] = [
     primaryStone: 'Amethyst',
     alternateStones: [],
     color: 'Purple to Violet',
-    hexColor: '#6E5AA6',
+    hexColor: palette.purple,
     hardness: '7 on Mohs scale',
     chemicalFormula: 'SiO₂ with iron impurities',
     crystalSystem: 'Trigonal',

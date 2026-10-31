@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { palette } from '../theme/palette';
 
 /**
  * ShareMyProfileButton (Task 19) — renders the birthday profile to a canvas
@@ -26,7 +27,7 @@ export function ShareMyProfileButton({
         const ctx = canvas.getContext('2d');
         if (!ctx) return resolve(null);
         const g = ctx.createLinearGradient(0, 0, 1080, 1080);
-        g.addColorStop(0, '#0E2238'); g.addColorStop(1, '#C6A15B');
+        g.addColorStop(0, palette.navy); g.addColorStop(1, palette.gold);
         ctx.fillStyle = g; ctx.fillRect(0, 0, 1080, 1080);
         ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
         ctx.font = 'bold 56px sans-serif';
@@ -72,7 +73,7 @@ export function ShareMyProfileButton({
       data-testid="share-profile-image"
       onClick={handleShare}
       disabled={busy}
-      className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold bg-[#0E2238] text-white hover:bg-[#0E2238] transition-colors disabled:opacity-60 ${className}`}
+      className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold bg-brand-navy text-white hover:bg-brand-navy transition-colors disabled:opacity-60 ${className}`}
     >
       {busy ? 'Preparing…' : '🖼️ Share my profile as an image'}
     </button>

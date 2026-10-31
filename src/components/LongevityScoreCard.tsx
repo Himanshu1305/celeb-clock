@@ -1,6 +1,7 @@
 import { Link } from '@/components/seo/CanonicalLink';
 import { TrendingUp, RefreshCw } from 'lucide-react';
 import { LongevityResult, calculateLongevityScore } from '@/services/LongevityCalculationService';
+import { ui } from '../theme/palette';
 
 interface LongevityScoreCardProps {
   result: LongevityResult;
@@ -39,7 +40,7 @@ function ScoreRing({ score }: { score: number }) {
 
   return (
     <svg width={136} height={136} className="rotate-[-90deg]">
-      <circle cx={68} cy={68} r={r} fill="none" stroke="#e5e7eb" strokeWidth={10} />
+      <circle cx={68} cy={68} r={r} fill="none" stroke={ui.gray200} strokeWidth={10} />
       <circle
         cx={68} cy={68} r={r} fill="none"
         stroke={stroke} strokeWidth={10}
@@ -69,10 +70,10 @@ export function LongevityScoreCard({ result, userId, isPremium, onRetake }: Long
     .slice(0, 3);
 
   return (
-    <div className="rounded-2xl border border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 bg-white dark:bg-card shadow-sm overflow-hidden">
-      <div className="bg-gradient-to-r from-[#6E5AA6]/10 to-[#6E5AA6]/10 dark:from-[#6E5AA6]/20 dark:to-[#6E5AA6]/20 px-5 py-4 border-b border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30">
+    <div className="rounded-2xl border border-brand-purple/30 dark:border-brand-purple/30 bg-white dark:bg-card shadow-sm overflow-hidden">
+      <div className="bg-gradient-to-r from-brand-purple/10 to-brand-purple/10 dark:from-brand-purple/20 dark:to-brand-purple/20 px-5 py-4 border-b border-brand-purple/30 dark:border-brand-purple/30">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-[#6E5AA6]" />
+          <TrendingUp className="w-5 h-5 text-brand-purple" />
           <h3 className="font-semibold text-foreground">Your Longevity Score</h3>
         </div>
       </div>
@@ -97,14 +98,14 @@ export function LongevityScoreCard({ result, userId, isPremium, onRetake }: Long
             {onRetake ? (
               <button
                 onClick={onRetake}
-                className="inline-flex items-center gap-1 text-xs text-[#6E5AA6] hover:underline"
+                className="inline-flex items-center gap-1 text-xs text-brand-purple hover:underline"
               >
                 <RefreshCw className="w-3 h-3" /> Retake quiz to update →
               </button>
             ) : (
               <Link
                 to="/life-expectancy/"
-                className="inline-flex items-center gap-1 text-xs text-[#6E5AA6] hover:underline"
+                className="inline-flex items-center gap-1 text-xs text-brand-purple hover:underline"
               >
                 <RefreshCw className="w-3 h-3" /> Retake quiz to update →
               </Link>

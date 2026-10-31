@@ -63,8 +63,8 @@ export default function WhatIsEpigeneticAge() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
+          <div className="bg-brand-blue/10 border-l-4 border-brand-blue/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-brand-blue leading-relaxed">
               Epigenetic age is a measure of biological aging based on DNA methylation — chemical changes to your DNA that accumulate in predictable patterns as you age. It was pioneered by UCLA geneticist Steve Horvath in 2013 and is one of the most studied laboratory ways to estimate biological aging at a cellular level. Your chronological age only moves forward; small early trials suggest an epigenetic age estimate may move down as well, but larger trials have not yet confirmed this.
             </p>
           </div>
@@ -94,7 +94,7 @@ export default function WhatIsEpigeneticAge() {
             <p className="text-lg font-bold text-gray-900 mb-2">Estimate My Biological Age</p>
             <p className="text-sm text-gray-500 mb-4">Free 15-question lifestyle and fitness estimate · Not a lab test</p>
             <Link to="/biological-age/"
-              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+              className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
               Estimate my biological age →
             </Link>
           </div>
@@ -103,7 +103,7 @@ export default function WhatIsEpigeneticAge() {
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Tools</p>
             <div className="space-y-2">
               {RELATED.map((t) => (
-                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ {t.label}</Link>
+                <Link key={t.path} to={t.path} className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ {t.label}</Link>
               ))}
             </div>
           </div>

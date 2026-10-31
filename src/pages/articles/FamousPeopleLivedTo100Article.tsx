@@ -153,7 +153,7 @@ export function FamousPeopleLivedTo100Article() {
             supercentenarian Kane Tanaka to Hollywood's Olivia de Havilland — followed by
             the six traits they most had in common, and how you can apply those lessons to
             your own life. Curious where you stand? You can estimate your own outlook with our
-            free <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline">longevity calculator</a>.
+            free <a href="/longevity-calculator/" className="text-brand-blue font-semibold underline">longevity calculator</a>.
           </p>
 
           <h2 className="text-2xl font-black text-gray-900 mb-4">Real Centenarians Who Lived to 100 and Beyond</h2>
@@ -211,7 +211,7 @@ export function FamousPeopleLivedTo100Article() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
+          <div className="bg-gradient-to-r from-brand-blue to-brand-blue rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Might You Live?</h2>
             <p className="text-white mb-6">
@@ -219,8 +219,8 @@ export function FamousPeopleLivedTo100Article() {
               shapes your outlook with BornClock's free, private longevity estimate.
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
+               className="inline-block bg-white text-brand-blue font-black px-8 py-3
+                          rounded-full text-lg hover:bg-brand-blue/10 transition-colors">
               Try the Longevity Calculator →
             </a>
           </div>
@@ -239,14 +239,14 @@ export function FamousPeopleLivedTo100Article() {
           <div className="grid gap-3 mb-10">
             <a href="/articles/how-to-live-to-100/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-4
-                          hover:border-[#2F6FB0]/30 transition-colors">
-              <span className="font-bold text-[#2F6FB0]">How to Live to 100 →</span>
+                          hover:border-brand-blue/30 transition-colors">
+              <span className="font-bold text-brand-blue">How to Live to 100 →</span>
               <span className="block text-sm text-gray-600">The evidence-based habits that add healthy years to your life.</span>
             </a>
             <a href="/articles/blue-zones-diet/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-4
-                          hover:border-[#2F6FB0]/30 transition-colors">
-              <span className="font-bold text-[#2F6FB0]">The Blue Zones Diet →</span>
+                          hover:border-brand-blue/30 transition-colors">
+              <span className="font-bold text-brand-blue">The Blue Zones Diet →</span>
               <span className="block text-sm text-gray-600">What the world's longest-lived communities actually eat.</span>
             </a>
           </div>

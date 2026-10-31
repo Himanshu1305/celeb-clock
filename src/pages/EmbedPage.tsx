@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
+import { ui } from '../theme/palette';
 
 const EMBED_CODE = '<iframe src="https://bornclock.com/widget/age-calculator" width="100%" height="220" frameborder="0" style="border-radius:12px;border:1px solid #e5e7eb;" title="Age Calculator"></iframe>';
 
@@ -46,7 +47,7 @@ const EmbedPage = () => {
             width="100%"
             height="220"
             frameBorder="0"
-            style={{ borderRadius: '12px', border: '1px solid #e5e7eb' }}
+            style={{ borderRadius: '12px', border: `1px solid ${ui.gray200}` }}
             title="BornClock Age Calculator Widget"
           />
         </section>

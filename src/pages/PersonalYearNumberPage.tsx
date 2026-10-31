@@ -62,12 +62,12 @@ function WorkedExample({ month, day, year }: { month: number; day: number; year:
   const sum = m + d + y;
   const final = reduceToSingleDigit(sum);
   return (
-    <div className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 p-4 text-sm text-foreground space-y-1">
-      <div className="font-semibold text-[#6E5AA6] mb-2">How this was worked out ({year})</div>
+    <div className="rounded-xl border border-brand-purple/30 bg-brand-purple/10 p-4 text-sm text-foreground space-y-1">
+      <div className="font-semibold text-brand-purple mb-2">How this was worked out ({year})</div>
       <div>Birth month: {month} → reduced: <strong>{m}</strong></div>
       <div>Birth day: {day} → reduced: <strong>{d}</strong></div>
       <div>Current year: {year} → reduced: <strong>{y}</strong></div>
-      <div className="border-t border-[#6E5AA6]/20 mt-2 pt-2">Sum: {m} + {d} + {y} = {sum} → reduced: <strong>{final}</strong></div>
+      <div className="border-t border-brand-purple/20 mt-2 pt-2">Sum: {m} + {d} + {y} = {sum} → reduced: <strong>{final}</strong></div>
     </div>
   );
 }
@@ -75,15 +75,15 @@ function WorkedExample({ month, day, year }: { month: number; day: number; year:
 function YearCard({ result, label }: { result: ReturnType<typeof computePersonalYear>; label: string }) {
   const meaning = getPersonalYearMeaning(result.number);
   return (
-    <div className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/5 p-5">
-      <div className="text-xs font-semibold text-[#6E5AA6]/70 uppercase tracking-wide mb-1">{label}</div>
+    <div className="rounded-xl border border-brand-purple/30 bg-brand-purple/5 p-5">
+      <div className="text-xs font-semibold text-brand-purple/70 uppercase tracking-wide mb-1">{label}</div>
       <div className="flex items-baseline gap-3 mb-2">
-        <span className="text-5xl font-black text-[#6E5AA6]">{result.number}</span>
+        <span className="text-5xl font-black text-brand-purple">{result.number}</span>
         <span className="text-xl font-bold text-foreground">{meaning.title}</span>
       </div>
       <p className="text-sm text-foreground leading-relaxed mb-1">{meaning.essence}</p>
       <p className="text-xs text-muted-foreground"><strong className="text-foreground">Focus themes:</strong> {meaning.focus}</p>
-      <p className="text-xs text-[#6E5AA6]/60 mt-2">Universal year for {result.year}: {result.universalYear}</p>
+      <p className="text-xs text-brand-purple/60 mt-2">Universal year for {result.year}: {result.universalYear}</p>
     </div>
   );
 }
@@ -188,7 +188,7 @@ export default function PersonalYearNumberPage() {
                 maxLength={2}
                 value={month}
                 onChange={e => setMonth(e.target.value.replace(/\D/g, ''))}
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-navy"
                 aria-label="Birth month"
               />
             </div>
@@ -205,7 +205,7 @@ export default function PersonalYearNumberPage() {
                 maxLength={2}
                 value={day}
                 onChange={e => setDay(e.target.value.replace(/\D/g, ''))}
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-navy"
                 aria-label="Birth day"
               />
             </div>
@@ -215,7 +215,7 @@ export default function PersonalYearNumberPage() {
 
           <button
             type="submit"
-            className="w-full bg-[#0E2238] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[#1a3450] transition-colors"
+            className="w-full bg-brand-navy text-white px-6 py-3 rounded-xl font-semibold hover:bg-brand-navy-hover transition-colors"
           >
             Calculate my personal year →
           </button>
@@ -252,7 +252,7 @@ export default function PersonalYearNumberPage() {
                 const m = getPersonalYearMeaning(n);
                 return (
                   <div key={n} className="flex gap-3 items-start rounded-lg border border-border p-3">
-                    <span className="text-lg font-black text-[#6E5AA6] w-6 shrink-0">{n}</span>
+                    <span className="text-lg font-black text-brand-purple w-6 shrink-0">{n}</span>
                     <div>
                       <span className="font-semibold text-foreground">{m.title}</span>
                       <span className="text-muted-foreground text-xs"> · </span>
@@ -279,11 +279,11 @@ export default function PersonalYearNumberPage() {
           <div className="rounded-xl border border-border p-4">
             <div className="font-semibold text-foreground mb-2">Continue exploring</div>
             <ul className="text-sm space-y-1">
-              <li><Link to="/numerology/" className="text-[#6E5AA6] hover:underline">Numerology overview</Link> — Life Path, Expression and other core numbers</li>
-              <li><Link to="/numerology/7/" className="text-[#6E5AA6] hover:underline">Life Path 7</Link> — example of a life path number reading</li>
-              <li><Link to="/angel-numbers/" className="text-[#6E5AA6] hover:underline">Angel Numbers</Link> — meaning of repeating sequences like 111, 222, 333</li>
-              <li><Link to="/mystic-corner/" className="text-[#6E5AA6] hover:underline">Mystic Corner</Link> — all symbolic tools on BornClock</li>
-              <li><Link to="/how-it-works/" className="text-[#6E5AA6] hover:underline">How it works</Link> — our methodology and data sources</li>
+              <li><Link to="/numerology/" className="text-brand-purple hover:underline">Numerology overview</Link> — Life Path, Expression and other core numbers</li>
+              <li><Link to="/numerology/7/" className="text-brand-purple hover:underline">Life Path 7</Link> — example of a life path number reading</li>
+              <li><Link to="/angel-numbers/" className="text-brand-purple hover:underline">Angel Numbers</Link> — meaning of repeating sequences like 111, 222, 333</li>
+              <li><Link to="/mystic-corner/" className="text-brand-purple hover:underline">Mystic Corner</Link> — all symbolic tools on BornClock</li>
+              <li><Link to="/how-it-works/" className="text-brand-purple hover:underline">How it works</Link> — our methodology and data sources</li>
             </ul>
           </div>
         </div>

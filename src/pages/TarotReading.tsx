@@ -103,7 +103,7 @@ export default function TarotReading() {
                 data-testid={`tarot-tab-${m}`}
                 onClick={() => setMode(m)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  mode === m ? 'bg-[#0E2238] text-white' : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  mode === m ? 'bg-brand-navy text-white' : 'bg-muted text-muted-foreground hover:bg-muted/80'
                 }`}
               >
                 {label}
@@ -122,7 +122,7 @@ export default function TarotReading() {
                 </p>
                 <div className="flex flex-wrap gap-2 justify-center mt-4">
                   {today.card.keywords.map((k) => (
-                    <span key={k} className="px-2 py-1 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded text-xs">{k}</span>
+                    <span key={k} className="px-2 py-1 bg-brand-purple/10 text-brand-purple rounded text-xs">{k}</span>
                   ))}
                 </div>
                 <p className="text-xs text-muted-foreground mt-4">This card is the same for everyone today and changes at midnight.</p>
@@ -147,7 +147,7 @@ export default function TarotReading() {
                   <button
                     onClick={() => setYesNoDraw(drawFromFullDeck())}
                     data-testid="tarot-yesno-draw"
-                    className="px-6 py-3 rounded-lg bg-[#0E2238] text-white font-semibold hover:opacity-90"
+                    className="px-6 py-3 rounded-lg bg-brand-navy text-white font-semibold hover:opacity-90"
                   >
                     {yesNoDraw ? 'Draw again' : 'Draw a card'}
                   </button>
@@ -182,7 +182,7 @@ export default function TarotReading() {
                   <button
                     onClick={() => setLoveDraw(drawCards(3))}
                     data-testid="tarot-love-draw"
-                    className="px-6 py-3 rounded-lg bg-[#0E2238] text-white font-semibold hover:opacity-90"
+                    className="px-6 py-3 rounded-lg bg-brand-navy text-white font-semibold hover:opacity-90"
                   >
                     {loveDraw ? 'Draw again' : 'Draw three cards'}
                   </button>

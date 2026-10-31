@@ -60,10 +60,10 @@ export default function MonthsHubPage() {
             const signs = m.zodiacSpans.map(z => z.sign).join(' & ');
             return (
               <Link key={m.slug} to={`/born-in-${m.slug}`}
-                className="block rounded-xl border border-gray-200 p-5 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/40 transition-colors">
+                className="block rounded-xl border border-gray-200 p-5 hover:border-brand-purple/30 hover:bg-brand-purple/40 transition-colors">
                 <p className="text-lg font-bold text-gray-900 mb-1">{m.month}</p>
                 <p className="text-sm text-gray-600">💎 {birthstoneAnswer(stone) || '—'} · ♈ {signs}</p>
-                <p className="text-xs text-[#6E5AA6] mt-2">Explore {m.month} →</p>
+                <p className="text-xs text-brand-purple mt-2">Explore {m.month} →</p>
               </Link>
             );
           })}
@@ -75,10 +75,10 @@ export default function MonthsHubPage() {
           <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {meshPosts.map(p => (
-              <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ {p.title}</Link>
+              <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 text-sm text-gray-700 hover:text-brand-purple transition-colors">→ {p.title}</Link>
             ))}
-            <Link to="/born-on/" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Browse by exact birth date</Link>
-            <Link to="/birthstone/" className="p-3 rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 text-sm text-gray-700 hover:text-[#6E5AA6] transition-colors">→ Birthstone finder</Link>
+            <Link to="/born-on/" className="p-3 rounded-xl border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 text-sm text-gray-700 hover:text-brand-purple transition-colors">→ Browse by exact birth date</Link>
+            <Link to="/birthstone/" className="p-3 rounded-xl border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 text-sm text-gray-700 hover:text-brand-purple transition-colors">→ Birthstone finder</Link>
           </div>
         </div>
       </section>

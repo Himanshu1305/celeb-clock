@@ -62,7 +62,7 @@ function StatCounter({ value, label, suffix = '' }: LandingStat) {
   }, [value]);
   return (
     <div className="rounded-2xl border border-border bg-card p-6 text-center" data-testid="landing-stat">
-      <div className="text-4xl md:text-5xl font-black text-[#2F6FB0] tabular-nums" aria-hidden="true">{display}{suffix}</div>
+      <div className="text-4xl md:text-5xl font-black text-brand-blue tabular-nums" aria-hidden="true">{display}{suffix}</div>
       <span className="sr-only">{value}{suffix} {label}</span>
       <p className="text-sm text-muted-foreground mt-1" aria-hidden="true">{label}</p>
     </div>
@@ -81,14 +81,14 @@ function Tier({ tier }: { tier: LandingTier }) {
       <h2 className="text-xl md:text-2xl font-bold text-foreground mb-3">{tier.heading}</h2>
       <div className={TIER_GRID[tier.variant]}>
         {tier.tools.map(t => {
-          const base = `group block rounded-2xl border border-border bg-card transition-all hover:border-[#2F6FB0]/50 hover:-translate-y-0.5`;
+          const base = `group block rounded-2xl border border-border bg-card transition-all hover:border-brand-blue/50 hover:-translate-y-0.5`;
           if (tier.variant === 'flagship') {
             return (
               <Link key={t.to} to={t.to} data-testid={`landing-tool-${t.to.replace(/\//g, '')}`} className={`${base} p-6 hover:shadow-lg`}>
                 <div className="text-3xl mb-2" aria-hidden="true">{t.emoji}</div>
                 <h3 className="font-bold text-lg text-foreground">{t.name}</h3>
                 {t.desc && <p className="text-sm text-muted-foreground leading-relaxed mt-1">{t.desc}</p>}
-                <span className="inline-flex items-center gap-1 text-sm text-[#2F6FB0] font-medium mt-3">
+                <span className="inline-flex items-center gap-1 text-sm text-brand-blue font-medium mt-3">
                   Open {t.name} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                 </span>
               </Link>
@@ -153,23 +153,23 @@ export function CategoryLandingPage({ config }: { config: CategoryLandingConfig 
         /* HERO */
         <section className="relative overflow-hidden rounded-3xl border border-border bg-card/60 px-5 py-12 md:py-16" data-testid="landing-hero">
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden="true">
-            <div className="absolute rounded-full border border-[#2F6FB0]/10 w-[320px] h-[320px] animate-[spin_60s_linear_infinite]" />
-            <div className="absolute rounded-full border border-[#2F6FB0]/10 w-[520px] h-[520px] animate-[spin_90s_linear_infinite_reverse]" />
-            <div className="absolute rounded-full border border-[#2F6FB0]/10 w-[720px] h-[720px] animate-[spin_120s_linear_infinite]" />
+            <div className="absolute rounded-full border border-brand-blue/10 w-[320px] h-[320px] animate-[spin_60s_linear_infinite]" />
+            <div className="absolute rounded-full border border-brand-blue/10 w-[520px] h-[520px] animate-[spin_90s_linear_infinite_reverse]" />
+            <div className="absolute rounded-full border border-brand-blue/10 w-[720px] h-[720px] animate-[spin_120s_linear_infinite]" />
           </div>
           <div className="absolute top-4 right-4 z-10 flex items-center gap-1 rounded-full border border-border bg-background/80 p-1 text-xs">
             <label className="sr-only" htmlFor={`${config.testid}-lang`}>Page language</label>
             <button type="button" data-testid="landing-lang-en" onClick={() => onLang('en')} aria-pressed={lang === 'en'}
-              className={`px-3 py-1 rounded-full font-medium transition-colors ${lang === 'en' ? 'bg-[#0E2238] text-white' : 'text-muted-foreground hover:text-foreground'}`}>EN</button>
+              className={`px-3 py-1 rounded-full font-medium transition-colors ${lang === 'en' ? 'bg-brand-navy text-white' : 'text-muted-foreground hover:text-foreground'}`}>EN</button>
             <button type="button" data-testid="landing-lang-hi" onClick={() => onLang('hi')} aria-pressed={false}
               className="px-3 py-1 rounded-full font-medium text-muted-foreground hover:text-foreground transition-colors">हि</button>
           </div>
           <div className="relative z-10 text-center max-w-3xl mx-auto">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2F6FB0]/10 border border-[#2F6FB0]/20 text-xs font-medium text-[#2F6FB0]">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-xs font-medium text-brand-blue">
               <BadgeIcon className="w-3.5 h-3.5" aria-hidden="true" /> {config.badge.label}
             </span>
             <h1 className="mt-4 text-3xl md:text-5xl font-black text-foreground leading-tight">
-              {config.headline.lead}{' '}<span className="text-[#2F6FB0]">{config.headline.accent}</span>
+              {config.headline.lead}{' '}<span className="text-brand-blue">{config.headline.accent}</span>
             </h1>
             <p className="mt-4 text-base md:text-lg text-muted-foreground leading-relaxed" data-testid="landing-answer">{config.directAnswer}</p>
             {hindiNotice && (
@@ -179,7 +179,7 @@ export function CategoryLandingPage({ config }: { config: CategoryLandingConfig 
             )}
             <div className="mt-6">
               <Link to={config.cta.to} data-testid="landing-hero-cta"
-                className="inline-flex items-center gap-2 bg-[#0E2238] text-white px-6 py-3 rounded-xl text-base font-semibold hover:bg-[#0E2238] transition-colors">
+                className="inline-flex items-center gap-2 bg-brand-navy text-white px-6 py-3 rounded-xl text-base font-semibold hover:bg-brand-navy transition-colors">
                 {config.cta.label} <ArrowRight className="w-5 h-5" aria-hidden="true" />
               </Link>
               {config.savedProfileHintTo && hasSaved && (
@@ -204,7 +204,7 @@ export function CategoryLandingPage({ config }: { config: CategoryLandingConfig 
 
       {/* CLOSING */}
       <section className="mt-8 mb-4" data-testid="landing-closing">
-        <div className="rounded-2xl border border-[#2F6FB0]/20 bg-gradient-to-br from-[#2F6FB0]/5 to-[#2F6FB0]/5 p-6 md:p-8 text-center max-w-3xl mx-auto">
+        <div className="rounded-2xl border border-brand-blue/20 bg-gradient-to-br from-brand-blue/5 to-brand-blue/5 p-6 md:p-8 text-center max-w-3xl mx-auto">
           {config.closing}
         </div>
       </section>

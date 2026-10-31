@@ -221,9 +221,9 @@ export default function Leaderboard() {
 
         {/* My rank banner */}
         {myEntry && myRank && (
-          <div className="mb-4 rounded-xl bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/30 border border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 px-4 py-3 flex items-center gap-3">
-            <Trophy className="w-5 h-5 text-[#6E5AA6]" />
-            <span className="text-sm font-medium text-[#6E5AA6] dark:text-[#6E5AA6]">
+          <div className="mb-4 rounded-xl bg-brand-purple/10 dark:bg-brand-purple/30 border border-brand-purple/30 dark:border-brand-purple/30 px-4 py-3 flex items-center gap-3">
+            <Trophy className="w-5 h-5 text-brand-purple" />
+            <span className="text-sm font-medium text-brand-purple dark:text-brand-purple">
               You are ranked <strong>#{myRank}</strong> globally with a forecast of <strong>{myEntry.forecast} years</strong>
             </span>
           </div>
@@ -264,7 +264,7 @@ export default function Leaderboard() {
                       key={entry.id}
                       className={`border-b last:border-0 transition-colors ${
                         isMe
-                          ? 'bg-[#6E5AA6]/10 dark:bg-[#6E5AA6]/20'
+                          ? 'bg-brand-purple/10 dark:bg-brand-purple/20'
                           : 'hover:bg-muted/20'
                       }`}
                     >
@@ -273,7 +273,7 @@ export default function Leaderboard() {
                       </td>
                       <td className="px-4 py-3 font-medium text-foreground">
                         {entry.display_name}
-                        {isMe && <span className="ml-2 text-xs text-[#6E5AA6]">(you)</span>}
+                        {isMe && <span className="ml-2 text-xs text-brand-purple">(you)</span>}
                       </td>
                       <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">
                         {entry.country || '—'}
@@ -303,10 +303,10 @@ export default function Leaderboard() {
 
         {/* Non-member CTA */}
         {user && !myEntry && (
-          <div className="mt-6 rounded-xl border border-dashed border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 p-5 text-center">
+          <div className="mt-6 rounded-xl border border-dashed border-brand-purple/30 dark:border-brand-purple/30 p-5 text-center">
             <p className="text-sm text-muted-foreground mb-3">
               Take the quiz at{' '}
-              <Link to="/life-expectancy/" className="text-[#6E5AA6] hover:underline">
+              <Link to="/life-expectancy/" className="text-brand-purple hover:underline">
                 /life-expectancy
               </Link>{' '}
               to get your forecast, then join the leaderboard.

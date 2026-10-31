@@ -9,15 +9,15 @@
  * on ivory/white/tinted surfaces. Darken-only — `--accent` (brand colour for
  * borders/dots/fills, a UI/3:1 role) is unchanged, so the approved look is preserved. */
 .paj { --muted:#434C59; } /* was #5B6472 (~4:1) → ~6.3:1 on ivory */
-.paj[data-theme="vedic"]    { --accent:#C6A15B; --accent-text:#6B4F1E; --green:#C6A15B; }
-.paj[data-theme="birthday"] { --accent:#F0715A; --accent-text:#B5432A; --green:#F0715A; }
-.paj[data-theme="mystic"]   { --accent:#6E5AA6; --accent-text:#4C3E78; --green:#6E5AA6; }
-.paj[data-theme="science"]  { --accent:#2F6FB0; --accent-text:#237A60; --green:#2E9E7B; --bg:#FFFFFF; --line:#DDE4EA; }
-.paj[data-theme="neutral"]  { --accent:#C6A15B; --accent-text:#0E2238; --green:#0E2238; }
+.paj[data-theme="vedic"]    { --accent:rgb(var(--brand-gold)); --accent-text:#6B4F1E; --green:rgb(var(--brand-gold)); }
+.paj[data-theme="birthday"] { --accent:rgb(var(--brand-coral)); --accent-text:rgb(var(--brand-coral-ink)); --green:rgb(var(--brand-coral)); }
+.paj[data-theme="mystic"]   { --accent:rgb(var(--brand-purple)); --accent-text:rgb(var(--brand-purple-dark)); --green:rgb(var(--brand-purple)); }
+.paj[data-theme="science"]  { --accent:rgb(var(--brand-blue)); --accent-text:rgb(var(--brand-green-ink)); --green:rgb(var(--brand-green)); --bg:#FFFFFF; --line:rgb(var(--brand-line-cool)); }
+.paj[data-theme="neutral"]  { --accent:rgb(var(--brand-gold)); --accent-text:rgb(var(--brand-navy)); --green:rgb(var(--brand-navy)); }
 /* Same darkened inks for any residual back-compat [data-category] surfaces. */
 .paj[data-category="vedic"]   { --accent-text:#6B4F1E; }
-.paj[data-category="mystic"]  { --accent-text:#4C3E78; }
-.paj[data-category="science"] { --accent-text:#237A60; }
+.paj[data-category="mystic"]  { --accent-text:rgb(var(--brand-purple-dark)); }
+.paj[data-category="science"] { --accent-text:rgb(var(--brand-green-ink)); }
 
 /* RC2 a11y: `.paj a{color:inherit}` (part-aj.css) makes links inherit the body ink,
  * which also stripped the explicit foreground from FILLED button-links (shadcn

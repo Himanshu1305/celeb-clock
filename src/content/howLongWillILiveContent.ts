@@ -250,8 +250,8 @@ export const HLWIL_COPY = {
     heading: 'The Direct Answer: It Depends on You',
     stats: [
       { label: 'Global average', value: `${leYears('World')} years`, note: 'UN WPP 2024', color: 'text-gray-700' as const },
-      { label: 'Japan', value: `${leYears('Japan')} years`, note: 'UN WPP 2024', color: 'text-[#6E5AA6]' as const },
-      { label: 'India average',   value: `${leYears('India')} years`, note: 'UN WPP 2024', color: 'text-[#6E5AA6]' as const },
+      { label: 'Japan', value: `${leYears('Japan')} years`, note: 'UN WPP 2024', color: 'text-brand-purple' as const },
+      { label: 'India average',   value: `${leYears('India')} years`, note: 'UN WPP 2024', color: 'text-brand-purple' as const },
       { label: 'United States',   value: `${leYears('United States')} years`, note: 'UN WPP 2024', color: 'text-blue-600' as const },
     ] as const,
     insight: 'Averages are for everyone. Your actual life expectancy could be 10-15 years above or below your national average depending on your lifestyle. Genetics accounts for only 25-30% of longevity. The remaining 70-75% is in your hands.',

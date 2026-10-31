@@ -46,6 +46,7 @@ const AshtakavargaSection = lazy(() => import('@/components/vedic/AshtakavargaSe
 // Batch 10: Bhava Chalit, KP and Jaimini — computed in the browser, own lazy chunk.
 const AdvancedSystems = lazy(() => import('@/components/vedic/advanced/AdvancedSystems'));
 import { findingsFromKundali, type KundaliLike } from '@/lib/vedic/remedies';
+import { brandVar, ui } from '../theme/palette';
 
 export default function KundaliPage() {
   const price = reportPrice(resolveCurrency(undefined));
@@ -299,7 +300,7 @@ export default function KundaliPage() {
             <label data-testid="kundali-marital-status" className="small" style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
               <span>Marital status <span className="muted">(optional)</span></span>
               <select value={maritalStatus} onChange={e => void changeMaritalStatus(e.target.value as MaritalStatusChoice)}
-                style={{ padding: '4px 8px', borderRadius: 8, border: '1px solid var(--line,#e4dcc8)', background: 'var(--paper)', color: 'var(--ink)' }}>
+                style={{ padding: '4px 8px', borderRadius: 8, border: `1px solid var(--line,${brandVar.line})`, background: 'var(--paper)', color: 'var(--ink)' }}>
                 {MARITAL_STATUS_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
               <span className="muted" style={{ fontSize: 12 }}>If you are married, we show partnership periods instead of “marriage windows”.</span>
@@ -453,7 +454,7 @@ export default function KundaliPage() {
 
               <div className="inline-actions" style={{ marginTop: 18 }}>
                 <a data-testid="kundali-whatsapp-share" href={whatsappHref} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2" style={{ background: '#15803D', color: '#fff', fontWeight: 600, borderRadius: 999, padding: '10px 18px', fontSize: 13 }}>
+                  className="inline-flex items-center gap-2" style={{ background: ui.green700, color: 'white', fontWeight: 600, borderRadius: 999, padding: '10px 18px', fontSize: 13 }}>
                   Share on WhatsApp
                 </a>
                 <button data-testid="kundali-download-pdf" type="button" className="btn secondary"

@@ -129,7 +129,7 @@ export default function CareerReportPage() {
           {report && (
             <div data-testid="career-result" className="mt-6 space-y-4" style={{ marginTop: 20 }}>
               {basis && <BirthDataUsed testid="career-birth-data" place={basis.place} basis={basis.basis} />}
-              <div data-testid="career-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
+              <div data-testid="career-methodology" className="rounded-xl border border-brand-purple/30 bg-brand-purple/40 p-4">
                 <div className="font-semibold text-foreground mb-1">How this report was built (from your chart)</div>
                 <p className="text-sm text-foreground">{report.methodology}</p>
               </div>
@@ -142,14 +142,14 @@ export default function CareerReportPage() {
                 <p className="text-sm text-foreground">{report.dasamsa.analysis}</p>
               </div>
               {fields && fields.ranked.length > 0 && (
-                <div data-testid="career-fields" className="rounded-xl border border-[#6E5AA6]/30 p-4">
+                <div data-testid="career-fields" className="rounded-xl border border-brand-purple/30 p-4">
                   <div className="font-semibold text-foreground mb-1">Best-suited career fields, ranked</div>
                   <p className="text-xs text-muted-foreground mb-2">{fields.note}</p>
                   <ol className="text-sm text-foreground space-y-1 list-decimal pl-5">
                     {fields.ranked.map((f, i) => (
                       <li key={i}>
                         <span className="font-medium">{f.field}</span>{' '}
-                        <span className="text-xs uppercase text-[#6E5AA6]">[{f.grade}]</span>
+                        <span className="text-xs uppercase text-brand-purple">[{f.grade}]</span>
                         <span className="block text-xs text-muted-foreground">{f.reason}</span>
                       </li>
                     ))}
@@ -170,17 +170,17 @@ export default function CareerReportPage() {
                   <div className="font-semibold text-foreground mb-1">Career-relevant <TermTip id="yoga">Yogas</TermTip></div>
                   <p className="text-xs text-muted-foreground mb-2">A "Yoga" here is a classical planetary combination linked to a career strength — an indication, never a guarantee.</p>
                   <ul className="text-sm text-foreground space-y-1">
-                    {report.yogas.map(y => <li key={y.name}><span className="font-medium">{yogaTermId(y.name) ? <TermTip id={yogaTermId(y.name)!}>{y.name}</TermTip> : y.name}</span> <span className="text-xs uppercase text-[#6E5AA6]">[{y.grade}]</span> — {y.summary}</li>)}
+                    {report.yogas.map(y => <li key={y.name}><span className="font-medium">{yogaTermId(y.name) ? <TermTip id={yogaTermId(y.name)!}>{y.name}</TermTip> : y.name}</span> <span className="text-xs uppercase text-brand-purple">[{y.grade}]</span> — {y.summary}</li>)}
                   </ul>
                   <GradeLegend />
                 </div>
               )}
-              <div data-testid="career-timing" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
+              <div data-testid="career-timing" className="rounded-xl border border-brand-purple/30 bg-brand-purple/40 p-4">
                 <div className="font-semibold text-foreground mb-1">Career timing windows</div>
                 <p className="text-xs text-muted-foreground mb-2">{report.timing.note}</p>
                 <ul className="text-sm text-foreground space-y-0.5">{report.timing.windows.map((w, i) => <li key={i}>• {w.describe}</li>)}</ul>
               </div>
-              <div data-testid="career-verdict" className="rounded-xl border-2 border-[#6E5AA6]/30 bg-card/70 p-5">
+              <div data-testid="career-verdict" className="rounded-xl border-2 border-brand-purple/30 bg-card/70 p-5">
                 <div className="font-semibold text-foreground mb-1">The bottom line</div>
                 <p className="text-sm text-foreground">{report.verdict}</p>
               </div>

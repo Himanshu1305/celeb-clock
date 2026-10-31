@@ -82,7 +82,7 @@ export class ChunkErrorBoundary extends Component<{ children: ReactNode }, { fai
             <p className="text-gray-600 mb-4">Please refresh to load the latest BornClock.</p>
             <button
               onClick={() => { try { window.location.reload(); } catch { /* ignore */ } }}
-              className="bg-[#0E2238] text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors"
+              className="bg-brand-navy text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-brand-navy transition-colors"
             >
               Refresh
             </button>

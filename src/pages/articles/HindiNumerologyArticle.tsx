@@ -133,7 +133,7 @@ export function HindiNumerologyArticle() {
           </p>
 
           <section className="my-8" data-testid="hi-calculator">
-            <h2 className="text-xl font-black text-[#6E5AA6] mb-2">अपना मूलांक, भाग्यांक और नामांक अभी जानें (मुफ्त)</h2>
+            <h2 className="text-xl font-black text-brand-purple mb-2">अपना मूलांक, भाग्यांक और नामांक अभी जानें (मुफ्त)</h2>
             <p className="text-gray-700 mb-4">जन्मतिथि डालें — नाम वैकल्पिक है। हर अंक की गणना साथ में दिखेगी।</p>
             <NumerologyCalculator lang="hi" />
           </section>
@@ -175,7 +175,7 @@ export function HindiNumerologyArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-brand-purple to-brand-purple rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">पूरी जन्मतिथि रिपोर्ट</h2>
             <p className="text-white/90 mb-6">
@@ -184,8 +184,8 @@ export function HindiNumerologyArticle() {
             </p>
             <a href="/birthday-report/"
                data-testid="hi-paid-report"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-brand-purple font-black px-8 py-3
+                          rounded-full text-lg hover:bg-brand-purple/10 transition-colors">
               पूरी जन्मतिथि रिपोर्ट देखें →
             </a>
             <p className="text-sm mt-3">मूलांक, भाग्यांक और नामांक ऊपर के कैलकुलेटर में मुफ्त हैं।</p>

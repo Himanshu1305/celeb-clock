@@ -8,6 +8,7 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { CollapsibleSection } from '@/components/vedic/CollapsibleSection';
 import { yoginiAntardashas, currentYoginiPeriod, type YoginiPeriod } from '@/lib/vedic/engine/yoginiDasha';
 import { YOGINI_META } from '@/data/yoginiAshtakavarga';
+import { ui } from '../../theme/palette';
 
 export interface YoginiDashaData {
   nakshatraNumber: number;
@@ -94,7 +95,7 @@ export function YoginiDashaSection({ data, now }: { data: YoginiDashaData; now?:
                   <span aria-hidden="true" style={{ width: 12 }}>{open ? '▾' : '▸'}</span>
                   <span style={{ fontWeight: 600 }}>{label(m)}</span>
                   <span className="text-xs text-muted-foreground">{fmtDate(m.start)} – {fmtDate(m.end)} · {m.years} yr{m.years === 1 ? '' : 's'}</span>
-                  {ym && <span className="text-xs" style={{ color: ym.tone === 'gentle' ? '#15803D' : 'var(--accent-text)' }}>{ym.tone === 'gentle' ? 'gentler' : 'asks for care'}</span>}
+                  {ym && <span className="text-xs" style={{ color: ym.tone === 'gentle' ? ui.green700 : 'var(--accent-text)' }}>{ym.tone === 'gentle' ? 'gentler' : 'asks for care'}</span>}
                   {isCur && <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent-text)' }}>• now</span>}
                 </button>
                 {open && (

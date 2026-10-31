@@ -75,11 +75,11 @@ function NakshatraCalculator() {
 
   return (
     <div data-testid="nakshatra-calculator"
-         className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-      <h3 className="text-lg font-black text-[#6E5AA6] mb-1">
+         className="bg-brand-purple/10 border-2 border-brand-purple/30 rounded-2xl p-6 my-8">
+      <h3 className="text-lg font-black text-brand-purple mb-1">
         Find Your Nakshatra — Free Calculator
       </h3>
-      <p className="text-sm text-[#6E5AA6] mb-4">
+      <p className="text-sm text-brand-purple mb-4">
         Enter your date of birth to see the Nakshatra(s) the Moon was in that day.
       </p>
       <input
@@ -87,33 +87,33 @@ function NakshatraCalculator() {
         value={dob}
         onChange={handleChange}
         max={new Date().toISOString().split('T')[0]}
-        className="w-full border-2 border-[#6E5AA6]/30 rounded-xl px-4 py-3
-                   text-base bg-white mb-4 focus:outline-none focus:border-[#6E5AA6]/30"
+        className="w-full border-2 border-brand-purple/30 rounded-xl px-4 py-3
+                   text-base bg-white mb-4 focus:outline-none focus:border-brand-purple/30"
         aria-label="Enter your date of birth"
       />
       {profile && (
         <div data-testid="nakshatra-result"
-             className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
+             className="bg-white rounded-xl border-2 border-brand-purple/30 p-5">
           <div className="text-sm text-gray-600 mb-2">
             Nakshatra: <strong data-testid="nakshatra-answer">{describeAlternatives(names)}</strong>
           </div>
           {profiles.length > 1 && (
             <p className="text-xs text-gray-500 mb-2">Showing {profile.nakshatra} first; your birth time decides which one is yours.</p>
           )}
-          <div className="text-2xl font-black text-[#6E5AA6] mb-0.5">
+          <div className="text-2xl font-black text-brand-purple mb-0.5">
             {profile.nakshatra}
           </div>
           <div className="text-sm text-gray-500 mb-3">
             Nakshatra #{profile.number} · Lord: {profile.lord} · Gana: {profile.gana} · Deity: {profile.deity}
           </div>
           <div className="flex flex-wrap gap-2 text-xs mb-3">
-            <span className="bg-[#6E5AA6]/10 text-[#6E5AA6] px-2 py-1 rounded-full">
+            <span className="bg-brand-purple/10 text-brand-purple px-2 py-1 rounded-full">
               🪐 Lord: {profile.lord}
             </span>
-            <span className="bg-[#6E5AA6]/10 text-[#6E5AA6] px-2 py-1 rounded-full">
+            <span className="bg-brand-purple/10 text-brand-purple px-2 py-1 rounded-full">
               🕉 Deity: {profile.deity}
             </span>
-            <span className="bg-[#6E5AA6]/10 text-[#6E5AA6] px-2 py-1 rounded-full">
+            <span className="bg-brand-purple/10 text-brand-purple px-2 py-1 rounded-full">
               ✨ Gana: {profile.gana}
             </span>
           </div>
@@ -121,15 +121,15 @@ function NakshatraCalculator() {
             {profile.personality_summary}
           </p>
           <a href={`/birthday-report/?dob=${dob}`}
-             className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
-                        rounded-full text-sm hover:bg-[#0E2238]">
+             className="inline-block bg-brand-navy text-white font-bold px-5 py-2.5
+                        rounded-full text-sm hover:bg-brand-navy">
             See my full birthday profile →
           </a>
         </div>
       )}
       {!profile && fallbackName && (
         <div data-testid="nakshatra-result"
-             className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5 text-sm text-gray-700">
+             className="bg-white rounded-xl border-2 border-brand-purple/30 p-5 text-sm text-gray-700">
           Your Nakshatra is <strong>{fallbackName}</strong>. Full profile details are being added.
         </div>
       )}
@@ -247,8 +247,8 @@ export function NakshatraArticle() {
           </p>
           <div className="space-y-3 mb-8">
             {GANA_INFO.map(g => (
-              <div key={g.name} className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-4">
-                <h3 className="font-bold text-[#6E5AA6] mb-1">{g.name}</h3>
+              <div key={g.name} className="bg-brand-purple/10 border border-brand-purple/30 rounded-xl p-4">
+                <h3 className="font-bold text-brand-purple mb-1">{g.name}</h3>
                 <p className="text-sm text-gray-700 leading-relaxed">{g.desc}</p>
               </div>
             ))}
@@ -271,13 +271,13 @@ export function NakshatraArticle() {
                 Lord: {p.lord} · Deity: {p.deity} · Gana: {p.gana}
               </div>
               <div className="flex flex-wrap gap-2 text-xs mb-3">
-                <span className="bg-[#6E5AA6]/10 text-[#6E5AA6] px-2 py-1 rounded-full">
+                <span className="bg-brand-purple/10 text-brand-purple px-2 py-1 rounded-full">
                   🪐 {p.lord}
                 </span>
-                <span className="bg-[#6E5AA6]/10 text-[#6E5AA6] px-2 py-1 rounded-full">
+                <span className="bg-brand-purple/10 text-brand-purple px-2 py-1 rounded-full">
                   🕉 {p.deity}
                 </span>
-                <span className="bg-[#6E5AA6]/10 text-[#6E5AA6] px-2 py-1 rounded-full">
+                <span className="bg-brand-purple/10 text-brand-purple px-2 py-1 rounded-full">
                   ✨ {p.gana}
                 </span>
                 <span className="bg-amber-100 text-amber-800 px-2 py-1 rounded-full">
@@ -299,15 +299,15 @@ export function NakshatraArticle() {
             sign) and interacts with your <strong>birth chart</strong> as a whole. To understand
             the bigger picture, explore how your moon sign shapes your emotional nature in our
             guide to the{' '}
-            <a href="/articles/moon-sign-by-date-of-birth/" className="text-[#6E5AA6] underline font-semibold">
+            <a href="/articles/moon-sign-by-date-of-birth/" className="text-brand-purple underline font-semibold">
               moon sign by date of birth
             </a>
             , and see how every placement fits together in the{' '}
-            <a href="/articles/vedic-astrology-birth-chart/" className="text-[#6E5AA6] underline font-semibold">
+            <a href="/articles/vedic-astrology-birth-chart/" className="text-brand-purple underline font-semibold">
               Vedic astrology birth chart
             </a>{' '}
             guide. For the fastest complete reading, generate your full{' '}
-            <a href="/birthday-report/" className="text-[#6E5AA6] underline font-semibold">
+            <a href="/birthday-report/" className="text-brand-purple underline font-semibold">
               birthday report
             </a>{' '}
             — it combines your Nakshatra, Rashi, Western zodiac and more from a single date of birth.
@@ -323,7 +323,7 @@ export function NakshatraArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-brand-purple to-brand-purple rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Discover Your Complete Birthday Profile</h2>
             <p className="text-white/90 mb-6">
@@ -331,8 +331,8 @@ export function NakshatraArticle() {
               Life Path number, lucky stone, and more — all from your date of birth.
             </p>
             <a href="/birthday-report/"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-brand-purple font-black px-8 py-3
+                          rounded-full text-lg hover:bg-brand-purple/10 transition-colors">
               Generate My Free Birthday Report →
             </a>
           </div>
@@ -341,12 +341,12 @@ export function NakshatraArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/moon-sign-by-date-of-birth/" className="text-[#6E5AA6] underline font-semibold">
+                <a href="/articles/moon-sign-by-date-of-birth/" className="text-brand-purple underline font-semibold">
                   Moon Sign by Date of Birth — Find Your Vedic Rashi
                 </a>
               </li>
               <li>
-                <a href="/articles/vedic-astrology-birth-chart/" className="text-[#6E5AA6] underline font-semibold">
+                <a href="/articles/vedic-astrology-birth-chart/" className="text-brand-purple underline font-semibold">
                   Vedic Astrology Birth Chart — Read Your Kundali
                 </a>
               </li>

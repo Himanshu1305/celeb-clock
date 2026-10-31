@@ -246,14 +246,14 @@ export function LongevitySupplementsArticle() {
             animal data or weak bioavailability and are expensive — promising, not proven.
           </p>
 
-          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-brand-blue to-brand-blue rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Could You Live?</h2>
             <p className="text-white mb-6">
               Supplements are a small lever. Sleep, movement, diet and stress matter far more.
               See how your habits shape your lifespan with our free longevity calculator.
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
+               className="inline-block bg-white text-brand-blue font-black px-8 py-3 rounded-full text-lg hover:bg-brand-blue/10 transition-colors">
               Try the Longevity Calculator →
             </a>
           </div>
@@ -268,13 +268,13 @@ export function LongevitySupplementsArticle() {
             ))}
           </div>
 
-          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8 text-center">
-            <p className="text-[#2F6FB0] font-semibold mb-4">
+          <div className="bg-brand-blue/10 border-2 border-brand-blue/30 rounded-2xl p-6 my-8 text-center">
+            <p className="text-brand-blue font-semibold mb-4">
               Curious what really moves the needle on how long you live? Your daily habits
               outweigh any pill.
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-[#0E2238] transition-colors">
+               className="inline-block bg-brand-navy text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-brand-navy transition-colors">
               Estimate My Lifespan Free →
             </a>
           </div>
@@ -282,12 +282,12 @@ export function LongevitySupplementsArticle() {
           <h2 className="text-2xl font-black text-gray-900 mb-4">Related Articles</h2>
           <div className="grid gap-3 mb-6">
             <a href="/articles/longevity-foods-india/"
-               className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-[#2F6FB0]/30 transition-colors">
+               className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-brand-blue/30 transition-colors">
               <div className="font-bold text-gray-900">Longevity Foods in India</div>
               <div className="text-sm text-gray-600">The food-first foundation these supplements are meant to support.</div>
             </a>
             <a href="/articles/how-to-live-to-100/"
-               className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-[#2F6FB0]/30 transition-colors">
+               className="block bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-brand-blue/30 transition-colors">
               <div className="font-bold text-gray-900">How to Live to 100</div>
               <div className="text-sm text-gray-600">The habits and lifestyle patterns of the world's longest-lived people.</div>
             </a>

@@ -49,8 +49,8 @@ const HindiAgeCalculator = () => {
       h1="मेरी उम्र कितनी है?"
     >
         <section className="max-w-3xl mx-auto mb-10 px-4">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
+          <div className="bg-brand-purple/10 border-l-4 border-brand-purple/30 rounded-r-xl p-5">
+            <p className="text-base font-semibold text-brand-purple leading-relaxed">
               आपकी उम्र सिर्फ साल में नहीं मापी जाती। BornClock आपको बताता है कि आप कितने दिन, कितने घंटे और कितने सेकंड जी चुके हैं। अपनी जन्म तिथि डालें और तुरंत जानें।
             </p>
           </div>

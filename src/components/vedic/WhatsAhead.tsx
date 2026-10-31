@@ -25,6 +25,7 @@ import {
 } from '@/lib/vedic/whatsAhead';
 import { WHATS_AHEAD_IS_FREE } from '@/config/whatsAheadAccess';
 import { TermTip } from '@/components/vedic/TermTip';
+import { brandVar, ui } from '../../theme/palette';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const monYear = (iso: string) => { const d = new Date(iso); return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`; };
@@ -46,9 +47,9 @@ function AreaCard({ area, timeline, nowMs, married }: { area: LifeArea; timeline
   // partnership periods — never a forward "marriage window".
   const marriedRel = isRel && married;
   return (
-    <div data-testid={`whatsahead-area-${area.key}`} data-significators={area.significators.join(',')} style={{ border: '1px solid var(--line, #e4dcc8)', borderRadius: 10, padding: '12px 14px' }}>
+    <div data-testid={`whatsahead-area-${area.key}`} data-significators={area.significators.join(',')} style={{ border: `1px solid var(--line, ${brandVar.line})`, borderRadius: 10, padding: '12px 14px' }}>
       <div style={{ fontWeight: 700, color: 'var(--ink)' }}>{marriedRel ? 'Relationship & partnership' : area.label}</div>
-      <p style={{ fontSize: 12, color: 'var(--muted,#667)', margin: '4px 0 8px' }}>{area.note}</p>
+      <p style={{ fontSize: 12, color: `var(--muted,${ui.mutedFallback})`, margin: '4px 0 8px' }}>{area.note}</p>
       {current && (
         <div style={{ fontSize: 13, color: 'var(--ink)' }}>
           <strong style={{ color: 'var(--accent-text)' }}>Active now:</strong> a {current.planet} period, {rangeOf(current)}
@@ -60,15 +61,15 @@ function AreaCard({ area, timeline, nowMs, married }: { area: LifeArea; timeline
         </div>
       )}
       {!current && !upcoming && (
-        <div style={{ fontSize: 13, color: 'var(--muted,#667)' }}>No strongly-significant upcoming window on the books — the quieter stretches matter too.</div>
+        <div style={{ fontSize: 13, color: `var(--muted,${ui.mutedFallback})` }}>No strongly-significant upcoming window on the books — the quieter stretches matter too.</div>
       )}
       {marriedRel && (
-        <p data-testid="whatsahead-married-note" style={{ fontSize: 11.5, color: 'var(--muted,#667)', marginTop: 8, fontStyle: 'italic' }}>
+        <p data-testid="whatsahead-married-note" style={{ fontSize: 11.5, color: `var(--muted,${ui.mutedFallback})`, marginTop: 8, fontStyle: 'italic' }}>
           As you’re married, these periods are read for your <strong>existing partnership</strong> — times that traditionally emphasise harmony, shared decisions and family life. They are not about a new marriage, and they are not certainties.
         </p>
       )}
       {isRel && !married && (
-        <p style={{ fontSize: 11.5, color: 'var(--muted,#667)', marginTop: 8, fontStyle: 'italic' }}>
+        <p style={{ fontSize: 11.5, color: `var(--muted,${ui.mutedFallback})`, marginTop: 8, fontStyle: 'italic' }}>
           These are <strong>traditionally favourable windows</strong> for relationship matters — periods of heightened possibility, not a fixed date and not a certainty. Astrology can’t promise whether or exactly when anything happens; treat them as "worth having plans ready", nothing more.
         </p>
       )}
@@ -104,14 +105,14 @@ export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free, marit
     <section data-testid="whats-ahead" style={{ marginTop: 16 }}>
       <button
         type="button" onClick={() => setOpen(o => !o)} aria-expanded={open} data-testid="whats-ahead-toggle"
-        style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left', padding: '12px 14px', borderRadius: 10, border: '1px solid var(--line,#e4dcc8)', background: 'var(--paper)', cursor: 'pointer', fontWeight: 700, color: 'var(--ink)' }}
+        style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left', padding: '12px 14px', borderRadius: 10, border: `1px solid var(--line,${brandVar.line})`, background: 'var(--paper)', cursor: 'pointer', fontWeight: 700, color: 'var(--ink)' }}
       >
         <span aria-hidden="true">{open ? '▾' : '▸'}</span>
         <span>What’s ahead — your chart by life area &amp; time horizon</span>
       </button>
 
       {open && !isFree && (
-        <div data-testid="whats-ahead-locked" style={{ marginTop: 10, border: '1px solid var(--line,#e4dcc8)', borderRadius: 10, padding: 14, fontSize: 13, color: 'var(--ink)' }}>
+        <div data-testid="whats-ahead-locked" style={{ marginTop: 10, border: `1px solid var(--line,${brandVar.line})`, borderRadius: 10, padding: 14, fontSize: 13, color: 'var(--ink)' }}>
           "What’s ahead" is part of the full report. It re-presents your real Dasha timeline by life area and time horizon.
           <div style={{ marginTop: 8 }}><Link className="btn" to="/birthday-report/gift/">See the full report →</Link></div>
         </div>
@@ -119,15 +120,15 @@ export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free, marit
 
       {open && isFree && (
         <div style={{ marginTop: 10 }}>
-          <p style={{ fontSize: 12.5, color: 'var(--muted,#667)', margin: '0 0 10px' }}>
+          <p style={{ fontSize: 12.5, color: `var(--muted,${ui.mutedFallback})`, margin: '0 0 10px' }}>
             The same Vimshottari periods shown above, organised by what they touch and when. These are classical
             timing <em>windows</em> — forward-looking guidance, never guarantees.
           </p>
           <div role="tablist" aria-label="What's ahead views" style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
             <button type="button" role="tab" aria-selected={tab === 'area'} data-testid="whatsahead-tab-area" onClick={() => setTab('area')}
-              style={{ padding: '6px 12px', borderRadius: 999, border: '1px solid var(--line,#e4dcc8)', background: tab === 'area' ? 'var(--accent)' : 'transparent', color: tab === 'area' ? '#fff' : 'var(--ink)', cursor: 'pointer', fontSize: 13 }}>By life area</button>
+              style={{ padding: '6px 12px', borderRadius: 999, border: `1px solid var(--line,${brandVar.line})`, background: tab === 'area' ? 'var(--accent)' : 'transparent', color: tab === 'area' ? 'white' : 'var(--ink)', cursor: 'pointer', fontSize: 13 }}>By life area</button>
             <button type="button" role="tab" aria-selected={tab === 'horizon'} data-testid="whatsahead-tab-horizon" onClick={() => setTab('horizon')}
-              style={{ padding: '6px 12px', borderRadius: 999, border: '1px solid var(--line,#e4dcc8)', background: tab === 'horizon' ? 'var(--accent)' : 'transparent', color: tab === 'horizon' ? '#fff' : 'var(--ink)', cursor: 'pointer', fontSize: 13 }}>By time horizon</button>
+              style={{ padding: '6px 12px', borderRadius: 999, border: `1px solid var(--line,${brandVar.line})`, background: tab === 'horizon' ? 'var(--accent)' : 'transparent', color: tab === 'horizon' ? 'white' : 'var(--ink)', cursor: 'pointer', fontSize: 13 }}>By time horizon</button>
           </div>
 
           {tab === 'area' && (
@@ -139,14 +140,14 @@ export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free, marit
           {tab === 'horizon' && (
             <div style={{ display: 'grid', gap: 10 }}>
               {horizons.map(h => (
-                <div key={h.label} data-testid={`whatsahead-horizon-${h.label.replace(/\s+/g, '-').toLowerCase()}`} style={{ border: '1px solid var(--line,#e4dcc8)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--ink)' }}>
+                <div key={h.label} data-testid={`whatsahead-horizon-${h.label.replace(/\s+/g, '-').toLowerCase()}`} style={{ border: `1px solid var(--line,${brandVar.line})`, borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--ink)' }}>
                   <strong>{h.label}:</strong>{' '}
                   {h.maha
                     ? <>{h.maha} Mahadasha{h.antar ? ` · ${h.antar} Antardasha` : ''}{h.pratyantar ? ` · ${h.pratyantar} Pratyantar` : ''}{h.sookshma ? ` · ${h.sookshma} Sookshma` : ''}</>
                     : 'beyond the computed timeline'}
                 </div>
               ))}
-              <div style={{ border: '1px solid var(--line,#e4dcc8)', borderRadius: 10, padding: '10px 14px' }}>
+              <div style={{ border: `1px solid var(--line,${brandVar.line})`, borderRadius: 10, padding: '10px 14px' }}>
                 <div style={{ fontWeight: 700, color: 'var(--ink)', marginBottom: 6 }}>Lifetime overview — your <TermTip id="mahadasha">Mahadasha</TermTip> sequence</div>
                 <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12.5, color: 'var(--ink)' }}>
                   {lifetime.map((m, i) => (
@@ -157,7 +158,7 @@ export function WhatsAhead({ lagnaSignIndex, planets, dashaTimeline, free, marit
             </div>
           )}
 
-          <p style={{ fontSize: 11, color: 'var(--muted,#667)', marginTop: 10 }}>
+          <p style={{ fontSize: 11, color: `var(--muted,${ui.mutedFallback})`, marginTop: 10 }}>
             Windows are the same computed Vimshottari periods used throughout your chart. Shown as month ranges, not exact days.
           </p>
         </div>

@@ -45,8 +45,8 @@ export default function WhatIsLifeExpectancy() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
+          <div className="bg-brand-blue/10 border-l-4 border-brand-blue/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-brand-blue leading-relaxed">
               Life expectancy is a statistical measure of the average number of years a person is expected to live, based on current mortality rates for their age, sex, and country. The global average is {leYears('World')} years and India's average is {leYears('India')} years ({LE_CITATION}). But your personal life expectancy can differ significantly based on your health and lifestyle.
             </p>
           </div>
@@ -61,7 +61,7 @@ export default function WhatIsLifeExpectancy() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
                 <thead>
-                  <tr className="bg-[#2F6FB0]/10">
+                  <tr className="bg-brand-blue/10">
                     <th className="text-left p-3 border border-gray-200">Rank</th>
                     <th className="text-left p-3 border border-gray-200">Country</th>
                     <th className="text-left p-3 border border-gray-200">Life Expectancy</th>
@@ -96,7 +96,7 @@ export default function WhatIsLifeExpectancy() {
             <p className="text-lg font-bold text-gray-900 mb-2">Calculate My Personal Life Expectancy</p>
             <p className="text-sm text-gray-500 mb-4">Personalised to your habits, country, and family history</p>
             <Link to="/life-expectancy/"
-              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+              className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
               Calculate My Personal Life Expectancy →
             </Link>
           </div>
@@ -104,10 +104,10 @@ export default function WhatIsLifeExpectancy() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How long will I live?</Link>
-              <Link to="/answers/how-to-live-longer/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How to live longer</Link>
-              <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is my biological age?</Link>
-              <Link to="/answers/how-does-stress-affect-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How stress affects life expectancy</Link>
+              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How long will I live?</Link>
+              <Link to="/answers/how-to-live-longer/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How to live longer</Link>
+              <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ What is my biological age?</Link>
+              <Link to="/answers/how-does-stress-affect-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How stress affects life expectancy</Link>
             </div>
           </div>
         </div>

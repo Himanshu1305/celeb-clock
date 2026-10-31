@@ -26,9 +26,9 @@ export function BirthdayCountdownCard({ birthDate }: { birthDate: Date | null })
   const dateLabel = nb.next.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
   return (
-    <div data-testid="birthday-countdown" className="rounded-2xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 p-6 text-center mb-6">
+    <div data-testid="birthday-countdown" className="rounded-2xl border border-brand-purple/30 bg-brand-purple/10 p-6 text-center mb-6">
       {nb.isToday && (
-        <p data-testid="birthday-today" className="text-lg font-bold text-[#6E5AA6] mb-2">🎉 Happy birthday — it's today!</p>
+        <p data-testid="birthday-today" className="text-lg font-bold text-brand-purple mb-2">🎉 Happy birthday — it's today!</p>
       )}
       <p className="text-sm text-muted-foreground">Your next birthday is in</p>
       <p className="text-5xl font-extrabold text-foreground my-2">

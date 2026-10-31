@@ -39,8 +39,8 @@ export default function HowDoesStressAffectLifeExpectancy() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
+          <div className="bg-brand-blue/10 border-l-4 border-brand-blue/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-brand-blue leading-relaxed">
               Chronic stress reduces life expectancy through multiple biological pathways: it shortens telomeres (accelerating cellular aging), raises cortisol (damaging cardiovascular health), suppresses immune function, and increases inflammation. Studies estimate chronic stress reduces life expectancy by 2–3 years on average — more in people with high-stress occupations or trauma histories.
             </p>
           </div>
@@ -75,7 +75,7 @@ export default function HowDoesStressAffectLifeExpectancy() {
             <p className="text-lg font-bold text-gray-900 mb-2">See How Stress Affects Your Personal Forecast</p>
             <p className="text-sm text-gray-500 mb-4">Move the stress slider in BornClock's What-If Simulator to see the year-impact in real time</p>
             <Link to="/life-expectancy/"
-              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+              className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
               See Stress Impact on My Lifespan →
             </Link>
           </div>
@@ -83,10 +83,10 @@ export default function HowDoesStressAffectLifeExpectancy() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How long will I live?</Link>
-              <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is my biological age?</Link>
-              <Link to="/answers/how-to-live-longer/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How to live longer</Link>
-              <Link to="/answers/what-is-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is life expectancy?</Link>
+              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How long will I live?</Link>
+              <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ What is my biological age?</Link>
+              <Link to="/answers/how-to-live-longer/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How to live longer</Link>
+              <Link to="/answers/what-is-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ What is life expectancy?</Link>
             </div>
           </div>
         </div>

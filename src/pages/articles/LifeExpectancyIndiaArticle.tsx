@@ -111,10 +111,10 @@ export function LifeExpectancyIndiaArticle() {
           <div className="overflow-x-auto mb-6">
             <table className="w-full border-collapse text-sm">
               <thead>
-                <tr className="bg-[#2F6FB0]/10">
-                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-[#2F6FB0]">Rank</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-[#2F6FB0]">State</th>
-                  <th className="border border-gray-300 px-4 py-2 text-right font-black text-[#2F6FB0]">Life Expectancy (years)</th>
+                <tr className="bg-brand-blue/10">
+                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-brand-blue">Rank</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left font-black text-brand-blue">State</th>
+                  <th className="border border-gray-300 px-4 py-2 text-right font-black text-brand-blue">Life Expectancy (years)</th>
                 </tr>
               </thead>
               <tbody>
@@ -143,8 +143,8 @@ export function LifeExpectancyIndiaArticle() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-            <div className="bg-[#2F6FB0]/10 rounded-xl p-4 text-center">
-              <div className="text-2xl font-black text-[#2F6FB0]">{leYears('India')}</div>
+            <div className="bg-brand-blue/10 rounded-xl p-4 text-center">
+              <div className="text-2xl font-black text-brand-blue">{leYears('India')}</div>
               <div className="text-xs text-gray-600">National average (UN WPP 2024)</div>
             </div>
             <div className="bg-blue-50 rounded-xl p-4 text-center">
@@ -228,7 +228,7 @@ export function LifeExpectancyIndiaArticle() {
           </p>
           <p className="text-gray-700 leading-relaxed mb-6">
             BornClock takes you beyond the crude state average. Our{' '}
-            <a href="/longevity-calculator/" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
+            <a href="/longevity-calculator/" className="text-brand-blue font-semibold underline hover:text-brand-blue">
               longevity calculator
             </a>{' '}
             personalises your estimate using your own lifestyle inputs — your habits, activity
@@ -237,7 +237,7 @@ export function LifeExpectancyIndiaArticle() {
             how many years the changes within your control could add.
           </p>
 
-          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-brand-blue to-brand-blue rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Find Out How Long <em>You</em> Might Live</h2>
             <p className="text-white mb-6">
               Stop guessing from a state average. The BornClock longevity calculator turns your
@@ -246,7 +246,7 @@ export function LifeExpectancyIndiaArticle() {
             </p>
             <a
               href="/longevity-calculator/"
-              className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors"
+              className="inline-block bg-white text-brand-blue font-black px-8 py-3 rounded-full text-lg hover:bg-brand-blue/10 transition-colors"
             >
               Calculate My Life Expectancy →
             </a>
@@ -266,12 +266,12 @@ export function LifeExpectancyIndiaArticle() {
             <h2 className="text-xl font-black text-gray-900 mb-4">Related Articles</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/articles/life-expectancy-by-country-2026/" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
+                <a href="/articles/life-expectancy-by-country-2026/" className="text-brand-blue font-semibold underline hover:text-brand-blue">
                   Life Expectancy by Country 2026 — Global Rankings
                 </a>
               </li>
               <li>
-                <a href="/articles/how-to-live-to-100/" className="text-[#2F6FB0] font-semibold underline hover:text-[#2F6FB0]">
+                <a href="/articles/how-to-live-to-100/" className="text-brand-blue font-semibold underline hover:text-brand-blue">
                   How to Live to 100 — Habits of the World's Longest-Lived People
                 </a>
               </li>

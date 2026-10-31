@@ -13,6 +13,7 @@ import {
   Tooltip as RechartsTooltip, ResponsiveContainer, Cell,
 } from 'recharts';
 import { completedYears } from '@/lib/ageBreakdown';
+import { ui } from '../theme/palette';
 
 interface Props {
   result: LongevityResult;
@@ -389,7 +390,7 @@ export const EnhancedLifeExpectancyReport = ({
                       {factorImpactData.map((entry, index) => (
                         <Cell
                           key={index}
-                          fill={entry.impact > 0 ? '#22c55e' : entry.impact < 0 ? '#ef4444' : '#94a3b8'}
+                          fill={entry.impact > 0 ? ui.green500 : entry.impact < 0 ? ui.red500 : ui.slate400}
                         />
                       ))}
                     </Bar>

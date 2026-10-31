@@ -1,3 +1,4 @@
+import { palette } from '../theme/palette';
 interface WelcomeEmailProps {
   firstName: string;
   appUrl?: string;
@@ -51,8 +52,8 @@ export function renderWelcomeEmail({ firstName, appUrl = 'https://cosmicage.app'
                 </tr>
                 <tr><td style="height:12px;"></td></tr>
                 <tr>
-                  <td style="padding:16px;background-color:#f7f8fa;border-radius:10px;border-left:4px solid #6E5AA6;">
-                    <strong style="color:#6E5AA6;font-size:15px;">♈ Zodiac & Birthstone</strong>
+                  <td style="padding:16px;background-color:#f7f8fa;border-radius:10px;border-left:4px solid ${palette.purple};">
+                    <strong style="color:${palette.purple};font-size:15px;">♈ Zodiac & Birthstone</strong>
                     <p style="margin:6px 0 0;color:#646b78;font-size:13px;line-height:1.5;">Explore your zodiac sign traits, lucky numbers, and your unique birthstone's meaning.</p>
                   </td>
                 </tr>

@@ -17,7 +17,7 @@ const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 function Entry({ e }: { e: GlossaryEntry }) {
   const { def } = e;
   return (
-    <article id={e.slug} data-testid={`glossary-term-${e.id}`} className="scroll-mt-24 rounded-xl border border-border p-4 target:border-[#6E5AA6] target:bg-[#6E5AA6]/5">
+    <article id={e.slug} data-testid={`glossary-term-${e.id}`} className="scroll-mt-24 rounded-xl border border-border p-4 target:border-brand-purple target:bg-brand-purple/5">
       <h3 className="font-semibold text-foreground">
         <a href={`#${e.slug}`} className="hover:underline">{def.term}</a>
         {def.hiTerm && <span lang="hi" className="ml-2 font-normal text-muted-foreground">{def.hiTerm}</span>}
@@ -25,7 +25,7 @@ function Entry({ e }: { e: GlossaryEntry }) {
       {def.category && <div className="text-[11px] uppercase tracking-wider text-muted-foreground mt-0.5">{CATEGORY_LABELS[def.category].en}</div>}
       <p className="mt-2 text-sm font-medium text-foreground">{def.impact}</p>
       {def.why && <p className="mt-1 text-sm text-muted-foreground leading-relaxed">{def.why}</p>}
-      {def.guidance && <p className="mt-1 text-sm text-[#6E5AA6]">{def.guidance}</p>}
+      {def.guidance && <p className="mt-1 text-sm text-brand-purple">{def.guidance}</p>}
       {def.learnMore && <p className="mt-1 text-sm text-muted-foreground">{def.learnMore}</p>}
       {def.hi && <p lang="hi" className="mt-2 text-sm text-muted-foreground border-l-2 border-border pl-2">{def.hi}</p>}
       {def.aliases && def.aliases.length > 0 && (

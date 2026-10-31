@@ -39,8 +39,8 @@ export default function WhatIsBMI() {
       h1="What Is BMI and What Does Your Number Actually Mean?"
     >
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
+          <div className="bg-brand-purple/10 border-l-4 border-brand-purple/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-brand-purple leading-relaxed">
               BMI (Body Mass Index) is calculated by dividing your weight in kilograms by your height in metres squared (kg/m²). A BMI of 18.5–24.9 is considered healthy, 25–29.9 is overweight, and 30+ is obese. However, BMI does not measure body fat directly and can be misleading for athletes and older adults.
             </p>
           </div>
@@ -55,7 +55,7 @@ export default function WhatIsBMI() {
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
                 <thead>
-                  <tr className="bg-[#6E5AA6]/10">
+                  <tr className="bg-brand-purple/10">
                     <th className="text-left p-3 border border-gray-200">Category</th>
                     <th className="text-left p-3 border border-gray-200">BMI Range</th>
                     <th className="text-left p-3 border border-gray-200">Health Implication</th>
@@ -88,7 +88,7 @@ export default function WhatIsBMI() {
             <p className="text-lg font-bold text-gray-900 mb-2">Test Your Biological Age Including BMI and WHtR</p>
             <p className="text-sm text-gray-500 mb-4">Free 15-question lifestyle and fitness estimate · Not a lab test</p>
             <Link to="/biological-age/"
-              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+              className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
               Test My Biological Age →
             </Link>
           </div>
@@ -96,10 +96,10 @@ export default function WhatIsBMI() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my biological age?</Link>
-              <Link to="/answers/how-to-live-longer/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How to live longer</Link>
-              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How long will I live?</Link>
-              <Link to="/answers/how-does-stress-affect-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How stress affects life expectancy</Link>
+              <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ What is my biological age?</Link>
+              <Link to="/answers/how-to-live-longer/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How to live longer</Link>
+              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How long will I live?</Link>
+              <Link to="/answers/how-does-stress-affect-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How stress affects life expectancy</Link>
             </div>
           </div>
         </div>

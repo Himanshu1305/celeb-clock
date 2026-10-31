@@ -67,7 +67,7 @@ export default function BioAgeQuizHindi() {
           placeholder="जैसे 35"
           value={ageText}
           onChange={e => setAgeText(e.target.value)}
-          className="w-full border rounded-xl px-4 py-3 text-xl text-center mb-4 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+          className="w-full border rounded-xl px-4 py-3 text-xl text-center mb-4 focus:outline-none focus:ring-2 focus:ring-brand-navy"
         />
         <p className="text-sm font-semibold text-gray-800 mb-1">लिंग</p>
         <p className="text-xs text-gray-500 mb-2">पुश-अप के पैमाने और कमर की सीमा के लिए</p>
@@ -79,7 +79,7 @@ export default function BioAgeQuizHindi() {
               aria-pressed={sex === s}
               onClick={() => setSex(s)}
               className={`flex-1 py-2 rounded-lg text-sm font-medium ${
-                sex === s ? 'bg-[#0E2238] text-white' : 'bg-white border text-gray-600'
+                sex === s ? 'bg-brand-navy text-white' : 'bg-white border text-gray-600'
               }`}
             >
               {s === 'male' ? 'पुरुष' : 'महिला'}
@@ -90,7 +90,7 @@ export default function BioAgeQuizHindi() {
           type="button"
           disabled={!canStart}
           onClick={() => setStep('quiz')}
-          className="w-full bg-[#0E2238] disabled:opacity-40 text-white font-semibold py-3 rounded-xl"
+          className="w-full bg-brand-navy disabled:opacity-40 text-white font-semibold py-3 rounded-xl"
         >
           Biological Age Quiz शुरू करें →
         </button>
@@ -106,7 +106,7 @@ export default function BioAgeQuizHindi() {
         </p>
         <div className="h-2 bg-slate-200 rounded-full overflow-hidden mb-5">
           <div
-            className="h-2 bg-[#0E2238]"
+            className="h-2 bg-brand-navy"
             style={{ width: `${((current + 1) / BIO_QUESTIONS.length) * 100}%` }}
           />
         </div>
@@ -129,7 +129,7 @@ export default function BioAgeQuizHindi() {
             </div>
             {bmi !== null && (
               <button type="button" onClick={() => answer(bmiOptionId(bmi))}
-                className="w-full bg-[#0E2238] text-white font-semibold py-3 rounded-xl">
+                className="w-full bg-brand-navy text-white font-semibold py-3 rounded-xl">
                 मेरा BMI {bmi} — {hi.options[bmiOptionId(bmi)]} → आगे
               </button>
             )}
@@ -146,7 +146,7 @@ export default function BioAgeQuizHindi() {
             </label>
             {waistNum > 0 && (
               <button type="button" onClick={() => answer(waistOptionId(waistNum, profile.sex))}
-                className="w-full bg-[#0E2238] text-white font-semibold py-3 rounded-xl">
+                className="w-full bg-brand-navy text-white font-semibold py-3 rounded-xl">
                 {waistNum} सेमी — {hi.options[waistOptionId(waistNum, profile.sex)]} → आगे
               </button>
             )}
@@ -158,7 +158,7 @@ export default function BioAgeQuizHindi() {
                 key={o.id}
                 type="button"
                 onClick={() => answer(o.id)}
-                className="w-full text-left px-4 py-3 rounded-xl border border-gray-200 hover:bg-[#2F6FB0]/10 text-sm text-gray-900"
+                className="w-full text-left px-4 py-3 rounded-xl border border-gray-200 hover:bg-brand-blue/10 text-sm text-gray-900"
               >
                 {hi.options[o.id] ?? o.label}
               </button>
@@ -180,7 +180,7 @@ export default function BioAgeQuizHindi() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-5">
-      <div className="bg-gradient-to-b from-slate-900 to-[#2F6FB0] text-white p-6 rounded-2xl text-center">
+      <div className="bg-gradient-to-b from-slate-900 to-brand-blue text-white p-6 rounded-2xl text-center">
         <p className="text-slate-300 text-sm">आपकी अनुमानित Biological Age</p>
         <p className="text-7xl font-black my-2">{bioAge}</p>
         <p className="text-slate-300">असली उम्र: {age} साल</p>

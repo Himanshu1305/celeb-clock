@@ -263,7 +263,7 @@ export const CelebritySearch = () => {
                       <div className="flex flex-wrap gap-2 mt-3">
                         <Link
                           to={ctaHref}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-[#0E2238] text-white text-xs font-medium rounded-lg hover:bg-[#0E2238] transition-colors"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-brand-navy text-white text-xs font-medium rounded-lg hover:bg-brand-navy transition-colors"
                         >
                           {hasCelebPage ? '🌟 View Profile' : '🌟 View Birthday Profile'}
                         </Link>

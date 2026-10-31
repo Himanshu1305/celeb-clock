@@ -12,6 +12,7 @@ import { TermTip } from '@/components/vedic/TermTip';
 import {
   subPeriods, describeDuration, DASHA_LEVEL_NAMES, type DashaSubPeriod, type DashaLevel,
 } from '@/lib/vedic/dashaDeep';
+import { brandVar, ui } from '../../theme/palette';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 function fmt(iso: string): string {
@@ -65,7 +66,7 @@ function Node({ period, level, path }: { period: DashaSubPeriod; level: DashaLev
           <span style={{ width: 16, flex: 'none' }} aria-hidden="true" />
         )}
         <span style={{ fontWeight: 600, color: 'var(--ink)' }}>{period.lord}</span>
-        <span style={{ fontSize: 12, color: 'var(--muted, #667)' }}>
+        <span style={{ fontSize: 12, color: `var(--muted, ${ui.mutedFallback})` }}>
           {levelName} · {fmt(period.start)} – {fmt(period.end)} · {describeDuration(period.start, period.end)}
         </span>
         {current && <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent-text)' }}>• now</span>}
@@ -99,7 +100,7 @@ export function DashaDeepDive({ mahadashas }: DashaDeepDiveProps) {
         data-testid="dasha-deep-toggle"
         style={{
           display: 'flex', alignItems: 'center', gap: 8, width: '100%', textAlign: 'left',
-          padding: '12px 14px', borderRadius: 10, border: '1px solid var(--line, #e4dcc8)',
+          padding: '12px 14px', borderRadius: 10, border: `1px solid var(--line, ${brandVar.line})`,
           background: 'var(--paper)', cursor: 'pointer', fontWeight: 700, color: 'var(--ink)',
         }}
       >
@@ -109,7 +110,7 @@ export function DashaDeepDive({ mahadashas }: DashaDeepDiveProps) {
 
       {open && (
         <div style={{ marginTop: 10 }}>
-          <p style={{ fontSize: 12.5, lineHeight: 1.5, color: 'var(--muted, #667)', margin: '0 0 10px' }}>
+          <p style={{ fontSize: 12.5, lineHeight: 1.5, color: `var(--muted, ${ui.mutedFallback})`, margin: '0 0 10px' }}>
             Expand any period to see the level beneath it. The deeper levels
             (Pratyantardasha, Sookshma and Prana) last from a few <strong>days down to hours</strong>, so they are
             <strong> very sensitive to your exact birth time</strong> — a few minutes' error can shift them.

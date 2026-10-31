@@ -57,9 +57,9 @@ export default function RashiRatnaPage() {
       <div className="section" style={{ maxWidth: 820, margin: '0 auto' }}>
 
         <nav className="text-sm text-gray-500 mb-6 flex gap-1 items-center flex-wrap">
-          <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
+          <Link to="/" className="hover:text-brand-purple">Home</Link>
           <span>›</span>
-          <Link to="/birthstone/" className="hover:text-[#6E5AA6]">Birthstone</Link>
+          <Link to="/birthstone/" className="hover:text-brand-purple">Birthstone</Link>
           <span>›</span>
           <span className="text-gray-600">Rashi Ratna</span>
         </nav>
@@ -75,10 +75,10 @@ export default function RashiRatnaPage() {
         </div>
 
         {/* Part AI — honest cross-reference to the precise, full-chart Gemstones tool. */}
-        <div data-testid="rashi-ratna-crossref" className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-5 my-6">
-          <p className="text-sm text-[#6E5AA6] leading-relaxed">
+        <div data-testid="rashi-ratna-crossref" className="bg-brand-purple/10 border border-brand-purple/30 rounded-xl p-5 my-6">
+          <p className="text-sm text-brand-purple leading-relaxed">
             <strong>This is a general, Moon-sign-based starting point.</strong> It gives one stone per Rashi from the ruling planet alone — a quick, popular reference. For the <strong>precise recommendation based on your full birth chart</strong> — your Ascendant (Lagna), functional benefics, and which planets are actually weak or strong in your chart — use the{' '}
-            <Link to="/gemstones/" className="underline font-semibold hover:text-[#6E5AA6]">Gemstone Recommendation tool</Link>. The two can suggest different stones: this page reads only your Moon sign, while the full-chart method is more tailored, so if they differ, the full-chart result is the more personalised one.
+            <Link to="/gemstones/" className="underline font-semibold hover:text-brand-purple">Gemstone Recommendation tool</Link>. The two can suggest different stones: this page reads only your Moon sign, while the full-chart method is more tailored, so if they differ, the full-chart result is the more personalised one.
           </p>
         </div>
 

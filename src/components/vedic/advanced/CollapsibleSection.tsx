@@ -4,6 +4,7 @@
  * one-sentence answer, so a collapsed section still tells the reader what it found.
  */
 import { useState, type ReactNode } from 'react';
+import { brandVar } from '../../../theme/palette';
 
 const isWide = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function'
   ? window.matchMedia('(min-width: 768px)').matches
@@ -15,7 +16,7 @@ export function CollapsibleSection({ testid, eyebrow, title, answer, children }:
   const [open, setOpen] = useState(isWide);
   return (
     <details data-testid={testid} open={open} onToggle={e => setOpen((e.currentTarget as HTMLDetailsElement).open)}
-      style={{ marginTop: 24, borderTop: '1px solid var(--line,#e4dcc8)', paddingTop: 12 }}>
+      style={{ marginTop: 24, borderTop: `1px solid var(--line,${brandVar.line})`, paddingTop: 12 }}>
       {/* The site's summary style is a flex row with a +/− marker (part-aj.css); one wrapper
           keeps eyebrow, heading and answer stacked on the left of that marker. */}
       <summary>

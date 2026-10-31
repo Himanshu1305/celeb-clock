@@ -57,7 +57,7 @@ export default function BirthdayMonthPage() {
       >
         <section className="section">
           <div className="text-center">
-            <Link to="/birthday/" className="text-[#6E5AA6] hover:underline">Browse all months</Link>
+            <Link to="/birthday/" className="text-brand-purple hover:underline">Browse all months</Link>
           </div>
         </section>
       </CollectionLayout>
@@ -138,14 +138,14 @@ export default function BirthdayMonthPage() {
                 Air:   'hover:bg-blue-50 hover:border-blue-300',
                 Water: 'hover:bg-cyan-50 hover:border-cyan-300',
               };
-              const hoverClass = elementColors[z.element] ?? 'hover:bg-[#6E5AA6]/10 hover:border-[#6E5AA6]/30';
+              const hoverClass = elementColors[z.element] ?? 'hover:bg-brand-purple/10 hover:border-brand-purple/30';
               return (
                 <Link
                   key={d}
                   to={`/birthday/${month}/${d}`}
                   className={`group border border-gray-200 rounded-lg p-2 text-center transition-all ${hoverClass}`}
                 >
-                  <span className="block text-lg font-black text-gray-900 group-hover:text-[#6E5AA6]">
+                  <span className="block text-lg font-black text-gray-900 group-hover:text-brand-purple">
                     {d}
                   </span>
                   <span className="block text-[10px] text-gray-400 mt-0.5 leading-none">
@@ -182,7 +182,7 @@ export default function BirthdayMonthPage() {
                 <p className="text-sm text-gray-700 leading-relaxed">{mc.intro}</p>
               </section>
 
-              <section className="mb-8 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-6">
+              <section className="mb-8 bg-brand-purple/10 border border-brand-purple/30 rounded-xl p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-3">
                   {monthName} Personality Traits
                 </h2>
@@ -223,17 +223,17 @@ export default function BirthdayMonthPage() {
         <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
           <Link
             to={`/birthday/${prevMonth}`}
-            className="flex items-center gap-2 text-sm text-[#6E5AA6] hover:text-[#6E5AA6] font-semibold transition-colors"
+            className="flex items-center gap-2 text-sm text-brand-purple hover:text-brand-purple font-semibold transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             {MONTH_NAMES[prevMonth]}
           </Link>
-          <Link to="/birthday/" className="text-xs text-gray-500 hover:text-[#6E5AA6] transition-colors">
+          <Link to="/birthday/" className="text-xs text-gray-500 hover:text-brand-purple transition-colors">
             All 12 Months
           </Link>
           <Link
             to={`/birthday/${nextMonth}`}
-            className="flex items-center gap-2 text-sm text-[#6E5AA6] hover:text-[#6E5AA6] font-semibold transition-colors"
+            className="flex items-center gap-2 text-sm text-brand-purple hover:text-brand-purple font-semibold transition-colors"
           >
             {MONTH_NAMES[nextMonth]}
             <ChevronRight className="w-4 h-4" />

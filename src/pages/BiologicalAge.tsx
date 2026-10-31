@@ -16,6 +16,7 @@ import {
 } from '@/services/BiologicalAgeService';
 import PageTagline from '@/components/PageTagline';
 import { BIO_AGE_META_DESCRIPTION } from '@/content/biologicalAgeMeta';
+import { palette } from '../theme/palette';
 
 // ── MedTerm tooltip ───────────────────────────────────────────────────────────
 
@@ -77,7 +78,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
   const bmi: number | null = bmiSliderActive ? bmiSlider : calculatedBmi;
 
   let category = '';
-  let bmiColor = '#6E5AA6';
+  let bmiColor = palette.purple;
   let bmiOptionId = '';
 
   if (bmi !== null) {
@@ -107,7 +108,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
         <button
           onClick={() => setUnit('metric')}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            unit === 'metric' ? 'bg-[#0E2238] text-white' : 'text-gray-600 hover:bg-gray-100'
+            unit === 'metric' ? 'bg-brand-navy text-white' : 'text-gray-600 hover:bg-gray-100'
           }`}
         >
           Metric (kg / cm)
@@ -115,7 +116,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
         <button
           onClick={() => setUnit('imperial')}
           className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            unit === 'imperial' ? 'bg-[#0E2238] text-white' : 'text-gray-600 hover:bg-gray-100'
+            unit === 'imperial' ? 'bg-brand-navy text-white' : 'text-gray-600 hover:bg-gray-100'
           }`}
         >
           Imperial (lbs / ft)
@@ -133,7 +134,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   placeholder="70"
                   value={weightKg}
                   onChange={e => { setWeightKg(e.target.value); setBmiSliderActive(false); }}
-                  className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+                  className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-navy"
                 />
                 <span className="absolute right-3 top-2.5 text-gray-600 text-sm">kg</span>
               </div>
@@ -146,7 +147,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   placeholder="170"
                   value={heightCm}
                   onChange={e => { setHeightCm(e.target.value); setBmiSliderActive(false); }}
-                  className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+                  className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-navy"
                 />
                 <span className="absolute right-3 top-2.5 text-gray-600 text-sm">cm</span>
               </div>
@@ -163,7 +164,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                   placeholder="154"
                   value={weightLbs}
                   onChange={e => { setWeightLbs(e.target.value); setBmiSliderActive(false); }}
-                  className="w-full border rounded-lg px-3 py-2 pr-12 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+                  className="w-full border rounded-lg px-3 py-2 pr-12 focus:outline-none focus:ring-2 focus:ring-brand-navy"
                 />
                 <span className="absolute right-3 top-2.5 text-gray-600 text-sm">lbs</span>
               </div>
@@ -177,7 +178,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                     placeholder="5"
                     value={heightFt}
                     onChange={e => { setHeightFt(e.target.value); setBmiSliderActive(false); }}
-                    className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+                    className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-brand-navy"
                   />
                   <span className="absolute right-2 top-2.5 text-gray-600 text-sm">ft</span>
                 </div>
@@ -187,7 +188,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
                     placeholder="8"
                     value={heightIn}
                     onChange={e => { setHeightIn(e.target.value); setBmiSliderActive(false); }}
-                    className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+                    className="w-full border rounded-lg px-3 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-brand-navy"
                   />
                   <span className="absolute right-2 top-2.5 text-gray-600 text-sm">in</span>
                 </div>
@@ -208,12 +209,12 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
             step={0.1}
             value={bmiSlider}
             onChange={e => { setBmiSlider(parseFloat(e.target.value)); setBmiSliderActive(true); }}
-            className="flex-1 accent-[#0E2238]"
+            className="flex-1 accent-brand-navy"
           />
           <span className="text-sm font-bold text-gray-700 w-10 text-right">{bmiSlider.toFixed(1)}</span>
         </div>
         {bmiSliderActive && (
-          <p className="text-xs text-center text-[#2F6FB0] mt-1">Using slider BMI value</p>
+          <p className="text-xs text-center text-brand-blue mt-1">Using slider BMI value</p>
         )}
       </div>
 
@@ -247,7 +248,7 @@ function BMICalculator({ onSelect }: BMICalculatorProps) {
           </p>
           <button
             onClick={() => onSelect(bmiOptionId)}
-            className="bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-8 py-3 rounded-xl transition-colors"
+            className="bg-brand-navy hover:bg-brand-navy text-white font-semibold px-8 py-3 rounded-xl transition-colors"
           >
             Use My BMI ({bmi}) — {category} →
           </button>
@@ -300,7 +301,7 @@ function WaistCalculator({ onSelect, sex }: WaistCalculatorProps) {
             key={u}
             onClick={() => setUnit(u)}
             className={`px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${
-              unit === u ? 'bg-[#0E2238] text-white' : 'text-gray-600 hover:bg-gray-100'
+              unit === u ? 'bg-brand-navy text-white' : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
             {u}
@@ -319,7 +320,7 @@ function WaistCalculator({ onSelect, sex }: WaistCalculatorProps) {
               placeholder="85"
               value={waistCm}
               onChange={e => setWaistCm(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+              className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-navy"
             />
             <span className="absolute right-3 top-2.5 text-gray-600 text-sm">cm</span>
           </div>
@@ -330,7 +331,7 @@ function WaistCalculator({ onSelect, sex }: WaistCalculatorProps) {
               placeholder="33.5"
               value={waistInches}
               onChange={e => setWaistInches(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+              className="w-full border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-brand-navy"
             />
             <span className="absolute right-3 top-2.5 text-gray-600 text-sm">in</span>
           </div>
@@ -354,7 +355,7 @@ function WaistCalculator({ onSelect, sex }: WaistCalculatorProps) {
           </p>
           <button
             onClick={() => onSelect(risk.optionId)}
-            className="bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-8 py-3 rounded-xl transition-colors"
+            className="bg-brand-navy hover:bg-brand-navy text-white font-semibold px-8 py-3 rounded-xl transition-colors"
           >
             Use My Measurement ({waistCmNum.toFixed(0)} cm) →
           </button>
@@ -384,7 +385,7 @@ const CATEGORY_CONFIG: Record<string, { emoji: string; label: string; pillClass:
   neurological: {
     emoji: '🧠',
     label: 'Brain, balance & sleep',
-    pillClass: 'bg-[#6E5AA6]/10 text-[#6E5AA6] border border-[#6E5AA6]/30',
+    pillClass: 'bg-brand-purple/10 text-brand-purple border border-brand-purple/30',
   },
   bodycomp: {
     emoji: '⚖️',
@@ -811,7 +812,7 @@ const BiologicalAge = () => {
             </div>
 
             {/* Concise answer block (AEO) */}
-            <div className="max-w-2xl mx-auto mb-6 bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 text-left">
+            <div className="max-w-2xl mx-auto mb-6 bg-brand-blue/10 border-l-4 border-brand-blue/30 rounded-r-xl p-5 text-left">
               <h2 className="text-lg font-bold text-gray-900 mb-2">What is my biological age?</h2>
               <p className="text-gray-700 leading-relaxed">
                 Biological age is an estimate of how your body is doing compared with your calendar
@@ -825,8 +826,8 @@ const BiologicalAge = () => {
             </div>
 
             {/* How it works — honest basis */}
-            <div className="bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-2xl p-6 mb-6">
-              <h2 className="text-[#2F6FB0] font-bold text-base mb-3">How this estimate works</h2>
+            <div className="bg-brand-blue/10 border border-brand-blue/30 rounded-2xl p-6 mb-6">
+              <h2 className="text-brand-blue font-bold text-base mb-3">How this estimate works</h2>
               <ul className="space-y-2 text-sm text-gray-700 leading-relaxed list-disc pl-5">
                 <li>
                   The cut-offs come from published studies and guidelines — for example age-group
@@ -854,7 +855,7 @@ const BiologicalAge = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-gray-700">
                 {BIO_QUESTIONS.map(item => (
                   <div key={item.id} className="flex items-start gap-2">
-                    <span className="text-[#2F6FB0] mt-0.5 flex-shrink-0 text-xs">●</span>
+                    <span className="text-brand-blue mt-0.5 flex-shrink-0 text-xs">●</span>
                     <span className="text-xs leading-snug">{item.biomarkerName}</span>
                   </div>
                 ))}
@@ -888,7 +889,7 @@ const BiologicalAge = () => {
                 placeholder="e.g. 35"
                 value={chronoAge}
                 onChange={e => setChronoAge(e.target.value)}
-                className="w-full border rounded-xl px-4 py-3 text-xl text-center focus:outline-none focus:ring-2 focus:ring-[#0E2238] mb-4"
+                className="w-full border rounded-xl px-4 py-3 text-xl text-center focus:outline-none focus:ring-2 focus:ring-brand-navy mb-4"
               />
               <p className="block text-sm font-semibold text-gray-800 mb-1">Sex</p>
               <p className="text-xs text-gray-500 mb-2">Used for the push-up benchmark and waist cut-off</p>
@@ -900,7 +901,7 @@ const BiologicalAge = () => {
                     onClick={() => setSex(s)}
                     aria-pressed={sex === s}
                     className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      sex === s ? 'bg-[#0E2238] text-white' : 'bg-white border text-gray-600 hover:bg-gray-50'
+                      sex === s ? 'bg-brand-navy text-white' : 'bg-white border text-gray-600 hover:bg-gray-50'
                     }`}
                   >
                     {s === 'male' ? 'Male' : 'Female'}
@@ -910,7 +911,7 @@ const BiologicalAge = () => {
               <button
                 disabled={!canStart}
                 onClick={handleStart}
-                className="w-full bg-[#0E2238] hover:bg-[#0E2238] disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
+                className="w-full bg-brand-navy hover:bg-brand-navy disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl flex items-center justify-center gap-2 transition-colors"
               >
                 Start the Biological Age Quiz
                 <ArrowRight className="w-4 h-4" />
@@ -945,7 +946,7 @@ const BiologicalAge = () => {
               </div>
               <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
                 <div
-                  className="h-2 bg-[#0E2238] rounded-full transition-all duration-300"
+                  className="h-2 bg-brand-navy rounded-full transition-all duration-300"
                   style={{ width: `${((current + 1) / BIO_QUESTIONS.length) * 100}%` }}
                 />
               </div>
@@ -976,7 +977,7 @@ const BiologicalAge = () => {
 
               {/* Motivational context */}
               {q.motivationalContext && (
-                <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 px-3 py-2 text-sm text-[#2F6FB0] mb-4 rounded-r-lg leading-relaxed">
+                <div className="bg-brand-blue/10 border-l-4 border-brand-blue/30 px-3 py-2 text-sm text-brand-blue mb-4 rounded-r-lg leading-relaxed">
                   💡 {q.motivationalContext}
                 </div>
               )}
@@ -1010,7 +1011,7 @@ const BiologicalAge = () => {
                       <button
                         key={opt.id}
                         onClick={() => handleAnswer(q.id, opt.id)}
-                        className="w-full text-left px-4 py-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-all"
+                        className="w-full text-left px-4 py-3 rounded-xl border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-all"
                       >
                         <span className="block font-medium text-sm text-gray-900">{opt.label}</span>
                         {opt.sublabel && (
@@ -1037,7 +1038,7 @@ const BiologicalAge = () => {
           <div className="max-w-3xl mx-auto pb-16 space-y-6">
 
             {/* ── SECTION A: INSPIRED ── */}
-            <div className="bg-gradient-to-b from-slate-900 to-[#2F6FB0] text-white p-8 rounded-2xl">
+            <div className="bg-gradient-to-b from-slate-900 to-brand-blue text-white p-8 rounded-2xl">
               <div className="text-center">
                 <p className="text-slate-400 text-sm uppercase tracking-widest font-medium">
                   Your Estimated Biological Age
@@ -1270,7 +1271,7 @@ const BiologicalAge = () => {
               )}
 
               {/* Longevity CTA */}
-              <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-6 text-center mt-6">
+              <div className="bg-gradient-to-r from-brand-blue to-brand-blue rounded-2xl p-6 text-center mt-6">
                 <p className="text-white font-semibold text-base mb-1">
                   🔬 Curious how habits relate to life expectancy?
                 </p>
@@ -1280,7 +1281,7 @@ const BiologicalAge = () => {
                 </p>
                 <Link
                   to="/life-expectancy/"
-                  className="inline-block bg-white text-[#2F6FB0] font-semibold px-6 py-3 rounded-xl hover:bg-[#2F6FB0]/10 transition-colors"
+                  className="inline-block bg-white text-brand-blue font-semibold px-6 py-3 rounded-xl hover:bg-brand-blue/10 transition-colors"
                 >
                   Calculate My Life Expectancy →
                 </Link>
@@ -1363,7 +1364,7 @@ const BiologicalAge = () => {
               { path: '/biological-age-vs-chronological-age/', label: 'Biological vs Chronological Age' },
               { path: '/answers/what-is-my-biological-age/', label: 'What Is My Biological Age?' },
             ].map((t) => (
-              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-gray-700 hover:text-[#2F6FB0] transition-colors">{t.label}</Link>
+              <Link key={t.path} to={t.path} className="text-sm px-3 py-1.5 rounded-full border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 text-gray-700 hover:text-brand-blue transition-colors">{t.label}</Link>
             ))}
           </div>
         </section>

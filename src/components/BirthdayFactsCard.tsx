@@ -4,6 +4,7 @@ import { Download, Share2, Loader2 } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { getGenerationBasic } from '@/services/GenerationService';
 import { numberOneSong } from '@/data/birthdaySongs';
+import { palette, brandVar, ui } from '../theme/palette';
 
 // Self-contained Western zodiac (emoji + name) so the card never depends on async data.
 function zodiac(date: Date): string {
@@ -89,9 +90,9 @@ export function BirthdayFactsCard({ name, birthDate, celebrityTwin }: Props) {
         <div
           ref={cardRef}
           className="w-full max-w-[420px] rounded-3xl p-7 text-white relative overflow-hidden"
-          style={{ background: 'linear-gradient(150deg,#0E2238 0%,#14314f 55%,#1d4a74 100%)' }}
+          style={{ background: `linear-gradient(150deg,${brandVar.navy} 0%,${ui.navyMid} 55%,${ui.navyLight} 100%)` }}
         >
-          <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full" style={{ background: 'radial-gradient(circle,#B8862F55,transparent 70%)' }} />
+          <div className="absolute -right-10 -top-10 w-40 h-40 rounded-full" style={{ background: `radial-gradient(circle,${palette.goldDeep}55,transparent 70%)` }} />
           <p className="text-xs tracking-widest uppercase opacity-70">Born on</p>
           <p className="text-2xl font-bold mt-1">{dateLabel}</p>
           {name && <p className="text-sm opacity-80 mt-0.5">for {name}</p>}
@@ -105,7 +106,7 @@ export function BirthdayFactsCard({ name, birthDate, celebrityTwin }: Props) {
           </div>
 
           <div className="mt-7 flex items-center justify-between">
-            <span className="text-xs font-semibold tracking-wide" style={{ color: '#E7C877' }}>bornclock.com</span>
+            <span className="text-xs font-semibold tracking-wide" style={{ color: ui.goldBright }}>bornclock.com</span>
             <span className="text-[11px] opacity-60 italic">Know your time. Live it well.</span>
           </div>
         </div>

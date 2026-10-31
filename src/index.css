@@ -9,6 +9,44 @@
 
 @layer base {
   :root {
+    /* ── Brand palette (B13) — SINGLE SOURCE OF TRUTH for brand colours ───────────────────
+       RGB channels so Tailwind opacity modifiers work: brand-<name> → rgb(var(--brand-<name>) / <alpha>).
+       Read by tailwind.config.ts (text-brand-purple, bg-brand-navy/10 …), src/styles/part-aj.css
+       (.paj --navy/--accent …, via scripts/build-paj-css.mjs) and inline React styles (brandVar.*).
+       src/theme/palette.ts mirrors these as hex for canvas / SVG / email / PDF output, and
+       src/theme/__tests__/palette.test.ts fails if the two disagree. To change a brand colour,
+       edit its line here and the same key in palette.ts — nothing else. */
+    --brand-navy: 14 34 56;             /* #0E2238 */
+    --brand-navy-hover: 26 52 80;       /* #1A3450 */
+    --brand-ink: 26 34 48;              /* #1A2230 */
+    --brand-ink-soft: 58 74 90;         /* #3A4A5A */
+    --brand-muted: 91 100 114;          /* #5B6472 */
+    --brand-ivory: 250 247 240;         /* #FAF7F0 */
+    --brand-paper: 255 255 255;         /* #FFFFFF */
+    --brand-line: 228 220 200;          /* #E4DCC8 */
+    --brand-line-cool: 221 228 234;     /* #DDE4EA */
+    --brand-line-blue: 215 225 234;     /* #D7E1EA */
+    --brand-mist: 241 246 250;          /* #F1F6FA */
+    --brand-purple: 110 90 166;         /* #6E5AA6 */
+    --brand-purple-light: 180 166 219;  /* #B4A6DB */
+    --brand-purple-pale: 201 191 240;   /* #C9BFF0 */
+    --brand-purple-dark: 76 62 120;     /* #4C3E78 */
+    --brand-purple-ink: 75 61 128;      /* #4B3D80 */
+    --brand-purple-deep: 75 58 140;     /* #4B3A8C */
+    --brand-blue: 47 111 176;           /* #2F6FB0 */
+    --brand-blue-light: 127 176 224;    /* #7FB0E0 */
+    --brand-blue-dark: 16 58 92;        /* #103A5C */
+    --brand-gold: 198 161 91;           /* #C6A15B */
+    --brand-gold-hover: 184 145 75;     /* #B8914B */
+    --brand-gold-deep: 184 134 47;      /* #B8862F */
+    --brand-gold-ink: 116 87 30;        /* #74571E */
+    --brand-gold-text: 92 70 32;        /* #5C4620 */
+    --brand-coral: 240 113 90;          /* #F0715A */
+    --brand-coral-ink: 181 67 42;       /* #B5432A */
+    --brand-green: 46 158 123;          /* #2E9E7B */
+    --brand-green-ink: 35 122 96;       /* #237A60 */
+    --brand-whatsapp: 30 190 93;        /* #1EBE5D */
+
     /* Warm ivory canvas + navy ink */
     --background: 42 50% 96%;      /* ivory #FAF7F0 */
     --foreground: 211 45% 15%;     /* navy ink */
@@ -408,13 +446,13 @@
   tfoot .report-print-cell  { padding-bottom: 1.5cm; }
   .report-running-header {
     display: flex !important; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid var(--hairline, #D7E1EA); padding: 9px 0;
+    border-bottom: 1px solid var(--hairline, rgb(var(--brand-line-blue))); padding: 9px 0;
     font-size: 9px; letter-spacing: .16em; text-transform: uppercase;
     color: var(--muted, #8A9BA8); background: white;
   }
   .report-print-footer {
     display: flex !important; align-items: center; justify-content: center;
-    padding: 8px 0; border-top: 1px solid var(--hairline, #D7E1EA);
+    padding: 8px 0; border-top: 1px solid var(--hairline, rgb(var(--brand-line-blue)));
     font-size: 9px; color: var(--muted, #8A9BA8); letter-spacing: 0.3px; background: #fff;
   }
   .report-cover-section {

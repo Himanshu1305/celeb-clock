@@ -73,12 +73,12 @@ export function BirthTimeVedicSection({ dob, onDetailsChange }: {
   };
 
   return (
-    <div className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/50 p-4">
-      <p className="text-sm font-semibold text-[#6E5AA6] mb-2">🌙 Accurate Vedic profile (optional)</p>
+    <div className="rounded-xl border border-brand-purple/30 bg-brand-purple/50 p-4">
+      <p className="text-sm font-semibold text-brand-purple mb-2">🌙 Accurate Vedic profile (optional)</p>
 
       {canOfferSaved && (
         <button type="button" data-testid="vedic-use-saved" onClick={useSavedDetails}
-                className="mb-3 text-sm text-[#6E5AA6] underline hover:text-[#6E5AA6]">
+                className="mb-3 text-sm text-brand-purple underline hover:text-brand-purple">
           Use my saved birth time &amp; city ({profile!.city.name})
         </button>
       )}
@@ -110,14 +110,14 @@ export function BirthTimeVedicSection({ dob, onDetailsChange }: {
 
       {hasTime && city && !result && (
         <button type="button" onClick={compute} disabled={loading}
-                className="mt-3 px-4 py-2 bg-[#0E2238] text-white text-sm font-semibold rounded-lg hover:bg-[#0E2238] disabled:opacity-60">
+                className="mt-3 px-4 py-2 bg-brand-navy text-white text-sm font-semibold rounded-lg hover:bg-brand-navy disabled:opacity-60">
           {loading ? 'Calculating…' : 'Reveal my Vedic profile →'}
         </button>
       )}
 
       {failed && (
         <p className="text-xs text-gray-500 mt-2">
-          Precise Vedic chart is included in the full report — <a href="/kundali/" className="text-[#6E5AA6] underline">generate your Kundali</a>.
+          Precise Vedic chart is included in the full report — <a href="/kundali/" className="text-brand-purple underline">generate your Kundali</a>.
         </p>
       )}
 

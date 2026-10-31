@@ -60,7 +60,7 @@ const CLOSING = (
     Most birthday sites stop at a name and a photo. We go further — the Nakshatra,
     zodiac and numerology behind every celebrity twin, your age to the exact second,
     and a fresh set of birthdays every single day.
-    <strong className="text-[#6E5AA6]"> Come find who you share your day with.</strong>
+    <strong className="text-brand-purple"> Come find who you share your day with.</strong>
   </p>
 );
 
@@ -86,7 +86,7 @@ function StatCounter({ value, label, suffix = '' }: LandingStat) {
   }, [value]);
   return (
     <div className="rounded-2xl border border-border bg-card p-6 text-center" data-testid="landing-stat">
-      <div className="text-4xl md:text-5xl font-black text-[#6E5AA6] tabular-nums" aria-hidden="true">{display}{suffix}</div>
+      <div className="text-4xl md:text-5xl font-black text-brand-purple tabular-nums" aria-hidden="true">{display}{suffix}</div>
       <span className="sr-only">{value}{suffix} {label}</span>
       <p className="text-sm text-muted-foreground mt-1" aria-hidden="true">{label}</p>
     </div>
@@ -105,14 +105,14 @@ function Tier({ tier }: { tier: LandingTier }) {
       <h2 className="text-xl md:text-2xl font-bold text-foreground mb-3">{tier.heading}</h2>
       <div className={TIER_GRID[tier.variant]}>
         {tier.tools.map(t => {
-          const base = `group block rounded-2xl border border-border bg-card transition-all hover:border-[#6E5AA6]/50 hover:-translate-y-0.5`;
+          const base = `group block rounded-2xl border border-border bg-card transition-all hover:border-brand-purple/50 hover:-translate-y-0.5`;
           if (tier.variant === 'flagship') {
             return (
               <Link key={t.to} to={t.to} data-testid={`landing-tool-${t.to.replace(/\//g, '')}`} className={`${base} p-6 hover:shadow-lg`}>
                 <div className="text-3xl mb-2" aria-hidden="true">{t.emoji}</div>
                 <h3 className="font-bold text-lg text-foreground">{t.name}</h3>
                 {t.desc && <p className="text-sm text-muted-foreground leading-relaxed mt-1">{t.desc}</p>}
-                <span className="inline-flex items-center gap-1 text-sm text-[#6E5AA6] font-medium mt-3">
+                <span className="inline-flex items-center gap-1 text-sm text-brand-purple font-medium mt-3">
                   Open {t.name} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
                 </span>
               </Link>
@@ -179,7 +179,7 @@ export default function BirthdayFunLanding() {
         ],
         note: '© 2026 BornClock.',
       }}
-      h1={(<>{HEADLINE.lead}{' '}<span className="text-[#6E5AA6]">{HEADLINE.accent}</span></>)}
+      h1={(<>{HEADLINE.lead}{' '}<span className="text-brand-purple">{HEADLINE.accent}</span></>)}
     >
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: schemaJson }} />
 
@@ -190,14 +190,14 @@ export default function BirthdayFunLanding() {
             <div className="flex items-center gap-1 rounded-full border border-border bg-background/80 p-1 text-xs">
               <label className="sr-only" htmlFor={`${TESTID}-lang`}>Page language</label>
               <button type="button" data-testid="landing-lang-en" onClick={() => onLang('en')} aria-pressed={lang === 'en'}
-                className={`px-3 py-1 rounded-full font-medium transition-colors ${lang === 'en' ? 'bg-[#0E2238] text-white' : 'text-muted-foreground hover:text-foreground'}`}>EN</button>
+                className={`px-3 py-1 rounded-full font-medium transition-colors ${lang === 'en' ? 'bg-brand-navy text-white' : 'text-muted-foreground hover:text-foreground'}`}>EN</button>
               <button type="button" data-testid="landing-lang-hi" onClick={() => onLang('hi')} aria-pressed={false}
                 className="px-3 py-1 rounded-full font-medium text-muted-foreground hover:text-foreground transition-colors">हि</button>
             </div>
           </div>
 
           <section className="text-center max-w-3xl mx-auto" data-testid="landing-hero">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#6E5AA6]/10 border border-[#6E5AA6]/20 text-xs font-medium text-[#6E5AA6]">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-purple/10 border border-brand-purple/20 text-xs font-medium text-brand-purple">
               <BadgeIcon className="w-3.5 h-3.5" aria-hidden="true" /> {BADGE.label}
             </span>
             <p className="mt-4 text-base md:text-lg text-muted-foreground leading-relaxed" data-testid="landing-answer">{DIRECT_ANSWER}</p>
@@ -208,7 +208,7 @@ export default function BirthdayFunLanding() {
             )}
             <div className="mt-6">
               <Link to={CTA.to} data-testid="landing-hero-cta"
-                className="inline-flex items-center gap-2 bg-[#0E2238] text-white px-6 py-3 rounded-xl text-base font-semibold hover:bg-[#0E2238] transition-colors">
+                className="inline-flex items-center gap-2 bg-brand-navy text-white px-6 py-3 rounded-xl text-base font-semibold hover:bg-brand-navy transition-colors">
                 {CTA.label} <ArrowRight className="w-5 h-5" aria-hidden="true" />
               </Link>
               {SAVED_PROFILE_HINT_TO && hasSaved && (
@@ -231,7 +231,7 @@ export default function BirthdayFunLanding() {
 
           {/* CLOSING */}
           <section className="mt-8 mb-4" data-testid="landing-closing">
-            <div className="rounded-2xl border border-[#6E5AA6]/20 bg-gradient-to-br from-[#6E5AA6]/5 to-[#6E5AA6]/5 p-6 md:p-8 text-center max-w-3xl mx-auto">
+            <div className="rounded-2xl border border-brand-purple/20 bg-gradient-to-br from-brand-purple/5 to-brand-purple/5 p-6 md:p-8 text-center max-w-3xl mx-auto">
               {CLOSING}
             </div>
           </section>

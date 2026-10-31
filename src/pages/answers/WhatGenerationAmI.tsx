@@ -39,8 +39,8 @@ export default function WhatGenerationAmI() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
+          <div className="bg-brand-blue/10 border-l-4 border-brand-blue/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-brand-blue leading-relaxed">
               Your generation is determined by your birth year. Gen Alpha: 2013+. Gen Z: 1997–2012. Millennials: 1981–1996. Gen X: 1965–1980. Baby Boomers: 1946–1964. Silent Generation: 1928–1945. Each generation was shaped by the technology, world events, and cultural forces of their formative years.
             </p>
           </div>
@@ -75,7 +75,7 @@ export default function WhatGenerationAmI() {
             <p className="text-lg font-bold text-gray-900 mb-2">Find My Generation and Birthday Insights</p>
             <p className="text-sm text-gray-500 mb-4">Instant · Celebrity twins · Zodiac · Live age countdown</p>
             <Link to="/age-calculator/"
-              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+              className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
               Find My Generation and Birthday Insights →
             </Link>
           </div>
@@ -83,10 +83,10 @@ export default function WhatGenerationAmI() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-to-calculate-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How to calculate my exact age</Link>
-              <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ Who shares my birthday?</Link>
-              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How long will I live?</Link>
-              <Link to="/answers/what-is-my-zodiac-sign/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is my zodiac sign?</Link>
+              <Link to="/answers/how-to-calculate-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How to calculate my exact age</Link>
+              <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ Who shares my birthday?</Link>
+              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How long will I live?</Link>
+              <Link to="/answers/what-is-my-zodiac-sign/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ What is my zodiac sign?</Link>
             </div>
           </div>
         </div>

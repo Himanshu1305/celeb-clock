@@ -359,8 +359,8 @@ export function ArticlesIndexPage() {
                 aria-pressed={active === cat}
                 className={`px-4 py-2 rounded-full text-sm font-bold border-2 transition-colors ${
                   active === cat
-                    ? 'bg-[#0E2238] text-white border-[#6E5AA6]/30'
-                    : 'bg-white text-[#6E5AA6] border-[#6E5AA6]/30 hover:border-[#6E5AA6]/30'
+                    ? 'bg-brand-navy text-white border-brand-purple/30'
+                    : 'bg-white text-brand-purple border-brand-purple/30 hover:border-brand-purple/30'
                 }`}
               >
                 {cat}
@@ -376,10 +376,10 @@ export function ArticlesIndexPage() {
                 href={canonicalPath(a.href)}
                 data-testid="article-card"
                 className="block bg-white border-2 border-gray-100 rounded-2xl p-5
-                           hover:border-[#6E5AA6]/30 hover:shadow-md transition-all"
+                           hover:border-brand-purple/30 hover:shadow-md transition-all"
               >
                 <span className="inline-block text-[11px] font-bold uppercase tracking-wide
-                                 text-[#6E5AA6] bg-[#6E5AA6]/10 rounded-full px-2.5 py-1 mb-3">
+                                 text-brand-purple bg-brand-purple/10 rounded-full px-2.5 py-1 mb-3">
                   {a.category}
                 </span>
                 <h2 className="text-lg font-black text-gray-900 leading-snug mb-2">
@@ -391,7 +391,7 @@ export function ArticlesIndexPage() {
           </div>
 
           {/* CTA */}
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-brand-purple to-brand-purple rounded-2xl
                           p-8 text-center text-white mt-12">
             <h2 className="text-2xl font-black mb-2">Start With Your Own Numbers</h2>
             <p className="text-white/90 mb-6 max-w-xl mx-auto">
@@ -403,16 +403,16 @@ export function ArticlesIndexPage() {
               <a
                 href="/birthday-report/"
                 data-testid="cta-birthday-report"
-                className="inline-block bg-white text-[#6E5AA6] font-black px-6 py-3
-                           rounded-full text-base hover:bg-[#6E5AA6]/10 transition-colors"
+                className="inline-block bg-white text-brand-purple font-black px-6 py-3
+                           rounded-full text-base hover:bg-brand-purple/10 transition-colors"
               >
                 Generate My Birthday Report →
               </a>
               <a
                 href="/longevity-calculator/"
                 data-testid="cta-longevity-calculator"
-                className="inline-block bg-[#0E2238] text-white font-black px-6 py-3
-                           rounded-full text-base hover:bg-[#0E2238] transition-colors"
+                className="inline-block bg-brand-navy text-white font-black px-6 py-3
+                           rounded-full text-base hover:bg-brand-navy transition-colors"
               >
                 Estimate My Life Expectancy →
               </a>

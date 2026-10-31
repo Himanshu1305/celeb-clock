@@ -44,7 +44,7 @@ export function GunaMilanResultView({
     <div data-testid={testid} className="space-y-4" lang={hi ? 'hi' : undefined}>
       <div className="text-center rounded-xl border border-border p-4">
         <div className="text-sm text-muted-foreground">{hi ? <>कुल <TermTip id="ashtakoota" lang="hi">गुण मिलान</TermTip></> : <>Total <TermTip id="ashtakoota">Guna Milan</TermTip></>}</div>
-        <div data-testid={`${testid}-total`} className="text-4xl font-black text-[#6E5AA6]">{result.total} / 36</div>
+        <div data-testid={`${testid}-total`} className="text-4xl font-black text-brand-purple">{result.total} / 36</div>
         <div className="font-semibold text-foreground">{hi ? COMPAT_HI[result.compatibility] : result.compatibility}</div>
         <NumberNote testid={`${testid}-total-note`}>{hi ? gunaTotalNoteHi(result.total) : gunaTotalNote(result.total)}</NumberNote>
       </div>
@@ -72,17 +72,17 @@ export function GunaMilanResultView({
               <td className="px-3 py-1.5 text-right font-semibold text-foreground">{k.score} / {k.max}</td>
             </tr>
           ))}
-          <tr className="border-t border-border"><td className="px-3 py-1.5 font-semibold text-foreground">{hi ? 'कुल' : 'Total'}</td><td className="px-3 py-1.5 text-right font-bold text-[#6E5AA6]">{result.total} / 36</td></tr>
+          <tr className="border-t border-border"><td className="px-3 py-1.5 font-semibold text-foreground">{hi ? 'कुल' : 'Total'}</td><td className="px-3 py-1.5 text-right font-bold text-brand-purple">{result.total} / 36</td></tr>
         </tbody>
       </table>
 
       <div className="space-y-2">
         <p className="text-xs text-muted-foreground">{hi ? 'आठों कूट क्या देखते हैं — सरल भाषा में:' : 'What each of the eight parts looks at:'}</p>
         {result.kootas.map(k => (
-          <div key={k.key} data-testid={`${testid}-koota-${k.key}`} className={`rounded-lg border p-3 ${k.heavy ? 'border-[#6E5AA6]/30 bg-[#6E5AA6]/10' : 'border-border'}`}>
+          <div key={k.key} data-testid={`${testid}-koota-${k.key}`} className={`rounded-lg border p-3 ${k.heavy ? 'border-brand-purple/30 bg-brand-purple/10' : 'border-border'}`}>
             <div className="flex items-center justify-between">
               <div className="font-semibold text-foreground">{hi ? KOOTA_HI[k.key] : KOOTA_EN[k.key] ?? k.label}</div>
-              <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-[#6E5AA6]'}`}>{k.score} / {k.max}</div>
+              <div className={`font-bold ${k.score === 0 ? 'text-amber-600' : 'text-brand-purple'}`}>{k.score} / {k.max}</div>
             </div>
             <NumberNote testid={`${testid}-note-${k.key}`}>{hi ? kootaScoreNoteHi(k.key, k.score, k.max) : kootaScoreNote(k.key, k.score, k.max)}</NumberNote>
             <div className="text-sm text-muted-foreground mt-1">{hi ? getTermDef(KOOTA_TERM[k.key])?.hi : withNames(k.explanation)}</div>

@@ -39,8 +39,8 @@ export default function HowToCalculateAge() {
       h1="How to Calculate Your Exact Age in Years, Months, Days and Seconds"
     >
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <div className="bg-[#6E5AA6]/10 border-l-4 border-[#6E5AA6]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#6E5AA6] leading-relaxed">
+          <div className="bg-brand-purple/10 border-l-4 border-brand-purple/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-brand-purple leading-relaxed">
               Your exact age is the difference between your date of birth and the current date and time, expressed in years, months, days, hours, minutes, and seconds. It updates every second. BornClock calculates this live and also shows your total days lived, generation, and which celebrities share your birthday.
             </p>
           </div>
@@ -81,7 +81,7 @@ export default function HowToCalculateAge() {
             <p className="text-lg font-bold text-gray-900 mb-2">Calculate My Exact Age Right Now</p>
             <p className="text-sm text-gray-500 mb-4">Live countdown · Seconds · Generations · Celebrity twins</p>
             <Link to="/age-calculator/"
-              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+              className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
               Calculate My Exact Age Right Now →
             </Link>
           </div>
@@ -89,11 +89,11 @@ export default function HowToCalculateAge() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-many-days-until-my-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How many days until my birthday?</Link>
-              <Link to="/answers/what-generation-am-i/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What generation am I?</Link>
-              <Link to="/answers/how-old-am-i-on-mars/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How old am I on Mars?</Link>
-              <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Who shares my birthday?</Link>
-              <Link to="/answers/what-is-my-zodiac-sign/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my zodiac sign?</Link>
+              <Link to="/answers/how-many-days-until-my-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How many days until my birthday?</Link>
+              <Link to="/answers/what-generation-am-i/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ What generation am I?</Link>
+              <Link to="/answers/how-old-am-i-on-mars/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How old am I on Mars?</Link>
+              <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ Who shares my birthday?</Link>
+              <Link to="/answers/what-is-my-zodiac-sign/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ What is my zodiac sign?</Link>
             </div>
           </div>
         </div>

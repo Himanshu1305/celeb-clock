@@ -89,7 +89,7 @@ export default function BabyNamesPage() {
           </div>
           <button data-testid="baby-compute-btn" onClick={computeFromBirth}
                   disabled={computing || !city || !/^\d{4}-\d{2}-\d{2}$/.test(dob) || !/^\d{2}:\d{2}$/.test(time)}
-                  className="w-full py-2.5 rounded-lg bg-[#0E2238] text-white font-semibold hover:bg-[#0E2238] disabled:opacity-50">
+                  className="w-full py-2.5 rounded-lg bg-brand-navy text-white font-semibold hover:bg-brand-navy disabled:opacity-50">
             {computing ? 'Finding Nakshatra…' : 'Find Nakshatra from birth details →'}
           </button>
           {failed && <p className="text-xs text-muted-foreground">Couldn't compute the Nakshatra automatically — pick it below instead.</p>}

@@ -1,6 +1,7 @@
 import { CountryInfo } from './CountryDetectionService';
 import { RAZORPAY_PLANS } from '@/lib/pricing';
 import { supabase } from '@/integrations/supabase/client';
+import { palette } from '../theme/palette';
 
 // Payment endpoints identify the buyer from the Supabase access token, never from
 // a userId in the body (one payment must only ever unlock the account that paid).
@@ -136,7 +137,7 @@ export async function initiateSubscription(options: SubscriptionOptions): Promis
       buyer_state_code: buyerStateCode ?? '',
       tax_mode: taxMode ?? '',
     },
-    theme: { color: '#0E2238' },
+    theme: { color: palette.navy },
     modal: {
       ondismiss: onDismiss,
       confirm_close: true,
@@ -264,7 +265,7 @@ export async function initiateOrderPayment(options: OrderPaymentOptions): Promis
     image: 'https://bornclock.com/favicon.png',
     prefill: { email: userEmail, name: userName || '' },
     notes: { email: userEmail, userId, product },
-    theme: { color: '#0E2238' },
+    theme: { color: palette.navy },
     modal: { ondismiss: onDismiss, confirm_close: true, escape: false },
     handler: async (response: any) => {
       try {

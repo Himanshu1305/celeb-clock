@@ -103,7 +103,7 @@ export function BirthDetailsForm({
       )}
 
       <button data-testid={`${p}-generate-btn`} onClick={submit} disabled={!canSubmit}
-              className="w-full py-3 rounded-lg bg-[#0E2238] text-white font-semibold hover:bg-[#0E2238] disabled:opacity-50">
+              className="w-full py-3 rounded-lg bg-brand-navy text-white font-semibold hover:bg-brand-navy disabled:opacity-50">
         {loading ? loadingLabel : submitLabel}
       </button>
       {!canSubmit && !loading && (

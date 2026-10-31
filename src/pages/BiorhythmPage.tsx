@@ -9,6 +9,7 @@ import { calculateBiorhythm, getBiorhythmStatus, getBiorhythmInsight, getBiorhyt
 import { useReportPrice } from '@/hooks/useCurrency';
 import { TermTip, NumberNote } from '@/components/vedic/TermTip';
 import { biorhythmNote } from '@/lib/vedic/numberNotes';
+import { brandVar, ui } from '../theme/palette';
 
 const CYCLE_TERM: Record<string, string> = { Physical: 'physicalCycle', Emotional: 'emotionalCycle', Intellectual: 'intellectualCycle' };
 
@@ -162,15 +163,15 @@ export default function BiorhythmPage() {
                   <p className="text-sm font-semibold text-gray-700 mb-4">30-Day Biorhythm Chart</p>
                   <ResponsiveContainer width="100%" height={260}>
                     <LineChart data={chartData} margin={{ top: 5, right: 5, left: -20, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                      <CartesianGrid strokeDasharray="3 3" stroke={ui.chartGridLight} />
                       <XAxis dataKey="label" tick={{ fontSize: 9 }} interval={4} />
                       <YAxis domain={[-100, 100]} tick={{ fontSize: 9 }} />
                       <Tooltip formatter={(v: number) => [`${v > 0 ? '+' : ''}${v}%`]} />
-                      <Legend wrapperStyle={{ fontSize: 11 }} formatter={(value) => <span style={{ color: "#1A2230" }}>{value}</span>} />
-                      <ReferenceLine y={0} stroke="#ccc" strokeDasharray="4 2" />
-                      <Line type="monotone" dataKey="physical" stroke="#f43f5e" strokeWidth={2} dot={false} name="Physical" />
-                      <Line type="monotone" dataKey="emotional" stroke="#3b82f6" strokeWidth={2} dot={false} name="Emotional" />
-                      <Line type="monotone" dataKey="intellectual" stroke="#f59e0b" strokeWidth={2} dot={false} name="Intellectual" />
+                      <Legend wrapperStyle={{ fontSize: 11 }} formatter={(value) => <span style={{ color: brandVar.ink }}>{value}</span>} />
+                      <ReferenceLine y={0} stroke={ui.chartGrid} strokeDasharray="4 2" />
+                      <Line type="monotone" dataKey="physical" stroke={ui.rose500} strokeWidth={2} dot={false} name="Physical" />
+                      <Line type="monotone" dataKey="emotional" stroke={ui.blue500} strokeWidth={2} dot={false} name="Emotional" />
+                      <Line type="monotone" dataKey="intellectual" stroke={ui.amber500} strokeWidth={2} dot={false} name="Intellectual" />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>

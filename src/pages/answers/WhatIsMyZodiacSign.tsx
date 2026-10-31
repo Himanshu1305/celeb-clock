@@ -93,7 +93,7 @@ export default function WhatIsMyZodiacSign() {
             <p className="text-lg font-bold text-gray-900 mb-2">Discover All 3 of Your Zodiac Signs</p>
             <p className="text-sm text-gray-500 mb-4">Western · Vedic Rashi · Chinese Zodiac — all from your birthday</p>
             <Link to="/"
-              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+              className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
               Discover All 3 of My Zodiac Signs →
             </Link>
           </div>
@@ -101,10 +101,10 @@ export default function WhatIsMyZodiacSign() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/what-is-my-life-path-number/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What is my Life Path number?</Link>
-              <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ Who shares my birthday?</Link>
-              <Link to="/answers/what-generation-am-i/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ What generation am I?</Link>
-              <Link to="/answers/how-old-am-i-on-mars/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors text-sm text-gray-700 hover:text-[#6E5AA6]">→ How old am I on Mars?</Link>
+              <Link to="/answers/what-is-my-life-path-number/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ What is my Life Path number?</Link>
+              <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ Who shares my birthday?</Link>
+              <Link to="/answers/what-generation-am-i/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ What generation am I?</Link>
+              <Link to="/answers/how-old-am-i-on-mars/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How old am I on Mars?</Link>
             </div>
           </div>
       </section>

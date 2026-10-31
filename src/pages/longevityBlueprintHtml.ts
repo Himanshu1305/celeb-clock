@@ -1,5 +1,6 @@
 import { LongevityResult, calculateLongevityScore, EPIGENETIC_HABITS } from '@/services/LongevityCalculationService';
 import { buildActionPlanPhases } from '@/utils/actionPlanBuilder';
+import { palette } from '../theme/palette';
 
 export interface BlueprintHtmlOptions {
   /** Explicit recipient name (highest precedence). */
@@ -417,7 +418,7 @@ export function buildLongevityBlueprintHtml(
       emoji: string; name: string; stat: string; color: string; border: string;
       recs: Array<{ emoji: string; title: string; impact?: number; quickWin: string; source: string }>;
     }> = [
-      { emoji: '😴', name: 'Sleep', stat: '7–9 hrs/night linked to +2.5 yrs life expectancy', color: '#6E5AA6', border: '#a5b4fc',
+      { emoji: '😴', name: 'Sleep', stat: '7–9 hrs/night linked to +2.5 yrs life expectancy', color: palette.purple, border: '#a5b4fc',
         recs: [
           { emoji: '⏰', title: 'Consistent Sleep Schedule', impact: 1.5, quickWin: 'Set both a bedtime alarm and wake alarm — keep them on weekends too.', source: 'Sleep Medicine Reviews, 2022' },
           { emoji: '📵', title: 'Screen-Free 90 Min Before Bed', impact: 0.8, quickWin: 'Enable Night Mode on all devices and set a "screens off" reminder.', source: 'Harvard Medical School, 2020' },
@@ -432,7 +433,7 @@ export function buildLongevityBlueprintHtml(
           { emoji: '🐟', title: 'Mediterranean Diet Pattern', impact: 2.0, quickWin: 'Replace one red meat meal per week with fatty fish (salmon, mackerel, sardines).', source: 'PREDIMED Trial, NEJM 2018' },
           { emoji: '🫘', title: 'Legumes Daily', impact: 1.3, quickWin: "Add a can of chickpeas or lentils to tonight's meal.", source: 'British Journal of Nutrition, 2014' },
         ]},
-      { emoji: '🧠', name: 'Mental Health', stat: 'Strong social ties reduce premature mortality by 50%', color: '#6E5AA6', border: '#c4b5fd',
+      { emoji: '🧠', name: 'Mental Health', stat: 'Strong social ties reduce premature mortality by 50%', color: palette.purple, border: '#c4b5fd',
         recs: [
           { emoji: '🎯', title: 'Purpose & Meaning (Ikigai)', impact: 1.0, quickWin: "Write one sentence: 'My purpose today is...' and post it visibly.", source: 'Rush University Medical Center, 2012' },
           { emoji: '🧘', title: 'Daily Stress Management', impact: 0.8, quickWin: 'Try box breathing: 4s inhale → 4s hold → 6s exhale, repeat 5 cycles.', source: 'Lancet Psychiatry, 2021' },
@@ -480,9 +481,9 @@ export function buildLongevityBlueprintHtml(
   <title>Longevity Blueprint — BornClock</title>
   <style>
     :root{
-      --ink:#0C1A2B; --ink-soft:#3A4A5A; --muted:#6B7A89;
-      --hairline:#D7E1EA; --panel:#F1F6FA; --panel-2:#FAFCFE; --paper:#FFFFFF;
-      --navy:#103A5C; --blue:#1E6FB8; --blue-tint:#E4EFF8;
+      --ink:#0C1A2B; --ink-soft:${palette.inkSoft}; --muted:#6B7A89;
+      --hairline:${palette.lineBlue}; --panel:${palette.mist}; --panel-2:#FAFCFE; --paper:#FFFFFF;
+      --navy:${palette.blueDark}; --blue:#1E6FB8; --blue-tint:#E4EFF8;
       --pos:#1F8A5B; --pos-soft:#BFE3CF; --neg:#C2453D; --neg-soft:#F0CFCB; --slate:#8A9BA8;
     }
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; box-sizing: border-box; margin: 0; padding: 0; }
@@ -607,7 +608,7 @@ export function buildLongevityBlueprintHtml(
     .intro-stats b{color:var(--navy);}
 
     /* Life countdown — navy family */
-    .countdown{background:linear-gradient(135deg,#0C1A2B,#103A5C 60%,#1E6FB8);color:#fff;padding:26px;border-radius:12px;margin:18px 0;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+    .countdown{background:linear-gradient(135deg,#0C1A2B,${palette.blueDark} 60%,#1E6FB8);color:#fff;padding:26px;border-radius:12px;margin:18px 0;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
     .cd-head{font-size:11px;letter-spacing:2px;text-align:center;color:#93c5fd;margin-bottom:4px;}
     .cd-sub{text-align:center;color:#bfdbfe;font-size:12px;margin-bottom:18px;}
     .cd-grid{display:flex;justify-content:center;gap:14px;margin-bottom:16px;}
@@ -730,7 +731,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:24px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
@@ -811,7 +812,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:24px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
@@ -875,7 +876,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:20px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
@@ -937,7 +938,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:20px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
@@ -957,7 +958,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:20px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
@@ -990,7 +991,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:20px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
@@ -1053,7 +1054,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:20px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
@@ -1092,7 +1093,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:20px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
@@ -1115,7 +1116,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:20px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
@@ -1155,7 +1156,7 @@ export function buildLongevityBlueprintHtml(
   <div style="margin-bottom:20px;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--hairline);padding-bottom:9px;margin-bottom:14px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);">
       <span style="display:flex;align-items:center;gap:7px;">
-        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:#103A5C;font-size:9px;'}))" />
+        <img src="/bornclock-logo.png" width="14" height="14" style="object-fit:contain;display:inline-block;vertical-align:middle;" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'BC',style:'font-weight:800;color:${palette.blueDark};font-size:9px;'}))" />
         BornClock Personal Longevity Blueprint
       </span>
       <span>${name}</span>
