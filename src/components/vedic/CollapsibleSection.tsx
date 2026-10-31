@@ -4,6 +4,7 @@
  * so it works without JS and keyboard/screen readers get a real disclosure widget.
  */
 import { useState, type ReactNode } from 'react';
+import { brandVar } from '../../theme/palette';
 
 function isPhone(): boolean {
   try {
@@ -22,7 +23,7 @@ export function CollapsibleSection({ testid, title, summary, children }: {
   const [open, setOpen] = useState(() => !isPhone());
   return (
     <details data-testid={testid} open={open} onToggle={e => setOpen((e.currentTarget as HTMLDetailsElement).open)}
-      style={{ marginTop: 20, border: '1px solid var(--line, #e4dcc8)', borderRadius: 12, padding: '10px 14px', background: 'var(--paper)' }}>
+      style={{ marginTop: 20, border: `1px solid var(--line, ${brandVar.line})`, borderRadius: 12, padding: '10px 14px', background: 'var(--paper)' }}>
       <summary style={{ cursor: 'pointer', listStyle: 'revert' }}>
         <div style={{ display: 'inline-block', verticalAlign: 'top', maxWidth: 'calc(100% - 28px)' }}>
           <h3 style={{ margin: 0 }}>{title}</h3>

@@ -93,7 +93,7 @@ export default function ChildKundliPage() {
               </div>
             ))}
 
-            <div className="rounded-xl border border-[#6E5AA6]/30 p-5">
+            <div className="rounded-xl border border-brand-purple/30 p-5">
               <div className="font-semibold text-foreground mb-1">{result.nameLetters.title}</div>
               <p className="text-sm text-muted-foreground mb-2">{result.nameLetters.note}</p>
               {result.nameLetters.aksharas.length > 0 && (

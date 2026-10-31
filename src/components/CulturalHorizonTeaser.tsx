@@ -67,8 +67,8 @@ function pickMatches(forecast: number, exclude: Set<string>, userCountry?: strin
 
 const BAR_GRADIENTS = [
   'from-amber-400 to-yellow-500',
-  'from-blue-400 to-[#6E5AA6]',
-  'from-[#6E5AA6] to-[#6E5AA6]',
+  'from-blue-400 to-brand-purple',
+  'from-brand-purple to-brand-purple',
 ];
 
 function IconCard({ icon, index }: { icon: LongevityIcon; index: number }) {

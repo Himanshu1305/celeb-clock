@@ -148,7 +148,7 @@ export function DobInput({ value, onChange, onValidChange, label = 'Date of birt
     }
   };
 
-  const fieldCls = 'w-full text-center border border-gray-300 rounded-xl px-2 py-3 text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0E2238] focus:border-[#6E5AA6]/30';
+  const fieldCls = 'w-full text-center border border-gray-300 rounded-xl px-2 py-3 text-lg font-semibold text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-navy focus:border-brand-purple/30';
   const showError = touched && error;
 
   return (
@@ -182,7 +182,7 @@ export function DobInput({ value, onChange, onValidChange, label = 'Date of birt
         <PopoverTrigger asChild>
           <button
             type="button" aria-label="Open calendar picker"
-            className="shrink-0 h-[50px] px-3 border border-gray-300 rounded-xl text-gray-500 hover:text-[#6E5AA6] hover:border-[#6E5AA6]/30 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+            className="shrink-0 h-[50px] px-3 border border-gray-300 rounded-xl text-gray-500 hover:text-brand-purple hover:border-brand-purple/30 focus:outline-none focus:ring-2 focus:ring-brand-navy"
           >
             <CalendarDays className="w-5 h-5" />
           </button>

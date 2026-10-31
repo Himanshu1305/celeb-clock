@@ -307,39 +307,39 @@ export function CelebrityPage() {
               {rashiProfile ? (
                 <>
                   <span data-testid="lucky-chip-color"
-                    className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                     🎨 Colour: {rashiProfile.lucky_colors[0]}
                   </span>
                   <span data-testid="lucky-chip-stone"
-                    className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                     💎 Stone: {rashiProfile.lucky_stone} ({rashiProfile.lucky_stone_hindi})
                   </span>
                   <span data-testid="lucky-chip-day"
-                    className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                     📅 Day: {rashiProfile.lucky_day}
                   </span>
                   <span data-testid="lucky-chip-number"
-                    className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                     🔢 Number: {rashiProfile.lucky_numbers.join(', ')}
                   </span>
                   <span data-testid="lucky-chip-direction"
-                    className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                     🧭 Direction: {rashiProfile.lucky_direction}
                   </span>
                   <span data-testid="lucky-chip-metal"
-                    className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                     ⚙️ Metal: {rashiProfile.lucky_metal}
                   </span>
                   {zodiacProfile && (
                     <span data-testid="lucky-chip-tarot"
-                      className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                                 rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                      className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                                 rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                       🃏 Tarot: {zodiacProfile.tarot_card}
                     </span>
                   )}
@@ -347,19 +347,19 @@ export function CelebrityPage() {
               ) : chineseProfile ? (
                 <>
                   <span data-testid="lucky-chip-color"
-                    className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                     🎨 Lucky Colour: {chineseProfile.lucky_colors[0]}
                   </span>
                   <span data-testid="lucky-chip-number"
-                    className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                     🔢 Lucky Number: {chineseProfile.lucky_numbers.join(', ')}
                   </span>
                   {zodiacProfile && (
                     <span data-testid="lucky-chip-tarot"
-                      className="flex-shrink-0 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30
-                                 rounded-full px-3 py-1.5 text-xs font-medium text-[#6E5AA6] whitespace-nowrap">
+                      className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                                 rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
                       🃏 Tarot: {zodiacProfile.tarot_card}
                     </span>
                   )}
@@ -381,9 +381,9 @@ export function CelebrityPage() {
           {personalitySynthesis && (
             <section
               data-testid="personality-synthesis"
-              className="mb-6 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-4"
+              className="mb-6 bg-brand-purple/10 border border-brand-purple/30 rounded-xl p-4"
             >
-              <p className="text-sm text-[#6E5AA6] leading-relaxed">{personalitySynthesis}</p>
+              <p className="text-sm text-brand-purple leading-relaxed">{personalitySynthesis}</p>
             </section>
           )}
 
@@ -573,11 +573,11 @@ export function CelebrityPage() {
                       ))}
                     </div>
                     {/* Tarot */}
-                    <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-3 mb-4">
-                      <div className="text-xs font-bold text-[#6E5AA6] mb-1">
+                    <div className="bg-brand-purple/10 border border-brand-purple/30 rounded-xl p-3 mb-4">
+                      <div className="text-xs font-bold text-brand-purple mb-1">
                         🃏 Tarot Card: {zodiacProfile.tarot_card}
                       </div>
-                      <div className="text-xs text-[#6E5AA6]">{zodiacProfile.tarot_meaning}</div>
+                      <div className="text-xs text-brand-purple">{zodiacProfile.tarot_meaning}</div>
                     </div>
                     {/* Compatibility */}
                     <div className="mb-4">
@@ -818,8 +818,8 @@ export function CelebrityPage() {
                 {lpExtended && lifePath ? (
                   <>
                     <div className="flex items-center gap-4 mb-4">
-                      <div className="w-16 h-16 bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-full
-                                      flex items-center justify-center text-2xl font-black text-[#6E5AA6]">
+                      <div className="w-16 h-16 bg-brand-purple/10 border-2 border-brand-purple/30 rounded-full
+                                      flex items-center justify-center text-2xl font-black text-brand-purple">
                         {lifePath}
                       </div>
                       <div>
@@ -851,9 +851,9 @@ export function CelebrityPage() {
                         </div>
                       </div>
                     </div>
-                    <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-3 mb-3">
-                      <h4 className="text-xs font-bold text-[#6E5AA6] mb-1">💖 Love Style</h4>
-                      <p className="text-xs text-[#6E5AA6]">{lpExtended.love_style}</p>
+                    <div className="bg-brand-purple/10 border border-brand-purple/30 rounded-xl p-3 mb-3">
+                      <h4 className="text-xs font-bold text-brand-purple mb-1">💖 Love Style</h4>
+                      <p className="text-xs text-brand-purple">{lpExtended.love_style}</p>
                     </div>
                     <div className="mb-3">
                       <h4 className="text-xs font-bold text-gray-700 mb-2">Career Paths</h4>
@@ -864,9 +864,9 @@ export function CelebrityPage() {
                         ))}
                       </div>
                     </div>
-                    <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-3 mb-3">
-                      <h4 className="text-xs font-bold text-[#6E5AA6] mb-1">✨ Spiritual Lesson</h4>
-                      <p className="text-xs text-[#6E5AA6]">{lpExtended.spiritual_lesson}</p>
+                    <div className="bg-brand-purple/10 border border-brand-purple/30 rounded-xl p-3 mb-3">
+                      <h4 className="text-xs font-bold text-brand-purple mb-1">✨ Spiritual Lesson</h4>
+                      <p className="text-xs text-brand-purple">{lpExtended.spiritual_lesson}</p>
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 text-center">
@@ -907,7 +907,7 @@ export function CelebrityPage() {
                     {planetary.map((p, i) => (
                       <tr key={p.planet} className={i % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                         <td className="px-4 py-3 text-gray-900">{p.emoji} {p.planet}</td>
-                        <td className="px-4 py-3 text-right font-bold text-[#6E5AA6]">{p.age.toLocaleString()}</td>
+                        <td className="px-4 py-3 text-right font-bold text-brand-purple">{p.age.toLocaleString()}</td>
                         <td className="px-4 py-3 text-right text-gray-600">{p.orbit_years}</td>
                       </tr>
                     ))}
@@ -924,7 +924,7 @@ export function CelebrityPage() {
           {/* Internal link to the compatibility tool (Task 19) */}
           <p className="text-sm text-gray-600 my-4">
             Curious how you match with {name}?{' '}
-            <Link to="/compatibility/" className="text-[#6E5AA6] font-medium hover:underline">
+            <Link to="/compatibility/" className="text-brand-purple font-medium hover:underline">
               Check your birthday compatibility →
             </Link>
           </p>
@@ -942,7 +942,7 @@ export function CelebrityPage() {
               <p data-testid="twins-none-found" className="text-gray-600 text-sm bg-gray-50 border border-gray-200 rounded-xl p-4">
                 No other celebrity in our database shares {name}'s exact birthday
                 {bornOnSlug ? '' : ''}. {bornOnSlug && (
-                  <Link to={bornOnIndiaPath(bornOnSlug)} className="text-[#6E5AA6] hover:underline">See everyone born on this date →</Link>
+                  <Link to={bornOnIndiaPath(bornOnSlug)} className="text-brand-purple hover:underline">See everyone born on this date →</Link>
                 )}
               </p>
             ) : (
@@ -961,7 +961,7 @@ export function CelebrityPage() {
                         key={tSlug}
                         to={`/celebrity/${tSlug}/`}
                         data-testid="birthday-twin-link"
-                        className="flex flex-col p-4 bg-white rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors"
+                        className="flex flex-col p-4 bg-white rounded-xl border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors"
                       >
                         <span className="font-semibold text-sm text-gray-900">{tName}</span>
                         <span className="text-xs text-gray-500">{tCat}</span>
@@ -971,7 +971,7 @@ export function CelebrityPage() {
                 </div>
                 {bornOnSlug && (
                   <p className="text-sm mt-4">
-                    <Link to={bornOnIndiaPath(bornOnSlug)} className="text-[#6E5AA6] hover:underline">
+                    <Link to={bornOnIndiaPath(bornOnSlug)} className="text-brand-purple hover:underline">
                       See all Indians born on {MONTH_NAMES[dob!.month - 1]} {dob!.day} →
                     </Link>
                   </p>
@@ -1013,12 +1013,12 @@ export function CelebrityPage() {
           <section className="mb-10 bg-gray-50 rounded-2xl border border-gray-200 p-6" aria-labelledby="related-heading">
             <h2 id="related-heading" className="text-xl font-bold text-gray-900 mb-4">Explore More</h2>
             <div className="flex flex-wrap gap-3">
-              <Link to="/celebrity/" className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-[#6E5AA6]/30 hover:text-[#6E5AA6] transition-colors">All Celebrity Profiles</Link>
+              <Link to="/celebrity/" className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-brand-purple/30 hover:text-brand-purple transition-colors">All Celebrity Profiles</Link>
               {CATEGORY_CONFIG[category] && (
-                <Link to={`/celebrity/${hubSlug}/`} className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-[#6E5AA6]/30 hover:text-[#6E5AA6] transition-colors">More {hubLabel} celebrities</Link>
+                <Link to={`/celebrity/${hubSlug}/`} className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-brand-purple/30 hover:text-brand-purple transition-colors">More {hubLabel} celebrities</Link>
               )}
               {bornOnSlug && (
-                <Link to={bornOnIndiaPath(bornOnSlug)} className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-[#6E5AA6]/30 hover:text-[#6E5AA6] transition-colors">Born on {MONTH_NAMES[dob!.month - 1]} {dob!.day}</Link>
+                <Link to={bornOnIndiaPath(bornOnSlug)} className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-brand-purple/30 hover:text-brand-purple transition-colors">Born on {MONTH_NAMES[dob!.month - 1]} {dob!.day}</Link>
               )}
             </div>
           </section>
@@ -1026,17 +1026,17 @@ export function CelebrityPage() {
           {/* ── CTA ── */}
           <div className="bg-gradient-to-br from-primary to-primary rounded-2xl p-8 text-center text-white" role="complementary">
             <h2 className="text-2xl font-black mb-2">Get Your Own Birthday Intelligence Report</h2>
-            <p className="text-[#B4A6DB] mb-6 max-w-md mx-auto">
+            <p className="text-brand-purple-light mb-6 max-w-md mx-auto">
               Discover your celebrity birthday twins, zodiac profiles, numerology, and life path — just like {name}'s.
             </p>
             <Link
               to={ctaHref}
               data-testid="cta-birthday-report"
-              className="inline-block bg-white text-primary hover:bg-[#6E5AA6]/10 font-black py-4 px-8 rounded-xl transition-colors text-lg"
+              className="inline-block bg-white text-primary hover:bg-brand-purple/10 font-black py-4 px-8 rounded-xl transition-colors text-lg"
             >
               Generate My Free Birthday Report →
             </Link>
-            <p className="text-[#B4A6DB] text-xs mt-3">Free · Instant · No account required</p>
+            <p className="text-brand-purple-light text-xs mt-3">Free · Instant · No account required</p>
           </div>
         </div>
     </ReportLayout>

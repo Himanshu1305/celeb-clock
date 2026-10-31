@@ -66,11 +66,11 @@ function AgeDaysCalculator() {
 
   return (
     <div data-testid="age-days-calculator"
-         className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 my-8">
-      <h3 className="text-lg font-black text-[#6E5AA6] mb-1">
+         className="bg-brand-purple/10 border-2 border-brand-purple/30 rounded-2xl p-6 my-8">
+      <h3 className="text-lg font-black text-brand-purple mb-1">
         Calculate Your Age in Days, Hours & Minutes
       </h3>
-      <p className="text-sm text-[#6E5AA6] mb-4">
+      <p className="text-sm text-brand-purple mb-4">
         Enter your date of birth to instantly see how long you have been alive.
       </p>
       <input
@@ -78,17 +78,17 @@ function AgeDaysCalculator() {
         value={dob}
         onChange={handleChange}
         max={new Date().toISOString().split('T')[0]}
-        className="w-full border-2 border-[#6E5AA6]/30 rounded-xl px-4 py-3
-                   text-base focus:outline-none focus:border-[#6E5AA6]/30 bg-white mb-4"
+        className="w-full border-2 border-brand-purple/30 rounded-xl px-4 py-3
+                   text-base focus:outline-none focus:border-brand-purple/30 bg-white mb-4"
         aria-label="Enter your date of birth"
       />
       {days !== null && (
         <div data-testid="age-days-result"
-             className="bg-white rounded-xl border-2 border-[#6E5AA6]/30 p-5">
+             className="bg-white rounded-xl border-2 border-brand-purple/30 p-5">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
             {rows.map(r => (
-              <div key={r.label} className="bg-[#6E5AA6]/10 rounded-lg p-3 text-center">
-                <div className="text-xl font-black text-[#6E5AA6]">
+              <div key={r.label} className="bg-brand-purple/10 rounded-lg p-3 text-center">
+                <div className="text-xl font-black text-brand-purple">
                   {r.value.toLocaleString()}
                 </div>
                 <div className="text-xs text-gray-600 mt-1">{r.label}</div>
@@ -96,8 +96,8 @@ function AgeDaysCalculator() {
             ))}
           </div>
           <a href="/birthday-report/"
-             className="inline-block bg-[#0E2238] text-white font-bold px-5 py-2.5
-                        rounded-full text-sm hover:bg-[#0E2238] transition-colors">
+             className="inline-block bg-brand-navy text-white font-bold px-5 py-2.5
+                        rounded-full text-sm hover:bg-brand-navy transition-colors">
             See my complete birthday report →
           </a>
         </div>
@@ -232,7 +232,7 @@ export function AgeDaysHoursMinutesArticle() {
             the days still ahead.
           </p>
 
-          <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
+          <div className="bg-gradient-to-r from-brand-purple to-brand-purple rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Turn Your Numbers Into a Full Report</h2>
             <p className="text-white/90 mb-6">
@@ -240,8 +240,8 @@ export function AgeDaysHoursMinutesArticle() {
               zodiac, numerology, planetary ages and life milestones — all from your date of birth.
             </p>
             <a href="/birthday-report/"
-               className="inline-block bg-white text-[#6E5AA6] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#6E5AA6]/10 transition-colors">
+               className="inline-block bg-white text-brand-purple font-black px-8 py-3
+                          rounded-full text-lg hover:bg-brand-purple/10 transition-colors">
               Generate My Free Birthday Report →
             </a>
           </div>
@@ -256,14 +256,14 @@ export function AgeDaysHoursMinutesArticle() {
             ))}
           </div>
 
-          <div className="bg-[#6E5AA6]/10 border-2 border-[#6E5AA6]/30 rounded-2xl p-6 text-center mb-10">
+          <div className="bg-brand-purple/10 border-2 border-brand-purple/30 rounded-2xl p-6 text-center mb-10">
             <p className="text-gray-700 mb-4">
               Curious how your days translate into a deeper picture of who you are and how you're
               living?
             </p>
             <a href="/birthday-report/"
-               className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3
-                          rounded-full text-base hover:bg-[#0E2238] transition-colors">
+               className="inline-block bg-brand-navy text-white font-bold px-6 py-3
+                          rounded-full text-base hover:bg-brand-navy transition-colors">
               Open My Free Birthday Report →
             </a>
           </div>
@@ -272,7 +272,7 @@ export function AgeDaysHoursMinutesArticle() {
           <div className="grid sm:grid-cols-2 gap-4 mb-6">
             <a href="/planetary-age/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-5
-                          hover:border-[#6E5AA6]/30 transition-colors">
+                          hover:border-brand-purple/30 transition-colors">
               <div className="font-bold text-gray-900 mb-1">Planetary Age Calculator</div>
               <div className="text-sm text-gray-600">
                 How old are you on Mercury, Mars and Saturn? See your age across the solar system.
@@ -280,7 +280,7 @@ export function AgeDaysHoursMinutesArticle() {
             </a>
             <a href="/articles/numerology-by-date-of-birth/"
                className="block bg-white border-2 border-gray-200 rounded-xl p-5
-                          hover:border-[#6E5AA6]/30 transition-colors">
+                          hover:border-brand-purple/30 transition-colors">
               <div className="font-bold text-gray-900 mb-1">Numerology by Date of Birth</div>
               <div className="text-sm text-gray-600">
                 Find your Life Path number and what your birth date reveals about you.

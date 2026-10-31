@@ -27,6 +27,7 @@ import '@/styles/homepage.css';
 // marker (data-theme) ties it to the single token source so a central change
 // follows here too. Its bespoke, approved visual design is kept as-is.
 import '@/styles/central/themes.css';
+import { palette, brandVar, ui } from '../theme/palette';
 
 const EXAMPLE_ISO = '1998-03-14';
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -79,20 +80,20 @@ function BornToday() {
   }, [active, mmdd]);
   const moreLabel = total != null ? `+${Math.max(0, total - people.length)} more today →` : 'See everyone born today →';
   return (
-    <div ref={ref} style={{ display: 'flex', alignItems: 'center', gap: 22, padding: '12px 24px', background: '#FFFFFF', borderBottom: '1px solid #E4DCC8', flexWrap: 'wrap', minHeight: 60 }}>
-      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.7px', color: '#B5432A', whiteSpace: 'nowrap' }}>
+    <div ref={ref} style={{ display: 'flex', alignItems: 'center', gap: 22, padding: '12px 24px', background: 'white', borderBottom: `1px solid ${brandVar.line}`, flexWrap: 'wrap', minHeight: 60 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.7px', color: brandVar.coralInk, whiteSpace: 'nowrap' }}>
         BORN TODAY · {now.getDate()} {MONTHS[now.getMonth()].toUpperCase()}
       </div>
       {people.map((p, i) => (
         <div className="bt" style={{ animationDelay: `${0.1 + i * 0.15}s` }} key={p.name}>
           <BornTodayPhoto name={p.name} />
           <div style={{ fontSize: 12.5 }}>
-            <b style={{ color: '#0E2238' }}>{p.name}</b>
-            <div style={{ fontSize: 10.5, color: '#5B6472' }}>{(p.occupation || p.knownFor || 'Notable person')}{p.birthDate ? ` · ${p.birthDate.slice(0, 4)}` : ''}</div>
+            <b style={{ color: brandVar.navy }}>{p.name}</b>
+            <div style={{ fontSize: 10.5, color: brandVar.muted }}>{(p.occupation || p.knownFor || 'Notable person')}{p.birthDate ? ` · ${p.birthDate.slice(0, 4)}` : ''}</div>
           </div>
         </div>
       ))}
-      <Link to="/todays-birthdays/" className="bt" style={{ animationDelay: '.55s', fontSize: 12.5, fontWeight: 700, color: '#B5432A' }}>{moreLabel}</Link>
+      <Link to="/todays-birthdays/" className="bt" style={{ animationDelay: '.55s', fontSize: 12.5, fontWeight: 700, color: brandVar.coralInk }}>{moreLabel}</Link>
     </div>
   );
 }
@@ -206,11 +207,11 @@ export default function Index() {
 
   const exampleLabel = isExample ? `Example: ${d} ${MONTHS[m - 1]} ${y} — enter yours` : null;
   const DEC = [
-    { lab: 'WESTERN SIGN', color: '#6E5AA6', top: '#6E5AA6', val: sign, sub: 'by date cut-offs' },
-    { lab: 'LIFE PATH', color: '#6E5AA6', top: '#6E5AA6', val: String(lp), sub: 'every digit summed' },
-    { lab: 'BIRTHSTONE', color: '#B5432A', top: '#F0715A', val: stone, sub: 'by birth month' },
-    { lab: 'AGE ON MARS', color: '#2F6FB0', top: '#2F6FB0', val: `${marsYears.toFixed(1)} yrs`, sub: 'Mars year = 1.881 Earth yrs' },
-    { lab: 'WEIGHT ON MARS', color: '#2F6FB0', top: '#2F6FB0', val: `${marsKg.toFixed(1)} kg`, sub: 'per 70 kg on Earth (0.38×)' },
+    { lab: 'WESTERN SIGN', color: palette.purple, top: palette.purple, val: sign, sub: 'by date cut-offs' },
+    { lab: 'LIFE PATH', color: palette.purple, top: palette.purple, val: String(lp), sub: 'every digit summed' },
+    { lab: 'BIRTHSTONE', color: palette.coralInk, top: palette.coral, val: stone, sub: 'by birth month' },
+    { lab: 'AGE ON MARS', color: palette.blue, top: palette.blue, val: `${marsYears.toFixed(1)} yrs`, sub: 'Mars year = 1.881 Earth yrs' },
+    { lab: 'WEIGHT ON MARS', color: palette.blue, top: palette.blue, val: `${marsKg.toFixed(1)} kg`, sub: 'per 70 kg on Earth (0.38×)' },
   ];
 
   return (
@@ -232,7 +233,7 @@ export default function Index() {
       <div aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>{announce}</div>
 
       {/* Header — real Navigation + AuthNav on the navy bar (global Navigation not restyled) */}
-      <header style={{ background: '#0E2238', color: '#FFFFFF', padding: '0 24px', minHeight: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+      <header style={{ background: brandVar.navy, color: 'white', padding: '0 24px', minHeight: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
         <Navigation />
         <AuthNav />
       </header>
@@ -240,74 +241,74 @@ export default function Index() {
       <div style={{ width: '100%', maxWidth: 1440, margin: '0 auto', display: 'flex', flexDirection: 'column' }}>
 
         {/* HERO */}
-        <div className="hero" style={{ display: 'flex', gap: 28, padding: '30px 24px', borderBottom: '1px solid #E4DCC8' }}>
+        <div className="hero" style={{ display: 'flex', gap: 28, padding: '30px 24px', borderBottom: `1px solid ${brandVar.line}` }}>
           <div style={{ flex: 1.05, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.4px', color: '#74571E' }}>RIGOROUSLY CALCULATED BIRTH INTELLIGENCE</div>
-            <h1 style={{ fontSize: 42, lineHeight: 1.08, color: '#0E2238', fontWeight: 700 }}>Everything your birth date reveals.</h1>
-            <p style={{ fontSize: 15, lineHeight: 1.55, color: '#3E4759', margin: 0, maxWidth: 540 }}>Your Vedic birth chart, the celebrities who share your birthday, your numerology and zodiac, and what longevity science says — all from one date.</p>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.4px', color: brandVar.goldInk }}>RIGOROUSLY CALCULATED BIRTH INTELLIGENCE</div>
+            <h1 style={{ fontSize: 42, lineHeight: 1.08, color: brandVar.navy, fontWeight: 700 }}>Everything your birth date reveals.</h1>
+            <p style={{ fontSize: 15, lineHeight: 1.55, color: ui.homeBody, margin: 0, maxWidth: 540 }}>Your Vedic birth chart, the celebrities who share your birthday, your numerology and zodiac, and what longevity science says — all from one date.</p>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6, flexWrap: 'wrap' }}>
-              <label htmlFor="dob" style={{ fontSize: 12, fontWeight: 700, color: '#0E2238' }}>Your birth date</label>
+              <label htmlFor="dob" style={{ fontSize: 12, fontWeight: 700, color: brandVar.navy }}>Your birth date</label>
               <input id="dob" type="date" defaultValue={activeIso} max={new Date().toISOString().slice(0, 10)}
                 onInput={e => onDate((e.target as HTMLInputElement).value)}
-                style={{ height: 40, border: '1px solid #D8D2C2', borderRadius: 6, padding: '0 12px', fontSize: 14, background: '#FFFFFF' }} />
+                style={{ height: 40, border: `1px solid ${ui.homeInputBorder}`, borderRadius: 6, padding: '0 12px', fontSize: 14, background: 'white' }} />
               <button type="button" onClick={() => { const el = document.getElementById('dob') as HTMLInputElement | null; if (el) onDate(el.value); }}
-                style={{ height: 40, background: '#0E2238', color: '#FFFFFF', border: 'none', borderRadius: 6, fontSize: 13.5, fontWeight: 700, padding: '0 18px' }}>Decode my date</button>
+                style={{ height: 40, background: brandVar.navy, color: 'white', border: 'none', borderRadius: 6, fontSize: 13.5, fontWeight: 700, padding: '0 18px' }}>Decode my date</button>
             </div>
-            {exampleLabel && <div style={{ fontSize: 11.5, fontWeight: 600, color: '#B5432A' }}>{exampleLabel}</div>}
+            {exampleLabel && <div style={{ fontSize: 11.5, fontWeight: 600, color: brandVar.coralInk }}>{exampleLabel}</div>}
             <div className="doors" data-testid="choose-your-path">
-              <Link className="door" to="/vedic-astrology/" style={{ ['--ac' as string]: '#C6A15B' }}><b>Vedic Astrology</b><span>Kundli · Matching · Sade Sati</span></Link>
-              <Link className="door" to="/celebrity-birthday/" style={{ ['--ac' as string]: '#F0715A' }}><b>Birthday &amp; Celebrity</b><span>Celebrity twins · Today's birthdays</span></Link>
-              <Link className="door" to="/mystic-corner/" style={{ ['--ac' as string]: '#6E5AA6' }}><b>Mystic Corner</b><span>Numerology · Zodiac · Tarot</span></Link>
-              <Link className="door" to="/life-expectancy/" style={{ ['--ac' as string]: '#2F6FB0' }}><b>Science &amp; Longevity</b><span>Life expectancy · Biological age</span></Link>
+              <Link className="door" to="/vedic-astrology/" style={{ ['--ac' as string]: brandVar.gold }}><b>Vedic Astrology</b><span>Kundli · Matching · Sade Sati</span></Link>
+              <Link className="door" to="/celebrity-birthday/" style={{ ['--ac' as string]: brandVar.coral }}><b>Birthday &amp; Celebrity</b><span>Celebrity twins · Today's birthdays</span></Link>
+              <Link className="door" to="/mystic-corner/" style={{ ['--ac' as string]: brandVar.purple }}><b>Mystic Corner</b><span>Numerology · Zodiac · Tarot</span></Link>
+              <Link className="door" to="/life-expectancy/" style={{ ['--ac' as string]: brandVar.blue }}><b>Science &amp; Longevity</b><span>Life expectancy · Biological age</span></Link>
             </div>
           </div>
           {/* Live clock panel */}
-          <div style={{ flex: 0.95, background: '#FFFFFF', border: '1px solid #E4DCC8', borderRadius: 10, padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.8px', color: '#B5432A' }}>{isExample ? 'EXAMPLE — ALIVE FOR' : "YOU'VE BEEN ALIVE FOR — LIVE"}</div>
+          <div style={{ flex: 0.95, background: 'white', border: `1px solid ${brandVar.line}`, borderRadius: 10, padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.8px', color: brandVar.coralInk }}>{isExample ? 'EXAMPLE — ALIVE FOR' : "YOU'VE BEEN ALIVE FOR — LIVE"}</div>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
               <div><div className="tick">{yearsLived}</div><div className="ticklab">YEARS</div></div>
               <div><div className="tick">{daysInYear}</div><div className="ticklab">DAYS</div></div>
               <div><div className="tick">{now.getHours()}</div><div className="ticklab">HOURS</div></div>
               <div><div className="tick">{pad(now.getMinutes())}</div><div className="ticklab">MINUTES</div></div>
-              <div><div className="tick" style={{ color: '#B5432A' }}>{pad(now.getSeconds())}</div><div className="ticklab">SECONDS</div></div>
+              <div><div className="tick" style={{ color: brandVar.coralInk }}>{pad(now.getSeconds())}</div><div className="ticklab">SECONDS</div></div>
             </div>
-            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', borderTop: '1px solid #EFE9DA', paddingTop: 10 }}>
-              <div style={{ fontSize: 12.5, color: '#1A2230' }}><b>{totalSec.toLocaleString()}</b> seconds in total</div>
-              <div style={{ fontSize: 12.5, color: '#1A2230' }}>≈ <b>{Math.floor(totalSec * 1.2).toLocaleString()}</b> heartbeats</div>
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', borderTop: `1px solid ${ui.homeRule}`, paddingTop: 10 }}>
+              <div style={{ fontSize: 12.5, color: brandVar.ink }}><b>{totalSec.toLocaleString()}</b> seconds in total</div>
+              <div style={{ fontSize: 12.5, color: brandVar.ink }}>≈ <b>{Math.floor(totalSec * 1.2).toLocaleString()}</b> heartbeats</div>
               {isBirthdayToday
-                ? <div style={{ fontSize: 12.5, color: '#B5432A', fontWeight: 700 }}>🎉 Happy birthday — today's the day!</div>
-                : <div style={{ fontSize: 12.5, color: '#1A2230' }}>Next birthday in <b>{nextIn}</b> days</div>}
+                ? <div style={{ fontSize: 12.5, color: brandVar.coralInk, fontWeight: 700 }}>🎉 Happy birthday — today's the day!</div>
+                : <div style={{ fontSize: 12.5, color: brandVar.ink }}>Next birthday in <b>{nextIn}</b> days</div>}
             </div>
             <div>
-              <div style={{ fontSize: 12.5, color: '#1A2230', marginBottom: 8 }}>
+              <div style={{ fontSize: 12.5, color: brandVar.ink, marginBottom: 8 }}>
                 {isExample ? 'This date falls on a ' : 'You were born on a '}<b>{weekday}</b>.
               </div>
               {ms.isMilestoneToday ? (
-                <div style={{ fontSize: 12.5, color: '#B5432A', fontWeight: 700 }}>
+                <div style={{ fontSize: 12.5, color: brandVar.coralInk, fontWeight: 700 }}>
                   🎊 {isExample ? 'This date is' : "You're"} exactly <b>{ms.milestone.toLocaleString()}</b> days old today!
                 </div>
               ) : (
                 <>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: '#1A2230', marginBottom: 5 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, color: brandVar.ink, marginBottom: 5 }}>
                     <span>Next milestone: <b>{ms.milestone.toLocaleString()}</b> days old</span>
                     <span><b>{ms.daysToGo.toLocaleString()}</b> days to go</span>
                   </div>
                   <div className="pbar" role="progressbar" aria-label={`Progress toward ${ms.milestone.toLocaleString()} days old`} aria-valuenow={Math.floor(ms.blockProgress * 100)} aria-valuemin={0} aria-valuemax={100}><div style={{ width: `${(ms.blockProgress * 100).toFixed(2)}%` }} /></div>
-                  <div style={{ fontSize: 10.5, color: '#5B6472', marginTop: 4 }}>Reaches {ms.milestone.toLocaleString()} days on {milestoneDateStr}</div>
+                  <div style={{ fontSize: 10.5, color: brandVar.muted, marginTop: 4 }}>Reaches {ms.milestone.toLocaleString()} days on {milestoneDateStr}</div>
                 </>
               )}
             </div>
-            <div style={{ fontSize: 10.5, color: '#5B6472' }}>Heartbeats estimated at an average 72 bpm. Clock assumes a 00:00 birth time.</div>
+            <div style={{ fontSize: 10.5, color: brandVar.muted }}>Heartbeats estimated at an average 72 bpm. Clock assumes a 00:00 birth time.</div>
           </div>
         </div>
 
         {/* YOUR DATE, DECODED */}
         <div style={{ padding: '10px 24px 0', display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.8px', color: '#0E2238' }}>YOUR DATE, DECODED</span>
-          {exampleLabel && <span style={{ fontSize: 11, color: '#B5432A', fontWeight: 600 }}>{exampleLabel}</span>}
-          <button type="button" onClick={seeFullProfile} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#B5432A', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>See your full birthday profile →</button>
+          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.8px', color: brandVar.navy }}>YOUR DATE, DECODED</span>
+          {exampleLabel && <span style={{ fontSize: 11, color: brandVar.coralInk, fontWeight: 600 }}>{exampleLabel}</span>}
+          <button type="button" onClick={seeFullProfile} style={{ marginLeft: 'auto', background: 'none', border: 'none', color: brandVar.coralInk, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>See your full birthday profile →</button>
         </div>
-        <div className="decrow" key={activeIso} style={{ display: 'flex', margin: '8px 24px 18px', background: '#FFFFFF', border: '1px solid #E4DCC8', borderRadius: 10 }}>
+        <div className="decrow" key={activeIso} style={{ display: 'flex', margin: '8px 24px 18px', background: 'white', border: `1px solid ${brandVar.line}`, borderRadius: 10 }}>
           {DEC.map((c, i) => (
             <div className="dec" key={c.lab} style={{ borderTop: `3px solid ${c.top}`, ...(i === 0 ? { borderTopLeftRadius: 10 } : {}) }}>
               <div className="lab" style={{ color: c.color }}>{c.lab}</div>
@@ -315,44 +316,44 @@ export default function Index() {
               <div className="sub">{c.sub}</div>
             </div>
           ))}
-          <div className="dec" style={{ borderTop: '3px solid #C6A15B', borderTopRightRadius: 10 }}>
-            <div className="lab" style={{ color: '#74571E' }}>VEDIC CHART</div>
+          <div className="dec" style={{ borderTop: `3px solid ${brandVar.gold}`, borderTopRightRadius: 10 }}>
+            <div className="lab" style={{ color: brandVar.goldInk }}>VEDIC CHART</div>
             <div className="val">Free</div>
             <div className="sub">needs time + place · <Link to={kundaliUrl} style={{ fontWeight: 700 }}>generate</Link></div>
           </div>
         </div>
 
         {/* TRUST STRIP */}
-        <div className="trust" style={{ display: 'flex', padding: '14px 24px', background: '#FFFFFF', borderTop: '1px solid #E4DCC8', borderBottom: '1px solid #E4DCC8' }}>
-          <div style={{ flex: 1, borderRight: '1px solid #E4DCC8', paddingRight: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#74571E' }}>CROSS-CHECKED — </span><span style={{ fontSize: 12, color: '#3E4759' }}>Vedic calculations checked against independent reference calculations, not a template.</span></div>
-          <div style={{ flex: 1, borderRight: '1px solid #E4DCC8', padding: '0 16px' }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#74571E' }}>CLASSICAL — </span><span style={{ fontSize: 12, color: '#3E4759' }}>the 36-point Ashtakoota system, per the Brihat Parashara Hora Shastra.</span></div>
-          <div style={{ flex: 1, paddingLeft: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: '#74571E' }}>SOURCED — </span><span style={{ fontSize: 12, color: '#3E4759' }}>WHO, Harvard, NIH, UN WPP 2024 and NASA's Planetary Fact Sheet (2023).</span></div>
+        <div className="trust" style={{ display: 'flex', padding: '14px 24px', background: 'white', borderTop: `1px solid ${brandVar.line}`, borderBottom: `1px solid ${brandVar.line}` }}>
+          <div style={{ flex: 1, borderRight: `1px solid ${brandVar.line}`, paddingRight: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: brandVar.goldInk }}>CROSS-CHECKED — </span><span style={{ fontSize: 12, color: ui.homeBody }}>Vedic calculations checked against independent reference calculations, not a template.</span></div>
+          <div style={{ flex: 1, borderRight: `1px solid ${brandVar.line}`, padding: '0 16px' }}><span style={{ fontSize: 10.5, fontWeight: 700, color: brandVar.goldInk }}>CLASSICAL — </span><span style={{ fontSize: 12, color: ui.homeBody }}>the 36-point Ashtakoota system, per the Brihat Parashara Hora Shastra.</span></div>
+          <div style={{ flex: 1, paddingLeft: 16 }}><span style={{ fontSize: 10.5, fontWeight: 700, color: brandVar.goldInk }}>SOURCED — </span><span style={{ fontSize: 12, color: ui.homeBody }}>WHO, Harvard, NIH, UN WPP 2024 and NASA's Planetary Fact Sheet (2023).</span></div>
         </div>
 
         {/* BORN TODAY (client-side) */}
         <BornToday />
 
         {/* DIRECTORY */}
-        <div className="dir" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', background: '#FAF7F0', borderBottom: '1px solid #E4DCC8' }}>
-          <div className="col" id="vedic" style={{ ['--ac' as string]: '#C6A15B' }}>
-            <div className="eyebrow" style={{ color: '#74571E' }}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#74571E" strokeWidth="1.4" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" /><path d="M1.5 1.5l13 13M14.5 1.5l-13 13" /></svg>VEDIC ASTROLOGY</div>
+        <div className="dir" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', background: brandVar.ivory, borderBottom: `1px solid ${brandVar.line}` }}>
+          <div className="col" id="vedic" style={{ ['--ac' as string]: brandVar.gold }}>
+            <div className="eyebrow" style={{ color: brandVar.goldInk }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke={palette.goldInk} strokeWidth="1.4" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="13" /><path d="M1.5 1.5l13 13M14.5 1.5l-13 13" /></svg>VEDIC ASTROLOGY</div>
             <h2>Traditional systems, computed.</h2>
-            <div className="teaser"><span>Your real Kundli — Lagna, Nakshatra and Dasha — free. <span style={{ color: '#5B6472', fontSize: 11 }}>House 1 (Lagna) sits at the top, as in the classical North-Indian chart.</span></span></div>
+            <div className="teaser"><span>Your real Kundli — Lagna, Nakshatra and Dasha — free. <span style={{ color: brandVar.muted, fontSize: 11 }}>House 1 (Lagna) sits at the top, as in the classical North-Indian chart.</span></span></div>
             <ToolList tools={VEDIC_TOOLS} />
-            <Link className="explore" to="/vedic-astrology/" style={{ color: '#74571E' }}>Explore Vedic Astrology →</Link>
+            <Link className="explore" to="/vedic-astrology/" style={{ color: brandVar.goldInk }}>Explore Vedic Astrology →</Link>
           </div>
-          <div className="col" id="birthday" style={{ ['--ac' as string]: '#F0715A' }}>
-            <div className="eyebrow" style={{ color: '#B5432A' }}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#B5432A" strokeWidth="1.4" aria-hidden="true"><path d="M2 14h12M3 14V8h10v6M8 8V5M8 5c-1-1-1-2 0-3 1 1 1 2 0 3z" /></svg>BIRTHDAY &amp; CELEBRITY</div>
+          <div className="col" id="birthday" style={{ ['--ac' as string]: brandVar.coral }}>
+            <div className="eyebrow" style={{ color: brandVar.coralInk }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke={palette.coralInk} strokeWidth="1.4" aria-hidden="true"><path d="M2 14h12M3 14V8h10v6M8 8V5M8 5c-1-1-1-2 0-3 1 1 1 2 0 3z" /></svg>BIRTHDAY &amp; CELEBRITY</div>
             <h2>Specific beats generic.</h2>
             <div className="teaser">{isBirthdayToday ? 'Your birthday is today — see who else celebrates it.' : <>Next birthday in <b>{nextIn}</b> days — see who else celebrates it.</>}</div>
             <ToolList tools={BIRTHDAY_TOOLS} />
-            <Link className="explore" to="/celebrity-birthday/" style={{ color: '#B5432A' }}>Explore Birthdays →</Link>
+            <Link className="explore" to="/celebrity-birthday/" style={{ color: brandVar.coralInk }}>Explore Birthdays →</Link>
           </div>
-          <div className="col" id="mystic" style={{ ['--ac' as string]: '#6E5AA6' }}>
-            <div className="eyebrow" style={{ color: '#6E5AA6' }}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#6E5AA6" strokeWidth="1.4" aria-hidden="true"><path d="M8 1.5l1.6 4.9L14.5 8l-4.9 1.6L8 14.5 6.4 9.6 1.5 8l4.9-1.6z" /></svg>MYSTIC CORNER</div>
+          <div className="col" id="mystic" style={{ ['--ac' as string]: brandVar.purple }}>
+            <div className="eyebrow" style={{ color: brandVar.purple }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke={palette.purple} strokeWidth="1.4" aria-hidden="true"><path d="M8 1.5l1.6 4.9L14.5 8l-4.9 1.6L8 14.5 6.4 9.6 1.5 8l4.9-1.6z" /></svg>MYSTIC CORNER</div>
             <h2>Many symbols. Different rules.</h2>
             <div className="teaser">Your Life Path is <b>{lp}</b> — see what it's said to mean.</div>
             <ToolList tools={MYSTIC_TOOLS} />
@@ -360,30 +361,30 @@ export default function Index() {
               <span className="chip">Each system has its own rules — we say which</span>
               <span className="chip">Western ≠ Vedic sign</span>
             </div>
-            <Link className="explore" to="/mystic-corner/" style={{ color: '#6E5AA6' }}>Explore Mystic Corner →</Link>
+            <Link className="explore" to="/mystic-corner/" style={{ color: brandVar.purple }}>Explore Mystic Corner →</Link>
           </div>
-          <div className="col" id="science" style={{ ['--ac' as string]: '#2F6FB0', background: '#FFFFFF' }}>
-            <div className="eyebrow" style={{ color: '#2F6FB0' }}>
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#2F6FB0" strokeWidth="1.4" aria-hidden="true"><path d="M1 9h3l2-5 3 9 2-6 1 2h3" /></svg>SCIENCE &amp; LONGEVITY</div>
+          <div className="col" id="science" style={{ ['--ac' as string]: brandVar.blue, background: 'white' }}>
+            <div className="eyebrow" style={{ color: brandVar.blue }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke={palette.blue} strokeWidth="1.4" aria-hidden="true"><path d="M1 9h3l2-5 3 9 2-6 1 2h3" /></svg>SCIENCE &amp; LONGEVITY</div>
             <h2>Numbers with a source trail.</h2>
             <div className="teaser"><span>You're <b>{marsYears.toFixed(1)}</b> years old on Mars — <b>{marsPctThisYear}</b>% through your current Mars year.</span></div>
             <ToolList tools={SCIENCE_TOOLS} />
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 4 }}>
               {['WHO', 'Harvard', 'NIH', 'UN WPP 2024', 'NASA 2023'].map(s => <span className="chip" key={s}>{s}</span>)}
             </div>
-            <div style={{ fontSize: 11, color: '#237A60', fontWeight: 600 }}>Estimates, not predictions — limits stated on every page.</div>
-            <Link className="explore" to="/life-expectancy/" style={{ color: '#2F6FB0' }}>Explore Science &amp; Longevity →</Link>
+            <div style={{ fontSize: 11, color: brandVar.greenInk, fontWeight: 600 }}>Estimates, not predictions — limits stated on every page.</div>
+            <Link className="explore" to="/life-expectancy/" style={{ color: brandVar.blue }}>Explore Science &amp; Longevity →</Link>
           </div>
         </div>
 
         {/* FOOTER SITEMAP (real routes; extended so every current-homepage link stays reachable) */}
-        <div style={{ background: '#0E2238', padding: '22px 24px 16px' }}>
+        <div style={{ background: brandVar.navy, padding: '22px 24px 16px' }}>
           <div className="foot" style={{ display: 'flex', gap: 28 }}>
-            <FootCol color="#D9BC82" title="VEDIC" links={[['Kundli', '/kundali'], ['Matching', '/kundali-match'], ['Sade Sati', '/sade-sati'], ['Muhurat', '/muhurat'], ['Gemstones', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'], ['Career', '/career-report'], ['AI Astrologer', '/astrologer']]} />
-            <FootCol color="#F7A08E" title="BIRTHDAY" links={[['Who Shares My Birthday?', '/celebrity-birthday/'], ["Today's Birthdays", '/todays-birthdays'], ['Age Calculator', '/age-calculator'], ['Birthstone', '/birthstone'], ['Indian Celebrities', '/born-on/india'], ['Blueprint', '/birthday-report']]} />
-            <FootCol color="#B3A4DE" title="MYSTIC" links={[['Numerology', '/numerology'], ['Name Numerology', '/name-numerology'], ['Western Zodiac', '/zodiac'], ['Chinese Zodiac', '/chinese-zodiac'], ['Tarot', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'], ['Biorhythm', '/biorhythm']]} />
-            <FootCol color="#8FC1E6" title="SCIENCE" links={[['Life Expectancy', '/life-expectancy'], ['Biological Age', '/biological-age'], ['Country Comparison', '/country-comparison'], ['Planetary Age', '/planetary-age'], ['Planetary Weight', '/weight-on-planets']]} />
-            <FootCol color="#FFFFFF" title="BORNCLOCK" links={[['How it works', '/how-it-works'], ['Accuracy', '/accuracy'], ['Answers', '/answers'], ['Articles', '/articles'], ['About', '/about'], ['Editorial Policy', '/editorial-policy'], ['Pricing', '/pricing'], ['Privacy', '/privacy'], ['Contact', '/contact']]} />
+            <FootCol color={ui.goldOnDark} title="VEDIC" links={[['Kundli', '/kundali'], ['Matching', '/kundali-match'], ['Sade Sati', '/sade-sati'], ['Muhurat', '/muhurat'], ['Gemstones', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'], ['Career', '/career-report'], ['AI Astrologer', '/astrologer']]} />
+            <FootCol color={ui.coralOnDark} title="BIRTHDAY" links={[['Who Shares My Birthday?', '/celebrity-birthday/'], ["Today's Birthdays", '/todays-birthdays'], ['Age Calculator', '/age-calculator'], ['Birthstone', '/birthstone'], ['Indian Celebrities', '/born-on/india'], ['Blueprint', '/birthday-report']]} />
+            <FootCol color={ui.purpleOnDark} title="MYSTIC" links={[['Numerology', '/numerology'], ['Name Numerology', '/name-numerology'], ['Western Zodiac', '/zodiac'], ['Chinese Zodiac', '/chinese-zodiac'], ['Tarot', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'], ['Biorhythm', '/biorhythm']]} />
+            <FootCol color={ui.blueOnDark} title="SCIENCE" links={[['Life Expectancy', '/life-expectancy'], ['Biological Age', '/biological-age'], ['Country Comparison', '/country-comparison'], ['Planetary Age', '/planetary-age'], ['Planetary Weight', '/weight-on-planets']]} />
+            <FootCol color="white" title="BORNCLOCK" links={[['How it works', '/how-it-works'], ['Accuracy', '/accuracy'], ['Answers', '/answers'], ['Articles', '/articles'], ['About', '/about'], ['Editorial Policy', '/editorial-policy'], ['Pricing', '/pricing'], ['Privacy', '/privacy'], ['Contact', '/contact']]} />
           </div>
         </div>
       </div>
@@ -397,7 +398,7 @@ function FootCol({ color, title, links }: { color: string; title: string; links:
       <div style={{ fontSize: 11, fontWeight: 700, color, marginBottom: 8 }}>{title}</div>
       <div style={{ fontSize: 11.5, lineHeight: 1.9 }}>
         {links.map(([label, to], i) => (
-          <span key={to}>{i > 0 && <span style={{ color: '#5B6472' }}> · </span>}<Link to={to} style={{ color: '#B9C2CF' }}>{label}</Link></span>
+          <span key={to}>{i > 0 && <span style={{ color: brandVar.muted }}> · </span>}<Link to={to} style={{ color: ui.homeFooterLink }}>{label}</Link></span>
         ))}
       </div>
     </div>

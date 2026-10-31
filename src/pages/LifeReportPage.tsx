@@ -19,7 +19,7 @@ import type { ChartBasis } from '@/lib/vedic/chartBasis';
 
 interface AreaReading { key: string; label: string; grade: 'strong' | 'moderate' | 'mild'; lead: string; reason: string; meaning: string }
 
-const gradeColor = (g: string) => g === 'strong' ? 'text-emerald-700' : g === 'moderate' ? 'text-[#6E5AA6]' : 'text-amber-600';
+const gradeColor = (g: string) => g === 'strong' ? 'text-emerald-700' : g === 'moderate' ? 'text-brand-purple' : 'text-amber-600';
 
 export default function LifeReportPage() {
   const { profile, save } = useSavedProfile();

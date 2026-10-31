@@ -1,3 +1,4 @@
+import { palette } from '../theme/palette';
 export interface ZodiacSignData {
   name: string;
   slug: string;
@@ -316,7 +317,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
     endMonth: 11,
     endDay: 21,
     element: 'Water',
-    elementColor: '#6E5AA6',
+    elementColor: palette.purple,
     rulingPlanet: 'Pluto / Mars',
     modality: 'Fixed',
     bodyPart: 'Reproductive organs',
@@ -355,7 +356,7 @@ export const ZODIAC_DATA: ZodiacSignData[] = [
     endMonth: 12,
     endDay: 21,
     element: 'Fire',
-    elementColor: '#6E5AA6',
+    elementColor: palette.purple,
     rulingPlanet: 'Jupiter',
     modality: 'Mutable',
     bodyPart: 'Hips, thighs, liver',

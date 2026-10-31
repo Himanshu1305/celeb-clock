@@ -1,4 +1,5 @@
 import { famousForLifePath } from './famousLifePaths';
+import { palette } from '../theme/palette';
 
 export interface NumerologyPersonData {
   name: string;
@@ -185,7 +186,7 @@ export const NUMEROLOGY_DATA: NumerologyNumberData[] = [
     name: 'The Seeker',
     isMasterNumber: false,
     color: 'Violet',
-    hexColor: '#6E5AA6',
+    hexColor: palette.purple,
     planet: 'Neptune',
     element: 'Water',
     keywords: ['Analysis', 'Introspection', 'Wisdom', 'Spirituality', 'Solitude'],

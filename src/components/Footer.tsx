@@ -6,6 +6,7 @@ import { CookiePreferencesModal } from '@/components/CookiePreferencesModal';
 import { getStoredConsent } from '@/components/CookieConsent';
 import { useAuth } from '@/hooks/useAuth';
 import { ArrowRight } from 'lucide-react';
+import { ui } from '../theme/palette';
 
 const SHARE_TEXT = 'Check out BornClock — find your age on every planet, celebrity birthday twins, life expectancy, zodiac & more!';
 const SHARE_URL = 'https://bornclock.com';
@@ -170,7 +171,7 @@ export const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-3 py-2 rounded-lg text-white text-xs font-medium hover:opacity-90 transition-opacity w-fit"
-                style={{ backgroundColor: '#15803D' }}
+                style={{ backgroundColor: ui.green700 }}
               >
                 <WhatsAppIcon />
                 Share on WhatsApp
@@ -191,7 +192,7 @@ export const Footer = () => {
                   setInstaCopied(true);
                   setTimeout(() => setInstaCopied(false), 2000);
                 }}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#0E2238] text-white text-xs font-medium hover:opacity-90 transition-opacity w-fit"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-brand-navy text-white text-xs font-medium hover:opacity-90 transition-opacity w-fit"
               >
                 📸 {instaCopied ? 'Copied!' : 'Copy for Instagram'}
               </button>

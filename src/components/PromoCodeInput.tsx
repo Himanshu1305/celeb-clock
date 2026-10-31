@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { redeemPromoCode, PromoCodeResult } from '@/services/PromoCodeService';
 import { Loader2, Tag, CheckCircle, XCircle } from 'lucide-react';
+import { palette } from '../theme/palette';
 
 export interface PromoCodeInputProps {
   userId: string;
@@ -46,7 +47,7 @@ export function PromoCodeInput({ userId, onSuccess }: PromoCodeInputProps) {
             .confetti-piece { animation: confetti-fall 1.5s ease-in forwards; }
           `}</style>
           <div className="absolute inset-0 pointer-events-none overflow-hidden z-10" aria-hidden="true">
-            {['#f87171','#fbbf24','#34d399','#60a5fa','#6E5AA6','#f472b6'].flatMap((color, ci) =>
+            {['#f87171','#fbbf24','#34d399','#60a5fa',palette.purple,'#f472b6'].flatMap((color, ci) =>
               [0,1,2].map((j) => (
                 <div
                   key={`${ci}-${j}`}

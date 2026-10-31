@@ -123,26 +123,26 @@ export default function Methodology() {
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li>
-                The <Link className="text-[#6E5AA6] hover:underline font-medium" to="/birthday-report/">Birthday Blueprint</Link> — a personalised 11-section
+                The <Link className="text-brand-purple hover:underline font-medium" to="/birthday-report/">Birthday Blueprint</Link> — a personalised 11-section
                 report (celebrity twins, zodiac, numerology, tarot, planetary ages and more), built from
                 the same source-cited data described below and printable as a gift.
               </li>
               <li>
-                The <Link className="text-[#6E5AA6] hover:underline font-medium" to="/life-expectancy/">life expectancy calculator</Link> and longevity suite —
+                The <Link className="text-brand-purple hover:underline font-medium" to="/life-expectancy/">life expectancy calculator</Link> and longevity suite —
                 the science core, using the peer-reviewed research cited in the sections below.
               </li>
               <li>
-                <Link className="text-[#6E5AA6] hover:underline font-medium" to="/celebrity-birthday/">Celebrity birthday matching</Link>, including the{' '}
-                <Link className="text-[#6E5AA6] hover:underline font-medium" to="/born-on/india/">Indian celebrities by date</Link> facet drawn from the same
+                <Link className="text-brand-purple hover:underline font-medium" to="/celebrity-birthday/">Celebrity birthday matching</Link>, including the{' '}
+                <Link className="text-brand-purple hover:underline font-medium" to="/born-on/india/">Indian celebrities by date</Link> facet drawn from the same
                 ranked dataset.
               </li>
               <li>
-                The <Link className="text-[#6E5AA6] hover:underline font-medium" to="/kundali/">Vedic Kundli</Link> and astrology suite —
+                The <Link className="text-brand-purple hover:underline font-medium" to="/kundali/">Vedic Kundli</Link> and astrology suite —
                 a precise sidereal birth-chart engine (Lahiri ayanamsa) cross-checked against professional
                 providers, described in full below.
               </li>
               <li>
-                The <Link className="text-[#6E5AA6] hover:underline font-medium" to="/answers/">Answers library</Link> — concise, sourced answers to common
+                The <Link className="text-brand-purple hover:underline font-medium" to="/answers/">Answers library</Link> — concise, sourced answers to common
                 birthday, age and longevity questions.
               </li>
             </ul>
@@ -175,7 +175,7 @@ export default function Methodology() {
                   <h3 className="text-xl font-semibold text-foreground mb-3">The Three-Pillar Framework</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
                     BornClock's{' '}
-                    <Link to="/life-expectancy/" className="text-[#6E5AA6] hover:underline font-medium">life expectancy</Link>{' '}
+                    <Link to="/life-expectancy/" className="text-brand-purple hover:underline font-medium">life expectancy</Link>{' '}
                     estimate is built on three pillars that are calculated sequentially and then combined:
                   </p>
                   <div className="grid md:grid-cols-3 gap-4 mb-4">
@@ -390,7 +390,7 @@ export default function Methodology() {
                   </p>
                   <p className="text-muted-foreground leading-relaxed mt-4">
                     Only the day and month of your birth date are used for matching. The year is never transmitted. Visit the{' '}
-                    <Link to="/celebrity-birthday/" className="text-[#6E5AA6] hover:underline font-medium">Celebrity Birthday Match</Link>{' '}
+                    <Link to="/celebrity-birthday/" className="text-brand-purple hover:underline font-medium">Celebrity Birthday Match</Link>{' '}
                     tool to see this in action.
                   </p>
                 </div>
@@ -404,7 +404,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   Your age on another planet is the number of complete orbits that planet has made around the Sun since your birth. BornClock's{' '}
-                  <Link to="/planetary-age/" className="text-[#6E5AA6] hover:underline font-medium">Planetary Age Calculator</Link>{' '}
+                  <Link to="/planetary-age/" className="text-brand-purple hover:underline font-medium">Planetary Age Calculator</Link>{' '}
                   uses mean sidereal orbital periods from the NASA JPL Planetary Fact Sheet (Williams, D.R., NASA GSFC, 2024).
                 </p>
                 <FormulaBlock>
@@ -447,7 +447,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   BornClock's{' '}
-                  <Link to="/zodiac/" className="text-[#6E5AA6] hover:underline font-medium">Zodiac Analysis</Link>{' '}
+                  <Link to="/zodiac/" className="text-brand-purple hover:underline font-medium">Zodiac Analysis</Link>{' '}
                   uses the <strong className="text-foreground">Western tropical zodiac</strong> — the twelve equal 30° divisions of the ecliptic, fixed to the vernal equinox. Date ranges follow the standard astronomical calendar boundaries that have been used since classical antiquity.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
@@ -466,7 +466,7 @@ export default function Methodology() {
                   <h3 className="text-xl font-semibold text-foreground mb-3">The Astronomical Engine</h3>
                   <p className="text-muted-foreground leading-relaxed mb-4">
                     BornClock's{' '}
-                    <Link to="/kundali/" className="text-[#6E5AA6] hover:underline font-medium">Kundli / birth-chart tool</Link>{' '}
+                    <Link to="/kundali/" className="text-brand-purple hover:underline font-medium">Kundli / birth-chart tool</Link>{' '}
                     is computed by a self-contained astronomical engine built on the open-source{' '}
                     <strong className="text-foreground">astronomy-engine</strong> library (VSOP87 / ELP2000-grade
                     planetary and lunar theory). Positions are calculated for the exact date, time, and place of
@@ -526,7 +526,7 @@ export default function Methodology() {
                     classical muhurat basis drawn from Brihat Samhita and standard panchang sources.
                   </p>
                   <p className="text-muted-foreground leading-relaxed mt-4">
-                    <Link to="/accuracy/" className="text-[#6E5AA6] hover:underline font-medium" data-testid="methodology-accuracy-link">How we check accuracy →</Link>{' '}
+                    <Link to="/accuracy/" className="text-brand-purple hover:underline font-medium" data-testid="methodology-accuracy-link">How we check accuracy →</Link>{' '}
                     every check, the reference it was compared with, how many cases, the result, the date and the limits.
                   </p>
                 </div>
@@ -559,8 +559,8 @@ export default function Methodology() {
                 <div>
                   <h3 className="text-xl font-semibold text-foreground mb-3">Doshas, Calmly</h3>
                   <p className="text-muted-foreground leading-relaxed">
-                    Classical patterns such as <Link to="/manglik/" className="text-[#6E5AA6] hover:underline font-medium">Mangal Dosha (Manglik)</Link>{' '}
-                    and <Link to="/kaal-sarp-dosha/" className="text-[#6E5AA6] hover:underline font-medium">Kaal Sarp Dosha</Link>{' '}
+                    Classical patterns such as <Link to="/manglik/" className="text-brand-purple hover:underline font-medium">Mangal Dosha (Manglik)</Link>{' '}
+                    and <Link to="/kaal-sarp-dosha/" className="text-brand-purple hover:underline font-medium">Kaal Sarp Dosha</Link>{' '}
                     are presented as <em>areas to be mindful of</em>, together with their classical cancellations
                     (parihara) — not as verdicts. Remedies we mention are the simple, free, traditional ones
                     (prayer, charity, patience with timing); BornClock does not sell fear, gemstone upsells, or
@@ -576,7 +576,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   BornClock's{' '}
-                  <Link to="/numerology/" className="text-[#6E5AA6] hover:underline font-medium">Numerology Calculator</Link>{' '}
+                  <Link to="/numerology/" className="text-brand-purple hover:underline font-medium">Numerology Calculator</Link>{' '}
                   computes the <strong className="text-foreground">Pythagorean Life Path Number</strong>: reduce the full birth date (day + month + year) to a single digit by repeatedly summing its digits. Master numbers 11, 22, and 33 are preserved without further reduction.
                 </p>
                 <p className="text-muted-foreground font-medium mb-2">Example — 15 June 1990:</p>
@@ -595,7 +595,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   BornClock's{' '}
-                  <Link to="/birthstone/" className="text-[#6E5AA6] hover:underline font-medium">Birthstone</Link>{' '}
+                  <Link to="/birthstone/" className="text-brand-purple hover:underline font-medium">Birthstone</Link>{' '}
                   tool uses the <strong className="text-foreground">American Gem Society / Jewelers of America official birthstone list</strong>, updated in 2002 (Tanzanite added for December) and 2016 (Spinel added for August). Where a month has multiple modern stones, all alternatives are displayed with their historical provenance.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
@@ -611,7 +611,7 @@ export default function Methodology() {
                 </h2>
                 <p className="text-muted-foreground leading-relaxed mb-4">
                   BornClock's{' '}
-                  <Link to="/generation/" className="text-[#6E5AA6] hover:underline font-medium">Generation Classification</Link>{' '}
+                  <Link to="/generation/" className="text-brand-purple hover:underline font-medium">Generation Classification</Link>{' '}
                   tool classifies birth years into generational cohorts using Pew Research Center (2019) definitions:
                 </p>
                 <div className="overflow-x-auto rounded-lg border border-border">
@@ -659,7 +659,7 @@ export default function Methodology() {
                   <li><strong className="text-foreground">Planetary age</strong> — exact to the day of calculation, using verified NASA JPL orbital period constants.</li>
                   <li><strong className="text-foreground">Celebrity birthdays</strong> — verified from multiple public sources; birth dates disputed in historical records are noted.</li>
                   <li><strong className="text-foreground">Zodiac / birthstone / numerology</strong> — based on established traditional systems. Provided for cultural enrichment and entertainment only.</li>
-                  <li><strong className="text-foreground">Vedic calculations</strong> — checked against the Swiss Ephemeris, AstroSage and Drik Panchang; dated results and known limits are on <Link to="/accuracy/" className="text-[#6E5AA6] hover:underline font-medium">How we check accuracy</Link>.</li>
+                  <li><strong className="text-foreground">Vedic calculations</strong> — checked against the Swiss Ephemeris, AstroSage and Drik Panchang; dated results and known limits are on <Link to="/accuracy/" className="text-brand-purple hover:underline font-medium">How we check accuracy</Link>.</li>
                   <li><strong className="text-foreground">Data currency</strong> — life expectancy baselines are reviewed annually against the latest UN WPP release. Last review: 2024.</li>
                 </ul>
               </section>

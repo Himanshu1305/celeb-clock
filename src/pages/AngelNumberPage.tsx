@@ -20,8 +20,9 @@ import {
   type AngelNumber,
 } from '@/data/angelNumbers';
 import { lifePathWorking } from '@/lib/lifePath';
+import { palette } from '../theme/palette';
 
-const ACCENT = '#6E5AA6';
+const ACCENT = palette.purple;
 
 const FOOTER = {
   tagline: 'Angel numbers explained honestly — a modern spiritual belief, not numerology from a birthday.',
@@ -54,7 +55,7 @@ function LifePathCheck({ a }: { a: AngelNumber }) {
         type="date"
         value={dob}
         onChange={e => setDob(e.target.value)}
-        className="w-full sm:w-auto border border-gray-300 rounded-xl px-4 py-2.5 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+        className="w-full sm:w-auto border border-gray-300 rounded-xl px-4 py-2.5 text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-brand-navy"
       />
       {result && (
         <div className="mt-3 text-sm text-foreground leading-relaxed" data-testid="angel-lifepath-result">

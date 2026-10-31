@@ -1,4 +1,11 @@
 import type { Config } from "tailwindcss";
+import { palette, tokenSlug } from "./src/theme/palette";
+
+// Brand tokens (B13): one Tailwind colour per --brand-* CSS variable in src/index.css, as
+// rgb(var(--brand-x) / <alpha-value>) so opacity modifiers work (bg-brand-purple/10).
+const brand = Object.fromEntries(
+  Object.keys(palette).map((k) => [tokenSlug(k), `rgb(var(--brand-${tokenSlug(k)}) / <alpha-value>)`]),
+);
 
 export default {
   darkMode: ["class"],
@@ -22,6 +29,7 @@ export default {
         'devanagari': ['"Noto Sans Devanagari"', '"Public Sans"', 'system-ui', 'sans-serif'],
       },
       colors: {
+        brand,
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

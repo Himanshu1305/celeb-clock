@@ -32,6 +32,7 @@ import { TEXT_VS } from './printHtml';
 import { currentYoginiPeriod, yoginiAntardashas } from '../vedic/engine/yoginiDasha';
 import { AV_PLANETS, byHouse } from '../vedic/engine/ashtakavarga';
 import { YOGINI_META, HOUSE_THEMES, SAV_STRONG, SAV_WEAK } from '../../data/yoginiAshtakavarga';
+import { palette } from '../../theme/palette';
 export { signLabel, TEXT_VS };
 
 type VargaChart = { lagnaSignIndex: number; planets: Array<{ name: string; signIndex: number; house: number }> };
@@ -300,7 +301,7 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta =
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${esc(title)} — BornClock</title>
 <style>
   @page { size: A4; margin: 0; }
-  :root { --ink:#0E2238; --soft:#3A4A5A; --muted:#6B7A89; --line:#D7E1EA; --panel:#F4F6FA; --navy:#103A5C; --gold:#A8842C; }
+  :root { --ink:${palette.navy}; --soft:${palette.inkSoft}; --muted:#6B7A89; --line:${palette.lineBlue}; --panel:#F4F6FA; --navy:${palette.blueDark}; --gold:#A8842C; }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   html, body { background: #fff; }
   body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); font-size: 11.5px; line-height: 1.5;

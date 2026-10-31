@@ -129,7 +129,7 @@ export default function MoonSignPage() {
                 <DateOnlyMoonNote ambiguous={calc!.moonSigns.length > 1 || calc!.nakshatraNumbers.length > 1} what="Moon sign and Nakshatra" className="text-xs text-gray-500 mt-2" />
               </div>
               <div className="grid sm:grid-cols-2 gap-4 mb-6">
-                <div className="bg-gradient-to-br from-blue-900 to-[#6E5AA6] rounded-2xl p-6 text-white text-center">
+                <div className="bg-gradient-to-br from-blue-900 to-brand-purple rounded-2xl p-6 text-white text-center">
                   <p className="text-xs text-white/90 mb-1 uppercase tracking-wide"><TermTip id="rashi">Moon Sign</TermTip></p>
                   <div className="text-5xl mb-2">{result.moonSignData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.moonSign} Moon</h2>
@@ -137,7 +137,7 @@ export default function MoonSignPage() {
                   <p className="text-xs text-white/90">{result.moonSignData.element} · {result.moonSignData.rulingPlanet}</p>
                   <p className="text-xs text-white/90 mt-2 italic">{result.moonSignData.emotionalNature}</p>
                 </div>
-                <div className="bg-gradient-to-br from-[#6E5AA6] to-pink-900 rounded-2xl p-6 text-white text-center">
+                <div className="bg-gradient-to-br from-brand-purple to-pink-900 rounded-2xl p-6 text-white text-center">
                   <p className="text-xs text-white/90 mb-1 uppercase tracking-wide"><TermTip id="nakshatra">Nakshatra</TermTip></p>
                   <div className="text-5xl mb-2">{result.nakshatraData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.nakshatraData.name}</h2>
@@ -284,8 +284,8 @@ export default function MoonSignPage() {
                         <span><strong>Quality:</strong> {nak.quality}</span>
                       </div>
                       <p className="text-sm text-gray-700 leading-relaxed">{nak.description}</p>
-                      <div className="bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-lg p-3">
-                        <p className="text-xs font-bold text-[#6E5AA6] mb-2">🌙 In Your Daily Life</p>
+                      <div className="bg-brand-purple/10 border border-brand-purple/30 rounded-lg p-3">
+                        <p className="text-xs font-bold text-brand-purple mb-2">🌙 In Your Daily Life</p>
                         <p className="text-xs text-gray-700 leading-relaxed">{getNakshatraLifeApplication(nak.name)}</p>
                       </div>
                     </div>

@@ -154,6 +154,26 @@ const overrides = `
 .paj .section-head>div{min-width:0;max-width:100%}
 `;
 
-const generated = (header + out.join('\n') + '\n' + overrides).split(VEDIC_ACCENT_TEXT[0]).join(VEDIC_ACCENT_TEXT[1]);
+const generatedHex = (header + out.join('\n') + '\n' + overrides).split(VEDIC_ACCENT_TEXT[0]).join(VEDIC_ACCENT_TEXT[1]);
+
+// B13 — one source of truth for colour. Every 6-digit hex that equals a brand token in
+// src/index.css (`--brand-<name>: R G B;`) is emitted as `rgb(var(--brand-<name>))`, so
+// .paj --navy/--ink/--muted/--line/--bg/--accent/--accent-text/--green follow the site
+// palette. Same resolved colour, so the pages render identically. White stays literal
+// (#FFFFFF text on dark bands is "white", not a brand surface) except the --paper/--bg
+// surface variables, which use --brand-paper. Comments are left untouched.
+const brandCss = readFileSync(new URL('../src/index.css', import.meta.url), 'utf8');
+const BRAND = new Map();
+for (const m of brandCss.matchAll(/--brand-([a-z-]+):\s*(\d+)\s+(\d+)\s+(\d+)\s*;/g)) {
+  const hex = '#' + [m[2], m[3], m[4]].map(n => (+n).toString(16).padStart(2, '0')).join('').toUpperCase();
+  if (!BRAND.has(hex)) BRAND.set(hex, m[1]);
+}
+const tokenise = (s) => s
+  .replace(/(--(?:paper|bg):)#FFFFFF(?![0-9A-Fa-f])/gi, (_, p) => `${p}rgb(var(--brand-paper))`)
+  .replace(/#[0-9A-Fa-f]{6}(?![0-9A-Fa-f\w-])/g, h => {
+    const name = BRAND.get(h.toUpperCase());
+    return name && name !== 'paper' ? `rgb(var(--brand-${name}))` : h;
+  });
+const generated = generatedHex.split(/(\/\*[\s\S]*?\*\/)/).map((p, i) => (i % 2 ? p : tokenise(p))).join('');
 writeFileSync('src/styles/part-aj.css', generated);
 console.log('Wrote src/styles/part-aj.css —', generated.length, 'bytes');

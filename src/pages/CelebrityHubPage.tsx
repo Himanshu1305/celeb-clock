@@ -84,7 +84,7 @@ export function CelebrityHubPage() {
                   key={c.slug}
                   to={`/celebrity/${c.slug}/`}
                   data-testid="hub-celebrity-link"
-                  className="flex flex-col p-4 bg-white rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors"
+                  className="flex flex-col p-4 bg-white rounded-xl border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors"
                 >
                   <span className="font-semibold text-sm text-gray-900">{c.name}</span>
                   <span className="text-xs text-gray-500">{c.category}</span>
@@ -93,7 +93,7 @@ export function CelebrityHubPage() {
             </div>
 
             <div className="mt-8">
-              <Link to="/celebrity/" className="text-sm text-[#6E5AA6] hover:underline">← All celebrity profiles</Link>
+              <Link to="/celebrity/" className="text-sm text-brand-purple hover:underline">← All celebrity profiles</Link>
             </div>
           </section>
         </div>

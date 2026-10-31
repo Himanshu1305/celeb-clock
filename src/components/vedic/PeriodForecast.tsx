@@ -8,7 +8,7 @@ import { Link } from '@/components/seo/CanonicalLink';
 import { buildPeriodForecast, type ForecastPeriod, type MahaPeriod, type NodePlacements } from '@/lib/vedic/periodForecast';
 
 type Tab = 'yearly' | 'quarterly' | 'monthly';
-const gradeColor = (g: string) => g === 'strong' ? 'text-emerald-700' : g === 'moderate' ? 'text-[#6E5AA6]' : 'text-amber-600';
+const gradeColor = (g: string) => g === 'strong' ? 'text-emerald-700' : g === 'moderate' ? 'text-brand-purple' : 'text-amber-600';
 
 function PeriodCard({ p }: { p: ForecastPeriod }) {
   return (
@@ -41,7 +41,7 @@ export function PeriodForecast({ dashaTimeline, lagnaSignIndex, planets }: {
   const periods = forecast[tab];
 
   return (
-    <div data-testid="period-forecast" className="rounded-xl border border-[#6E5AA6]/30 p-4 mt-6">
+    <div data-testid="period-forecast" className="rounded-xl border border-brand-purple/30 p-4 mt-6">
       <div className="font-semibold text-foreground mb-1">Your predictions, period by period</div>
       <p className="text-xs text-muted-foreground mb-3">{forecast.note}</p>
       <div className="inline-flex rounded-lg border border-border overflow-hidden mb-3 text-sm" role="group" aria-label="Forecast period">

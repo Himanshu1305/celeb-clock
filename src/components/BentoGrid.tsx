@@ -72,7 +72,7 @@ const LiveAgeTicker = () => {
 const CelebrityAvatars = () => {
   const [isHovered, setIsHovered] = useState(false);
   const celebrities = [
-    { name: 'Albert Einstein', initials: 'AE', color: 'from-blue-500 to-[#6E5AA6]' },
+    { name: 'Albert Einstein', initials: 'AE', color: 'from-blue-500 to-brand-purple' },
     { name: 'Eva Longoria', initials: 'EL', color: 'from-pink-500 to-rose-500' },
     { name: 'will.i.am', initials: 'WI', color: 'from-amber-500 to-orange-500' },
     { name: 'More', initials: '+47', color: 'from-gray-400 to-gray-500' },
@@ -274,7 +274,7 @@ const NumerologyDisplay = () => {
   return (
     <div className="mt-4 text-center">
       <span 
-        className={`text-6xl font-bold text-[#6E5AA6] inline-block transition-transform duration-500 ${
+        className={`text-6xl font-bold text-brand-purple inline-block transition-transform duration-500 ${
           isPulsing ? 'animate-pulse scale-110' : 'scale-100'
         }`}
         onMouseEnter={() => setIsPulsing(false)}
@@ -485,7 +485,7 @@ export const BentoGrid = () => {
         <BentoCard
           className="lg:col-span-4"
           tag="♈ Zodiac"
-          tagColor="bg-[#6E5AA6]/10 text-[#6E5AA6]"
+          tagColor="bg-brand-purple/10 text-brand-purple"
           title="Your Cosmic Identity"
           description="Western & Chinese zodiac, personality traits, and compatibility insights."
           cta="Explore my zodiac"
@@ -498,7 +498,7 @@ export const BentoGrid = () => {
         <BentoCard
           className="lg:col-span-2"
           tag="🔢 Numerology"
-          tagColor="bg-[#6E5AA6]/10 text-[#6E5AA6]"
+          tagColor="bg-brand-purple/10 text-brand-purple"
           title="Life Path 7"
           description="Your birthday numbers reveal your destiny and personality."
           cta="Find my number"

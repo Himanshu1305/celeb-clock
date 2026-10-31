@@ -137,7 +137,7 @@ export default function BirthdayDatePage() {
         <div className="max-w-3xl mx-auto">
 
         {/* Direct answer box */}
-        <div className={`rounded-xl border-2 p-5 mb-8 ${ELEMENT_COLORS[p.element] ?? 'bg-[#6E5AA6]/10 border-[#6E5AA6]/30 text-[#6E5AA6]'}`}>
+        <div className={`rounded-xl border-2 p-5 mb-8 ${ELEMENT_COLORS[p.element] ?? 'bg-brand-purple/10 border-brand-purple/30 text-brand-purple'}`}>
           <p className="text-sm font-semibold leading-relaxed">
             People born on <strong>{monthName} {day}</strong> are{' '}
             <strong>{p.zodiacSign} {p.zodiacSymbol}</strong> — a {p.element} sign ruled by{' '}
@@ -151,7 +151,7 @@ export default function BirthdayDatePage() {
         <p className="text-xs text-gray-500 -mt-4 mb-8 leading-relaxed">
           Your <strong className="text-gray-700">Birth Day Number ({p.lifePathNumber})</strong> comes from the day of the month alone.
           Your full <strong className="text-gray-700">Life Path number</strong>, calculated from your complete birth date, is in the{' '}
-          <Link to="/birthday-report/" className="text-[#6E5AA6] hover:underline">Birthday Blueprint</Link>.
+          <Link to="/birthday-report/" className="text-brand-purple hover:underline">Birthday Blueprint</Link>.
         </p>
 
         {/* Core traits */}
@@ -159,7 +159,7 @@ export default function BirthdayDatePage() {
           <h2 className="text-lg font-bold text-gray-900 mb-3">Core Personality Traits</h2>
           <div className="flex flex-wrap gap-2">
             {p.coreTraits.map(trait => (
-              <span key={trait} className="bg-[#6E5AA6]/10 text-[#6E5AA6] px-3 py-1.5 rounded-full text-sm font-medium capitalize">
+              <span key={trait} className="bg-brand-purple/10 text-brand-purple px-3 py-1.5 rounded-full text-sm font-medium capitalize">
                 {trait}
               </span>
             ))}
@@ -204,22 +204,22 @@ export default function BirthdayDatePage() {
         <section className="mb-8">
           <h2 className="text-lg font-bold text-gray-900 mb-3">Lucky Attributes</h2>
           <div className="grid grid-cols-3 gap-3">
-            <Card className="text-center border-[#6E5AA6]/30">
+            <Card className="text-center border-brand-purple/30">
               <CardContent className="p-4">
                 <p className="text-xs text-gray-500 uppercase font-bold mb-1">Lucky Day</p>
-                <p className="text-base font-black text-[#6E5AA6]">{p.luckyDay}</p>
+                <p className="text-base font-black text-brand-purple">{p.luckyDay}</p>
               </CardContent>
             </Card>
-            <Card className="text-center border-[#6E5AA6]/30">
+            <Card className="text-center border-brand-purple/30">
               <CardContent className="p-4">
                 <p className="text-xs text-gray-500 uppercase font-bold mb-1">Lucky Color</p>
-                <p className="text-base font-black text-[#6E5AA6]">{p.luckyColor}</p>
+                <p className="text-base font-black text-brand-purple">{p.luckyColor}</p>
               </CardContent>
             </Card>
-            <Card className="text-center border-[#6E5AA6]/30">
+            <Card className="text-center border-brand-purple/30">
               <CardContent className="p-4">
                 <p className="text-xs text-gray-500 uppercase font-bold mb-1">Lucky Number</p>
-                <p className="text-base font-black text-[#6E5AA6]">{p.luckyNumber}</p>
+                <p className="text-base font-black text-brand-purple">{p.luckyNumber}</p>
               </CardContent>
             </Card>
           </div>
@@ -230,7 +230,7 @@ export default function BirthdayDatePage() {
           <h2 className="text-lg font-bold text-gray-900 mb-3">Compatible Zodiac Signs</h2>
           <div className="flex flex-wrap gap-2">
             {p.compatibleSigns.map(sign => (
-              <Badge key={sign} variant="outline" className="text-sm px-3 py-1.5 border-[#6E5AA6]/30 text-[#6E5AA6]">
+              <Badge key={sign} variant="outline" className="text-sm px-3 py-1.5 border-brand-purple/30 text-brand-purple">
                 {sign}
               </Badge>
             ))}
@@ -240,19 +240,19 @@ export default function BirthdayDatePage() {
         {/* Date fact */}
         <section className="mb-8 bg-gray-50 border border-gray-200 rounded-xl p-5">
           <h2 className="text-lg font-bold text-gray-900 mb-2">
-            <Calendar className="w-4 h-4 inline mr-1.5 text-[#6E5AA6]" />
+            <Calendar className="w-4 h-4 inline mr-1.5 text-brand-purple" />
             About {monthName} {day}
           </h2>
           <p className="text-sm text-gray-700 leading-relaxed">{p.dateFact}</p>
         </section>
 
         {/* CTA */}
-        <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-6 mb-8 text-white text-center">
+        <div className="bg-gradient-to-r from-brand-purple to-brand-purple rounded-2xl p-6 mb-8 text-white text-center">
           <h2 className="text-lg font-bold mb-2">Find who shares your {monthName} {day} birthday</h2>
           <p className="text-sm text-white/90 mb-4">
             Discover famous people born on your exact date — athletes, artists, scientists, and leaders.
           </p>
-          <Button asChild className="bg-white text-[#6E5AA6] hover:bg-[#6E5AA6]/10 font-bold">
+          <Button asChild className="bg-white text-brand-purple hover:bg-brand-purple/10 font-bold">
             <Link to={`/born-on/${monthName.toLowerCase()}-${day}/`}>
               Famous people born on {monthName} {day} <ArrowRight className="w-4 h-4 ml-1.5" />
             </Link>
@@ -271,11 +271,11 @@ export default function BirthdayDatePage() {
         </section>
 
         {/* Numerology Context */}
-        <section className="mb-8 bg-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-xl p-6">
+        <section className="mb-8 bg-brand-purple/10 border border-brand-purple/30 rounded-xl p-6">
           <h2 className="text-xl font-bold text-gray-900 mb-1">
             {getNumerologyDescription(p.lifePathNumber)}
           </h2>
-          <p className="text-xs text-[#6E5AA6] font-semibold mb-3 uppercase tracking-wide">
+          <p className="text-xs text-brand-purple font-semibold mb-3 uppercase tracking-wide">
             Your numerological foundation
           </p>
           <p className="text-sm text-gray-700 leading-relaxed">
@@ -339,20 +339,20 @@ export default function BirthdayDatePage() {
         <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-100">
           <Link
             to={`/birthday/${prevMonth}/${prevDay}`}
-            className="flex items-center gap-2 text-sm text-[#6E5AA6] hover:text-[#6E5AA6] font-semibold transition-colors"
+            className="flex items-center gap-2 text-sm text-brand-purple hover:text-brand-purple font-semibold transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
             {MONTH_NAMES[prevMonth]} {prevDay}
           </Link>
           <Link
             to={`/birthday/${month}`}
-            className="text-xs text-gray-500 hover:text-[#6E5AA6] transition-colors"
+            className="text-xs text-gray-500 hover:text-brand-purple transition-colors"
           >
             All {monthName} Birthdays
           </Link>
           <Link
             to={`/birthday/${nextMonth}/${nextDay}`}
-            className="flex items-center gap-2 text-sm text-[#6E5AA6] hover:text-[#6E5AA6] font-semibold transition-colors"
+            className="flex items-center gap-2 text-sm text-brand-purple hover:text-brand-purple font-semibold transition-colors"
           >
             {MONTH_NAMES[nextMonth]} {nextDay}
             <ChevronRight className="w-4 h-4" />

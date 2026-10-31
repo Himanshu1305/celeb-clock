@@ -1,0 +1,97 @@
+# Readability (WCAG text-contrast) gate — one URL per route template / page family.
+# Run by .github/workflows/deploy.yml (prod-contrast job) as:
+#   node scripts/contrast-audit.mjs --dist dist --urls scripts/contrast-urls.txt --fill --fail
+# Any text below WCAG AA (4.5:1, or 3:1 for large text) on these pages blocks the deploy.
+# Keep it to ~80 URLs so the job stays well under 6 minutes; add a URL when a NEW page
+# template (not a new instance of an existing one) ships.
+
+# Home + hubs
+/
+/vedic-astrology
+/science-longevity
+/birthday-fun
+/mystic-corner
+/celebrity-birthday
+/answers
+/articles
+/blog
+/gemstones
+/glossary
+
+# Calculators (filled state audited too)
+/age-calculator
+/age-in-days
+/birthday-countdown
+/longevity-calculator
+/how-long-will-i-live
+/life-expectancy
+/biological-age
+/planetary-age
+/weight-on-planets
+/generation
+/country-comparison
+/numerology
+/name-numerology
+/personal-year-number
+/chaldean-numerology
+/lo-shu-grid-calculator
+/love-calculator
+/biorhythm
+/tarot-card-by-birthday
+/kundali
+/kundali-match
+/marriage-biodata-maker
+/meri-umar-kitni-hai
+/hi/life-expectancy-calculator
+
+# Template pages (one instance each)
+/numerology/1
+/zodiac
+/zodiac/aries
+/zodiac/aries/today
+/birthstone/january
+/life-expectancy-india
+/life-expectancy/factors/smoking
+/todays-birthdays
+/birthday/1/1
+/born-on/january-1
+/celebrity/bollywood
+/celebrity/mahatma-gandhi
+/chinese-zodiac/rat
+/vedic-zodiac/mesh
+/rashifal/mesh/today
+/nakshatra/ashwini
+/transit/saturn/2025
+/festivals/2025
+/vrat/ekadashi
+/planet-in-sign/sun/aries
+/yoga/raja-yoga
+/remedies/manglik-dosha
+/divisional-charts/d1-rashi
+/sade-sati/mesh
+/angel-numbers/111
+/muhurat/marriage/2026
+/baby-names/nakshatra/ashwini
+/panchang/mumbai
+/rahu-kaal/mumbai
+/tarot/cards/the-fool
+/compatibility/aquarius/aquarius
+/rashi-ratna
+/answers/what-is-my-biological-age
+/answers/how-old-am-i-on-mars
+/articles/nakshatra-by-date-of-birth
+/articles/life-expectancy-by-country-2026
+/articles/famous-indians-born-in-january
+/articles/tarot-card-by-date-of-birth
+/blog/calculate-exact-age-seconds-minutes-hours
+
+# Commerce / account / info
+/pricing
+/upgrade
+/birthday-report
+/birthday-report/sample
+/gift
+/coach
+/leaderboard
+/about
+/faq

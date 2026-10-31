@@ -150,7 +150,7 @@ export function CityPicker({ testid, value, onPick, dob, time, id, placeholder =
             <li key={`${o.label}-${o.lat}-${i}`} role="presentation">
               <button type="button" role="option" id={`${listId}-opt-${i}`} aria-selected={i === active} tabIndex={-1}
                       onMouseDown={e => e.preventDefault()} onClick={() => pick(o)} data-testid={`${testid}-option`}
-                      className={`w-full text-left px-3 py-2 text-sm hover:bg-[#6E5AA6]/10 text-gray-900 ${i === active ? 'bg-[#6E5AA6]/10' : ''}`}>
+                      className={`w-full text-left px-3 py-2 text-sm hover:bg-brand-purple/10 text-gray-900 ${i === active ? 'bg-brand-purple/10' : ''}`}>
                 {labels[i]}
               </button>
             </li>
@@ -158,7 +158,7 @@ export function CityPicker({ testid, value, onPick, dob, time, id, placeholder =
           {!searchedNetwork && (
             <li role="presentation">
               <button type="button" data-testid={`${testid}-more`} onClick={() => runSearch(query, true)}
-                      className="w-full text-left px-3 py-2 text-xs text-[#6E5AA6] underline hover:bg-[#6E5AA6]/10">
+                      className="w-full text-left px-3 py-2 text-xs text-brand-purple underline hover:bg-brand-purple/10">
                 Not listed? Search more places named “{query.trim()}”
               </button>
             </li>
@@ -182,7 +182,7 @@ export function CityPicker({ testid, value, onPick, dob, time, id, placeholder =
           </p>
           <button type="button" data-testid={`${testid}-edit`} onClick={edit}
                   aria-label={`Edit birth city (${value.name})`}
-                  className="shrink-0 text-xs text-[#6E5AA6] underline">
+                  className="shrink-0 text-xs text-brand-purple underline">
             Edit
           </button>
         </div>

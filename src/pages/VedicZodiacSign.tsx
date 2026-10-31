@@ -105,7 +105,7 @@ export default function VedicZodiacSign() {
             <span className="px-3 py-1.5 bg-orange-100 text-orange-800 rounded-full text-sm font-medium">
               {signInfo.element} Element
             </span>
-            <span className="px-3 py-1.5 bg-[#6E5AA6]/10 text-[#6E5AA6] rounded-full text-sm font-medium">
+            <span className="px-3 py-1.5 bg-brand-purple/10 text-brand-purple rounded-full text-sm font-medium">
               Ruled by {signInfo.ruling_planet}
             </span>
             <span className="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">

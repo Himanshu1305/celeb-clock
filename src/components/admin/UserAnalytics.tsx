@@ -5,6 +5,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recha
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Globe } from 'lucide-react';
+import { ui } from '../../theme/palette';
 
 interface CountryData {
   country: string;
@@ -123,7 +124,7 @@ export const UserAnalytics = () => {
                     cy="50%"
                     labelLine={false}
                     outerRadius={100}
-                    fill="#8884d8"
+                    fill={ui.chartPurple}
                     dataKey="count"
                     nameKey="country"
                     label={({ country, percentage }) => 

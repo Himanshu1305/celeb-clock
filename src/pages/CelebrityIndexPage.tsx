@@ -81,7 +81,7 @@ export function CelebrityIndexPage() {
                     key={hub}
                     to={`/celebrity/${hub}/`}
                     data-testid="category-hub-link"
-                    className="p-4 bg-white rounded-xl border border-gray-200 hover:border-[#6E5AA6]/30 hover:bg-[#6E5AA6]/10 transition-colors"
+                    className="p-4 bg-white rounded-xl border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors"
                   >
                     <div className="font-bold text-sm text-gray-900">{cfg.label}</div>
                     <div className="text-xs text-gray-600">{cfg.label} celebrity profiles</div>
@@ -101,7 +101,7 @@ export function CelebrityIndexPage() {
                     key={f.slug}
                     to={`/celebrity/${f.slug}/`}
                     data-testid="featured-celebrity-link"
-                    className="p-4 bg-[#6E5AA6]/10 rounded-xl border border-[#6E5AA6]/30 hover:border-[#6E5AA6]/30 transition-colors text-center"
+                    className="p-4 bg-brand-purple/10 rounded-xl border border-brand-purple/30 hover:border-brand-purple/30 transition-colors text-center"
                   >
                     <div className="font-semibold text-sm text-gray-900">{f.name}</div>
                     <div className="text-xs text-gray-600">{f.category}</div>
@@ -122,7 +122,7 @@ export function CelebrityIndexPage() {
                   key={c.slug}
                   to={`/celebrity/${c.slug}/`}
                   data-testid="celebrity-index-link"
-                  className="text-sm text-gray-700 hover:text-[#6E5AA6] hover:underline py-1 truncate"
+                  className="text-sm text-gray-700 hover:text-brand-purple hover:underline py-1 truncate"
                 >
                   {c.name}
                 </Link>

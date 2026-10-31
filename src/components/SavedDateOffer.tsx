@@ -18,20 +18,20 @@ export function SavedDateOffer({ dobIso, onUseSaved, prefix = 'date' }: { dobIso
 
   if (savedDob && !dobIso && !dismissed) {
     return (
-      <div data-testid={`${prefix}-use-saved`} className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 px-4 py-3 text-sm">
-        <span className="text-[#6E5AA6]">★ Use your saved birth date — <strong>{savedDob}</strong>?</span>
+      <div data-testid={`${prefix}-use-saved`} className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-purple/30 bg-brand-purple/10 px-4 py-3 text-sm">
+        <span className="text-brand-purple">★ Use your saved birth date — <strong>{savedDob}</strong>?</span>
         <span className="flex gap-3">
-          <button type="button" data-testid={`${prefix}-use-saved-btn`} onClick={() => onUseSaved(savedDob)} className="text-[#6E5AA6] underline hover:text-[#6E5AA6]">Use it</button>
-          <button type="button" onClick={() => setDismissed(true)} className="text-[#6E5AA6] hover:text-[#6E5AA6]">No thanks</button>
+          <button type="button" data-testid={`${prefix}-use-saved-btn`} onClick={() => onUseSaved(savedDob)} className="text-brand-purple underline hover:text-brand-purple">Use it</button>
+          <button type="button" onClick={() => setDismissed(true)} className="text-brand-purple hover:text-brand-purple">No thanks</button>
         </span>
       </div>
     );
   }
   if (dobIso && !profile && !saved) {
     return (
-      <div data-testid={`${prefix}-save-offer`} className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 px-4 py-3 text-sm">
-        <span className="text-[#6E5AA6]">Save this birth date on this device so other BornClock tools can reuse it?</span>
-        <button type="button" data-testid={`${prefix}-save-btn`} onClick={() => { if (save({ dob: dobIso })) setSaved(true); }} className="text-[#6E5AA6] underline hover:text-[#6E5AA6]">Save my date</button>
+      <div data-testid={`${prefix}-save-offer`} className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-purple/30 bg-brand-purple/10 px-4 py-3 text-sm">
+        <span className="text-brand-purple">Save this birth date on this device so other BornClock tools can reuse it?</span>
+        <button type="button" data-testid={`${prefix}-save-btn`} onClick={() => { if (save({ dob: dobIso })) setSaved(true); }} className="text-brand-purple underline hover:text-brand-purple">Save my date</button>
       </div>
     );
   }

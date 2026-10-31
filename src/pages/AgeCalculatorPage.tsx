@@ -36,12 +36,12 @@ function AgeCalcProfileBridge({ birthDate, onUseSaved }: { birthDate: Date | nul
   if (savedDob && !birthDate && !dismissed) {
     const [y, m, d] = savedDob.split('-').map(Number);
     return (
-      <div data-testid="agecalc-use-saved" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 px-4 py-3 text-sm">
-        <span className="text-[#6E5AA6]">★ Use your saved birth date — <strong>{savedDob}</strong>?</span>
+      <div data-testid="agecalc-use-saved" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-purple/30 bg-brand-purple/10 px-4 py-3 text-sm">
+        <span className="text-brand-purple">★ Use your saved birth date — <strong>{savedDob}</strong>?</span>
         <span className="flex gap-3">
           <button type="button" data-testid="agecalc-use-saved-btn" onClick={() => onUseSaved(new Date(y, m - 1, d))}
-                  className="text-[#6E5AA6] underline hover:text-[#6E5AA6]">Use it</button>
-          <button type="button" onClick={() => setDismissed(true)} className="text-[#6E5AA6] hover:text-[#6E5AA6]">No thanks</button>
+                  className="text-brand-purple underline hover:text-brand-purple">Use it</button>
+          <button type="button" onClick={() => setDismissed(true)} className="text-brand-purple hover:text-brand-purple">No thanks</button>
         </span>
       </div>
     );
@@ -51,10 +51,10 @@ function AgeCalcProfileBridge({ birthDate, onUseSaved }: { birthDate: Date | nul
   if (birthDate && !profile && !saved) {
     const iso = `${birthDate.getFullYear()}-${String(birthDate.getMonth() + 1).padStart(2, '0')}-${String(birthDate.getDate()).padStart(2, '0')}`;
     return (
-      <div data-testid="agecalc-save-offer" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 px-4 py-3 text-sm">
-        <span className="text-[#6E5AA6]">Save this birth date on this device so BornClock’s other tools (Kundali, Sade Sati…) can reuse it?</span>
+      <div data-testid="agecalc-save-offer" className="max-w-4xl mx-auto mb-4 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-purple/30 bg-brand-purple/10 px-4 py-3 text-sm">
+        <span className="text-brand-purple">Save this birth date on this device so BornClock’s other tools (Kundali, Sade Sati…) can reuse it?</span>
         <button type="button" data-testid="agecalc-save-btn" onClick={() => { if (save({ dob: iso })) setSaved(true); }}
-                className="text-[#6E5AA6] underline hover:text-[#6E5AA6]">Save my date</button>
+                className="text-brand-purple underline hover:text-brand-purple">Save my date</button>
       </div>
     );
   }

@@ -119,12 +119,12 @@ export function BillionaireLongevityArticle() {
             {enriched.map(b => (
               <section key={b.name} className="bg-gray-50 rounded-2xl border border-gray-200 p-6">
                 <div className="flex items-center gap-4 mb-3">
-                  <div className="w-14 h-14 bg-[#0E2238] rounded-full flex items-center justify-center text-2xl font-black text-white flex-shrink-0">
+                  <div className="w-14 h-14 bg-brand-navy rounded-full flex items-center justify-center text-2xl font-black text-white flex-shrink-0">
                     {b.lifePath}
                   </div>
                   <div>
                     <h3 className="text-xl font-black text-gray-900">{b.name}</h3>
-                    <div className="text-sm text-[#2F6FB0] font-semibold">
+                    <div className="text-sm text-brand-blue font-semibold">
                       Life Path {b.lifePath}
                     </div>
                     <div className="text-xs text-gray-500">Born {b.dobLabel}</div>
@@ -147,14 +147,14 @@ export function BillionaireLongevityArticle() {
             and we make no such claim. It is simply a lens some readers enjoy.
           </p>
 
-          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8">
-            <h3 className="text-lg font-black text-[#2F6FB0] mb-2">How long might you live?</h3>
-            <p className="text-sm text-[#2F6FB0] mb-4">
+          <div className="bg-brand-blue/10 border-2 border-brand-blue/30 rounded-2xl p-6 my-8">
+            <h3 className="text-lg font-black text-brand-blue mb-2">How long might you live?</h3>
+            <p className="text-sm text-brand-blue mb-4">
               The habits below are free. Start by seeing your own baseline — then decide which
               lessons are worth adopting.
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-[#0E2238] transition-colors">
+               className="inline-block bg-brand-navy text-white font-bold px-6 py-3 rounded-full text-sm hover:bg-brand-navy transition-colors">
               Estimate My Life Expectancy →
             </a>
           </div>
@@ -196,14 +196,14 @@ export function BillionaireLongevityArticle() {
             longevity advantage of the ultra-wealthy is less about money and more about habit.
           </p>
 
-          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
+          <div className="bg-gradient-to-r from-brand-blue to-brand-blue rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">See Your Own Longevity Baseline</h2>
             <p className="text-white mb-6">
               Adopt the free habits — and track your progress against a personalised estimate of how
               long you might live.
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3 rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
+               className="inline-block bg-white text-brand-blue font-black px-8 py-3 rounded-full text-lg hover:bg-brand-blue/10 transition-colors">
               Open the Longevity Calculator →
             </a>
           </div>
@@ -219,7 +219,7 @@ export function BillionaireLongevityArticle() {
           </div>
 
           <h2 className="text-2xl font-black text-gray-900 mb-3">Related Articles</h2>
-          <ul className="list-disc pl-6 text-[#2F6FB0] space-y-2 mb-6">
+          <ul className="list-disc pl-6 text-brand-blue space-y-2 mb-6">
             <li>
               <a href="/articles/how-indian-celebrities-stay-fit/" className="hover:underline font-semibold">
                 How Indian Celebrities Stay Fit

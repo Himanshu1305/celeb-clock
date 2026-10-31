@@ -162,15 +162,15 @@ export function BryanJohnsonArticle() {
             ))}
           </div>
 
-          <div className="bg-[#2F6FB0]/10 border-2 border-[#2F6FB0]/30 rounded-2xl p-6 my-8 text-center">
-            <h3 className="text-lg font-black text-[#2F6FB0] mb-2">See how these habits change your numbers</h3>
-            <p className="text-sm text-[#2F6FB0] mb-4">
+          <div className="bg-brand-blue/10 border-2 border-brand-blue/30 rounded-2xl p-6 my-8 text-center">
+            <h3 className="text-lg font-black text-brand-blue mb-2">See how these habits change your numbers</h3>
+            <p className="text-sm text-brand-blue mb-4">
               Our free longevity calculator estimates how sleep, exercise, diet, and smoking
               status shift your life-expectancy — no budget, no medical team required.
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-[#0E2238] text-white font-bold px-6 py-3
-                          rounded-full text-sm hover:bg-[#0E2238] transition-colors">
+               className="inline-block bg-brand-navy text-white font-bold px-6 py-3
+                          rounded-full text-sm hover:bg-brand-navy transition-colors">
               Try the free longevity calculator →
             </a>
           </div>
@@ -233,7 +233,7 @@ export function BryanJohnsonArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
+          <div className="bg-gradient-to-r from-brand-blue to-brand-blue rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Build Your Own Longevity Plan — Free</h2>
             <p className="text-white mb-6">
@@ -242,8 +242,8 @@ export function BryanJohnsonArticle() {
               lifespan.
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-white text-[#2F6FB0] font-black px-8 py-3
-                          rounded-full text-lg hover:bg-[#2F6FB0]/10 transition-colors">
+               className="inline-block bg-white text-brand-blue font-black px-8 py-3
+                          rounded-full text-lg hover:bg-brand-blue/10 transition-colors">
               Open the Free Longevity Calculator →
             </a>
           </div>
@@ -253,13 +253,13 @@ export function BryanJohnsonArticle() {
             <ul className="space-y-2">
               <li>
                 <a href="/articles/how-to-live-to-100/"
-                   className="text-[#2F6FB0] font-semibold hover:underline">
+                   className="text-brand-blue font-semibold hover:underline">
                   How to Live to 100 — Habits of the World&apos;s Longest-Lived People →
                 </a>
               </li>
               <li>
                 <a href="/articles/blue-zones-diet/"
-                   className="text-[#2F6FB0] font-semibold hover:underline">
+                   className="text-brand-blue font-semibold hover:underline">
                   The Blue Zones Diet — What the Longest-Living Communities Eat →
                 </a>
               </li>

@@ -6,6 +6,7 @@ import { ArrowRight, Gift, Check } from 'lucide-react';
 import { REPORT_SECTION_COUNT, SECTIONS_LABEL } from '@/lib/reportFacts';
 import { reportPrice, resolveCurrency, type Currency } from '@/lib/pricing';
 import { detectCountry } from '@/services/CountryDetectionService';
+import { brandVar, ui } from '../theme/palette';
 
 // Homepage showcase for the paid Birthday Blueprint (₹199). Sells the report
 // with styled mockups of REAL report sections (cover, celebrity twins, zodiac
@@ -17,11 +18,11 @@ import { detectCountry } from '@/services/CountryDetectionService';
 // palette so the homepage hints at what the PDF actually looks like.
 function PreviewCard({ children, label }: { children: React.ReactNode; label: string }) {
   return (
-    <div className="rounded-xl overflow-hidden border shadow-sm bg-white" style={{ borderColor: '#E6D8B8' }}>
-      <div className="aspect-[3/4] p-4 flex flex-col" style={{ background: '#FBF6EA' }}>
+    <div className="rounded-xl overflow-hidden border shadow-sm bg-white" style={{ borderColor: ui.goldBorder }}>
+      <div className="aspect-[3/4] p-4 flex flex-col" style={{ background: ui.goldTint }}>
         {children}
       </div>
-      <div className="text-[11px] font-semibold text-center py-1.5 tracking-wide uppercase" style={{ color: '#B8862F', background: '#F5EAD2' }}>
+      <div className="text-[11px] font-semibold text-center py-1.5 tracking-wide uppercase" style={{ color: brandVar.goldDeep, background: ui.goldSoft }}>
         {label}
       </div>
     </div>
@@ -40,7 +41,7 @@ export function BirthdayReportShowcase() {
           <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Copy side */}
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full" style={{ background: '#F5EAD2', color: '#B8862F' }}>
+              <div className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full" style={{ background: ui.goldSoft, color: brandVar.goldDeep }}>
                 <Gift className="w-3.5 h-3.5" /> The Birthday Blueprint
               </div>
               <h2 className="text-3xl md:text-4xl font-black leading-tight gradient-text-primary">
@@ -89,26 +90,26 @@ export function BirthdayReportShowcase() {
             {/* Preview side — styled mockups of real sections */}
             <div className="grid grid-cols-3 gap-3">
               <PreviewCard label="Cover">
-                <div className="text-[9px] font-bold" style={{ color: '#103A5C' }}>BornClock</div>
+                <div className="text-[9px] font-bold" style={{ color: brandVar.blueDark }}>BornClock</div>
                 <div className="mt-auto">
-                  <div className="text-[8px] font-semibold uppercase tracking-wider" style={{ color: '#B8862F' }}>A Blueprint for</div>
-                  <div className="text-lg font-black leading-none" style={{ color: '#103A5C' }}>Aanya</div>
-                  <div className="h-0.5 w-8 mt-2" style={{ background: '#B8862F' }} />
+                  <div className="text-[8px] font-semibold uppercase tracking-wider" style={{ color: brandVar.goldDeep }}>A Blueprint for</div>
+                  <div className="text-lg font-black leading-none" style={{ color: brandVar.blueDark }}>Aanya</div>
+                  <div className="h-0.5 w-8 mt-2" style={{ background: brandVar.goldDeep }} />
                 </div>
               </PreviewCard>
               <PreviewCard label="Twins">
-                <div className="text-[8px] font-semibold uppercase" style={{ color: '#B8862F' }}>Born the same day</div>
+                <div className="text-[8px] font-semibold uppercase" style={{ color: brandVar.goldDeep }}>Born the same day</div>
                 <div className="space-y-1.5 mt-1.5">
                   {['★ A. Actor', '★ N. Author', '★ R. Athlete'].map(t => (
-                    <div key={t} className="rounded px-1.5 py-1 text-[8px] border" style={{ borderColor: '#E6D8B8', color: '#103A5C' }}>{t}</div>
+                    <div key={t} className="rounded px-1.5 py-1 text-[8px] border" style={{ borderColor: ui.goldBorder, color: brandVar.blueDark }}>{t}</div>
                   ))}
                 </div>
               </PreviewCard>
               <PreviewCard label="Zodiac">
-                <div className="text-[8px] font-semibold uppercase" style={{ color: '#B8862F' }}>Three traditions</div>
+                <div className="text-[8px] font-semibold uppercase" style={{ color: brandVar.goldDeep }}>Three traditions</div>
                 <div className="grid gap-1.5 mt-1.5">
                   {['Cancer', 'Horse', 'Mithuna'].map(z => (
-                    <div key={z} className="rounded text-center py-1 text-[8px] font-bold border" style={{ borderColor: '#E6D8B8', color: '#103A5C' }}>{z}</div>
+                    <div key={z} className="rounded text-center py-1 text-[8px] font-bold border" style={{ borderColor: ui.goldBorder, color: brandVar.blueDark }}>{z}</div>
                   ))}
                 </div>
               </PreviewCard>

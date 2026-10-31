@@ -82,7 +82,7 @@ export default function WeightOnPlanetsPage() {
                 value={raw}
                 min="0"
                 onChange={e => setRaw(e.target.value)}
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#0E2238]"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-2xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-navy"
               />
             </div>
             <div className="inline-flex rounded-xl border border-gray-300 overflow-hidden">
@@ -90,7 +90,7 @@ export default function WeightOnPlanetsPage() {
                 <button
                   key={u}
                   onClick={() => switchUnit(u)}
-                  className={`px-5 py-3 text-sm font-bold transition-colors ${unit === u ? 'bg-[#0E2238] text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
+                  className={`px-5 py-3 text-sm font-bold transition-colors ${unit === u ? 'bg-brand-navy text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}`}
                 >
                   {u}
                 </button>
@@ -115,7 +115,7 @@ export default function WeightOnPlanetsPage() {
                 <div>
                   <div className="flex items-baseline gap-2">
                     <span className="font-bold text-gray-900">{p.name}</span>
-                    <span className="text-lg font-black text-[#2F6FB0]">{w(p)}</span>
+                    <span className="text-lg font-black text-brand-blue">{w(p)}</span>
                   </div>
                   <p className="text-xs text-gray-500 leading-relaxed mt-0.5">{p.fact}</p>
                 </div>
@@ -180,10 +180,10 @@ export default function WeightOnPlanetsPage() {
 
       {/* CTA to sister tools */}
       <section className="max-w-2xl mx-auto px-4 py-4">
-        <div className="rounded-2xl bg-gradient-to-br from-[#2F6FB0] to-[#2F6FB0] p-6 text-center text-white">
+        <div className="rounded-2xl bg-gradient-to-br from-brand-blue to-brand-blue p-6 text-center text-white">
           <p className="text-lg font-bold mb-1">Loved this? See your age on every planet</p>
           <p className="text-white text-sm mb-4">You’re a different number of years old on Mercury, Mars and Jupiter too — find out in seconds.</p>
-          <Link to="/planetary-age/" className="inline-flex items-center gap-2 bg-white text-[#2F6FB0] px-6 py-3 rounded-xl font-semibold hover:bg-[#2F6FB0]/10 transition-colors">
+          <Link to="/planetary-age/" className="inline-flex items-center gap-2 bg-white text-brand-blue px-6 py-3 rounded-xl font-semibold hover:bg-brand-blue/10 transition-colors">
             <ArrowRightCircle className="w-5 h-5" /> Try the Planetary Age calculator
           </Link>
         </div>
@@ -203,10 +203,10 @@ export default function WeightOnPlanetsPage() {
         <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Keep exploring</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {meshPosts.map(p => (
-            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ {p.title}</Link>
+            <Link key={p.slug} to={`/blog/${p.slug}`} className="p-3 rounded-xl border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 text-sm text-gray-700 hover:text-brand-blue transition-colors">→ {p.title}</Link>
           ))}
-          <Link to="/planetary-age/" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Your age on every planet</Link>
-          <Link to="/birthday-report/" className="p-3 rounded-xl border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 text-sm text-gray-700 hover:text-[#2F6FB0] transition-colors">→ Your Birthday Report</Link>
+          <Link to="/planetary-age/" className="p-3 rounded-xl border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 text-sm text-gray-700 hover:text-brand-blue transition-colors">→ Your age on every planet</Link>
+          <Link to="/birthday-report/" className="p-3 rounded-xl border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 text-sm text-gray-700 hover:text-brand-blue transition-colors">→ Your Birthday Report</Link>
         </div>
       </div>
     </ToolLayout>

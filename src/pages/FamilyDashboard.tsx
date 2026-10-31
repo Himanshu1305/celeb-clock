@@ -69,6 +69,7 @@ import {
 import { addReminder } from '@/services/reminderService';
 import { QUIZ_COUNTRIES } from '@/services/LongevityCalculationService';
 import { completedYears, parseYmdLocal } from '@/lib/ageBreakdown';
+import { ui } from '../theme/palette';
 
 type FamilyMemberExt = FamilyMember & { relationship?: string | null };
 
@@ -131,7 +132,7 @@ function FamilyDashboardInner() {
           <div className="max-w-sm mx-auto text-center bg-white rounded-2xl p-8 shadow-sm border border-gray-200">
             <div className="text-4xl mb-4">👨‍👩‍👧</div>
             <p className="text-xs text-gray-400 mb-4">Available in the next update.</p>
-            <a href="/" className="inline-block bg-[#0E2238] text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-[#0E2238] transition-colors">
+            <a href="/" className="inline-block bg-brand-navy text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-brand-navy transition-colors">
               ← Back to BornClock
             </a>
           </div>
@@ -308,7 +309,7 @@ function FamilyDashboardInner() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="animate-spin w-8 h-8 border-4 border-[#6E5AA6]/30 border-t-transparent rounded-full mx-auto mb-3" />
+          <div className="animate-spin w-8 h-8 border-4 border-brand-purple/30 border-t-transparent rounded-full mx-auto mb-3" />
           <p className="text-gray-500 text-sm">Loading your dashboard...</p>
         </div>
       </div>
@@ -354,7 +355,7 @@ function FamilyDashboardInner() {
           <div className="text-4xl mb-4">👨‍👩‍👧</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Family Dashboard</h1>
           <p className="text-gray-500 mb-6">Track longevity forecasts for up to 10 family members. Compare results side by side. Start important conversations about health.</p>
-          <Link to="/upgrade/" className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+          <Link to="/upgrade/" className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
             Unlock Family Dashboard →
           </Link>
           <p className="text-xs text-gray-400 mt-3">Included in all premium plans from ₹299/month</p>
@@ -437,7 +438,7 @@ function FamilyDashboardInner() {
                     <CardContent className="p-5">
                       <div className="text-lg font-bold text-foreground mb-0.5">{m.name}</div>
                       {m.relationship && (
-                        <p className="text-xs text-[#6E5AA6] capitalize font-medium mb-1">
+                        <p className="text-xs text-brand-purple capitalize font-medium mb-1">
                           {m.relationship}
                         </p>
                       )}
@@ -453,7 +454,7 @@ function FamilyDashboardInner() {
                       <div className="flex flex-wrap gap-2 pt-1">
                         <Link
                           to={kundliHref(m)}
-                          className="text-xs font-medium text-[#6E5AA6] hover:underline inline-flex items-center gap-1"
+                          className="text-xs font-medium text-brand-purple hover:underline inline-flex items-center gap-1"
                         >
                           {age <= 17 ? "Child's Kundli" : 'Kundli'} <ArrowRight className="w-3 h-3" />
                         </Link>
@@ -461,7 +462,7 @@ function FamilyDashboardInner() {
                           type="button"
                           onClick={() => handleRemind(m)}
                           disabled={remindedIds.has(m.id)}
-                          className="text-xs font-medium text-[#6E5AA6] hover:underline disabled:text-green-600 disabled:no-underline inline-flex items-center gap-1"
+                          className="text-xs font-medium text-brand-purple hover:underline disabled:text-green-600 disabled:no-underline inline-flex items-center gap-1"
                         >
                           {remindedIds.has(m.id) ? '✓ Reminder set' : '🎂 Remind me'}
                         </button>
@@ -486,7 +487,7 @@ function FamilyDashboardInner() {
                       formatter={(v: number) => [`${v} yrs`, 'Forecast']}
                       contentStyle={{ fontSize: 12 }}
                     />
-                    <ReferenceLine y={75} stroke="#94a3b8" strokeDasharray="4 2" label={{ value: 'Global avg', position: 'right', fontSize: 10 }} />
+                    <ReferenceLine y={75} stroke={ui.slate400} strokeDasharray="4 2" label={{ value: 'Global avg', position: 'right', fontSize: 10 }} />
                     <Bar dataKey="forecast" radius={[4, 4, 0, 0]}>
                       {chartData.map((entry, i) => (
                         <rect key={i} fill={entry.fill} />

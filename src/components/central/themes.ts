@@ -1,3 +1,4 @@
+import { palette } from '../../theme/palette';
 /**
  * Central design system — the single source of truth for the five themes.
  * (Run 1 of the central-system migration; see docs/part-ap-design-system.md.)
@@ -24,11 +25,11 @@ export interface ThemeTokens {
 }
 
 export const THEME_TOKENS: Record<Theme, ThemeTokens> = {
-  vedic: { accent: '#C6A15B', accentText: '#74571E', green: '#C6A15B', bg: '#FAF7F0', line: '#E4DCC8' },
-  birthday: { accent: '#F0715A', accentText: '#B5432A', green: '#F0715A', bg: '#FAF7F0', line: '#E4DCC8' },
-  mystic: { accent: '#6E5AA6', accentText: '#6E5AA6', green: '#6E5AA6', bg: '#FAF7F0', line: '#E4DCC8' },
-  science: { accent: '#2F6FB0', accentText: '#237A60', green: '#2E9E7B', bg: '#FFFFFF', line: '#DDE4EA' },
-  neutral: { accent: '#C6A15B', accentText: '#0E2238', green: '#0E2238', bg: '#FAF7F0', line: '#E4DCC8' },
+  vedic: { accent: palette.gold, accentText: palette.goldInk, green: palette.gold, bg: palette.ivory, line: palette.line },
+  birthday: { accent: palette.coral, accentText: palette.coralInk, green: palette.coral, bg: palette.ivory, line: palette.line },
+  mystic: { accent: palette.purple, accentText: palette.purple, green: palette.purple, bg: palette.ivory, line: palette.line },
+  science: { accent: palette.blue, accentText: palette.greenInk, green: palette.green, bg: '#FFFFFF', line: palette.lineCool },
+  neutral: { accent: palette.gold, accentText: palette.navy, green: palette.navy, bg: palette.ivory, line: palette.line },
 };
 
 /** The seven central page layouts and the `.paj` hero variant each maps to. */

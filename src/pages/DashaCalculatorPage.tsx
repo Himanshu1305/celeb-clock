@@ -205,12 +205,12 @@ export default function DashaCalculatorPage() {
             {hasDasha && (
               <div
                 data-testid="dasha-current-period"
-                className="rounded-xl border border-[#6E5AA6]/40 bg-[#6E5AA6]/10 p-5"
+                className="rounded-xl border border-brand-purple/40 bg-brand-purple/10 p-5"
               >
                 <div className="text-sm text-muted-foreground mb-1">
                   Current planetary period
                 </div>
-                <div className="text-2xl font-black text-[#4B3A8C]">
+                <div className="text-2xl font-black text-brand-purple-deep">
                   {result.dasha!.mahadasha} <TermTip id="mahadasha">Mahadasha</TermTip>
                 </div>
                 <div className="text-base font-semibold text-foreground mt-1">

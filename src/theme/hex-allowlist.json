@@ -1,0 +1,16 @@
+{
+  "_comment": "Files allowed to keep literal hex colours in className / style / SVG-colour attributes (see src/theme/__tests__/no-hardcoded-colors.test.ts). Brand colours inside them still come from src/theme/palette.ts (hex); only off-palette one-offs stay literal. Add a file here ONLY when the output cannot use CSS variables.",
+  "files": [
+    { "path": "src/emails/WelcomeEmail.tsx", "reason": "Email HTML: mail clients do not support CSS variables or the site stylesheet." },
+    { "path": "src/emails/PremiumThankYouEmail.tsx", "reason": "Email HTML: mail clients do not support CSS variables or the site stylesheet." },
+    { "path": "src/emails/PremiumUpsellEmail.tsx", "reason": "Email HTML: mail clients do not support CSS variables or the site stylesheet." },
+    { "path": "src/emails/ReEngagementEmail.tsx", "reason": "Email HTML: mail clients do not support CSS variables or the site stylesheet." },
+    { "path": "src/pages/longevityBlueprintHtml.ts", "reason": "Standalone printable HTML document (opened in a new window, no site CSS)." },
+    { "path": "src/lib/pdf/kundaliPdfHtml.ts", "reason": "Standalone PDF HTML (no site CSS)." },
+    { "path": "src/lib/pdf/biodataPdfHtml.ts", "reason": "Standalone PDF HTML (no site CSS)." },
+    { "path": "src/lib/invoice-generator.ts", "reason": "Standalone invoice HTML/PDF (no site CSS)." },
+    { "path": "src/lib/share/kundaliShareCard.ts", "reason": "SVG serialised to a PNG share card on a canvas (no site CSS)." },
+    { "path": "src/lib/vedic/chartSvg.ts", "reason": "SVG string for PDF/share export (no site CSS)." },
+    { "path": "src/components/ui/chart.tsx", "reason": "shadcn chart: selectors must match the literal stroke/fill attribute strings Recharts renders (e.g. [stroke='#ccc'])." }
+  ]
+}

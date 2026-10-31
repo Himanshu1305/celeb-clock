@@ -9,6 +9,7 @@ import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ORBITAL_PERIOD_DAYS } from '@/lib/orbitalPeriods';
 import { completedYears } from '@/lib/ageBreakdown';
+import { palette, ui } from '../theme/palette';
 
 // ── NASA orbital periods (sidereal, Earth days) — the one shared table (N13) ──
 export const ORBITAL_PERIODS_DAYS: Record<string, number> = { ...ORBITAL_PERIOD_DAYS };
@@ -99,7 +100,7 @@ const PLANET_UI: PlanetUIData[] = [
   {
     name: 'Neptune',
     emoji: '♆',
-    accentColor: '#B4A6DB',
+    accentColor: palette.purpleLight,
     gravityRatio: 1.14,
     tempDisplay: '-201°C 🥶',
     moons: 16,
@@ -326,7 +327,7 @@ const SVG_PLANETS = [
   { name: 'Jupiter', color: '#fb923c', orbitR: 118, planetR: 9, dur: '15s' },
   { name: 'Saturn',  color: '#fbbf24', orbitR: 142, planetR: 7, dur: '25s' },
   { name: 'Uranus',  color: '#7dd3fc', orbitR: 163, planetR: 6, dur: '40s' },
-  { name: 'Neptune', color: '#6E5AA6', orbitR: 185, planetR: 6, dur: '60s' },
+  { name: 'Neptune', color: palette.purple, orbitR: 185, planetR: 6, dur: '60s' },
 ];
 
 // ── Main component ────────────────────────────────────────────────────────────
@@ -472,7 +473,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
         ))}
         <div className="relative z-10">
           <p className="text-slate-400 text-sm uppercase tracking-widest mb-3">Your Cosmic Age Profile</p>
-          <div className="text-6xl font-black text-[#B4A6DB] leading-none mb-1 tabular-nums">
+          <div className="text-6xl font-black text-brand-purple-light leading-none mb-1 tabular-nums">
             {primaryAgeStr}
           </div>
           <p className="text-2xl text-slate-300 mb-2">{primaryLabel}</p>
@@ -490,22 +491,22 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
       </div>
 
       {/* ── PLANET CARDS — all 8 ─────────────────────────────────────────── */}
-      <h2 className="text-xl font-bold text-[#0E2238] mb-2">🪐 Your Age Across All 8 Planets</h2>
+      <h2 className="text-xl font-bold text-brand-navy mb-2">🪐 Your Age Across All 8 Planets</h2>
       <p className="text-slate-600 text-sm mb-5">Tap any card to reveal a shocking fact.</p>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
         {/* Earth reference card */}
         <div
           className="bg-slate-800 border border-slate-700 rounded-2xl p-5 text-white"
-          style={{ borderLeft: '4px solid #4fa3e0' }}
+          style={{ borderLeft: `4px solid ${ui.earthBlue}` }}
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-4xl">🌍</span>
             <div className="text-right">
               <div className="text-xs text-slate-400 uppercase tracking-widest">Earth</div>
-              <div className="text-[10px] text-[#B4A6DB] font-medium">reference</div>
+              <div className="text-[10px] text-brand-purple-light font-medium">reference</div>
             </div>
           </div>
-          <div className="text-4xl font-black mb-0.5 leading-none" style={{ color: '#4fa3e0' }}>
+          <div className="text-4xl font-black mb-0.5 leading-none" style={{ color: ui.earthBlue }}>
             {earthAge}
           </div>
           <div className="text-sm text-slate-400 mb-3">Earth years old</div>
@@ -529,7 +530,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
       <div className="text-center mt-6 mb-12">
         <button
           onClick={handleShare}
-          className="inline-flex items-center gap-2 bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-8 py-3 rounded-xl transition-colors shadow-lg"
+          className="inline-flex items-center gap-2 bg-brand-navy hover:bg-brand-navy text-white font-semibold px-8 py-3 rounded-xl transition-colors shadow-lg"
         >
           {shareCopied ? '✓ Link Copied!' : '🚀 Share My Cosmic Ages'}
         </button>
@@ -562,12 +563,12 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             {jupiter.age < 1 ? (
               <p className="text-slate-300 text-sm leading-relaxed">
                 You haven't reached your first Jupiter birthday yet. You'll celebrate on{' '}
-                <span className="text-[#B4A6DB] font-bold">{format(firstJupiterDate, 'MMMM d, yyyy')}</span>.
+                <span className="text-brand-purple-light font-bold">{format(firstJupiterDate, 'MMMM d, yyyy')}</span>.
               </p>
             ) : (
               <p className="text-slate-300 text-sm leading-relaxed">
                 You are{' '}
-                <span className="text-[#B4A6DB] font-bold">{jupiter.age.toFixed(2)}</span>
+                <span className="text-brand-purple-light font-bold">{jupiter.age.toFixed(2)}</span>
                 {' '}years old on Jupiter — a number most humans never reach in a full lifetime.
               </p>
             )}
@@ -579,9 +580,9 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             <h3 className="font-semibold text-white mb-1">Neptune Status</h3>
             <p className="text-slate-300 text-sm leading-relaxed">
               On Neptune, you are{' '}
-              <span className="text-[#B4A6DB] font-bold">{neptune.age.toFixed(3)}</span>
+              <span className="text-brand-purple-light font-bold">{neptune.age.toFixed(3)}</span>
               {' '}years old. The last time Neptune completed a full orbit, it was{' '}
-              <span className="text-[#B4A6DB] font-bold">{neptuneLastYear}</span>
+              <span className="text-brand-purple-light font-bold">{neptuneLastYear}</span>
               {' '}— {neptuneContext}.
             </p>
           </div>
@@ -615,11 +616,11 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             value={userName}
             onChange={e => setUserName(e.target.value)}
             maxLength={30}
-            className="w-full max-w-xs mx-auto block px-4 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white placeholder-slate-500 text-center focus:outline-none focus:border-[#6E5AA6]/30 mb-4"
+            className="w-full max-w-xs mx-auto block px-4 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white placeholder-slate-500 text-center focus:outline-none focus:border-brand-purple/30 mb-4"
           />
           <button
             onClick={handleGenerateCard}
-            className="bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-8 py-3 rounded-xl transition-colors"
+            className="bg-brand-navy hover:bg-brand-navy text-white font-semibold px-8 py-3 rounded-xl transition-colors"
           >
             Generate My Cosmic Card ✨
           </button>
@@ -644,7 +645,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
           <div className="flex flex-wrap gap-3 justify-center mb-4">
             <button
               onClick={() => { const l = document.createElement('a'); l.download = `${userName || 'my'}-cosmic-age-bornclock.png`; l.href = cardDataUrl; l.click(); }}
-              className="flex items-center gap-2 bg-[#0E2238] hover:bg-[#0E2238] text-white font-semibold px-6 py-3 rounded-xl transition-colors"
+              className="flex items-center gap-2 bg-brand-navy hover:bg-brand-navy text-white font-semibold px-6 py-3 rounded-xl transition-colors"
             >
               ⬇️ Download PNG
             </button>
@@ -671,10 +672,10 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
             📸 For Instagram: Download the PNG then share to your Story or Feed
           </p>
           {!user && (
-            <div className="border border-[#6E5AA6]/30 rounded-xl p-4 bg-[#6E5AA6]/40 text-center max-w-sm mx-auto mb-4">
+            <div className="border border-brand-purple/30 rounded-xl p-4 bg-brand-purple/40 text-center max-w-sm mx-auto mb-4">
               <p className="font-semibold text-white mb-1">Save your Cosmic Profile</p>
               <p className="text-sm text-slate-300 mb-3">Sign in to save your planetary ages and get birthday reminders</p>
-              <Link to="/auth/?redirect=/planetary-age" className="inline-block bg-[#0E2238] text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#0E2238] transition-colors text-sm">
+              <Link to="/auth/?redirect=/planetary-age" className="inline-block bg-brand-navy text-white font-semibold px-6 py-2 rounded-lg hover:bg-brand-navy transition-colors text-sm">
                 Sign In to Save →
               </Link>
             </div>
@@ -726,19 +727,19 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
 
       {/* ── SOLAR SYSTEM ANIMATION ───────────────────────────────────────── */}
       <section className="mb-12">
-        <h2 className="text-xl font-bold text-[#0E2238] mb-2 text-center">☀️ Solar System — Orbital Animation</h2>
+        <h2 className="text-xl font-bold text-brand-navy mb-2 text-center">☀️ Solar System — Orbital Animation</h2>
         <p className="text-sm text-center text-slate-600 mb-6 max-w-md mx-auto">
           Planets closer to the Sun move faster. Animation speeds are artistic — not proportional to real periods.
         </p>
         <div className="flex justify-center">
           <svg viewBox="0 0 400 400" width="360" height="360" className="rounded-2xl" aria-label="Animated solar system" role="img">
-            <rect width="400" height="400" fill="#07071a" rx="16" />
+            <rect width="400" height="400" fill={ui.spaceBlack} rx="16" />
             <g transform="translate(200,200)">
               {SVG_PLANETS.map(p => (
                 <circle key={`ring-${p.name}`} cx="0" cy="0" r={p.orbitR} fill="none" stroke="white" strokeOpacity="0.07" strokeWidth="0.5" />
               ))}
-              <circle cx="0" cy="0" r="14" fill="#FDB813" />
-              <circle cx="0" cy="0" r="20" fill="none" stroke="#FDB813" strokeOpacity="0.18" strokeWidth="5" />
+              <circle cx="0" cy="0" r="14" fill={ui.sunYellow} />
+              <circle cx="0" cy="0" r="20" fill="none" stroke={ui.sunYellow} strokeOpacity="0.18" strokeWidth="5" />
               {SVG_PLANETS.map(p => (
                 <g key={`planet-${p.name}`} className="planet-orbit" style={{ animation: `pa-orbit ${p.dur} linear infinite`, transformOrigin: '0 0' }}>
                   <circle cx={p.orbitR} cy="0" r={p.planetR} fill={p.color} />
@@ -755,13 +756,13 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
       {/* ── KEPLER'S THIRD LAW ───────────────────────────────────────────── */}
       <section className="space-y-6 max-w-3xl mx-auto mb-12">
         <div>
-          <h2 className="text-2xl font-bold text-[#0E2238] mb-3">
+          <h2 className="text-2xl font-bold text-brand-navy mb-3">
             ⚙️ Kepler's Third Law — The Science Behind Planetary Ages
           </h2>
           <p className="text-slate-700 leading-relaxed">
             The vast differences in planetary year lengths follow directly from Johannes Kepler's Third Law of
-            Planetary Motion, published in <em>Harmonices Mundi</em> (1619): the <strong className="text-[#0E2238]">square</strong> of a
-            planet's orbital period is proportional to the <strong className="text-[#0E2238]">cube</strong> of its semi-major axis.
+            Planetary Motion, published in <em>Harmonices Mundi</em> (1619): the <strong className="text-brand-navy">square</strong> of a
+            planet's orbital period is proportional to the <strong className="text-brand-navy">cube</strong> of its semi-major axis.
             Written as T² ∝ a³, this means a planet twice as far from the Sun takes not twice, but 2^(3/2) ≈ 2.83
             times as long to orbit. Neptune — roughly 30× farther from the Sun than Earth — takes 30^(3/2) ≈
             164 times longer to complete one orbit.
@@ -775,7 +776,7 @@ export const PlanetaryAge = ({ birthDate }: PlanetaryAgeProps) => {
         </div>
 
         <div>
-          <h2 className="text-xl font-bold text-[#0E2238] mb-3">How the Calculator Works</h2>
+          <h2 className="text-xl font-bold text-brand-navy mb-3">How the Calculator Works</h2>
           <p className="text-slate-700 leading-relaxed">
             Your "age" on any planet is the number of full orbits that planet has completed around the Sun since
             you were born. We calculate this by dividing the total Earth days elapsed since your birth date by

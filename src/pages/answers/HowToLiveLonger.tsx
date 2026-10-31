@@ -39,8 +39,8 @@ export default function HowToLiveLonger() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         <div className="max-w-2xl mx-auto px-4 py-12">
-          <div className="bg-[#2F6FB0]/10 border-l-4 border-[#2F6FB0]/30 rounded-r-xl p-5 mb-8">
-            <p className="text-base font-semibold text-[#2F6FB0] leading-relaxed">
+          <div className="bg-brand-blue/10 border-l-4 border-brand-blue/30 rounded-r-xl p-5 mb-8">
+            <p className="text-base font-semibold text-brand-blue leading-relaxed">
               The most powerful longevity interventions are not drugs or supplements — they are behaviours. Not smoking, regular physical activity, a plant-rich diet, healthy body weight, moderate alcohol, quality sleep, and strong social connections together can add 10–14 years to life expectancy compared to having none of these habits.
             </p>
           </div>
@@ -78,7 +78,7 @@ export default function HowToLiveLonger() {
             <p className="text-lg font-bold text-gray-900 mb-2">Calculate How Your Habits Affect Your Lifespan</p>
             <p className="text-sm text-gray-500 mb-4">See the exact year-impact of every lifestyle change with BornClock's What-If Simulator</p>
             <Link to="/life-expectancy/"
-              className="inline-block bg-[#0E2238] text-white px-8 py-3 rounded-xl font-semibold hover:bg-[#0E2238] transition-colors">
+              className="inline-block bg-brand-navy text-white px-8 py-3 rounded-xl font-semibold hover:bg-brand-navy transition-colors">
               Calculate My Longevity Score →
             </Link>
           </div>
@@ -86,10 +86,10 @@ export default function HowToLiveLonger() {
           <div className="mt-10 pt-8 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-4">Related Questions</p>
             <div className="space-y-2">
-              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How long will I live?</Link>
-              <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is my biological age?</Link>
-              <Link to="/answers/how-does-stress-affect-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ How does stress affect life expectancy?</Link>
-              <Link to="/answers/what-is-bmi/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-[#2F6FB0]/30 hover:bg-[#2F6FB0]/10 transition-colors text-sm text-gray-700 hover:text-[#2F6FB0]">→ What is BMI?</Link>
+              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How long will I live?</Link>
+              <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ What is my biological age?</Link>
+              <Link to="/answers/how-does-stress-affect-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How does stress affect life expectancy?</Link>
+              <Link to="/answers/what-is-bmi/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ What is BMI?</Link>
             </div>
           </div>
         </div>

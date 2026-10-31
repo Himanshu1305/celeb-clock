@@ -110,7 +110,7 @@ export default function RemindersPage() {
             </div>
           )}
           <button data-testid="remind-add-btn" onClick={add} disabled={!canAdd}
-                  className="w-full py-2.5 rounded-lg bg-[#0E2238] text-white font-semibold hover:bg-[#0E2238] disabled:opacity-50">
+                  className="w-full py-2.5 rounded-lg bg-brand-navy text-white font-semibold hover:bg-brand-navy disabled:opacity-50">
             {saving ? 'Saving…' : 'Add reminder'}
           </button>
           {status && (

@@ -7,9 +7,10 @@
  * Sign indices are 1-based (1 = Aries … 12 = Pisces), as in the /api/kundali response.
  */
 import { abbr, SIGN_CELL, NORTH_HOUSE_POLY, layoutInPolygon, type Pt, type LabelRow, type ChartPlanet } from './chartGeometry';
+import { palette } from '../../theme/palette';
 
 const esc = (s: unknown) => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
-const INK = '#0E2238';
+const INK = palette.navy;
 const FONT = 'font-family="-apple-system, \'Segoe UI\', Roboto, Helvetica, Arial, sans-serif"';
 
 function rowsSvg(rows: LabelRow[]): string {
@@ -48,7 +49,7 @@ export function kundaliChartSvg({ lagnaSignIndex, planets, style = 'north', labe
       const area: Pt[] = [[x, y + 14], [x + S, y + 14], [x + S, y + S], [x, y + S]];
       body += `<g data-sign="${sign}">`
         + `<rect x="${x}" y="${y}" width="${S}" height="${S}" fill="${isLagna ? '#EEEBF6' : '#fff'}" stroke="${INK}" stroke-width="1"/>`
-        + (isLagna ? `<line x1="${x}" y1="${y}" x2="${x + 16}" y2="${y + 16}" stroke="#6E5AA6" stroke-width="1.5"/>` : '')
+        + (isLagna ? `<line x1="${x}" y1="${y}" x2="${x + 16}" y2="${y + 16}" stroke="${palette.purple}" stroke-width="1.5"/>` : '')
         + `<text x="${x + 4}" y="${y + 12}" font-size="8" fill="#6b7280">${sign}${isLagna ? ' La' : ''}</text>`
         + rowsSvg(layoutInPolygon(area, bySign[sign] || [], undefined, [x + S / 2, y + 14 + (S - 14) / 2]))
         + `</g>`;

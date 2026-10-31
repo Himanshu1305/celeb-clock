@@ -224,14 +224,14 @@ export default function SadeSatiPage() {
             )}
 
             {report.dhaiya.active && (
-              <div data-testid="sadesati-dhaiya" className="rounded-lg border border-[#6E5AA6]/30 bg-[#6E5AA6]/50 p-4">
+              <div data-testid="sadesati-dhaiya" className="rounded-lg border border-brand-purple/30 bg-brand-purple/50 p-4">
                 <div className="font-semibold text-foreground"><TermTip id="dhaiya">Dhaiya (small Panoti)</TermTip> is active</div>
                 <div className="text-sm text-foreground">{report.dhaiya.type}{report.dhaiya.currentEnd ? ` — until ${fmtDay(report.dhaiya.currentEnd)}` : ''}</div>
                 <p className="text-xs text-muted-foreground mt-1">A 2.5-year Saturn transit (the 4th or 8th from your Moon), traditionally a lighter version of Sade Sati’s themes.</p>
               </div>
             )}
 
-            <div data-testid="sadesati-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
+            <div data-testid="sadesati-methodology" className="rounded-xl border border-brand-purple/30 bg-brand-purple/40 p-4">
               <div className="font-semibold text-foreground mb-1">How this was worked out</div>
               <p className="text-sm text-foreground">{report.methodology}</p>
             </div>

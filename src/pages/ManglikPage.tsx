@@ -241,7 +241,7 @@ export default function ManglikPage() {
             </div>
 
             {/* Methodology */}
-            <div data-testid="manglik-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
+            <div data-testid="manglik-methodology" className="rounded-xl border border-brand-purple/30 bg-brand-purple/40 p-4">
               <div className="font-semibold text-foreground mb-1">How this was worked out</div>
               <p className="text-sm text-foreground">
                 Mars's house is computed from your birth data using the <TermTip id="ayanamsa">Lahiri ayanamsa (the traditional Indian sidereal calculation)</TermTip> and checked by the AstroSage convention: Mars in the 1st, 4th, 7th, 8th or 12th house (whole-sign) from the Lagna, and separately from the Moon. The 2nd house is not counted and Venus is not used. Positive from both checks is shown as High, from one as Low. The same check is used in Kundali matching. Treat it as a classical indicator, not a fixed prediction.

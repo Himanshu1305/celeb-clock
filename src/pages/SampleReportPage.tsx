@@ -75,7 +75,7 @@ export function SampleReportPage() {
           <section
             data-testid="sample-report-banner"
             className="flex flex-col sm:flex-row items-center justify-between gap-3
-                       bg-gradient-to-r from-primary to-[#6E5AA6] text-white
+                       bg-gradient-to-r from-primary to-brand-purple text-white
                        rounded-2xl px-5 py-4 mb-8"
           >
             <p className="text-sm font-semibold">
@@ -84,7 +84,7 @@ export function SampleReportPage() {
             <Link
               to="/birthday-report/"
               className="flex-shrink-0 bg-white text-primary font-bold px-5 py-2 rounded-full
-                         text-sm hover:bg-[#6E5AA6]/10 transition-colors whitespace-nowrap"
+                         text-sm hover:bg-brand-purple/10 transition-colors whitespace-nowrap"
             >
               Generate Mine Free →
             </Link>
@@ -113,7 +113,7 @@ export function SampleReportPage() {
               <div className="text-xs text-gray-500 mb-3">{western.dateRange} · {western.element} · {western.rulingPlanet}</div>
               <div className="flex flex-wrap gap-1">
                 {western.coreTraits.slice(0, 5).map(t => (
-                  <span key={t} className="bg-[#6E5AA6]/10 text-[#6E5AA6] text-xs px-2 py-1 rounded-full">{t}</span>
+                  <span key={t} className="bg-brand-purple/10 text-brand-purple text-xs px-2 py-1 rounded-full">{t}</span>
                 ))}
               </div>
             </section>
@@ -158,12 +158,12 @@ export function SampleReportPage() {
           {/* Life Path + Personal Year */}
           <section className="mb-6 bg-white border border-gray-200 rounded-2xl p-5">
             <div className="flex items-center gap-4 mb-3">
-              <div className="w-14 h-14 bg-[#0E2238] rounded-full flex items-center justify-center text-2xl font-black text-white flex-shrink-0">
+              <div className="w-14 h-14 bg-brand-navy rounded-full flex items-center justify-center text-2xl font-black text-white flex-shrink-0">
                 {lp.number}
               </div>
               <div>
                 <h2 className="text-lg font-black text-gray-900">Life Path {lp.number}</h2>
-                <div className="text-[#6E5AA6] font-semibold text-sm">{lpData.archetype}</div>
+                <div className="text-brand-purple font-semibold text-sm">{lpData.archetype}</div>
                 <div className="text-xs text-gray-500">{lp.steps}</div>
               </div>
             </div>

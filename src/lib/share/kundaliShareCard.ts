@@ -10,6 +10,7 @@ import { kundaliChartSvg } from '../vedic/chartSvg';
 import { signLabel } from '../vedic/signLabel';
 import { TEXT_VS } from '../pdf/printHtml';
 import type { ChartPlanet } from '../vedic/chartGeometry';
+import { palette } from '../../theme/palette';
 
 export const SHARE_SIZE = 1080;
 export const SHARE_URL_LABEL = 'bornclock.com/kundali';
@@ -67,17 +68,17 @@ export function buildKundaliShareSvg(data: ShareCardData, opts: ShareCardOptions
   }).join('');
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${SHARE_SIZE}" height="${SHARE_SIZE}" viewBox="0 0 ${SHARE_SIZE} ${SHARE_SIZE}" font-family="${FONT}">
-<rect width="1080" height="1080" fill="#0E2238"/>
+<rect width="1080" height="1080" fill="${palette.navy}"/>
 <rect x="30" y="30" width="1020" height="1020" rx="28" fill="none" stroke="#A8842C" stroke-width="3"/>
 <text x="70" y="140" font-size="30" fill="#A8842C" letter-spacing="4">\u2726${TEXT_VS} BORNCLOCK</text>
 <text x="70" y="205" font-size="56" font-weight="800" fill="#FFFFFF" data-testid="share-title">${esc(title)}</text>
 <rect x="60" y="240" width="490" height="490" rx="14" fill="#FFFFFF"/>
 ${chart}
 ${factSvg}
-${bornLine ? `<text x="70" y="800" font-size="30" fill="#D7E1EA" data-testid="share-born">${esc(bornLine)}</text>` : ''}
-<text x="70" y="${bornLine ? 860 : 820}" font-size="28" fill="#D7E1EA">Sidereal (Lahiri) · ${style === 'south' ? 'South' : 'North'} Indian chart</text>
+${bornLine ? `<text x="70" y="800" font-size="30" fill="${palette.lineBlue}" data-testid="share-born">${esc(bornLine)}</text>` : ''}
+<text x="70" y="${bornLine ? 860 : 820}" font-size="28" fill="${palette.lineBlue}">Sidereal (Lahiri) · ${style === 'south' ? 'South' : 'North'} Indian chart</text>
 <rect x="60" y="930" width="960" height="90" rx="45" fill="#A8842C"/>
-<text x="540" y="988" font-size="36" font-weight="700" fill="#0E2238" text-anchor="middle">Make yours at ${SHARE_URL_LABEL}</text>
+<text x="540" y="988" font-size="36" font-weight="700" fill="${palette.navy}" text-anchor="middle">Make yours at ${SHARE_URL_LABEL}</text>
 </svg>`;
 }
 

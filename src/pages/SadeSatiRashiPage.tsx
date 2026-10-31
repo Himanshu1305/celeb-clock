@@ -208,7 +208,7 @@ export default function SadeSatiRashiPage({ lang = 'en' }: { lang?: Lang }) {
           ))}
         </div>
 
-        <div className="mt-8 rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/10 p-4" data-testid="ss-rashi-method">
+        <div className="mt-8 rounded-xl border border-brand-purple/30 bg-brand-purple/10 p-4" data-testid="ss-rashi-method">
           <div className="font-semibold text-foreground mb-1">{t.howH}</div>
           <p className="text-sm text-foreground">{t.how} <TermTip id="ayanamsa" lang={lang}>{lang === 'hi' ? 'अयनांश' : 'Ayanamsa'}</TermTip></p>
         </div>

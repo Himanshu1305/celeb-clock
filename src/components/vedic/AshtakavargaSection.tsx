@@ -7,6 +7,7 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { CollapsibleSection } from '@/components/vedic/CollapsibleSection';
 import { AV_PLANETS, byHouse } from '@/lib/vedic/engine/ashtakavarga';
 import { HOUSE_THEMES, SAV_STRONG, SAV_WEAK, savBand, SAV_BAND_LABEL } from '@/data/yoginiAshtakavarga';
+import { brandVar, ui } from '../../theme/palette';
 
 export interface AshtakavargaData {
   bav: Record<string, number[]>;
@@ -68,13 +69,13 @@ export function AshtakavargaSection({ data }: { data: AshtakavargaData }) {
                   <td style={{ ...cellStyle, textAlign: 'left', fontWeight: 600 }}>{p}</td>
                   {HOUSES.map(h => {
                     const v = byHouse(row, data.lagnaSignIndex, h);
-                    return <td key={h} style={{ ...cellStyle, fontWeight: v >= 4 ? 700 : 400, color: v >= 4 ? 'var(--ink)' : 'var(--muted, #667)' }}>{v}</td>;
+                    return <td key={h} style={{ ...cellStyle, fontWeight: v >= 4 ? 700 : 400, color: v >= 4 ? 'var(--ink)' : `var(--muted, ${ui.mutedFallback})` }}>{v}</td>;
                   })}
                   <td style={{ ...cellStyle, fontWeight: 600 }}>{row.reduce((s, x) => s + x, 0)}</td>
                 </tr>
               );
             })}
-            <tr data-testid="av-row-SAV" style={{ borderTop: '2px solid var(--line, #e4dcc8)' }}>
+            <tr data-testid="av-row-SAV" style={{ borderTop: `2px solid var(--line, ${brandVar.line})` }}>
               <td style={{ ...cellStyle, textAlign: 'left', fontWeight: 700 }}>All (SAV)</td>
               {HOUSES.map(h => {
                 const v = byHouse(data.sav, data.lagnaSignIndex, h);

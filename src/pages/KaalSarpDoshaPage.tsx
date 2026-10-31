@@ -209,7 +209,7 @@ export default function KaalSarpDoshaPage() {
             )}
 
             {/* Methodology */}
-            <div data-testid="kaalsarp-methodology" className="rounded-xl border border-[#6E5AA6]/30 bg-[#6E5AA6]/40 p-4">
+            <div data-testid="kaalsarp-methodology" className="rounded-xl border border-brand-purple/30 bg-brand-purple/40 p-4">
               <div className="font-semibold text-foreground mb-1">How this was worked out</div>
               <p className="text-sm text-foreground">
                 All seven classical planet positions are computed from your birth data using the <TermTip id="ayanamsa">Lahiri ayanamsa (the traditional Indian sidereal calculation)</TermTip>. Kaal Sarp is reported only when all seven planets (Sun to Saturn) lie strictly between Rahu and Ketu on one side, by exact degree; near-misses are shown only as a note. The type is named from Rahu's house counted from the Lagna (whole-sign houses).
