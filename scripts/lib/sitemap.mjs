@@ -145,7 +145,7 @@ export function resolveLastmod({ hash, prev, daily, havePrevManifest, buildDate,
   if (daily) return buildDate;
   if (prev && ((hash && prev.h === hash) || !hash)) return prev.m > buildDate ? buildDate : prev.m;
   if (havePrevManifest) return buildDate;
-  return fallbackDate || buildDate;
+  return fallbackDate && fallbackDate < buildDate ? fallbackDate : buildDate;
 }
 
 const escapeXml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
