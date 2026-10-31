@@ -63,7 +63,7 @@ describe('brand palette — src/theme/palette.ts ⇄ src/index.css', () => {
     }
     // any brand-valued hex left in the generated sheet means the generator missed it
     const brandHex = new Set([...vars.values()].filter(h => h !== '#FFFFFF'));
-    const left = (pajCss.replace(/\/\*[\s\S]*?\*\//g, '').match(/#[0-9A-Fa-f]{6}(?![0-9A-Fa-f\w-])/g) ?? []).filter(h => brandHex.has(h.toUpperCase()));
+    const left = (pajCss.replace(/\/\*[\s\S]*?\*\//g, '').match(/#[0-9A-Fa-f]{6}(?![0-9A-Fa-f\w-])/g) ?? [] as string[]).filter((h: string) => brandHex.has(h.toUpperCase()));
     expect(left).toEqual([]);
   });
 });
