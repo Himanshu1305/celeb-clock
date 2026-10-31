@@ -56,7 +56,7 @@ export const CelebrityMatch = ({ birthDate }: CelebrityMatchProps) => {
         <div className="flex items-center justify-center gap-2 mb-2">
           <CakeIcon className="h-8 w-8 text-secondary animate-pulse-glow" />
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold gradient-text-secondary">
+        <h2 className="text-3xl md:text-4xl font-bold gradient-text-primary">
           Celebrity Birthday Matches
         </h2>
         <p className="text-lg text-muted-foreground">

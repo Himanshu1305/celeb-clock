@@ -248,7 +248,7 @@ export function LongevitySupplementsArticle() {
 
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Could You Live?</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               Supplements are a small lever. Sleep, movement, diet and stress matter far more.
               See how your habits shape your lifespan with our free longevity calculator.
             </p>

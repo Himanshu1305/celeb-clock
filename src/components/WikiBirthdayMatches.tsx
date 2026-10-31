@@ -223,7 +223,7 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
       <div className="space-y-6">
         <div className="text-center space-y-4">
           <CakeIcon className="h-8 w-8 text-secondary animate-pulse-glow mx-auto" />
-          <h2 className="text-3xl md:text-4xl font-bold gradient-text-secondary">Birthday Matches</h2>
+          <h2 className="text-3xl md:text-4xl font-bold gradient-text-primary">Birthday Matches</h2>
           <p className="text-lg text-muted-foreground">Discovering famous people and events that share your special day</p>
         </div>
         <Card className="glass-card p-8">
@@ -258,7 +258,7 @@ export const WikiBirthdayMatches = ({ birthDate, onCelebritiesChange }: WikiBirt
       <div className="space-y-6">
         <div className="text-center space-y-4">
           <CakeIcon className="h-8 w-8 text-secondary animate-pulse-glow mx-auto" />
-          <h2 className="text-3xl md:text-4xl font-bold gradient-text-secondary">Birthday Matches</h2>
+          <h2 className="text-3xl md:text-4xl font-bold gradient-text-primary">Birthday Matches</h2>
           <p className="text-lg text-muted-foreground">Famous people and historical events that share your special day</p>
           <p className="text-sm text-muted-foreground">Calculated in your timezone: {timezoneInfo.timezone} (UTC{timezoneInfo.offset})</p>
         </div>

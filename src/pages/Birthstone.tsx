@@ -91,19 +91,19 @@ export default function Birthstone() {
             >
               <span className="text-xl mb-0.5">🌍</span>
               <span className="font-bold text-sm">Western</span>
-              <span className={`text-xs leading-tight ${activeTab === 'western' ? 'text-[#6E5AA6]' : 'text-gray-400'}`}>By birth month</span>
+              <span className={`text-xs leading-tight ${activeTab === 'western' ? 'text-[#B4A6DB]' : 'text-gray-500'}`}>By birth month</span>
             </button>
             <button
               onClick={() => setActiveTab('indian')}
               className={`flex flex-col items-start px-5 py-3 rounded-xl border-2 text-left transition-all min-w-[160px] ${
                 activeTab === 'indian'
-                  ? 'bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-200'
+                  ? 'bg-orange-700 border-orange-700 text-white shadow-lg shadow-orange-200'
                   : 'bg-white border-gray-200 text-gray-600 hover:border-orange-300 hover:bg-orange-50'
               }`}
             >
               <span className="text-xl mb-0.5">🇮🇳</span>
               <span className="font-bold text-sm">Indian (Rashi Ratna)</span>
-              <span className={`text-xs leading-tight ${activeTab === 'indian' ? 'text-orange-100' : 'text-gray-400'}`}>By Vedic zodiac sign</span>
+              <span className={`text-xs leading-tight ${activeTab === 'indian' ? 'text-orange-50' : 'text-gray-500'}`}>By Vedic zodiac sign</span>
             </button>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function Birthstone() {
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: rr.hex }} />
                     <div className="text-xs font-medium text-gray-700">{rr.primaryStone}</div>
                   </div>
-                  <div className="text-xs text-gray-400 mt-0.5">({rr.primaryStoneHindi})</div>
+                  <div className="text-xs text-gray-500 mt-0.5">({rr.primaryStoneHindi})</div>
                   <div className="text-xs text-gray-500 mt-1">{rr.rulingPlanet}</div>
                 </Link>
               ))}
@@ -239,7 +239,7 @@ export default function Birthstone() {
                 {BIRTHSTONE_DATA.map((stone, i) => {
                   const h = parseFloat(stone.hardness.split('–')[0].replace(/[^0-9.]/g, ''));
                   const wear = h >= 8 ? 'Excellent' : h >= 7 ? 'Good' : h >= 6 ? 'Fair' : 'Delicate';
-                  const wearColor = h >= 8 ? 'text-green-600 dark:text-green-400' : h >= 7 ? 'text-blue-600 dark:text-blue-400' : h >= 6 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400';
+                  const wearColor = h >= 8 ? 'text-green-700 dark:text-green-400' : h >= 7 ? 'text-blue-700 dark:text-blue-400' : h >= 6 ? 'text-amber-700 dark:text-amber-400' : 'text-red-700 dark:text-red-400';
                   return (
                     <tr key={stone.slug} className={`border-b border-border/50 ${i % 2 === 0 ? 'bg-muted/20' : ''}`}>
                       <td className="py-2 pr-4">

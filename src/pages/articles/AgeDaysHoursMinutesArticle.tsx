@@ -235,7 +235,7 @@ export function AgeDaysHoursMinutesArticle() {
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Turn Your Numbers Into a Full Report</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-white/90 mb-6">
               Your days-lived count is just the beginning. A BornClock birthday report adds your
               zodiac, numerology, planetary ages and life milestones — all from your date of birth.
             </p>

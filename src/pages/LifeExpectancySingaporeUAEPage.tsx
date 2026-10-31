@@ -127,8 +127,8 @@ export function LifeExpectancySingaporeUAEPage() {
               Averages describe countries. This tool describes you.
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-emerald-600 text-white font-black px-8 py-3
-                          rounded-full text-lg hover:bg-emerald-700 transition-colors">
+               className="inline-block bg-emerald-700 text-white font-black px-8 py-3
+                          rounded-full text-lg hover:bg-emerald-800 transition-colors">
               Calculate My Life Expectancy →
             </a>
           </div>
@@ -198,7 +198,7 @@ export function LifeExpectancySingaporeUAEPage() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl
+          <div className="bg-gradient-to-r from-emerald-700 to-teal-700 rounded-2xl
                p-8 text-center text-white mb-10">
             <h2 className="text-2xl font-black mb-2">See Your Own Number, Not the Average</h2>
             <p className="text-emerald-100 mb-6">

@@ -304,7 +304,7 @@ export function IndianCelebritiesFitnessArticle() {
 
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Compare Yourself to Your Favourite Stars</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               See the Life Path number, zodiac sign and birth details of hundreds of Indian celebrities —
               and find out who shares yours.
             </p>

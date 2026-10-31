@@ -205,7 +205,7 @@ export function RetirementAgeIndiaArticle() {
 
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Plan Retirement Around Your Real Lifespan</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               Get a personalised life expectancy, then subtract your target retirement age to see
               exactly how many years you need to fund.
             </p>

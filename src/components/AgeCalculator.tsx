@@ -80,7 +80,7 @@ export const AgeCalculator = ({ onBirthDateChange, initialDate }: AgeCalculatorP
         <div className="space-y-8">
           {/* Main Age */}
           <div className="text-center">
-            <div className="text-6xl md:text-8xl font-bold gradient-text-secondary mb-2 animate-counter-tick">
+            <div className="text-6xl md:text-8xl font-bold gradient-text-primary mb-2 animate-counter-tick">
               {ageData.years}
             </div>
             <div className="text-2xl text-muted-foreground">

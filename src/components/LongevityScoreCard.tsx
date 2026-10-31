@@ -70,7 +70,7 @@ export function LongevityScoreCard({ result, userId, isPremium, onRetake }: Long
 
   return (
     <div className="rounded-2xl border border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30 bg-white dark:bg-card shadow-sm overflow-hidden">
-      <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] dark:from-[#6E5AA6]/20 dark:to-[#6E5AA6]/20 px-5 py-4 border-b border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30">
+      <div className="bg-gradient-to-r from-[#6E5AA6]/10 to-[#6E5AA6]/10 dark:from-[#6E5AA6]/20 dark:to-[#6E5AA6]/20 px-5 py-4 border-b border-[#6E5AA6]/30 dark:border-[#6E5AA6]/30">
         <div className="flex items-center gap-2">
           <TrendingUp className="w-5 h-5 text-[#6E5AA6]" />
           <h3 className="font-semibold text-foreground">Your Longevity Score</h3>

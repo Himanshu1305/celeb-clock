@@ -116,7 +116,7 @@ export default function FitnessRhythmPage() {
           </div>
 
           {/* Mandatory standard disclaimer — page footer */}
-          <p className="mt-8 pt-6 border-t border-gray-100 text-xs text-gray-400 leading-relaxed">{RHYTHM_DISCLAIMER}</p>
+          <p className="mt-8 pt-6 border-t border-gray-100 text-xs text-gray-500 leading-relaxed">{RHYTHM_DISCLAIMER}</p>
         </div>
       </section>
     </ToolLayout>

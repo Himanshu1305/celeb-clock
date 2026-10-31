@@ -38,12 +38,12 @@ const CardBack = () => (
     />
     <div className="relative z-10 text-center">
       <div className="text-3xl mb-1">✦</div>
-      <div className="text-xs text-[#6E5AA6] font-medium tracking-widest uppercase">BornClock</div>
+      <div className="text-xs text-[#B4A6DB] font-medium tracking-widest uppercase">BornClock</div>
     </div>
-    <div className="absolute top-2 left-2 text-[#6E5AA6] text-xs">✦</div>
-    <div className="absolute top-2 right-2 text-[#6E5AA6] text-xs">✦</div>
-    <div className="absolute bottom-2 left-2 text-[#6E5AA6] text-xs">✦</div>
-    <div className="absolute bottom-2 right-2 text-[#6E5AA6] text-xs">✦</div>
+    <div className="absolute top-2 left-2 text-[#B4A6DB] text-xs">✦</div>
+    <div className="absolute top-2 right-2 text-[#B4A6DB] text-xs">✦</div>
+    <div className="absolute bottom-2 left-2 text-[#B4A6DB] text-xs">✦</div>
+    <div className="absolute bottom-2 right-2 text-[#B4A6DB] text-xs">✦</div>
     <div className="absolute inset-0 tarot-card-shimmer" />
   </div>
 );
@@ -54,13 +54,13 @@ const CardFront = ({ card }: { card: TarotCard }) => (
     className="w-full h-full flex flex-col items-center justify-center p-3 text-center"
     style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}
   >
-    <p className="text-xs text-[#6E5AA6] mb-1 tracking-wider">Card {card.number}</p>
+    <p className="text-xs text-[#B4A6DB] mb-1 tracking-wider">Card {card.number}</p>
     <div className="text-4xl mb-2">{card.emoji}</div>
     <p className="text-white font-black text-sm leading-tight">{card.name}</p>
     <div className="w-8 h-px bg-[#0E2238] my-2" />
     <div className="flex flex-wrap justify-center gap-1">
       {card.keywords.slice(0, 2).map(kw => (
-        <span key={kw} className="text-[#6E5AA6] text-xs">{kw}</span>
+        <span key={kw} className="text-[#B4A6DB] text-xs">{kw}</span>
       ))}
     </div>
   </div>
@@ -134,18 +134,18 @@ function InteractiveTarotDraw({ onCardDrawn, drawnCard }: InteractiveTarotDrawPr
           style={{ background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)' }}
         >
           <div className="w-full h-full flex flex-col items-center justify-center p-4 text-center">
-            <p className="text-xs text-[#6E5AA6] mb-2 tracking-wider">Card {drawnCard.number}</p>
+            <p className="text-xs text-[#B4A6DB] mb-2 tracking-wider">Card {drawnCard.number}</p>
             <div className="text-5xl mb-3">{drawnCard.emoji}</div>
             <p className="text-white font-black text-base leading-tight">{drawnCard.name}</p>
             <div className="w-10 h-px bg-[#0E2238] my-2" />
             <div className="flex flex-wrap justify-center gap-1">
               {drawnCard.keywords.slice(0, 2).map(kw => (
-                <span key={kw} className="text-[#6E5AA6] text-xs">{kw}</span>
+                <span key={kw} className="text-[#B4A6DB] text-xs">{kw}</span>
               ))}
             </div>
           </div>
         </div>
-        <p className="text-sm text-[#6E5AA6] font-medium mt-3 italic">
+        <p className="text-sm text-[#B4A6DB] font-medium mt-3 italic">
           You drew {drawnCard.name} ✨
         </p>
         <button
@@ -346,25 +346,25 @@ export default function TarotByBirthday() {
           {birthdayResult && (
             <div className="mb-8">
               <div className="bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-white text-center mb-6">
-                <p className="text-sm text-[#6E5AA6] mb-1">
+                <p className="text-sm text-white/90 mb-1">
                   Your tarot birth card is
                 </p>
                 <div className="text-7xl mb-3">{birthdayResult.card.emoji}</div>
-                <p className="text-sm font-semibold text-[#6E5AA6] mb-1">
+                <p className="text-sm font-semibold text-white/90 mb-1">
                   Card {birthdayResult.card.number}
                 </p>
                 <h2 className="text-3xl font-black text-white mb-4">{birthdayResult.card.name}</h2>
                 {birthdayResult.pair.length > 0 && (
-                  <p className="text-sm text-white/80 mb-3" data-testid="birth-card-pair">
+                  <p className="text-sm text-white mb-3" data-testid="birth-card-pair">
                     Paired with {birthdayResult.pair.map(c => `${c.name} (${c.number})`).join(' and ')}
                   </p>
                 )}
-                <p className="text-xs text-white/60 mb-4" data-testid="birth-card-working">
+                <p className="text-xs text-white/90 mb-4" data-testid="birth-card-working">
                   {birthdayResult.working}
                 </p>
                 <div className="flex flex-wrap justify-center gap-2 mb-4">
                   {birthdayResult.card.keywords.map(kw => (
-                    <span key={kw} className="bg-white/10 text-white/80 text-xs px-3 py-1 rounded-full">
+                    <span key={kw} className="bg-white/10 text-white text-xs px-3 py-1 rounded-full">
                       {kw}
                     </span>
                   ))}
@@ -382,7 +382,7 @@ export default function TarotByBirthday() {
                     className={`flex-1 min-w-0 py-2 px-3 rounded-lg text-sm font-medium capitalize transition-colors whitespace-nowrap ${
                       activeTab === tab.key
                         ? 'bg-white text-[#6E5AA6] shadow-sm'
-                        : 'text-gray-500 hover:text-gray-700'
+                        : 'text-gray-600 hover:text-gray-800'
                     }`}
                   >
                     {tab.label}
@@ -400,7 +400,7 @@ export default function TarotByBirthday() {
                       {birthdayResult.card.deepMeaning}
                     </p>
                     <div className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-                      <p className="text-xs font-semibold text-amber-600 mb-1">⚠️ Shadow side</p>
+                      <p className="text-xs font-semibold text-amber-700 mb-1">⚠️ Shadow side</p>
                       <p className="text-sm text-gray-700">{birthdayResult.card.reversed}</p>
                     </div>
                   </>
@@ -421,7 +421,7 @@ export default function TarotByBirthday() {
                 )}
 
                 <div className="mt-6 bg-green-50 rounded-xl p-4 border border-green-100">
-                  <p className="text-xs font-semibold text-green-600 mb-1">✨ Your Affirmation</p>
+                  <p className="text-xs font-semibold text-green-700 mb-1">✨ Your Affirmation</p>
                   <p className="text-sm text-gray-700 italic">"{birthdayResult.card.affirmation}"</p>
                 </div>
 
@@ -446,7 +446,7 @@ export default function TarotByBirthday() {
 
               <div className="bg-[#0E2238] rounded-2xl p-6 mt-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get the complete Birthday Intelligence Report</p>
-                <p className="text-[#6E5AA6] text-sm mb-4">
+                <p className="text-[#B4A6DB] text-sm mb-4">
                   Your tarot card + moon sign + nakshatra + name numerology + 12 more sections —
                   personalised to your exact birthday.
                 </p>
@@ -467,17 +467,17 @@ export default function TarotByBirthday() {
               <div className="flex justify-center gap-8 mb-6">
                 <div className="text-center">
                   <div className="text-3xl mb-1">{drawnCard.emoji}</div>
-                  <p className="text-xs text-[#6E5AA6]">Drawn card</p>
+                  <p className="text-xs text-white/90">Drawn card</p>
                   <p className="text-sm font-bold text-white">{drawnCard.name}</p>
                 </div>
-                <div className="text-2xl self-center text-[#6E5AA6]">+</div>
+                <div className="text-2xl self-center text-white/90">+</div>
                 <div className="text-center">
                   <div className="text-3xl mb-1">{birthdayResult.card.emoji}</div>
-                  <p className="text-xs text-[#6E5AA6]">Birthday card</p>
+                  <p className="text-xs text-white/90">Birthday card</p>
                   <p className="text-sm font-bold text-white">{birthdayResult.card.name}</p>
                 </div>
               </div>
-              <p className="text-sm text-[#6E5AA6] leading-relaxed text-center">
+              <p className="text-sm text-white/90 leading-relaxed text-center">
                 {getCombinationReading(drawnCard, birthdayResult.card)}
               </p>
             </div>
@@ -540,7 +540,7 @@ export default function TarotByBirthday() {
                           </div>
                         </div>
                         {card.affirmation && (
-                          <div className="bg-[#0E2238] text-[#6E5AA6] rounded-lg p-3 text-center">
+                          <div className="bg-[#0E2238] text-[#B4A6DB] rounded-lg p-3 text-center">
                             <p className="text-xs font-medium italic">"{card.affirmation}"</p>
                           </div>
                         )}

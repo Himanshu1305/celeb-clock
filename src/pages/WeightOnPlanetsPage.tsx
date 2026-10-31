@@ -182,7 +182,7 @@ export default function WeightOnPlanetsPage() {
       <section className="max-w-2xl mx-auto px-4 py-4">
         <div className="rounded-2xl bg-gradient-to-br from-[#2F6FB0] to-[#2F6FB0] p-6 text-center text-white">
           <p className="text-lg font-bold mb-1">Loved this? See your age on every planet</p>
-          <p className="text-white/80 text-sm mb-4">You’re a different number of years old on Mercury, Mars and Jupiter too — find out in seconds.</p>
+          <p className="text-white text-sm mb-4">You’re a different number of years old on Mercury, Mars and Jupiter too — find out in seconds.</p>
           <Link to="/planetary-age/" className="inline-flex items-center gap-2 bg-white text-[#2F6FB0] px-6 py-3 rounded-xl font-semibold hover:bg-[#2F6FB0]/10 transition-colors">
             <ArrowRightCircle className="w-5 h-5" /> Try the Planetary Age calculator
           </Link>
@@ -196,7 +196,7 @@ export default function WeightOnPlanetsPage() {
 
       {/* Sources + mesh */}
       <div className="max-w-2xl mx-auto px-4 pb-12">
-        <p className="text-xs text-gray-400 mb-6">
+        <p className="text-xs text-gray-500 mb-6">
           Gravity values from NASA’s NSSDCA Planetary Fact Sheet (ratio to Earth). Jupiter is “cloud-top” gravity, since
           it has no solid surface. This is a fun science tool — nothing you enter is stored or sent anywhere.
         </p>

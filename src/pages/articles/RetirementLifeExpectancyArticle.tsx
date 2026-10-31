@@ -265,7 +265,7 @@ export function RetirementLifeExpectancyArticle() {
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Plan for Your Real Lifespan, Not the Average</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               The most important input to your retirement corpus is how long you will actually live.
               Estimate your personal, lifestyle-adjusted life expectancy — then size your money to match.
             </p>

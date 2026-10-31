@@ -56,7 +56,7 @@ export default function RashiRatnaPage() {
 
       <div className="section" style={{ maxWidth: 820, margin: '0 auto' }}>
 
-        <nav className="text-sm text-gray-400 mb-6 flex gap-1 items-center flex-wrap">
+        <nav className="text-sm text-gray-500 mb-6 flex gap-1 items-center flex-wrap">
           <Link to="/" className="hover:text-[#6E5AA6]">Home</Link>
           <span>›</span>
           <Link to="/birthstone/" className="hover:text-[#6E5AA6]">Birthstone</Link>
@@ -100,7 +100,7 @@ export default function RashiRatnaPage() {
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: rr.hex }} />
                 <div className="text-xs font-medium text-gray-700">{rr.primaryStone}</div>
               </div>
-              <div className="text-xs text-gray-400 mt-0.5">({rr.primaryStoneHindi})</div>
+              <div className="text-xs text-gray-500 mt-0.5">({rr.primaryStoneHindi})</div>
             </button>
           ))}
         </div>

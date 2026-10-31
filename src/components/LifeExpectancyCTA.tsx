@@ -57,7 +57,7 @@ export const LifeExpectancyCTA = () => {
             <Button
               size="lg"
               onClick={() => navigate(isPremium ? '/life-expectancy' : '/upgrade')}
-              className="gap-2 text-base px-8 py-6 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white shadow-lg shadow-amber-500/20"
+              className="gap-2 text-base px-8 py-6 bg-gradient-to-r from-amber-700 to-yellow-700 hover:from-amber-800 hover:to-yellow-800 text-white shadow-lg shadow-amber-500/20"
             >
               <Crown className="w-5 h-5" />
               {isPremium ? 'View My Life Report' : 'Unlock Your Life Report'}

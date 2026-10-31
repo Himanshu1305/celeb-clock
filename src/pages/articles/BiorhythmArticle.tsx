@@ -144,7 +144,7 @@ function BiorhythmCalculator() {
               </div>
             ))}
           </div>
-          <p className="text-xs text-gray-400 mt-4 mb-4">
+          <p className="text-xs text-gray-500 mt-4 mb-4">
             Biorhythms are a self-reflection tool, not a scientifically proven prediction.
           </p>
           <a href={`/birthday-report/?dob=${dob}`}
@@ -300,7 +300,7 @@ export function BiorhythmArticle() {
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Discover Your Complete Birthday Profile</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-white/90 mb-6">
               Your biorhythm is just one lens. BornClock also reveals your Vedic Rashi,
               Western zodiac, Nakshatra, Life Path number and more — all from your date of
               birth, alongside your astrology chart.

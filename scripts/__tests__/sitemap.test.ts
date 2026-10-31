@@ -88,7 +88,7 @@ describe('scripts/generate-sitemap.mjs', () => {
   it('writes an index + section sitemaps + manifest; keeps lastmod for unchanged pages on the next build', () => {
     const dist = mkdtempSync(join(tmpdir(), 'b11-sitemap-'));
     write(dist, '/', page('<p>Home</p>'));
-    write(dist, '/kundali', page('<p>Kundali v1</p>'));
+    write(dist, '/kundali', page('<p>Kundali first draft</p>'));
     write(dist, '/privacy', page('<p>Privacy</p>'));
     write(dist, '/rashifal/mesh/today', page('<p>Daily</p>'));
     write(dist, '/upgrade', page('<p>Upgrade</p>').replace('</head>', '<meta name="robots" content="noindex, follow"></head>'));
@@ -115,7 +115,7 @@ describe('scripts/generate-sitemap.mjs', () => {
     // Next build: kundali changed, privacy did not; previous manifest read from a file.
     const prevFile = join(dist, 'prev.json');
     writeFileSync(prevFile, JSON.stringify({ ...m1, urls: { ...m1.urls, '/privacy/': { ...m1.urls['/privacy/'], m: '2026-09-01' } } }));
-    write(dist, '/kundali', page('<p>Kundali v2</p>'));
+    write(dist, '/kundali', page('<p>Kundali second draft</p>'));
     run(dist, prevFile, '2026-10-30');
     const m2 = JSON.parse(readFileSync(join(dist, 'sitemap-manifest.json'), 'utf8'));
     expect(m2.urls['/privacy/'].m).toBe('2026-09-01');     // unchanged → kept

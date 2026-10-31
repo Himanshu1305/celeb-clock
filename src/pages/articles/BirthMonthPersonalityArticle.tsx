@@ -177,7 +177,7 @@ export function BirthMonthPersonalityArticle() {
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">See What Your Exact Birth Date Reveals</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-white/90 mb-6">
               Go beyond your birth month. BornClock reads your full date of birth for your
               precise zodiac sign, Rashi, Nakshatra, Life Path number, and more.
             </p>

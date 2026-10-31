@@ -1026,7 +1026,7 @@ export function CelebrityPage() {
           {/* ── CTA ── */}
           <div className="bg-gradient-to-br from-primary to-primary rounded-2xl p-8 text-center text-white" role="complementary">
             <h2 className="text-2xl font-black mb-2">Get Your Own Birthday Intelligence Report</h2>
-            <p className="text-[#6E5AA6] mb-6 max-w-md mx-auto">
+            <p className="text-[#B4A6DB] mb-6 max-w-md mx-auto">
               Discover your celebrity birthday twins, zodiac profiles, numerology, and life path — just like {name}'s.
             </p>
             <Link
@@ -1036,7 +1036,7 @@ export function CelebrityPage() {
             >
               Generate My Free Birthday Report →
             </Link>
-            <p className="text-[#6E5AA6] text-xs mt-3">Free · Instant · No account required</p>
+            <p className="text-[#B4A6DB] text-xs mt-3">Free · Instant · No account required</p>
           </div>
         </div>
     </ReportLayout>

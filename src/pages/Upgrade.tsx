@@ -210,7 +210,7 @@ export default function Upgrade() {
             <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 flex flex-col">
               <div className="text-lg font-bold text-gray-700 mb-1">Free</div>
               <div className="text-4xl font-black text-gray-900 mb-1">{currency === 'INR' ? '₹0' : '$0'}</div>
-              <div className="text-gray-400 text-sm mb-5">forever</div>
+              <div className="text-gray-500 text-sm mb-5">forever</div>
               <ul className="space-y-2.5 mb-6 flex-1">
                 {[
                   'Celebrity birthday twin (1/day)',
@@ -243,7 +243,7 @@ export default function Upgrade() {
                   <div className="text-4xl font-black text-gray-900 mb-1">
                     {monthlyPrice?.amount}
                   </div>
-                  <div className="text-gray-400 text-sm mb-5">{monthlyPrice?.period}</div>
+                  <div className="text-gray-500 text-sm mb-5">{monthlyPrice?.period}</div>
                 </>
               )}
               <ul className="space-y-2 mb-6 flex-1">
@@ -272,7 +272,7 @@ export default function Upgrade() {
                   'Subscribe Monthly'
                 )}
               </button>
-              <p className="text-gray-400 text-xs text-center mt-2">Cancel anytime</p>
+              <p className="text-gray-500 text-xs text-center mt-2">Cancel anytime</p>
             </div>
 
             {/* Annual Premium card */}
@@ -282,13 +282,13 @@ export default function Upgrade() {
                 BEST VALUE
               </div>
 
-              <div className="text-lg font-bold text-[#6E5AA6] mb-1">Premium Annual</div>
+              <div className="text-lg font-bold text-[#B4A6DB] mb-1">Premium Annual</div>
               {detecting ? (
                 <div className="text-4xl font-black text-white/50 mb-1">...</div>
               ) : (
                 <>
                   <div className="text-4xl font-black mb-1">{annualPrice?.amount}</div>
-                  <div className="text-[#6E5AA6] text-sm mb-1">{annualPrice?.period}</div>
+                  <div className="text-[#B4A6DB] text-sm mb-1">{annualPrice?.period}</div>
                   {annualPrice?.saving && (
                     <div className="text-green-300 text-sm font-semibold mb-4">
                       {annualPrice.saving}
@@ -299,7 +299,7 @@ export default function Upgrade() {
 
               <ul className="space-y-2 mb-6 flex-1 mt-2">
                 {premiumFeatures.map(f => (
-                  <li key={f} className="flex items-center gap-2 text-sm text-[#6E5AA6]">
+                  <li key={f} className="flex items-center gap-2 text-sm text-[#B4A6DB]">
                     <Check size={14} className="text-green-300 flex-shrink-0" />
                     {f}
                   </li>
@@ -328,13 +328,13 @@ export default function Upgrade() {
               {!user && (
                 <button
                   onClick={() => navigate('/auth?redirect=/upgrade')}
-                  className="w-full mt-2 py-2 text-[#6E5AA6] text-sm underline"
+                  className="w-full mt-2 py-2 text-[#B4A6DB] text-sm underline"
                 >
                   Sign in first →
                 </button>
               )}
 
-              <p className="text-[#6E5AA6] text-xs text-center mt-3">
+              <p className="text-[#B4A6DB] text-xs text-center mt-3">
                 7-day money-back guarantee · Cancel anytime
               </p>
             </div>
@@ -425,7 +425,7 @@ export default function Upgrade() {
             ].map(t => (
               <div key={t.user} className="bg-white rounded-xl border p-5">
                 <p className="text-sm text-gray-700 italic mb-3">"{t.quote}"</p>
-                <p className="text-xs text-gray-400">— {t.user}</p>
+                <p className="text-xs text-gray-500">— {t.user}</p>
               </div>
             ))}
           </div>

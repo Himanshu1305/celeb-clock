@@ -114,11 +114,11 @@ export default function BirthdayHub() {
         </div>
 
         {/* Date picker */}
-        <section className="mb-10 bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border border-[#6E5AA6]/30 rounded-2xl p-6">
+        <section className="mb-10 bg-gradient-to-br from-[#6E5AA6]/10 to-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-2xl p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-1 text-center">
             Jump to Any Birthday
           </h2>
-          <p className="text-sm text-gray-500 text-center mb-4">
+          <p className="text-sm text-gray-600 text-center mb-4">
             Enter any date to see the full personality profile
           </p>
           <div className="flex gap-3 justify-center flex-wrap items-start">
@@ -159,10 +159,10 @@ export default function BirthdayHub() {
                   <p className="font-black text-gray-900 text-base group-hover:text-[#6E5AA6]">
                     {MONTH_NAMES[m]}
                   </p>
-                  <p className="text-[11px] text-gray-400 mt-0.5 leading-tight">
+                  <p className="text-[11px] text-gray-500 mt-0.5 leading-tight">
                     {ZODIAC_PAIRS[m]}
                   </p>
-                  <p className="text-[10px] text-gray-300 mt-1">{MONTH_DAYS[m]} days</p>
+                  <p className="text-[10px] text-gray-500 mt-1">{MONTH_DAYS[m]} days</p>
                   {isCurrentMonth && (
                     <span className="inline-block mt-1.5 text-[10px] bg-[#0E2238] text-white px-2 py-0.5 rounded-full font-bold">
                       This month
@@ -175,7 +175,7 @@ export default function BirthdayHub() {
         </section>
 
         {/* How it works */}
-        <section className="mb-12 bg-gradient-to-br from-[#6E5AA6] to-[#6E5AA6] border border-[#6E5AA6]/30 rounded-2xl p-8">
+        <section className="mb-12 bg-gradient-to-br from-[#6E5AA6]/10 to-[#6E5AA6]/10 border border-[#6E5AA6]/30 rounded-2xl p-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4 text-center">
             <Sparkles className="w-5 h-5 inline mr-2 text-[#6E5AA6]" />
             What Shapes Your Birthday Personality?
@@ -264,7 +264,7 @@ export default function BirthdayHub() {
         {/* CTA */}
         <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl p-8 text-center text-white">
           <h2 className="text-xl font-bold mb-2">Find Your Complete Birthday Intelligence Report</h2>
-          <p className="text-[#6E5AA6] text-sm mb-5 max-w-md mx-auto">
+          <p className="text-white/90 text-sm mb-5 max-w-md mx-auto">
             Beyond personality — discover your celebrity birthday twins, birthstone, numerology
             number, and longevity forecast all in one place.
           </p>

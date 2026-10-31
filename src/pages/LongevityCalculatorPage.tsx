@@ -115,7 +115,7 @@ export function LongevityCalculatorPage() {
             >
               Start My Free Longevity Calculator →
             </Link>
-            <p className="text-xs text-gray-400 mt-3">
+            <p className="text-xs text-gray-500 mt-3">
               Free · No account required · Results in 3 minutes
             </p>
           </div>
@@ -503,7 +503,7 @@ export function LongevityCalculatorPage() {
             <h2 className="text-2xl font-black mb-2">
               {LC_COPY.bottomCTA.heading}
             </h2>
-            <p className="text-[#2F6FB0] mb-6 max-w-md mx-auto">
+            <p className="text-[#7FB0E0] mb-6 max-w-md mx-auto">
               {LC_COPY.bottomCTA.sub}
             </p>
             <Link
@@ -514,7 +514,7 @@ export function LongevityCalculatorPage() {
             >
               {LC_COPY.bottomCTA.button}
             </Link>
-            <p className="text-[#2F6FB0] text-xs mt-3">
+            <p className="text-[#7FB0E0] text-xs mt-3">
               {LC_COPY.bottomCTA.footnote}
             </p>
           </div>

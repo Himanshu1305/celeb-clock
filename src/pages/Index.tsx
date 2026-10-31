@@ -232,7 +232,7 @@ export default function Index() {
       <div aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>{announce}</div>
 
       {/* Header — real Navigation + AuthNav on the navy bar (global Navigation not restyled) */}
-      <header style={{ background: '#0E2238', padding: '0 24px', minHeight: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+      <header style={{ background: '#0E2238', color: '#FFFFFF', padding: '0 24px', minHeight: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
         <Navigation />
         <AuthNav />
       </header>

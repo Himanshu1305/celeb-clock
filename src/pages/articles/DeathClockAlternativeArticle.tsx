@@ -178,7 +178,7 @@ export function DeathClockAlternativeArticle() {
 
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-6 text-center text-white my-8">
             <h2 className="text-xl font-black mb-2">Skip the morbid countdown</h2>
-            <p className="text-[#2F6FB0] mb-4 text-sm">
+            <p className="text-white mb-4 text-sm">
               Get a science-backed life expectancy estimate from 8 real factors — in about 3 minutes, free.
             </p>
             <a href="/longevity-calculator/"
@@ -227,7 +227,7 @@ export function DeathClockAlternativeArticle() {
 
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">A Better Answer Than a Death Clock</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               Trade the morbid countdown for a science-backed estimate you can actually
               improve. 8 factors, WHO baselines, a personalised 90-day plan — all free.
             </p>

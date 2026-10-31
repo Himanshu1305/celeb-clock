@@ -116,7 +116,7 @@ export default function CoachLandingPage() {
           <Lock className="w-8 h-8 text-[#2F6FB0] shrink-0 mt-0.5" />
           <div>
             <p className="font-bold text-[#2F6FB0] mb-1">Your conversations are never stored</p>
-            <p className="text-sm text-[#2F6FB0]/80 leading-relaxed">
+            <p className="text-sm text-[#2F6FB0] leading-relaxed">
               Each message is processed just long enough to write a reply, then it’s gone — nothing is saved, logged
               or added to a profile. Close the tab and the conversation no longer exists anywhere. Talking about your
               health should feel private, so we built it that way rather than promising it in the fine print.

@@ -132,7 +132,7 @@ export function HowLongWillILivePage() {
             >
               {HLWIL_COPY.hero.ctaButton}
             </Link>
-            <p className="text-xs text-gray-400 mt-3">
+            <p className="text-xs text-gray-500 mt-3">
               Free · Takes 3 minutes · No account required
             </p>
           </div>
@@ -160,9 +160,9 @@ export function HowLongWillILivePage() {
                 data-testid="stat-card"
                 className="bg-white border border-gray-200 rounded-xl p-4 text-center"
               >
-                <div className="text-xs text-gray-400 mb-1">{stat.label}</div>
+                <div className="text-xs text-gray-500 mb-1">{stat.label}</div>
                 <div className={`text-2xl font-black ${stat.color}`}>{stat.value}</div>
-                <div className="text-xs text-gray-400 mt-0.5">{stat.note}</div>
+                <div className="text-xs text-gray-500 mt-0.5">{stat.note}</div>
               </div>
             ))}
           </div>
@@ -331,7 +331,7 @@ export function HowLongWillILivePage() {
               </table>
             </ScrollTable>
 
-            <p className="text-xs text-gray-400 mt-2 italic">
+            <p className="text-xs text-gray-500 mt-2 italic">
               {HLWIL_COPY.countryTable.source}
             </p>
             <div className="mt-3 bg-[#2F6FB0]/10 border border-[#2F6FB0]/30 rounded-xl p-3">
@@ -532,7 +532,7 @@ export function HowLongWillILivePage() {
             <h2 className="text-2xl font-black mb-2">
               How Long Will You Live? Find Out Free.
             </h2>
-            <p className="text-[#2F6FB0] mb-6 max-w-md mx-auto">
+            <p className="text-[#7FB0E0] mb-6 max-w-md mx-auto">
               3 minutes. 8 science-backed factors. Personalised result and 90-day plan.
             </p>
             <Link
@@ -543,7 +543,7 @@ export function HowLongWillILivePage() {
             >
               {HLWIL_COPY.hero.ctaButton}
             </Link>
-            <p className="text-[#2F6FB0] text-xs mt-3">
+            <p className="text-[#7FB0E0] text-xs mt-3">
               Free · No account required · Results in 3 minutes
             </p>
           </div>

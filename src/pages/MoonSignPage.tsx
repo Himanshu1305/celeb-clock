@@ -106,7 +106,7 @@ export default function MoonSignPage() {
                 Find My Sign →
               </button>
             </div>
-            <p className="text-xs text-gray-400 mt-2">For greater accuracy, use your exact birth time with a full Vedic chart calculator.</p>
+            <p className="text-xs text-gray-500 mt-2">For greater accuracy, use your exact birth time with a full Vedic chart calculator.</p>
           </div>
 
           {result && (
@@ -130,19 +130,19 @@ export default function MoonSignPage() {
               </div>
               <div className="grid sm:grid-cols-2 gap-4 mb-6">
                 <div className="bg-gradient-to-br from-blue-900 to-[#6E5AA6] rounded-2xl p-6 text-white text-center">
-                  <p className="text-xs text-blue-300 mb-1 uppercase tracking-wide"><TermTip id="rashi">Moon Sign</TermTip></p>
+                  <p className="text-xs text-white/90 mb-1 uppercase tracking-wide"><TermTip id="rashi">Moon Sign</TermTip></p>
                   <div className="text-5xl mb-2">{result.moonSignData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.moonSign} Moon</h2>
-                  <p className="text-xs text-blue-200">Vedic (sidereal) Moon sign</p>
-                  <p className="text-xs text-blue-300">{result.moonSignData.element} · {result.moonSignData.rulingPlanet}</p>
-                  <p className="text-xs text-blue-200 mt-2 italic">{result.moonSignData.emotionalNature}</p>
+                  <p className="text-xs text-white">Vedic (sidereal) Moon sign</p>
+                  <p className="text-xs text-white/90">{result.moonSignData.element} · {result.moonSignData.rulingPlanet}</p>
+                  <p className="text-xs text-white/90 mt-2 italic">{result.moonSignData.emotionalNature}</p>
                 </div>
                 <div className="bg-gradient-to-br from-[#6E5AA6] to-pink-900 rounded-2xl p-6 text-white text-center">
-                  <p className="text-xs text-[#6E5AA6] mb-1 uppercase tracking-wide"><TermTip id="nakshatra">Nakshatra</TermTip></p>
+                  <p className="text-xs text-white/90 mb-1 uppercase tracking-wide"><TermTip id="nakshatra">Nakshatra</TermTip></p>
                   <div className="text-5xl mb-2">{result.nakshatraData.symbol}</div>
                   <h2 className="text-2xl font-black text-white mb-1">{result.nakshatraData.name}</h2>
-                  <p className="text-xs text-[#6E5AA6]">#{result.nakshatraNumber} · {result.nakshatraData.meaning}</p>
-                  <p className="text-xs text-[#6E5AA6] mt-2 italic">{result.nakshatraData.quality}</p>
+                  <p className="text-xs text-white/90">#{result.nakshatraNumber} · {result.nakshatraData.meaning}</p>
+                  <p className="text-xs text-white/90 mt-2 italic">{result.nakshatraData.quality}</p>
                 </div>
               </div>
 
@@ -150,7 +150,7 @@ export default function MoonSignPage() {
                 {(Object.keys(TAB_LABELS) as TabKey[]).map(tab => (
                   <button key={tab} onClick={() => setActiveTab(tab)}
                     className={`flex-1 min-w-0 py-2 px-2 rounded-lg text-xs font-medium transition-colors whitespace-nowrap ${
-                      activeTab === tab ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                      activeTab === tab ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-600 hover:text-gray-800'
                     }`}>
                     {TAB_LABELS[tab]}
                   </button>
@@ -190,12 +190,12 @@ export default function MoonSignPage() {
               <div className="bg-blue-50 rounded-2xl p-5 mb-4">
                 <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-2">Your Nakshatra — {result.nakshatraData.name}</p>
                 <p className="text-sm text-gray-700 leading-relaxed mb-2">{result.nakshatraData.description}</p>
-                <p className="text-xs text-gray-500">Deity: {result.nakshatraData.deity}</p>
+                <p className="text-xs text-gray-600">Deity: {result.nakshatraData.deity}</p>
               </div>
 
               <div className="bg-blue-600 rounded-2xl p-6 text-center text-white">
                 <p className="text-lg font-bold mb-1">Get the complete Birthday Intelligence Report</p>
-                <p className="text-blue-200 text-sm mb-4">Moon sign + nakshatra + tarot card + name numerology + 12 more sections — personalised to your exact birthday.</p>
+                <p className="text-white text-sm mb-4">Moon sign + nakshatra + tarot card + name numerology + 12 more sections — personalised to your exact birthday.</p>
                 <Link to="/birthday-report/" className="inline-block bg-white text-blue-600 px-8 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors">
                   Generate My Report → {reportPriceLabel}
                 </Link>
@@ -243,7 +243,7 @@ export default function MoonSignPage() {
                     <span className="text-xl">{sign.symbol}</span>
                     <div className="flex-1">
                       <span className="font-bold text-gray-900">{sign.sign} Moon</span>
-                      <span className="text-xs text-gray-400 ml-2">{sign.element} · {sign.rulingPlanet}</span>
+                      <span className="text-xs text-gray-500 ml-2">{sign.element} · {sign.rulingPlanet}</span>
                     </div>
                     <span className="text-gray-400">{expandedSign === sign.sign ? '▲' : '▼'}</span>
                   </button>
@@ -270,7 +270,7 @@ export default function MoonSignPage() {
                     <span className="text-lg">{nak.symbol}</span>
                     <div className="flex-1">
                       <span className="font-bold text-gray-900 text-sm">{nak.name}</span>
-                      <span className="text-xs text-gray-400 ml-2">#{num} · {nak.quality}</span>
+                      <span className="text-xs text-gray-500 ml-2">#{num} · {nak.quality}</span>
                     </div>
                     <span className="text-gray-400 text-sm">{expandedNak === Number(num) ? '▲' : '▼'}</span>
                   </button>

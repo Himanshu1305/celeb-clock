@@ -414,7 +414,7 @@ export function LifeExpectancyByCountryArticle() {
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl
                p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">How Long Will You Live?</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               National averages only tell part of the story. See a personalised estimate based
               on your own lifestyle, habits and health with the free BornClock longevity
               calculator.

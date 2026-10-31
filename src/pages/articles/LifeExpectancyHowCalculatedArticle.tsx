@@ -237,7 +237,7 @@ export function LifeExpectancyHowCalculatedArticle() {
 
           <div className="bg-gradient-to-r from-[#2F6FB0] to-[#2F6FB0] rounded-2xl p-8 text-center text-white my-10">
             <h2 className="text-2xl font-black mb-2">Get Your Personal Life Expectancy Estimate</h2>
-            <p className="text-[#2F6FB0] mb-6">
+            <p className="text-white mb-6">
               Move beyond the national average. Enter your details and see an estimate adjusted for
               your age, sex and lifestyle in seconds.
             </p>

@@ -178,7 +178,7 @@ export function HindiNumerologyArticle() {
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">पूरी जन्मतिथि रिपोर्ट</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-white/90 mb-6">
               मूलांक तो केवल एक हिस्सा है। BornClock आपकी वैदिक राशि, पश्चिमी राशि, नक्षत्र,
               भाग्यशाली रत्न और बहुत कुछ आपकी जन्मतिथि से बताता है।
             </p>

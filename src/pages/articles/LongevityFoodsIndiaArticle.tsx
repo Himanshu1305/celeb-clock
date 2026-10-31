@@ -255,7 +255,7 @@ export function LongevityFoodsIndiaArticle() {
             get a personalised estimate and see where small changes could add the most healthy years.
           </p>
 
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl p-8 text-center text-white mt-10 mb-10">
+          <div className="bg-gradient-to-r from-emerald-700 to-teal-700 rounded-2xl p-8 text-center text-white mt-10 mb-10">
             <h2 className="text-2xl font-black mb-2">How long could you live?</h2>
             <p className="text-emerald-100 mb-6">
               Diet is one lever. Enter your details in the BornClock longevity calculator to see a

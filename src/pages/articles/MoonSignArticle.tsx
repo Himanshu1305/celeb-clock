@@ -114,8 +114,8 @@ function RashiCalculator() {
             </div>
           ))}
           <a href={`/birthday-report/?dob=${dob}`}
-             className="inline-block bg-amber-600 text-white font-bold px-5 py-2.5
-                        rounded-full text-sm hover:bg-amber-700">
+             className="inline-block bg-amber-700 text-white font-bold px-5 py-2.5
+                        rounded-full text-sm hover:bg-amber-800">
             See my full birthday profile →
           </a>
         </div>
@@ -284,10 +284,10 @@ export function MoonSignArticle() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-amber-600 to-orange-600 rounded-2xl
+          <div className="bg-gradient-to-r from-amber-700 to-orange-700 rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Discover Your Complete Birthday Profile</h2>
-            <p className="text-amber-100 mb-6">
+            <p className="text-white mb-6">
               Your Rashi is just one piece. BornClock also shows your Nakshatra, Western zodiac,
               Life Path number, lucky stone, and more — all from your date of birth.
             </p>

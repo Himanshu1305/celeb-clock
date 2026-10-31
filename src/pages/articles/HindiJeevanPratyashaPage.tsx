@@ -102,8 +102,8 @@ export function HindiJeevanPratyashaPage() {
               अपनी जन्मतिथि और जीवनशैली दर्ज करें और तुरंत जानें कि आप कितने साल जी सकते हैं।
             </p>
             <a href="/longevity-calculator/"
-               className="inline-block bg-emerald-600 text-white font-black px-8 py-3
-                          rounded-full text-lg hover:bg-emerald-700 transition-colors">
+               className="inline-block bg-emerald-700 text-white font-black px-8 py-3
+                          rounded-full text-lg hover:bg-emerald-800 transition-colors">
               मुफ्त कैलकुलेटर खोलें →
             </a>
           </div>
@@ -140,7 +140,7 @@ export function HindiJeevanPratyashaPage() {
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl
+          <div className="bg-gradient-to-r from-emerald-700 to-teal-700 rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">आज ही अपनी जीवन प्रत्याशा जानें</h2>
             <p className="text-emerald-100 mb-6">

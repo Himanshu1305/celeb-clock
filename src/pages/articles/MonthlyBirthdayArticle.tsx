@@ -398,7 +398,7 @@ export function MonthlyBirthdayArticle({ month }: { month: number }) {
           <div className="bg-gradient-to-r from-[#6E5AA6] to-[#6E5AA6] rounded-2xl
                p-8 text-center text-white mt-10">
             <h2 className="text-2xl font-black mb-2">Find Your Own Birthday Profile</h2>
-            <p className="text-[#6E5AA6] mb-6">
+            <p className="text-white/90 mb-6">
               Share a birthday with someone famous? BornClock reveals your Western zodiac,
               Vedic Rashi, Nakshatra, Chinese zodiac, Life Path number, lucky stone and more —
               all free, from your date of birth.

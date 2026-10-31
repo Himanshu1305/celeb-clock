@@ -141,7 +141,7 @@ export const Navigation = () => {
     }`;
 
   const mobileSectionLabel = (label: string) => (
-    <p className="px-4 pt-4 pb-1 text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+    <p className="px-4 pt-4 pb-1 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
       {label}
     </p>
   );
@@ -161,7 +161,7 @@ export const Navigation = () => {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden ml-1 p-3 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+          className="md:hidden ml-1 p-3 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors"
           onClick={() => setMobileOpen(o => !o)}
           aria-label="Toggle navigation menu"
           aria-expanded={mobileOpen}
