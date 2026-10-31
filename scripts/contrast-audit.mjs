@@ -27,7 +27,7 @@ const opt = { viewports: 'desktop,mobile', concurrency: '4', shot: [] };
 const paths = [];
 for (let i = 0; i < args.length; i++) {
   const a = args[i];
-  if (a === '--fill') opt.fill = true;
+  if (a === '--fill' || a === '--fail' || a === '--strict') opt[a.slice(2)] = true;
   else if (a === '--shot') opt.shot.push(args[++i]);
   else if (a.startsWith('--')) opt[a.slice(2)] = args[++i];
   else paths.push(a);
