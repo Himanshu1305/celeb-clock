@@ -200,6 +200,15 @@ const TransitIndex = lazyWithReload(() => import('@/pages/TransitIndex'));
 const TransitYearPage = lazyWithReload(() => import('@/pages/TransitYearPage'));
 const MercuryRetrograde = lazyWithReload(() => import('@/pages/MercuryRetrograde'));
 const FestivalsPage = lazyWithReload(() => import('@/pages/FestivalsPage'));
+// B14: 2027 pages — yearly rashifal / horoscope, festival dates, tithi lists, calendar,
+// numerology and Chinese horoscope (routes = year2027Routes() in src/lib/year2027/meta.js).
+const YearForecastPage = lazyWithReload(() => import('@/pages/year2027/YearForecastPage'));
+const YearHubPage = lazyWithReload(() => import('@/pages/year2027/YearHubPage'));
+const FestivalDatePage = lazyWithReload(() => import('@/pages/year2027/FestivalDatePage'));
+const TithiListPage = lazyWithReload(() => import('@/pages/year2027/TithiListPage'));
+const HinduCalendar2027 = lazyWithReload(() => import('@/pages/year2027/HinduCalendar2027'));
+const Numerology2027 = lazyWithReload(() => import('@/pages/year2027/Numerology2027'));
+const ChineseHoroscope2027 = lazyWithReload(() => import('@/pages/year2027/ChineseHoroscope2027'));
 const VratPage = lazyWithReload(() => import('@/pages/VratPage'));
 const PlanetInSignPage = lazyWithReload(() => import('@/pages/PlanetInSignPage'));
 const PlanetInHousePage = lazyWithReload(() => import('@/pages/PlanetInHousePage'));
@@ -490,6 +499,21 @@ const App = () => (
               <Route path="/hi/rashifal" element={<RashifalPage />} />
               <Route path="/hi/panchang" element={<HindiPanchangPage />} />
               <Route path="/hi/panchang/:city" element={<HindiPanchangPage />} />
+              {/* B14: 2027 pages (static "2027" segments outrank /rashifal/:rashi/:period) */}
+              <Route path="/rashifal-2027" element={<YearHubPage system="vedic" />} />
+              <Route path="/hi/rashifal-2027" element={<YearHubPage system="vedic" lang="hi" />} />
+              <Route path="/horoscope-2027" element={<YearHubPage system="western" />} />
+              <Route path="/rashifal/:sign/2027" element={<YearForecastPage system="vedic" />} />
+              <Route path="/hi/rashifal/:sign/2027" element={<YearForecastPage system="vedic" lang="hi" />} />
+              <Route path="/horoscope/:sign/2027" element={<YearForecastPage system="western" />} />
+              <Route path="/festivals/2027/:slug" element={<FestivalDatePage />} />
+              <Route path="/hi/festivals/2027/:slug" element={<FestivalDatePage lang="hi" />} />
+              <Route path="/ekadashi-2027" element={<TithiListPage kind="ekadashi" />} />
+              <Route path="/purnima-2027" element={<TithiListPage kind="purnima" />} />
+              <Route path="/amavasya-2027" element={<TithiListPage kind="amavasya" />} />
+              <Route path="/hindu-calendar-2027" element={<HinduCalendar2027 />} />
+              <Route path="/numerology-2027" element={<Numerology2027 />} />
+              <Route path="/chinese-horoscope-2027" element={<ChineseHoroscope2027 />} />
               <Route path="/rashifal" element={<RashifalIndex />} />
               <Route path="/rashifal/:rashi" element={<RashifalSign />} />
               <Route path="/rashifal/:rashi/:period" element={<RashifalSign />} />
