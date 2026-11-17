@@ -57,7 +57,7 @@ export function ToneBadge({ tone, label }: { tone: Tone; label: string }) {
 }
 
 export function H2({ id, children }: { id?: string; children: ReactNode }) {
-  return <h2 id={id} className="mt-10 mb-3 scroll-mt-24">{children}</h2>;
+  return <h2 id={id} className="!mt-10 !mb-3 scroll-mt-24">{children}</h2>;
 }
 
 export function Card({ children, className = '', testId }: { children: ReactNode; className?: string; testId?: string }) {
@@ -70,7 +70,7 @@ export function FaqList({ items, testId }: { items: Array<{ question: string; an
       {items.map(f => (
         <details key={f.question} className="rounded-xl border border-brand-line bg-brand-paper p-4" open>
           <summary className="font-semibold text-brand-ink cursor-pointer">{f.question}</summary>
-          <p className="text-sm text-brand-ink-soft mt-2 leading-relaxed">{f.answer}</p>
+          <p className="text-sm text-brand-ink-soft !mt-2 leading-relaxed">{f.answer}</p>
         </details>
       ))}
     </div>

@@ -99,11 +99,11 @@ export default function YearHubPage({ system, lang = 'en' }: { system: System; l
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" data-testid="year2027-hub-grid">
           {readings.map(r => (
             <Link key={r.signIndex} to={`${pathFor(r.signIndex)}/`} className="block rounded-xl border border-brand-line bg-brand-paper p-4 hover:shadow-sm transition">
-              <div className="flex items-center justify-between gap-2 mb-1">
+              <div className="flex items-center justify-between gap-2 !mb-1">
                 <span className="font-semibold text-brand-ink">{western ? WESTERN_SIGNS[r.signIndex] : L === 'hi' ? `${RASHI_NAME_HI[r.signIndex]} राशिफल 2027` : `${RASHI_NAME_EN[r.signIndex]} Rashifal 2027`}</span>
                 <ToneBadge tone={r.tone} label={TONE_WORD[L][r.tone]} />
               </div>
-              <div className="text-xs text-brand-muted mb-1">{western ? WESTERN_DATES[r.signIndex] : `${RASHIS[r.signIndex].english} · ${L === 'hi' ? 'चंद्र राशि' : 'Moon sign'}`}</div>
+              <div className="text-xs text-brand-muted !mb-1">{western ? WESTERN_DATES[r.signIndex] : `${RASHIS[r.signIndex].english} · ${L === 'hi' ? 'चंद्र राशि' : 'Moon sign'}`}</div>
               <p className="text-sm text-brand-ink-soft">
                 {r.best[0] ? `${L === 'hi' ? 'सबसे अच्छा समय' : 'Best stretch'}: ${range(r.best[0].from, r.best[0].to, L)}. ` : ''}
                 {r.saturn.status === 'sadeSati' ? (L === 'hi' ? 'साढ़ेसाती जारी। ' : 'Sade Sati year. ') : r.saturn.status === 'dhaiya' ? (L === 'hi' ? 'शनि ढैया। ' : 'Shani Dhaiya. ') : ''}
@@ -126,7 +126,7 @@ export default function YearHubPage({ system, lang = 'en' }: { system: System; l
         <H2 id="faq">{L === 'hi' ? 'प्रश्नोत्तर' : 'Questions'}</H2>
         <FaqList items={faq} testId="year2027-hub-faq" />
 
-        <p className="text-sm text-brand-muted mt-6" data-testid="year2027-hub-links">
+        <p className="text-sm text-brand-muted !mt-6" data-testid="year2027-hub-links">
           {L === 'hi' ? 'यह भी देखें' : 'Also for 2027'}: <Link to="/hindu-calendar-2027/" className="underline">{L === 'hi' ? 'हिंदू कैलेंडर 2027' : 'Hindu calendar 2027'}</Link>
           {' · '}<Link to="/festivals/2027/diwali/" className="underline">{L === 'hi' ? 'दिवाली 2027' : 'Diwali 2027'}</Link>
           {' · '}<Link to="/festivals/2027/holi/" className="underline">{L === 'hi' ? 'होली 2027' : 'Holi 2027'}</Link>

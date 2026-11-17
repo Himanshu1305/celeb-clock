@@ -76,22 +76,22 @@ export default function ChineseHoroscope2027() {
           {rows.map(({ a, f }, i) => (
             <Card key={a}>
               <h3 className="font-semibold text-brand-ink">{a} in 2027 <span className="text-xs font-normal text-brand-muted">· born {yearsOf(i).slice(-5).join(', ')}…</span></h3>
-              <p className="text-sm text-brand-ink mt-1">{f.overall}</p>
-              <ul className="text-sm text-brand-ink-soft mt-2 space-y-1">
+              <p className="text-sm text-brand-ink !mt-1">{f.overall}</p>
+              <ul className="text-sm text-brand-ink-soft !mt-2 space-y-1">
                 <li><strong className={GRADE_TONE[f.career.grade]}>Career ({f.career.grade}):</strong> {f.career.text}</li>
                 <li><strong className={GRADE_TONE[f.finance.grade]}>Money ({f.finance.grade}):</strong> {f.finance.text}</li>
                 <li><strong className={GRADE_TONE[f.love.grade]}>Love ({f.love.grade}):</strong> {f.love.text}</li>
                 <li><strong className={GRADE_TONE[f.health.grade]}>Health ({f.health.grade}):</strong> {f.health.text}</li>
               </ul>
-              <p className="text-sm text-brand-ink mt-2"><strong>Advice:</strong> {f.advice}</p>
-              <p className="text-sm mt-2"><Link to={`/chinese-horoscope/${a.toLowerCase()}/`} className="underline">{a} horoscope →</Link></p>
+              <p className="text-sm text-brand-ink !mt-2"><strong>Advice:</strong> {f.advice}</p>
+              <p className="text-sm !mt-2"><Link to={`/chinese-horoscope/${a.toLowerCase()}/`} className="underline">{a} horoscope →</Link></p>
             </Card>
           ))}
         </div>
 
         <H2 id="faq">Chinese horoscope 2027 — questions</H2>
         <FaqList items={faq} testId="cn2027-faq" />
-        <p className="text-xs text-brand-muted mt-3">Date source: Hong Kong Observatory Gregorian–Lunar calendar for 2027 (“Ding-wei – year of the Goat”). The outlook follows the classical relationships between animals; it describes tendencies, not certainties.</p>
+        <p className="text-xs text-brand-muted !mt-3">Date source: Hong Kong Observatory Gregorian–Lunar calendar for 2027 (“Ding-wei – year of the Goat”). The outlook follows the classical relationships between animals; it describes tendencies, not certainties.</p>
         <H2 id="more">More for 2027</H2>
         <LinkChips items={[{ label: 'Chinese zodiac calculator', to: '/chinese-zodiac/' }, { label: 'Horoscope 2027 (Western)', to: '/horoscope-2027/' }, { label: 'Rashifal 2027 (Vedic)', to: '/rashifal-2027/' }, { label: 'Numerology 2027', to: '/numerology-2027/' }]} />
       </section>

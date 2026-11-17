@@ -95,7 +95,7 @@ export default function TithiListPage({ kind }: { kind: Kind }) {
         </ScrollTable>
         <H2 id="about">About {label}</H2>
         <div className="space-y-3 text-brand-ink leading-relaxed">{info.what.map(p => <p key={p.slice(0, 30)}>{p}</p>)}</div>
-        <p className="text-xs text-brand-muted mt-3">Computed by BornClock’s festival engine from real Sun and Moon positions; the observance date follows the classical rule (tithi at New Delhi sunrise; Ekadashi with the Smarta corrections). <Link to="/accuracy/" className="underline">How we check our dates →</Link></p>
+        <p className="text-xs text-brand-muted !mt-3">Computed by BornClock’s festival engine from real Sun and Moon positions; the observance date follows the classical rule (tithi at New Delhi sunrise; Ekadashi with the Smarta corrections). <Link to="/accuracy/" className="underline">How we check our dates →</Link></p>
         <H2 id="faq">{label} 2027 — questions</H2>
         <FaqList items={faq} testId="tithi2027-faq" />
         <H2 id="more">More for 2027</H2>

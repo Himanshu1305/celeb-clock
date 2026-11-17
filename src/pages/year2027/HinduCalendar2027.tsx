@@ -64,7 +64,7 @@ export default function HinduCalendar2027() {
         <div className="grid md:grid-cols-2 gap-3" data-testid="hc2027-months">
           {byMonth.map((fs, i) => (
             <Card key={i}>
-              <h3 className="font-semibold text-brand-ink mb-2">{MONTHS[i]} 2027</h3>
+              <h3 className="font-semibold text-brand-ink !mb-2">{MONTHS[i]} 2027</h3>
               <ul className="space-y-1 text-sm text-brand-ink-soft">
                 {fs.map(f => {
                   const pg = pageByDateName(f.name);

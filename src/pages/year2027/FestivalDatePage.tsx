@@ -116,16 +116,16 @@ export default function FestivalDatePage({ lang = 'en' }: { lang?: Lang }) {
 
         <Card className="border-brand-gold/50 bg-brand-gold/10" testId="festival2027-answer">
           <div className="text-sm text-brand-gold-text font-semibold">{en ? `${name} 2027 date` : `${name} 2027 की तारीख़`}</div>
-          <div className="text-2xl font-black text-brand-ink mt-1" data-testid="festival2027-date" data-date={f.dateISO}>{when}</div>
-          <p className="text-brand-ink mt-2">{answer}</p>
+          <div className="text-2xl font-black text-brand-ink !mt-1" data-testid="festival2027-date" data-date={f.dateISO}>{when}</div>
+          <p className="text-brand-ink !mt-2">{answer}</p>
         </Card>
 
         <H2 id="timings">{en ? `${name} 2027 tithi and puja timings (New Delhi, IST)` : `${name} 2027 — तिथि और पूजा का समय (नई दिल्ली, IST)`}</H2>
         <Card testId="festival2027-timings">
           <KV rows={f.timings.map(t => ({ label: t.label, value: t.value }))} />
-          {f.alt && <p className="text-sm text-brand-ink-soft mt-3">{en ? `Bengal (Para-Viddha rule — Navami for at least one muhurta after sunrise): ${dayLabel(f.alt.dateISO, 'en')}.` : `बंगाल (पर-विद्धा नियम — सूर्योदय के बाद कम से कम एक मुहूर्त नवमी): ${dayLabel(f.alt.dateISO, 'hi')}।`}</p>}
-          {f.notes.map(n => <p key={n.slice(0, 30)} className="text-sm text-brand-ink-soft mt-3">{n}</p>)}
-          <p className="text-xs text-brand-muted mt-3">{en
+          {f.alt && <p className="text-sm text-brand-ink-soft !mt-3">{en ? `Bengal (Para-Viddha rule — Navami for at least one muhurta after sunrise): ${dayLabel(f.alt.dateISO, 'en')}.` : `बंगाल (पर-विद्धा नियम — सूर्योदय के बाद कम से कम एक मुहूर्त नवमी): ${dayLabel(f.alt.dateISO, 'hi')}।`}</p>}
+          {f.notes.map(n => <p key={n.slice(0, 30)} className="text-sm text-brand-ink-soft !mt-3">{n}</p>)}
+          <p className="text-xs text-brand-muted !mt-3">{en
             ? 'Computed by BornClock’s festival engine from the real positions of the Sun and Moon (sidereal, Lahiri), with New Delhi sunrise, sunset and moonrise; the date follows the classical rule for this festival. In another city the times shift by minutes and, rarely, the date by a day.'
             : 'BornClock के पंचांग इंजन से सूर्य और चंद्रमा की वास्तविक स्थिति (निरयन, लाहिड़ी) और नई दिल्ली के सूर्योदय, सूर्यास्त व चंद्रोदय से गणना; तारीख़ इस पर्व के शास्त्रीय नियम से तय है। दूसरे शहर में समय कुछ मिनट बदलता है और कभी-कभी तारीख़ एक दिन।'}{' '}
             <Link to="/accuracy/" className="underline">{en ? 'How we check our dates →' : 'हम तारीख़ें कैसे जाँचते हैं →'}</Link>
@@ -153,11 +153,11 @@ export default function FestivalDatePage({ lang = 'en' }: { lang?: Lang }) {
         <H2 id="faq">{en ? `${name} 2027 — questions` : `${name} 2027 — प्रश्नोत्तर`}</H2>
         <FaqList items={faq} testId="festival2027-faq" />
 
-        <p className="text-sm text-brand-muted mt-4">{en ? 'Further reading' : 'अधिक जानकारी'}: <a href={text.more.url} className="underline" rel="noopener" target="_blank">{text.more.label}</a></p>
+        <p className="text-sm text-brand-muted !mt-4">{en ? 'Further reading' : 'अधिक जानकारी'}: <a href={text.more.url} className="underline" rel="noopener" target="_blank">{text.more.label}</a></p>
 
         <H2 id="more">{en ? 'More festival dates in 2027' : '2027 के और त्योहार'}</H2>
         <LinkChips testId="festival2027-others" items={others} />
-        <p className="text-sm text-brand-muted mt-4">
+        <p className="text-sm text-brand-muted !mt-4">
           <Link to="/hindu-calendar-2027/" className="underline">{en ? 'Hindu calendar 2027' : 'हिंदू कैलेंडर 2027'}</Link>
           {' · '}<Link to="/festivals/2027/" className="underline">{en ? 'Full festival & vrat calendar 2027' : 'पूरा त्योहार व व्रत कैलेंडर 2027'}</Link>
           {' · '}<Link to="/ekadashi-2027/" className="underline">{en ? 'Ekadashi 2027' : 'एकादशी 2027'}</Link>

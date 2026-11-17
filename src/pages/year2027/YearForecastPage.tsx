@@ -167,8 +167,8 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
         <div className="space-y-3 text-brand-ink leading-relaxed" data-testid="year2027-brief">
           {r.brief.map(p => <p key={p.slice(0, 40)}>{p}</p>)}
         </div>
-        <Card className="mt-4" testId="year2027-facts">
-          <div className="font-semibold text-brand-ink mb-2">{t.facts}</div>
+        <Card className="!mt-4" testId="year2027-facts">
+          <div className="font-semibold text-brand-ink !mb-2">{t.facts}</div>
           <KV rows={facts} />
         </Card>
 
@@ -194,15 +194,15 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
         <div className="grid md:grid-cols-2 gap-4" data-testid="year2027-areas">
           {r.areas.map(a => (
             <Card key={a.key}>
-              <div className="flex items-center justify-between gap-2 mb-2">
+              <div className="flex items-center justify-between gap-2 !mb-2">
                 <h3 className="font-semibold text-brand-ink">{a.title}</h3>
                 <ToneBadge tone={a.tone} label={TONE_WORD[L][a.tone]} />
               </div>
-              <p className="text-brand-ink font-medium mb-2">{a.impact}</p>
+              <p className="text-brand-ink font-medium !mb-2">{a.impact}</p>
               <div className="text-sm text-brand-ink-soft"><strong className="text-brand-ink">{t.why}: </strong>
-                <ul className="list-disc pl-5 mt-1 space-y-1">{a.reasons.map(x => <li key={x}>{x}</li>)}</ul>
+                <ul className="list-disc pl-5 !mt-1 space-y-1">{a.reasons.map(x => <li key={x}>{x}</li>)}</ul>
               </div>
-              <p className="text-sm text-brand-ink-soft mt-2"><strong className="text-brand-ink">{t.todo}: </strong>{a.todo}</p>
+              <p className="text-sm text-brand-ink-soft !mt-2"><strong className="text-brand-ink">{t.todo}: </strong>{a.todo}</p>
             </Card>
           ))}
         </div>
@@ -211,27 +211,27 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
         <div className="grid md:grid-cols-2 gap-3" data-testid="year2027-months">
           {r.months.map(m => (
             <Card key={m.month}>
-              <div className="flex items-center justify-between gap-2 mb-1">
+              <div className="flex items-center justify-between gap-2 !mb-1">
                 <h3 className="font-semibold text-brand-ink">{m.name} 2027</h3>
                 <ToneBadge tone={m.tone} label={TONE_WORD[L][m.tone]} />
               </div>
               <p className="text-sm font-medium text-brand-ink">{m.verdict}.</p>
-              <p className="text-sm text-brand-ink-soft mt-1 leading-relaxed">{m.text}</p>
+              <p className="text-sm text-brand-ink-soft !mt-1 leading-relaxed">{m.text}</p>
             </Card>
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-4 mt-2">
+        <div className="grid md:grid-cols-2 gap-4 !mt-2">
           <div>
             <H2 id="best">{t.best}</H2>
-            <p className="text-sm text-brand-muted mb-2">{t.bestLead}</p>
+            <p className="text-sm text-brand-muted !mb-2">{t.bestLead}</p>
             <ul className="space-y-2" data-testid="year2027-best">
               {r.best.map(w => <li key={w.from} className="text-sm text-brand-ink"><strong>{range(w.from, w.to, L)}</strong> — {t.because}: {w.why}.</li>)}
             </ul>
           </div>
           <div>
             <H2 id="care">{t.hard}</H2>
-            <p className="text-sm text-brand-muted mb-2">{t.hardLead}</p>
+            <p className="text-sm text-brand-muted !mb-2">{t.hardLead}</p>
             <ul className="space-y-2" data-testid="year2027-hard">
               {r.challenging.map(w => <li key={w.from} className="text-sm text-brand-ink"><strong>{range(w.from, w.to, L)}</strong> — {t.because}: {w.why}.</li>)}
             </ul>
@@ -241,7 +241,7 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
         {r.loveWindows.length > 0 && (
           <>
             <H2 id="love-windows">{t.love}</H2>
-            <p className="text-sm text-brand-muted mb-2">{t.loveLead}</p>
+            <p className="text-sm text-brand-muted !mb-2">{t.loveLead}</p>
             <ul className="space-y-2" data-testid="year2027-love">
               {r.loveWindows.map(w => <li key={w.from} className="text-sm text-brand-ink"><strong>{range(w.from, w.to, L)}</strong> — {w.why}.</li>)}
             </ul>
@@ -251,14 +251,14 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
         <H2 id="saturn">{western ? W.saturn : t.sadeSati}</H2>
         <Card testId="year2027-saturn">
           <p className="text-brand-ink leading-relaxed">{r.saturn.text}</p>
-          <ul className="mt-2 space-y-1 text-sm text-brand-ink-soft">
+          <ul className="!mt-2 space-y-1 text-sm text-brand-ink-soft">
             {r.saturn.rows.map(x => <li key={x.from}><strong className="text-brand-ink">{x.when}</strong> — {x.label}</li>)}
           </ul>
-          {!western && <p className="text-sm mt-2"><Link to={lang === 'hi' ? `/hi/sade-sati/${RASHI_SLUGS_HI_2027[idx]}` : `/sade-sati/${RASHI_SLUGS_2027[idx]}`} className="underline">{t.ssLink} {name} →</Link></p>}
+          {!western && <p className="text-sm !mt-2"><Link to={lang === 'hi' ? `/hi/sade-sati/${RASHI_SLUGS_HI_2027[idx]}` : `/sade-sati/${RASHI_SLUGS_2027[idx]}`} className="underline">{t.ssLink} {name} →</Link></p>}
         </Card>
 
         <H2 id="eclipses">{t.ecl}</H2>
-        <p className="text-sm text-brand-muted mb-2">{western ? 'Every solar and lunar eclipse of 2027 (dates and times IST; checked against NASA’s eclipse tables), and the solar house each one activates for you.' : t.eclLead}</p>
+        <p className="text-sm text-brand-muted !mb-2">{western ? 'Every solar and lunar eclipse of 2027 (dates and times IST; checked against NASA’s eclipse tables), and the solar house each one activates for you.' : t.eclLead}</p>
         <ScrollTable lang={L}>
           <table className="w-full text-sm" data-testid="year2027-eclipses">
             <thead><tr className="text-left text-brand-muted">{t.eclTh.map(h => <th key={h} className="py-1 pr-3 font-medium">{h}</th>)}</tr></thead>
@@ -274,7 +274,7 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
             </tbody>
           </table>
         </ScrollTable>
-        <p className="text-sm mt-2"><Link to="/eclipses/2027/" className="underline">{lang === 'hi' && !western ? 'ग्रहण 2027 — पूरा विवरण →' : 'Eclipses 2027 — full details →'}</Link></p>
+        <p className="text-sm !mt-2"><Link to="/eclipses/2027/" className="underline">{lang === 'hi' && !western ? 'ग्रहण 2027 — पूरा विवरण →' : 'Eclipses 2027 — full details →'}</Link></p>
 
         <H2 id="lucky">{t.lucky}</H2>
         <Card testId="year2027-lucky">
@@ -284,11 +284,11 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
             ...(r.lucky.numbers.length ? [{ label: t.numbers, value: r.lucky.numbers.join(', ') }] : []),
             { label: t.day, value: r.lucky.day },
           ]} />
-          <p className="text-sm text-brand-ink-soft mt-3">{r.lucky.text}</p>
+          <p className="text-sm text-brand-ink-soft !mt-3">{r.lucky.text}</p>
         </Card>
 
         <H2 id="remedies">{western ? W.rem : t.rem}</H2>
-        <p className="text-sm text-brand-muted mb-3">{western ? W.remLead : t.remLead}</p>
+        <p className="text-sm text-brand-muted !mb-3">{western ? W.remLead : t.remLead}</p>
         {western ? (
           <ul className="list-disc pl-5 space-y-1 text-sm text-brand-ink" data-testid="year2027-steps">
             {r.areas.map(a => <li key={a.key}><strong>{a.title}:</strong> {a.todo}</li>)}
@@ -300,31 +300,31 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
               const temple = e.temples.map(id => TEMPLES[id]).find(Boolean);
               return (
                 <Card key={e.key}>
-                  <h3 className="font-semibold text-brand-ink mb-2">{e.name[lang]}</h3>
+                  <h3 className="font-semibold text-brand-ink !mb-2">{e.name[lang]}</h3>
                   <KV rows={[
                     ...(mantra ? [{ label: t.mantra, value: <><span lang="sa">{mantra.devanagari}</span><br /><em>{mantra.transliteration}</em> — {mantra.count[lang]}, {mantra.when[lang]}</> }] : []),
                     { label: t.fasting, value: e.free.fasting.text[lang] },
                     ...(e.daan[0] ? [{ label: t.daan, value: `${e.daan[0].what[lang]} — ${e.daan[0].toWhom[lang]}, ${e.daan[0].day[lang]}` }] : []),
                     ...(temple ? [{ label: t.temple, value: `${temple.name[lang]} (${temple.town}, ${temple.state})` }] : []),
                   ]} />
-                  <p className="text-sm mt-2"><Link to={lang === 'hi' ? `/hi/upay/${e.slug}` : `/remedies/${e.slug}`} className="underline">{t.fullRem}</Link></p>
+                  <p className="text-sm !mt-2"><Link to={lang === 'hi' ? `/hi/upay/${e.slug}` : `/remedies/${e.slug}`} className="underline">{t.fullRem}</Link></p>
                 </Card>
               );
             })}
           </div>
         )}
-        {!western && <p className="text-sm text-brand-ink-soft mt-3" data-testid="year2027-gem-note"><strong className="text-brand-ink">{t.gem}: </strong>{GEM_CAUTION[lang].split(/(?<=[.।])\s/)[0]} <Link to={lang === 'hi' ? '/hi/upay/' : '/remedies/'} className="underline">{lang === 'hi' ? 'सभी उपाय →' : 'All remedies →'}</Link></p>}
+        {!western && <p className="text-sm text-brand-ink-soft !mt-3" data-testid="year2027-gem-note"><strong className="text-brand-ink">{t.gem}: </strong>{GEM_CAUTION[lang].split(/(?<=[.।])\s/)[0]} <Link to={lang === 'hi' ? '/hi/upay/' : '/remedies/'} className="underline">{lang === 'hi' ? 'सभी उपाय →' : 'All remedies →'}</Link></p>}
 
         <H2 id="faq">{western ? `Questions about ${name} in 2027` : lang === 'hi' ? `${t.faq} ${name} राशिफल 2027` : `${t.faq} ${name} rashifal 2027`}</H2>
         <FaqList items={r.faq} testId="year2027-faq" />
 
-        <div className="mt-8 rounded-xl border border-brand-purple/30 bg-brand-purple/10 p-4" data-testid="year2027-method">
-          <div className="font-semibold text-brand-ink mb-1">{western ? W.method : t.method}</div>
+        <div className="!mt-8 rounded-xl border border-brand-purple/30 bg-brand-purple/10 p-4" data-testid="year2027-method">
+          <div className="font-semibold text-brand-ink !mb-1">{western ? W.method : t.method}</div>
           <p className="text-sm text-brand-ink">{western ? W.methodText : t.methodText} <Link to="/how-it-works/#vedic" className="underline">{lang === 'hi' && !western ? 'गणना पद्धति →' : 'Methodology →'}</Link></p>
         </div>
 
-        <div className="mt-6 rounded-xl border border-brand-gold/40 bg-brand-gold/10 p-5 text-center">
-          <p className="text-brand-ink mb-3">{western ? W.cta : t.cta}</p>
+        <div className="!mt-6 rounded-xl border border-brand-gold/40 bg-brand-gold/10 p-5 text-center">
+          <p className="text-brand-ink !mb-3">{western ? W.cta : t.cta}</p>
           <Link to={western ? `${p2027.rashifalHub}/` : '/kundali/'} className="inline-flex items-center gap-2 bg-brand-navy text-white rounded-lg px-5 py-2.5 font-semibold">{western ? W.ctaBtn : t.ctaBtn}</Link>
         </div>
 
@@ -333,7 +333,7 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
           to: western ? `${p2027.horoscope(i)}/` : lang === 'hi' ? `${p2027.rashifalHi(i)}/` : `${p2027.rashifal(i)}/`,
           label: western ? SIGN_EN[i] : lang === 'hi' ? `${RASHI_NAME_HI[i]} राशिफल 2027` : `${RASHI_NAME_EN[i]} 2027`,
         }))} />
-        <p className="text-sm text-brand-muted mt-4" data-testid="year2027-also">
+        <p className="text-sm text-brand-muted !mt-4" data-testid="year2027-also">
           {t.also}: <Link to={`${hubPath}/`} className="underline">{western ? 'Horoscope 2027 (all signs)' : lang === 'hi' ? 'राशिफल 2027 (सभी राशियाँ)' : 'Rashifal 2027 (all rashis)'}</Link>
           {' · '}<Link to={western ? `/zodiac/${SIGN_SLUGS_2027[idx]}/` : lang === 'hi' ? `/hi/rashifal/${RASHI_SLUGS_HI_2027[idx]}/` : `/rashifal/${RASHI_SLUGS_2027[idx]}/today/`} className="underline">{western ? `${name} sign guide` : lang === 'hi' ? `आज का ${name} राशिफल` : `${name} rashifal today`}</Link>
           {' · '}<Link to="/hindu-calendar-2027/" className="underline">{lang === 'hi' && !western ? 'हिंदू कैलेंडर 2027' : 'Hindu calendar 2027'}</Link>

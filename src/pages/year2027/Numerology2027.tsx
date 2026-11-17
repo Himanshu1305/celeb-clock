@@ -62,19 +62,19 @@ export default function Numerology2027() {
         </div>
 
         <Card testId="num2027-calc">
-          <div className="font-semibold text-brand-ink mb-2">Your personal year 2027</div>
+          <div className="font-semibold text-brand-ink !mb-2">Your personal year 2027</div>
           <form className="flex flex-wrap items-end gap-3" onSubmit={e => e.preventDefault()}>
             <label className="text-sm text-brand-ink">Birth month (1–12)
-              <input aria-label="Birth month" inputMode="numeric" value={month} onChange={e => setMonth(e.target.value.replace(/\D/g, '').slice(0, 2))} className="block mt-1 w-24 rounded-lg border border-brand-line px-3 py-2 text-brand-ink bg-brand-paper" />
+              <input aria-label="Birth month" inputMode="numeric" value={month} onChange={e => setMonth(e.target.value.replace(/\D/g, '').slice(0, 2))} className="block !mt-1 w-24 rounded-lg border border-brand-line px-3 py-2 text-brand-ink bg-brand-paper" />
             </label>
             <label className="text-sm text-brand-ink">Birth day (1–31)
-              <input aria-label="Birth day" inputMode="numeric" value={day} onChange={e => setDay(e.target.value.replace(/\D/g, '').slice(0, 2))} className="block mt-1 w-24 rounded-lg border border-brand-line px-3 py-2 text-brand-ink bg-brand-paper" />
+              <input aria-label="Birth day" inputMode="numeric" value={day} onChange={e => setDay(e.target.value.replace(/\D/g, '').slice(0, 2))} className="block !mt-1 w-24 rounded-lg border border-brand-line px-3 py-2 text-brand-ink bg-brand-paper" />
             </label>
           </form>
           {result ? (
-            <p className="mt-3 text-brand-ink" data-testid="num2027-result">Your personal year in 2027 is <strong className="text-2xl">{result.number}</strong> — {getPersonalYearMeaning(result.number).title}. <a href={`#py-${result.number}`} className="underline">Read your outlook ↓</a></p>
+            <p className="!mt-3 text-brand-ink" data-testid="num2027-result">Your personal year in 2027 is <strong className="text-2xl">{result.number}</strong> — {getPersonalYearMeaning(result.number).title}. <a href={`#py-${result.number}`} className="underline">Read your outlook ↓</a></p>
           ) : (
-            <p className="mt-3 text-sm text-brand-muted">Enter your birth month and day to see your number.</p>
+            <p className="!mt-3 text-sm text-brand-muted">Enter your birth month and day to see your number.</p>
           )}
         </Card>
 
@@ -92,8 +92,8 @@ export default function Numerology2027() {
             return (
               <Card key={n}>
                 <h3 id={`py-${n}`} className="font-semibold text-brand-ink scroll-mt-24">Personal year {n} — {meaning.title}</h3>
-                <p className="text-sm text-brand-ink mt-1">{meaning.essence}</p>
-                <ul className="text-sm text-brand-ink-soft mt-2 space-y-1">
+                <p className="text-sm text-brand-ink !mt-1">{meaning.essence}</p>
+                <ul className="text-sm text-brand-ink-soft !mt-2 space-y-1">
                   <li><strong className="text-brand-ink">Work:</strong> {o.work}</li>
                   <li><strong className="text-brand-ink">Money:</strong> {o.money}</li>
                   <li><strong className="text-brand-ink">Relationships:</strong> {o.love}</li>
@@ -108,7 +108,7 @@ export default function Numerology2027() {
         <FaqList items={faq} testId="num2027-faq" />
         <H2 id="more">More numerology</H2>
         <LinkChips items={[{ label: 'Personal year number calculator', to: '/personal-year-number/' }, { label: 'Life path number', to: '/numerology/' }, { label: 'Chinese horoscope 2027', to: '/chinese-horoscope-2027/' }, { label: 'Rashifal 2027', to: '/rashifal-2027/' }]} />
-        <p className="text-sm text-brand-muted mt-4"><Link to="/editorial-policy/" className="underline">How we write about numerology →</Link></p>
+        <p className="text-sm text-brand-muted !mt-4"><Link to="/editorial-policy/" className="underline">How we write about numerology →</Link></p>
       </section>
     </PajPage>
   );
