@@ -9,7 +9,7 @@ import { resolveRequestBirthTz } from './_birthParams.js';
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600' } });
 }
-const sunMoon = (d: Date) => ({ sun: getSiderealLongitude('Sun', d), moon: getSiderealLongitude('Moon', d) });
+const sunMoon = (d: Date) => ({ sun: getSiderealLongitude('Sun', d, 'drik'), moon: getSiderealLongitude('Moon', d, 'drik') });
 
 async function handler(request) {
   if (request.method !== 'GET') return json({ error: 'Method not allowed' }, 405);

@@ -32,7 +32,7 @@ const IST = 5.5;
 const DAY = 86400000;
 
 function norm(x: number): number { return ((x % 360) + 360) % 360; }
-function elong(d: Date): number { return norm(getSiderealLongitude('Moon', d) - getSiderealLongitude('Sun', d)); }
+function elong(d: Date): number { return norm(getSiderealLongitude('Moon', d, 'drik') - getSiderealLongitude('Sun', d, 'drik')); }
 /** Map an angle to (-180,180] so we can look for ascending zero-crossings. */
 function wrap180(x: number): number { let v = norm(x); if (v > 180) v -= 360; return v; }
 
@@ -84,7 +84,7 @@ function fullMoons(from: Date, to: Date): Date[] {
 function sankrantis(from: Date, to: Date): Array<{ instant: Date; sign: number }> {
   const out: Array<{ instant: Date; sign: number }> = [];
   for (let k = 0; k < 12; k++) {
-    for (const t of crossings(d => wrap180(getSiderealLongitude('Sun', d) - k * 30), from, to)) {
+    for (const t of crossings(d => wrap180(getSiderealLongitude('Sun', d, 'drik') - k * 30), from, to)) {
       out.push({ instant: t, sign: k });
     }
   }
@@ -553,7 +553,7 @@ function malayalamMonthStart(ingress: Date): string {
   const limit = t.rise.getTime() + (t.set.getTime() - t.rise.getTime()) * 3 / 5;
   return ingress.getTime() < limit ? d : isoAddDays(d, 1);
 }
-function nakIndex(t: number): number { return Math.floor(getSiderealLongitude('Moon', new Date(t)) / (360 / 27)); }
+function nakIndex(t: number): number { return Math.floor(getSiderealLongitude('Moon', new Date(t), 'drik') / (360 / 27)); }
 export function onamDate(year: number): string | null {
   const sk = sankrantis(new Date(Date.UTC(year, 6, 1)), new Date(Date.UTC(year, 9, 1)));
   const simha = sk.find(s => s.sign === 4), kanya = sk.find(s => s.sign === 5);

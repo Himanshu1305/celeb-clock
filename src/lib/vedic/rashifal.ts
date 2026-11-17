@@ -260,7 +260,7 @@ const PLANETS_ALL: PlanetName[] = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 
 const SLOW: PlanetName[] = ['Jupiter', 'Saturn', 'Rahu', 'Ketu'];
 
 function signIndexOf(planet: PlanetName, at: Date): number {
-  const lon = getSiderealLongitude(planet, at);
+  const lon = getSiderealLongitude(planet, at, 'drik');
   return Math.floor(((lon % 360) + 360) % 360 / 30);
 }
 
@@ -507,7 +507,7 @@ export function rashifalSky(period: RashifalPeriod, ref: Date): RashifalSky {
     }
   }
   if (period === 'today') {
-    const moonLon = ((getSiderealLongitude('Moon', rep) % 360) + 360) % 360;
+    const moonLon = ((getSiderealLongitude('Moon', rep, 'drik') % 360) + 360) % 360;
     const next = signSegments('Moon', rep, new Date(rep.getTime() + 3 * DAY_MS))[1];
     sky.moon = { nak: Math.floor(moonLon / (360 / 27)) % 27, ...(next ? { next: { s: next.signIndex, f: next.fromISO } } : {}) };
   }

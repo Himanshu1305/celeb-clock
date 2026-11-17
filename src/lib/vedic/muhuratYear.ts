@@ -37,7 +37,7 @@ export interface Seg { s: number; e: number; t: number; n: number; y: number; k:
 
 function limbs(ms: number) {
   const d = new Date(ms);
-  const sun = getSiderealLongitude('Sun', d), moon = getSiderealLongitude('Moon', d);
+  const sun = getSiderealLongitude('Sun', d, 'drik'), moon = getSiderealLongitude('Moon', d, 'drik');
   const el = norm(moon - sun);
   return { t: Math.floor(el / 12), n: Math.floor(norm(moon) / NAK_UNIT), y: Math.floor(norm(sun + moon) / NAK_UNIT), k: Math.floor(el / 6) };
 }
@@ -250,7 +250,7 @@ const GANDANTA_PADA: Record<number, number> = { 8: 3, 17: 3, 26: 3, 9: 0, 18: 0,
 /** Split segments at every Nakshatra pada (quarter) boundary, tagging the pada (0..3). */
 function withPadas(segs: Seg[]): Array<Seg & { pada: number }> {
   const out: Array<Seg & { pada: number }> = [];
-  const moonAt = (t: number) => norm(getSiderealLongitude('Moon', new Date(t)));
+  const moonAt = (t: number) => norm(getSiderealLongitude('Moon', new Date(t), 'drik'));
   const padaAt = (t: number) => Math.floor(moonAt(t) / (NAK_UNIT / 4)) % 4;
   for (const g of segs) {
     let s = g.s;
@@ -269,7 +269,7 @@ function withPadas(segs: Seg[]): Array<Seg & { pada: number }> {
 }
 
 function sunSignTimeline(from: number, to: number): Array<{ s: number; e: number; sign: number }> {
-  const sign = (t: number) => Math.floor(norm(getSiderealLongitude('Sun', new Date(t))) / 30);
+  const sign = (t: number) => Math.floor(norm(getSiderealLongitude('Sun', new Date(t), 'drik')) / 30);
   const out: Array<{ s: number; e: number; sign: number }> = [];
   let s = from, cur = sign(from);
   for (let t = from + 6 * HOUR; t <= to; t += 6 * HOUR) {

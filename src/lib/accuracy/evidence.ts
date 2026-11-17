@@ -41,11 +41,20 @@
  *    status at 24 Oct 2026: 22/22 in the same run.
  *  - WEEKLY CHECK: .github/workflows/weekly-drift.yml (Mondays ~03:00 IST; 20 births +
  *    7 couples on the code and on the live bornclock.com API).
+ *
+ * B14 re-run (17 Nov 2026): natal charts moved to TRUE Lahiri (AstroSage's convention;
+ * vedicEngine.getNatalAyanamsa). goldenCharts.json regenerated with Swiss true Lahiri
+ * (scripts/golden/generate_golden.py). KUNDALI: 220/220 within 1 arc-minute, largest
+ * 30″ (G11 Rahu, mean node); nakshatra + pada 22/22; Mahadasha + Antardasha 22/22;
+ * Antardasha start within 8.3 h (→ "within 9 hours"). MATCHING 7/7, MANGLIK 10/10,
+ * SADE SATI 22/22 unchanged. DATE-ONLY MOON: 3,043/3,043 same sign(s) vs Swiss true
+ * Lahiri; the same four pre-1210 dates exceed 60″, largest now 566.4″ (Aryabhata).
+ * Panchang / ingress / festival rows are unchanged (they keep the Drik convention).
  */
 
-export const TESTED_MONTH = 'October 2026';
-export const PAGE_UPDATED_ISO = '2026-10-26';
-export const PAGE_UPDATED = '26 October 2026';
+export const TESTED_MONTH = 'November 2026';
+export const PAGE_UPDATED_ISO = '2026-11-17';
+export const PAGE_UPDATED = '17 November 2026';
 
 export interface EvidenceRow {
   id: string;
@@ -61,8 +70,8 @@ export const COUNTS = {
   kundaliBirths: 22,
   goldenBirths: 20,
   kundaliPositions: 220, // 22 births × (Lagna + Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn, Rahu, Ketu)
-  kundaliMaxArcsec: 32,
-  dashaMaxHours: 8,
+  kundaliMaxArcsec: 30, // B14 re-run 17 Nov 2026 (G11 Rahu)
+  dashaMaxHours: 9, // B14 re-run 17 Nov 2026: worst 8.26 h
   couples: 7,
   manglikCharts: 10,
   panchangCityDays: 19,
@@ -88,7 +97,7 @@ export const COUNTS = {
   kaalSarpCharts: 2,
   ancientMoonDates: 4,
   ancientMoonBeforeYear: 1210,
-  ancientMoonMaxArcsec: 525, // Aryabhata, 476 CE (524.8″ ≈ 8.7 arc-minutes)
+  ancientMoonMaxArcsec: 566, // Aryabhata, 476 CE (566.4″ ≈ 9.4 arc-minutes; B14 re-run vs Swiss true Lahiri)
 } as const;
 
 /** "about N arc-minutes" for the very-old-dates caveat, derived from COUNTS. */
@@ -101,7 +110,7 @@ export const EVIDENCE: EvidenceRow[] = [
     reference: 'Swiss Ephemeris (astronomical library)',
     howMany: `${COUNTS.kundaliBirths} test births, ${COUNTS.kundaliPositions} positions`,
     result: `All ${COUNTS.kundaliPositions} within 1 arc-minute (largest gap ${COUNTS.kundaliMaxArcsec}″); same sign every time`,
-    date: '26 Oct 2026',
+    date: '17 Nov 2026',
   },
   {
     id: 'nakshatra-dasha',
@@ -109,7 +118,7 @@ export const EVIDENCE: EvidenceRow[] = [
     reference: 'Swiss Ephemeris + the classical Vimshottari rules',
     howMany: `${COUNTS.kundaliBirths} test births`,
     result: `${COUNTS.kundaliBirths} of ${COUNTS.kundaliBirths} same Nakshatra and pada; ${COUNTS.kundaliBirths} of ${COUNTS.kundaliBirths} same Mahadasha and Antardasha`,
-    date: '26 Oct 2026',
+    date: '17 Nov 2026',
   },
   {
     id: 'vargas',
@@ -185,7 +194,7 @@ export const EVIDENCE: EvidenceRow[] = [
     reference: 'Swiss Ephemeris',
     howMany: `${COUNTS.celebrities.toLocaleString('en-IN')} people`,
     result: `${COUNTS.celebrities.toLocaleString('en-IN')} of ${COUNTS.celebrities.toLocaleString('en-IN')} same sign (or same two signs on change days)`,
-    date: '29 Oct 2026',
+    date: '17 Nov 2026',
   },
   {
     id: 'sade-sati',
@@ -193,7 +202,7 @@ export const EVIDENCE: EvidenceRow[] = [
     reference: 'Saturn positions from Swiss Ephemeris',
     howMany: `${COUNTS.kundaliBirths} test births`,
     result: `${COUNTS.kundaliBirths} of ${COUNTS.kundaliBirths} same status`,
-    date: '26 Oct 2026',
+    date: '17 Nov 2026',
   },
 ];
 

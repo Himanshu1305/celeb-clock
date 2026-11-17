@@ -48,7 +48,7 @@ export interface DayPanchang extends Panchang {
   dayLengthMin: number;
 }
 
-const sunMoon = (d: Date) => ({ sun: getSiderealLongitude('Sun', d), moon: getSiderealLongitude('Moon', d) });
+const sunMoon = (d: Date) => ({ sun: getSiderealLongitude('Sun', d, 'drik'), moon: getSiderealLongitude('Moon', d, 'drik') });
 const elong = (d: Date) => { const x = sunMoon(d); return x.moon - x.sun; };
 
 /** Round an instant to the nearest whole minute (Drik-style HH:MM, not truncated seconds). */
@@ -122,7 +122,7 @@ type LimbKey = 'tithi' | 'nak' | 'yoga' | 'karana' | 'rashi';
 const LIMBS: Record<LimbKey, { f: (d: Date) => number; unit: number }> = {
   tithi: { f: elong, unit: 12 },
   nak: { f: d => sunMoon(d).moon, unit: 360 / 27 },
-  rashi: { f: d => getSiderealLongitude('Moon', d), unit: 30 },
+  rashi: { f: d => getSiderealLongitude('Moon', d, 'drik'), unit: 30 },
   yoga: { f: d => { const x = sunMoon(d); return x.sun + x.moon; }, unit: 360 / 27 },
   karana: { f: elong, unit: 6 },
 };

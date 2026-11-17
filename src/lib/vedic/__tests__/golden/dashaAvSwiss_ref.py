@@ -1,6 +1,7 @@
 # Batch 10 — INDEPENDENT reference for Yogini Dasha + Ashtakavarga on Swiss Ephemeris.
 # Usage: <engine-audit>/venv/bin/python -I dashaAvSwiss_ref.py out.json <engine-audit dir>
-# Swiss Ephemeris (pyswisseph), SIDM_LAHIRI. Convention = BornClock's documented Drik convention
+# Swiss Ephemeris (pyswisseph), SIDM_LAHIRI. B14 (Nov 2026): natal convention = Swiss TRUE Lahiri
+# (nutation included; natalAyanamsa.test.ts). Before B14 it was the Drik convention
 # (__tests__/ayanamsaDrik.test.ts): apparent tropical longitude minus (SE Lahiri MEAN ayanamsa + 24.4").
 # Ascendant from houses_ex (tropical) with the same ayanamsa.
 # Rules written from the classical statements, NOT from our TypeScript:
@@ -82,7 +83,7 @@ BODIES = dict(Sun=swe.SUN,Moon=swe.MOON,Mars=swe.MARS,Mercury=swe.MERCURY,Jupite
 out = []
 for cid, y, m, d, h, mi, lat, lon in CASES:
     jd = swe.julday(y, m, d, h + mi/60)
-    ay = swe.get_ayanamsa_ex_ut(jd, swe.FLG_SWIEPH | swe.FLG_NONUT)[1] + 24.4/3600
+    ay = swe.get_ayanamsa_ex_ut(jd, swe.FLG_SWIEPH)[1]  # B14: natal = TRUE Lahiri (nutation incl., as AstroSage)
     lons = {k: (swe.calc_ut(jd, b, swe.FLG_SWIEPH)[0][0] - ay) % 360 for k, b in BODIES.items()}
     lons['Lagna'] = (swe.houses_ex(jd, lat, lon, b'P', swe.FLG_SWIEPH)[1][0] - ay) % 360
     signs = {k: int(v // 30) for k, v in lons.items()}

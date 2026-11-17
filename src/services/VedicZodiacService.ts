@@ -1,4 +1,4 @@
-import { getSiderealLongitude, getLahiriAyanamsa } from '@/lib/vedic/engine/vedicEngine';
+import { getSiderealLongitude, getNatalAyanamsa } from '@/lib/vedic/engine/vedicEngine';
 import { moonSignsForDate } from '@/lib/vedic/dateOnlyMoonSign';
 
 export const VEDIC_SIGNS = [
@@ -159,14 +159,14 @@ export const VEDIC_SIGNS = [
  * Vedic (sidereal) Sun sign, never as "your Rashi".
  */
 export function getVedicRashi(dob: Date): typeof VEDIC_SIGNS[number] {
-  const sidereal = getSiderealLongitude('Sun', dob);
+  const sidereal = getSiderealLongitude('Sun', dob, 'natal');
   const signIndex = Math.floor(sidereal / 30) % 12;
   return VEDIC_SIGNS[signIndex];
 }
 
 /** Current Lahiri ayanamsa in degrees (for display), from the same engine. */
 export function currentAyanamsaDeg(date: Date = new Date()): number {
-  return getLahiriAyanamsa(date);
+  return getNatalAyanamsa(date);
 }
 
 export function getWesternSign(dob: Date): string {

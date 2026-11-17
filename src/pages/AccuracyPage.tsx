@@ -118,8 +118,10 @@ export default function AccuracyPage() {
           <p className="mb-3">Astrology sites can differ simply because they follow different conventions. These are ours:</p>
           <ul className="list-disc pl-5 space-y-2 mb-8">
             <li>
-              <strong className="text-foreground"><TermTip id="ayanamsa">Ayanamsa</TermTip>: Lahiri</strong>, in the form Drik
-              Panchang uses (the mean Lahiri value, calibrated so planet ingress moments line up with Drik’s published times).
+              <strong className="text-foreground"><TermTip id="ayanamsa">Ayanamsa</TermTip>: Lahiri</strong>, in two forms. Birth
+              charts, Dasha and Kundali matching use the standard (true) Lahiri value, as AstroSage does. Panchang, festivals
+              and planet ingress times use the form Drik Panchang uses (the mean Lahiri value, calibrated so ingress moments
+              line up with Drik’s published times).
             </li>
             <li>
               <strong className="text-foreground"><TermTip id="rahu">Rahu</TermTip> and Ketu: mean node</strong> — the

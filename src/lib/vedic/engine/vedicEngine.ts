@@ -39,31 +39,54 @@ const COMBUSTION_ORBS_RETROGRADE: Record<string, number> = { Mercury: 12, Venus:
 
 export function normalize360(deg: number): number { return ((deg % 360) + 360) % 360; }
 /**
- * Lahiri (Chitrapaksha) ayanamsa — the ONE ayanamsa used by every chart,
- * transit, Panchang, festival and Shadbala calculation on the site.
+ * Lahiri (Chitrapaksha) ayanamsa. B14 (Nov 2026): TWO deliberately different
+ * conventions, each routed explicitly by its callers. Never mix them in one result.
  *
- * Convention (Oct 2026, calibrated to Drik Panchang): a MEAN ayanamsa (no
- * nutation term) subtracted from apparent (true-equinox-of-date) tropical
- * longitudes. Drik Panchang's published ingress moments follow exactly this
- * structure: their offset from Swiss Ephemeris "true" Lahiri tracks minus the
- * nutation in longitude (e.g. Karka Sankranti 2001 ≈ +40″ vs 2026 ≈ +13″), and
- * their mean-Rahu sign changes in 2023/2025/2026/2028 all imply the same
- * constant: Swiss Ephemeris SIDM_LAHIRI mean ayanamsa + 24.4″.
+ * 1. getNatalAyanamsa — TRUE Lahiri, i.e. Swiss Ephemeris SIDM_LAHIRI including
+ *    nutation (what AstroSage uses). Founder rule: users compare natal charts with
+ *    AstroSage, and Kundali matching follows AstroSage exactly. So EVERYTHING natal
+ *    uses this: birth chart, Lagna/houses, divisional charts, all dasha systems
+ *    (Vimshottari 5 levels, Yogini, Chara), matching inputs, Manglik, Kaal Sarp, the
+ *    natal Moon of Sade Sati, yogas, KP, Shadbala, Ashtakavarga, Bhava Chalit.
+ *    Evidence (accuracy audit, 17 Nov 2026): for SRK, true Lahiri ends the Moon
+ *    Mahadasha on 1967-03-06, exactly AstroSage's printed date; the Drik value gave
+ *    1967-03-09. Formula: Drik value − 24.4″ + Δψ (nutation in longitude, from
+ *    astronomy-engine e_tilt). Agrees with pyswisseph SIDM_LAHIRI to < 0.0001°
+ *    (fixture: __tests__/fixtures/swissTrueLahiri.json).
  *
- * The coefficients below reproduce (Swiss SIDM_LAHIRI mean + 24.4″) to within
- * 0.01″ over 1800–2100 (fitted with pyswisseph 2.10.03). The previous constant
- * (23.853222° at J2000, rate 5029.0966″/cy) was ~38″ lower, which placed slow
- * ingresses hours late (e.g. Rahu → Makara 2026: 6 Dec 00:18 IST vs Drik's
- * 5 Dec 19:28 IST). Reference events + URLs: __tests__/ayanamsaDrik.test.ts.
+ * 2. getDrikAyanamsa — Drik Panchang's convention (Oct 2026): a MEAN ayanamsa (no
+ *    nutation) subtracted from apparent tropical longitudes. Drik's published
+ *    ingress moments follow exactly this structure: their offset from Swiss "true"
+ *    Lahiri tracks minus the nutation in longitude (e.g. Karka Sankranti 2001 ≈ +40″
+ *    vs 2026 ≈ +13″), and their mean-Rahu sign changes in 2023/2025/2026/2028 all
+ *    imply the same constant: Swiss SIDM_LAHIRI mean ayanamsa + 24.4″. Used ONLY for
+ *    Panchang, festivals, sankranti, muhurat and transit/ingress timing (incl. the
+ *    transiting Saturn of Sade Sati), which match Drik Panchang to the minute.
+ *    Coefficients reproduce (Swiss mean + 24.4″) within 0.01″ over 1800–2100
+ *    (pyswisseph 2.10.03). Reference events + URLs: __tests__/ayanamsaDrik.test.ts.
  */
 const LAHIRI_J2000_DEG = 23.8638692;
 const LAHIRI_RATE_ARCSEC_PER_CY = 5028.8030;
+const DRIK_OFFSET_ARCSEC = 24.4;
 
-export function getLahiriAyanamsa(date: Date): number {
+export type AyanamsaKind = 'natal' | 'drik';
+
+/** Drik Panchang convention (mean Lahiri + 24.4″). Panchang/festival/transit timing only. */
+export function getDrikAyanamsa(date: Date): number {
   const time = Astronomy.MakeTime(date);
   const T = time.tt / 36525;
   const precessionArcsec = LAHIRI_RATE_ARCSEC_PER_CY * T + 1.11161 * T * T - 0.000113 * T * T * T;
   return LAHIRI_J2000_DEG + precessionArcsec / 3600;
+}
+
+/** True Lahiri (Swiss SIDM_LAHIRI with nutation, as AstroSage). Everything natal. */
+export function getNatalAyanamsa(date: Date): number {
+  const dpsiArcsec = Astronomy.e_tilt(Astronomy.MakeTime(date)).dpsi;
+  return getDrikAyanamsa(date) + (dpsiArcsec - DRIK_OFFSET_ARCSEC) / 3600;
+}
+
+export function getAyanamsa(date: Date, kind: AyanamsaKind): number {
+  return kind === 'natal' ? getNatalAyanamsa(date) : getDrikAyanamsa(date);
 }
 
 function getMeanNodeTropicalLongitude(date: Date): number {
@@ -140,7 +163,8 @@ export function calculateLagna(birthDateUTC: Date, latitude: number, longitude: 
   const tilt = Astronomy.e_tilt(time);
   const obliquity = tilt.tobl;
 
-  const ayanamsa = getLahiriAyanamsa(birthDateUTC);
+  // Lagna is natal only → true Lahiri.
+  const ayanamsa = getNatalAyanamsa(birthDateUTC);
 
   const toRad = (deg: number) => deg * Math.PI / 180;
   const toDeg = (rad: number) => rad * 180 / Math.PI;
@@ -189,7 +213,8 @@ export interface ChartWarning { code: string; message: string; latitude?: number
  */
 export function generateFullChart(birthDateUTC: Date, refDateUTC: Date, latitude: number, longitude: number) {
   const time = Astronomy.MakeTime(birthDateUTC);
-  const ayanamsa = getLahiriAyanamsa(birthDateUTC);
+  // Natal chart → true Lahiri (AstroSage parity). See getNatalAyanamsa.
+  const ayanamsa = getNatalAyanamsa(birthDateUTC);
 
   const _polarTime = Astronomy.MakeTime(birthDateUTC);
   const _polarTilt = Astronomy.e_tilt(_polarTime);
@@ -260,7 +285,8 @@ export function generateFullChart(birthDateUTC: Date, refDateUTC: Date, latitude
   const kaalSarpDosha = allInRahuArcWS || allInKetuArcWS;
 
   const refTime = Astronomy.MakeTime(refDateUTC);
-  const refAyanamsa = getLahiriAyanamsa(refDateUTC);
+  // Transiting Saturn (Sade Sati status) is transit timing → Drik convention.
+  const refAyanamsa = getDrikAyanamsa(refDateUTC);
   const transitingSaturnLon = getPlanetSiderealLongitude('Saturn', refTime, refAyanamsa);
   const transitingSaturnSignIdx = Math.floor(transitingSaturnLon / 30);
   const houseOfSaturnFromMoon = ((transitingSaturnSignIdx - moonSignIdx + 12) % 12) + 1;
@@ -651,7 +677,7 @@ export function calculatePlacidusCusps(birthDateUTC: Date, latitude: number, lon
   const ramc = normalize360(lst * 15);
   const tilt = Astronomy.e_tilt(time);
   const obliquity = tilt.tobl;
-  const ayanamsa = getLahiriAyanamsa(birthDateUTC);
+  const ayanamsa = getNatalAyanamsa(birthDateUTC); // natal (KP / Shadbala / Western cusps)
 
   const cusp11trop = iteratePlacidusCuspTropical(ramc, latitude, obliquity, 30, 3, false, true);
   const cusp12trop = iteratePlacidusCuspTropical(ramc, latitude, obliquity, 60, 1.5, false, true);
@@ -698,20 +724,22 @@ export function getMangalDoshaSeverity(marsHouseFromLagna: number, hasCancellati
 
 export { RASHI_NAMES, NAKSHATRA_NAMES, DASHA_LORDS, DASHA_YEARS };
 
-/** Saturn's sidereal sign index (0-11) at an arbitrary date — reuses the same
- * validated position + Lahiri-ayanamsa path the chart uses (Part I.10, Sade Sati
- * cycle dates). No new astronomy. */
+/** TRANSITING Saturn's sidereal sign index (0-11) at an arbitrary date (Sade Sati
+ * cycle dates). Ingress timing → Drik convention (getDrikAyanamsa); the natal Moon
+ * sign it is compared with comes from the natal (true Lahiri) chart. */
 export function getSaturnSignIndex(date: Date): number {
   const t = Astronomy.MakeTime(date);
-  const lon = getPlanetSiderealLongitude('Saturn', t, getLahiriAyanamsa(date));
+  const lon = getPlanetSiderealLongitude('Saturn', t, getDrikAyanamsa(date));
   return Math.floor(lon / 30);
 }
 
 /** Sidereal (Lahiri) longitude of a body at an arbitrary date — same validated
- * path the chart uses (Part I.9, Panchang/Muhurat). Rahu/Ketu use the mean lunar
- * node (the exact path generateFullChart uses). No new astronomy. */
-export function getSiderealLongitude(planet: string, date: Date): number {
-  const ayanamsa = getLahiriAyanamsa(date);
+ * path the chart uses. Rahu/Ketu use the mean lunar node (the exact path
+ * generateFullChart uses). `kind` is REQUIRED so every caller states its
+ * convention: 'natal' (true Lahiri — anything about a birth) or 'drik' (Panchang,
+ * festivals, muhurat, transits/ingresses). */
+export function getSiderealLongitude(planet: string, date: Date, kind: AyanamsaKind): number {
+  const ayanamsa = getAyanamsa(date, kind);
   if (planet === 'Rahu') return normalize360(getMeanNodeTropicalLongitude(date) - ayanamsa);
   if (planet === 'Ketu') return normalize360(getMeanNodeTropicalLongitude(date) - ayanamsa + 180);
   return getPlanetSiderealLongitude(planet, Astronomy.MakeTime(date), ayanamsa);

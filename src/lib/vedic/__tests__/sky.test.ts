@@ -152,7 +152,7 @@ describe('Planets today page text (29 Oct 2026)', () => {
   });
   it('Moon row matches Swiss (Vrishabha, Mrigashira 1 at 23°49′)', () => {
     // Swiss sidereal Moon (skySwiss.json, ayanamsa already + 24.4″) 53.82052° → Vrishabha 23°49′, Mrigashira pada 1.
-    expect(arcmin(getSiderealLongitude('Moon', new Date('2026-10-29T06:30:00Z')), 53.82052)).toBeLessThan(1);
+    expect(arcmin(getSiderealLongitude('Moon', new Date('2026-10-29T06:30:00Z'), 'drik'), 53.82052)).toBeLessThan(1);
     expect(e.sections[0].rows![1].slice(1, 4)).toEqual(['Vrishabha (Taurus)', '23°49′', 'Mrigashira (1)']);
   });
 });

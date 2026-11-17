@@ -476,7 +476,7 @@ export default function Methodology() {
                     committee.
                   </p>
                   <FormulaBlock>
-                    {`siderealLongitude = tropicalLongitude − lahiriAyanamsa(date)\nlahiriAyanamsa(2000-01-01) ≈ 23.864° (mean Lahiri, as Drik Panchang uses), advancing with precession (~50.3″/yr)`}
+                    {`siderealLongitude = tropicalLongitude − lahiriAyanamsa(date)\nbirth charts, Dasha, matching: true Lahiri, as AstroSage uses — lahiriAyanamsa(2000-01-01) ≈ 23.853°\nPanchang, festivals, transit times: mean Lahiri, as Drik Panchang uses — ≈ 23.864° at 2000-01-01\nboth advance with precession (~50.3″/yr)`}
                   </FormulaBlock>
                   <p className="text-muted-foreground leading-relaxed">
                     Everything downstream — your <strong className="text-foreground">Rashi</strong> (Moon sign),{' '}

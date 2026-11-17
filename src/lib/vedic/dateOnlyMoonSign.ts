@@ -4,7 +4,7 @@
  * In Indian astrology a person's "Rashi" is the sidereal sign of the MOON at birth,
  * not the Sun. The old celebrity/article code renamed the Western Sun sign
  * (Libra → "Tula"), which is wrong for most dates. This module uses the SAME
- * Moon-longitude path the Kundali uses (`getSiderealLongitude('Moon', …)` from the
+ * Moon-longitude path the Kundali uses (`getSiderealLongitude('Moon', …, 'natal')` from the
  * chart engine: astronomy-engine Moon + the engine's Lahiri ayanamsa, validated
  * against Swiss Ephemeris).
  *
@@ -77,8 +77,8 @@ export function moonSignsForDate(dobIso: string, window: LocalDayWindow = IST_WI
   const base = new Date(midnightUtc); base.setUTCFullYear(y);
   const startUtc = new Date(base.getTime() - window.maxOffsetMin * 60_000);
   const endUtc = new Date(base.getTime() + (23 * 60 + 59) * 60_000 - window.minOffsetMin * 60_000);
-  const a = getSiderealLongitude('Moon', startUtc);
-  const b = getSiderealLongitude('Moon', endUtc);
+  const a = getSiderealLongitude('Moon', startUtc, 'natal');
+  const b = getSiderealLongitude('Moon', endUtc, 'natal');
 
   const signIndices = forwardRange(Math.floor(a / 30) % 12, Math.floor(b / 30) % 12, 12);
   const nakshatraIdx = forwardRange(Math.floor(a / NK_SPAN) % 27, Math.floor(b / NK_SPAN) % 27, 27);

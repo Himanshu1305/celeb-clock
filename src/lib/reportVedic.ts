@@ -136,8 +136,8 @@ export function dateOnlyMoon(dobIso: string): DateOnlyMoon {
   const [y, m, d] = dobIso.slice(0, 10).split('-').map(Number);
   const startUtc = new Date(Date.UTC(y, m - 1, d, 0, 0) - 14 * 3600_000);
   const endUtc = new Date(Date.UTC(y, m - 1, d, 24, 0) + 12 * 3600_000);
-  const a = getSiderealLongitude('Moon', startUtc);
-  const b = getSiderealLongitude('Moon', endUtc);
+  const a = getSiderealLongitude('Moon', startUtc, 'natal');
+  const b = getSiderealLongitude('Moon', endUtc, 'natal');
   const span = ((b - a) % 360 + 360) % 360; // forward arc, < 30° over 50 h
   const nkSpan = 360 / 27;
   const sameSign = Math.floor(a / 30) === Math.floor(b / 30) && span < 30;
