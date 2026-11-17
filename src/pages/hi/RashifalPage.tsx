@@ -8,6 +8,10 @@ import { useDailyEntry } from '@/lib/daily/useDailyEntry';
 import { DailyBody, DailyDate, DailyH1, DailyJsonLd } from '@/lib/daily/DailyParts';
 import { RASHI_SLUGS_HI } from '@/lib/daily/registry';
 import { DailyTermStrip } from '@/components/daily/DailyTermStrip';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { HiRashifalGuide } from '@/content/guides/HiRashifalGuide';
+
+const INDEX_META = GUIDE_META['/hi/rashifal'];
 
 /**
  * आज का राशिफल (Batch 7, W1). The daily Hindi rashifal now uses the shared daily-page
@@ -28,13 +32,13 @@ export default function RashifalPage() {
       <ToolLayout
         theme="vedic"
         testId="rashifal-page"
-        seo={<SEO title="राशिफल — आज का राशिफल | BornClock" description="अपनी राशि चुनें और आज का राशिफल पढ़ें — ग्रहों की वास्तविक चाल से गणना किया गया।" canonicalUrl="/hi/rashifal" />}
+        seo={<SEO title={INDEX_META.title} description={INDEX_META.description} canonicalUrl="/hi/rashifal" />}
         breadcrumb={{ current: 'राशिफल' }}
-        h1="राशिफल"
+        h1={INDEX_META.h1}
       >
         <section className="section">
           <div className="container mx-auto px-4 py-8 max-w-3xl">
-            <p className="text-muted-foreground mb-4">कृपया एक मान्य राशि चुनें:</p>
+            <p className="text-muted-foreground mb-4">अपनी चंद्र राशि चुनें और आज का राशिफल पढ़ें:</p>
             <div className="flex flex-wrap gap-2">
               {HI_SLUGS.map(s => (
                 <Link key={s} to={`/hi/rashifal/${s}`} className="px-3 py-1.5 rounded-lg border border-border text-foreground hover:bg-primary/5">
@@ -50,6 +54,8 @@ export default function RashifalPage() {
             </p>
           </div>
         </section>
+        {/* B14: explanatory guide (Hindi) + FAQPage — below the sign list. */}
+        <HiRashifalGuide />
       </ToolLayout>
     );
   }

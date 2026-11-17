@@ -8,7 +8,7 @@
 import { useState } from 'react';
 import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
-import { SEO, FAQSchema } from '@/components/SEO';
+import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
 import { AutoTranslatedNotice } from '@/components/AutoTranslatedNotice';
 import { CityPicker } from '@/components/CityPicker';
@@ -19,13 +19,12 @@ import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import type { ManglikAssessment } from '@/lib/vedic/manglik';
 import { NAKSHATRA_HINDI } from '@/data/vedicTermsHindi';
 import { RASHI_HI_LIST } from '@/lib/vedic/nameMatching';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { HiKundliMilanGuide } from '@/content/guides/HiKundliMilanGuide';
 
 const SITE = 'https://bornclock.com';
-export const HINDI_MILAN_META = {
-  title: 'कुंडली मिलान हिंदी में — 36 गुण मिलान व मांगलिक | BornClock',
-  description: 'कुंडली मिलान हिंदी में: जन्म तिथि, समय और स्थान से 36 गुणों का अष्टकूट मिलान — वर्ण, वश्य, तारा, योनि, ग्रह मैत्री, गण, भकूट, नाड़ी — मांगलिक जाँच और सरल उपाय।',
-  h1: 'कुंडली मिलान (गुण मिलान)',
-};
+// B14: one shared copy with the prerender (src/lib/seo/guideMeta.js).
+export const HINDI_MILAN_META = GUIDE_META['/hi/kundli-milan'];
 
 export const HINDI_MILAN_FAQ = [
   { question: 'कुंडली मिलान में कितने गुण मिलने चाहिए?', answer: 'अष्टकूट मिलान 36 गुणों का होता है। परंपरा में 18 गुण न्यूनतम माने जाते हैं, 24 या अधिक अच्छे और 28 या अधिक उत्तम। साथ में नाड़ी, भकूट और मांगलिक दोष व उनके परिहार भी देखे जाते हैं।' },
@@ -133,7 +132,6 @@ export default function HindiKundliMilanPage() {
         nav: [{ label: 'नाम से कुंडली मिलान', to: '/hi/naam-se-kundli-milan/' }, { label: 'राशिफल', to: '/hi/rashifal/' }, { label: 'पंचांग', to: '/hi/panchang/' }, { label: 'उपाय', to: '/hi/upay/' }, { label: 'English', to: '/kundali-match/' }],
       }}
     >
-      <FAQSchema items={HINDI_MILAN_FAQ} />
       <section className="section" lang="hi">
         <div className="section-head">
           <div><span className="eyebrow">गुण मिलान</span><h1>{HINDI_MILAN_META.h1}</h1></div>
@@ -185,16 +183,11 @@ export default function HindiKundliMilanPage() {
           </div>
         )}
 
-        <div data-testid="hkm-faq" className="space-y-2" style={{ marginTop: 24 }}>
-          <h2 className="text-lg font-bold text-foreground">सामान्य प्रश्न</h2>
-          {HINDI_MILAN_FAQ.map(f => (
-            <details key={f.question} className="rounded-lg border border-border p-3 text-sm">
-              <summary className="cursor-pointer font-medium text-foreground">{f.question}</summary>
-              <p className="mt-2 text-muted-foreground">{f.answer}</p>
-            </details>
-          ))}
-        </div>
       </section>
+      {/* B14: explanatory guide (Hindi) + the page's one FAQPage (keeps HINDI_MILAN_FAQ first). */}
+      <div data-testid="hkm-faq">
+        <HiKundliMilanGuide baseFaq={HINDI_MILAN_FAQ} />
+      </div>
     </PajPage>
   );
 }

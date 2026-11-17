@@ -16,6 +16,8 @@ import { AutoTranslatedNotice } from '@/components/AutoTranslatedNotice';
 import { GunaMilanResultView } from '@/components/vedic/GunaMilanResultView';
 import { readName, matchByName, ALL_PADAS, RASHI_EN, RASHI_HI_LIST, type NameStar } from '@/lib/vedic/nameMatching';
 import { NAKSHATRA_HINDI } from '@/data/vedicTermsHindi';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { NameMatchGuide } from '@/content/guides/NameMatchGuide';
 
 type Lang = 'en' | 'hi';
 const SITE = 'https://bornclock.com';
@@ -23,11 +25,8 @@ export const NAME_MATCH_PATH: Record<Lang, string> = { en: '/kundli-milan-by-nam
 const ACCURATE_PATH: Record<Lang, string> = { en: '/kundali-match', hi: '/hi/kundli-milan' };
 
 export const NAME_MATCH_META: Record<Lang, { title: string; description: string; h1: string }> = {
-  en: {
-    title: 'Kundli Milan by Name — Match Without Birth Details | BornClock',
-    description: 'Kundli milan by name: the first syllable of each name gives a nakshatra, and the 36 gunas are added up. An approximation — use birth details for an accurate match.',
-    h1: 'Kundli milan by name',
-  },
+  // B14: one shared copy with the prerender (src/lib/seo/guideMeta.js).
+  en: GUIDE_META['/kundli-milan-by-name'],
   hi: {
     title: 'नाम से कुंडली मिलान — बिना जन्म तिथि गुण मिलान | BornClock',
     description: 'नाम से कुंडली मिलान: नाम के पहले अक्षर से नक्षत्र और राशि, फिर 36 गुणों का मिलान। यह अनुमान है — सटीक मिलान के लिए जन्म तिथि, समय और स्थान डालें।',
@@ -200,7 +199,8 @@ export default function KundliMilanByNamePage({ lang = 'en' }: { lang?: Lang }) 
           : [{ label: 'Kundali Matching', to: '/kundali-match/' }, { label: 'Vedic Astrology', to: '/vedic-astrology/' }, { label: 'Baby names by nakshatra', to: '/baby-names/' }, { label: 'हिंदी', to: NAME_MATCH_PATH.hi }],
       }}
     >
-      <FAQSchema items={NAME_MATCH_FAQ[lang]} />
+      {/* English: the FAQPage comes from NameMatchGuide below (one block). */}
+      {hi && <FAQSchema items={NAME_MATCH_FAQ.hi} />}
       <section className="section" lang={hi ? 'hi' : undefined}>
         <div className="section-head">
           <div><span className="eyebrow">{t.eyebrow}</span><h1>{meta.h1}</h1></div>
@@ -246,7 +246,7 @@ export default function KundliMilanByNamePage({ lang = 'en' }: { lang?: Lang }) 
           <h2 className="text-lg font-bold text-foreground">{t.how}</h2>
           <p className="text-sm text-muted-foreground">{t.howText}</p>
         </div>
-        <div data-testid="nm-faq" className="space-y-2" style={{ marginTop: 24 }}>
+        {hi && <div data-testid="nm-faq" className="space-y-2" style={{ marginTop: 24 }}>
           <h2 className="text-lg font-bold text-foreground">{t.faqHead}</h2>
           {NAME_MATCH_FAQ[lang].map(f => (
             <details key={f.question} className="rounded-lg border border-border p-3 text-sm">
@@ -254,13 +254,15 @@ export default function KundliMilanByNamePage({ lang = 'en' }: { lang?: Lang }) 
               <p className="mt-2 text-muted-foreground">{f.answer}</p>
             </details>
           ))}
-        </div>
+        </div>}
         <p className="subtle" style={{ marginTop: 24 }}>
           <Link to={ACCURATE_PATH[lang]} className="textlink">{hi ? 'जन्म विवरण से कुंडली मिलान' : 'Kundali matching with birth details'}</Link>
           {' · '}
           <Link to={hi ? NAME_MATCH_PATH.en : NAME_MATCH_PATH.hi} className="textlink" lang={hi ? 'en' : 'hi'}>{t.hindiLink}</Link>
         </p>
       </section>
+      {/* B14: English explanatory guide + FAQPage, below the tool. */}
+      {!hi && <div data-testid="nm-faq"><NameMatchGuide baseFaq={NAME_MATCH_FAQ.en} /></div>}
     </PajPage>
   );
 }

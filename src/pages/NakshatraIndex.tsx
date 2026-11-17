@@ -1,10 +1,13 @@
 import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
-import { PageFAQ } from '@/components/PageFAQ';
 import { TermTip } from '@/components/vedic/TermTip';
 import { NAKSHATRA_ORDER, NAKSHATRA_EXTRA } from '@/data/nakshatraPages';
 import { getNakshatraMeaning } from '@/lib/vedic/nakshatraMeanings';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { NakshatraGuide } from '@/content/guides/NakshatraGuide';
+
+const META = GUIDE_META['/nakshatra'];
 
 export default function NakshatraIndex() {
   const faqItems = [
@@ -27,15 +30,15 @@ export default function NakshatraIndex() {
       theme="vedic"
       testId="nakshatra-index"
       seo={<SEO
-        title="27 Nakshatras — Vedic Birth Stars: Meaning, Ruling Planet & Name Sounds | BornClock"
-        description="Explore all 27 Nakshatras (lunar mansions) — each with its deity, symbol, ruling planet, meaning, Gana, Yoni, Nadi and traditional baby-name sounds. Find your birth star free."
+        title={META.title}
+        description={META.description}
         canonicalUrl="/nakshatra"
         ogImage="https://bornclock.com/og/vedic.png"
       />}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Nakshatras' }}
       footer={{ tagline: 'The 27 Nakshatras of Vedic astrology.', nav: [{ label: 'Free Kundli', to: '/kundali/' }, { label: 'Kundali matching', to: '/kundali-match/' }] }}
       eyebrow="Nakshatra"
-      h1="The 27 Nakshatras"
+      h1={META.h1}
       lead="The 27 lunar mansions of Vedic astrology — each a finer read of character than the sign alone. Tap any birth star for its meaning, ruling planet, matching attributes and name sounds."
     >
       <section className="section">
@@ -59,14 +62,15 @@ export default function NakshatraIndex() {
             <Link to="/how-it-works/#vedic" className="underline">How we calculate this →</Link>
           </p>
 
-          <PageFAQ items={faqItems} />
-
           <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 text-center">
             <p className="text-muted-foreground mb-3">Find your birth Nakshatra and pada, free.</p>
             <Link to="/kundali/" className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold">Free Kundli →</Link>
           </div>
         </div>
       </section>
+
+      {/* B14: explanatory guide + the page's one FAQ (FAQPage) — below the index. */}
+      <NakshatraGuide baseFaq={faqItems} />
     </ToolLayout>
   );
 }

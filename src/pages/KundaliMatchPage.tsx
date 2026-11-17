@@ -16,6 +16,10 @@ import { METHOD_LINE } from '@/lib/timezone/birthTimezone';
 import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile';
 import { RemediesForFindings } from '@/components/vedic/Remedies';
 import { findingsFromMatch } from '@/lib/vedic/remedies';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { KundaliMatchGuide } from '@/content/guides/KundaliMatchGuide';
+
+const META = GUIDE_META['/kundali-match'];
 
 /** Map each koota's data key to its glossary (TermTip) id. */
 const KOOTA_TERM: Record<string, string> = {
@@ -144,8 +148,8 @@ export default function KundaliMatchPage() {
       testId="kmatch-page"
       seo={(
         <SEO
-          title="Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock"
-          description="Free Kundali matching by the 36-point Ashtakoota (Guna Milan) system — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi, with Nadi & Bhakoot dosha checks."
+          title={META.title}
+          description={META.description}
           canonicalUrl="/kundali-match"
           ogType="website"
           hreflang={[{ lang: 'en', url: 'https://bornclock.com/kundali-match/' }, { lang: 'hi', url: 'https://bornclock.com/hi/kundli-milan/' }]}
@@ -167,7 +171,7 @@ export default function KundaliMatchPage() {
     >
         <section className="section">
           <div className="section-head">
-            <div><span className="eyebrow">Guna Milan</span><h1>Kundali Matching.</h1></div>
+            <div><span className="eyebrow">Guna Milan</span><h1>{META.h1}</h1></div>
             <p>The traditional 36-point Ashtakoota system. {usingSaved ? 'Your details are already filled in — just add the second person.' : 'Enter both people’s birth date, birth time and birthplace — all three are needed for an accurate Moon Nakshatra — to see all eight kootas.'}</p>
           </div>
 
@@ -442,6 +446,9 @@ export default function KundaliMatchPage() {
           Read the full <Link to="/articles/kundali-compatibility/" className="textlink">Kundali compatibility guide</Link>.
         </p>
         </section>
+
+        {/* B14: explanatory guide — always below the tool and its results. */}
+        <KundaliMatchGuide />
     </PajPage>
   );
 }

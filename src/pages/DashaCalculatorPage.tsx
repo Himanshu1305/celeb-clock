@@ -4,7 +4,6 @@
  * Distinct from the full Kundali page; reuses existing building blocks only.
  */
 import { useState } from 'react';
-import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
@@ -19,10 +18,13 @@ import { WhatsAhead } from '@/components/vedic/WhatsAhead';
 import { fetchKundali, type KundaliData } from '@/services/kundaliService';
 import { Remedies } from '@/components/vedic/Remedies';
 import { planetRemedyKey } from '@/lib/vedic/remedies';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { DashaGuide } from '@/content/guides/DashaGuide';
 
-const PAGE_TITLE = 'Dasha Calculator — Your Vimshottari Dasha Timeline | BornClock';
-const PAGE_DESC =
-  'Free Vimshottari Dasha calculator — your full planetary-period timeline (Mahadasha to Prana), with real start and end dates from your birth chart.';
+// B14: title/description/H1 shared with the prerender (src/lib/seo/guideMeta.js).
+const META = GUIDE_META['/dasha-calculator'];
+const PAGE_TITLE = META.title;
+const PAGE_DESC = META.description;
 
 const FAQ_LD = {
   '@context': 'https://schema.org',
@@ -124,7 +126,7 @@ export default function DashaCalculatorPage() {
         <div className="section-head">
           <div>
             <span className="eyebrow">Vimshottari · planetary periods</span>
-            <h1>Dasha Calculator.</h1>
+            <h1>{META.h1}</h1>
           </div>
           <p>
             Your complete{' '}
@@ -295,8 +297,8 @@ export default function DashaCalculatorPage() {
           </ul>
         </nav>
       </section>
-      {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
-      <PageFAQ variant="plain" items={faqItemsFromSchema(FAQ_LD)} />
+      {/* B14: explanatory guide below the tool; its FAQ (the page's one FAQPage) keeps the Batch 10 Q&As first. */}
+      <DashaGuide baseFaq={faqItemsFromSchema(FAQ_LD)} />
     </PajPage>
   );
 }
