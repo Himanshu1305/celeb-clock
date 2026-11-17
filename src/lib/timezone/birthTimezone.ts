@@ -49,6 +49,21 @@ export interface BirthTimezone {
   source: 'coordinates' | 'manual';
 }
 
+/**
+ * B14 F7: a FIXED Indian Standard Time zone (UTC+05:30, no war time). India kept its
+ * clocks at +6:30 from 1 Sep 1942 to 15 Oct 1945 (IANA Asia/Kolkata), but many birth
+ * records — and AstroSage's published charts — already give the time in IST (+5:30).
+ * The user can choose this one-click option next to the war-time note; the default
+ * stays the tz database. Not an IANA name, so it is handled here without Intl.
+ */
+export const FIXED_IST_ZONE = 'UTC+05:30';
+/** India war-time window in which the IST option is offered (Asia/Kolkata +6:30). */
+export const INDIA_WAR_TIME = { from: '1942-09-01', to: '1945-10-15' } as const;
+/** True for an India (Asia/Kolkata) birth date inside the 1942–45 war-time window. */
+export function isIndiaWarTimeBirth(dob: string | undefined, zone: string | undefined): boolean {
+  return !!dob && zone === 'Asia/Kolkata' && dob >= INDIA_WAR_TIME.from && dob < INDIA_WAR_TIME.to;
+}
+
 const fmtCache = new Map<string, Intl.DateTimeFormat>();
 function formatter(tz: string): Intl.DateTimeFormat {
   let f = fmtCache.get(tz);
@@ -64,6 +79,7 @@ function formatter(tz: string): Intl.DateTimeFormat {
 
 /** True when the runtime knows this IANA zone name. */
 export function isValidTimezone(tz: unknown): tz is string {
+  if (tz === FIXED_IST_ZONE) return true;
   if (typeof tz !== 'string' || !tz || tz.length > 64) return false;
   try { formatter(tz); return true; } catch { return false; }
 }
@@ -83,6 +99,7 @@ function coordinateZoneOrNull(lat: number, lon: number): string | null {
 
 /** Offset (in SECONDS east of UTC) of `tz` at the UTC instant `utcMs`. */
 export function offsetSecondsAt(tz: string, utcMs: number): number {
+  if (tz === FIXED_IST_ZONE) return 5.5 * 3600;
   const parts = formatter(tz).formatToParts(new Date(utcMs));
   const get = (t: string) => Number(parts.find(p => p.type === t)?.value);
   const wall = Date.UTC(get('year'), get('month') - 1, get('day'), get('hour') % 24, get('minute'), get('second'));
