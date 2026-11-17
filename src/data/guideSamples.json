@@ -11,16 +11,16 @@
    "lon": 77.209
   },
   "ayanamsa": "23°48′",
-  "ayanamsaDeg": 23.8027,
+  "ayanamsaDeg": 23.7986,
   "lagna": {
    "sign": "Simha",
    "western": "Leo",
-   "degree": "5°43′"
+   "degree": "5°44′"
   },
   "rashi": "Meena",
   "rashiIndex": 11,
   "moonDegree": "22°47′",
-  "moonLongitude": 352.785,
+  "moonLongitude": 352.789,
   "nakshatra": {
    "name": "Revati",
    "pada": 2,
@@ -31,7 +31,7 @@
     "name": "Sun",
     "sign": "Karka",
     "house": 12,
-    "degree": "27°57′",
+    "degree": "27°58′",
     "nakshatra": "Ashlesha",
     "pada": 4,
     "retrograde": false
@@ -85,7 +85,7 @@
     "name": "Saturn",
     "sign": "Kumbha",
     "house": 7,
-    "degree": "29°42′",
+    "degree": "29°43′",
     "nakshatra": "Purva Bhadrapada",
     "pada": 3,
     "retrograde": true
@@ -111,11 +111,11 @@
   ],
   "currentDasha": {
    "mahadasha": "Venus",
-   "mahadashaStart": "2011-10-26",
-   "mahadashaEnd": "2031-10-26",
+   "mahadashaStart": "2011-10-24",
+   "mahadashaEnd": "2031-10-24",
    "antardasha": "Saturn",
-   "antardashaStart": "2024-08-26",
-   "antardashaEnd": "2027-10-26"
+   "antardashaStart": "2024-08-24",
+   "antardashaEnd": "2027-10-24"
   }
  },
  "dasha": {
@@ -129,7 +129,7 @@
     "lon": 80.2707
    },
    "ayanamsa": "23°39′",
-   "ayanamsaDeg": 23.656,
+   "ayanamsaDeg": 23.6457,
    "lagna": {
     "sign": "Dhanu",
     "western": "Sagittarius",
@@ -138,7 +138,7 @@
    "rashi": "Tula",
    "rashiIndex": 6,
    "moonDegree": "24°37′",
-   "moonLongitude": 204.6108,
+   "moonLongitude": 204.621,
    "nakshatra": {
     "name": "Vishakha",
     "pada": 2,
@@ -167,7 +167,7 @@
      "name": "Mercury",
      "sign": "Makara",
      "house": 2,
-     "degree": "23°53′",
+     "degree": "23°54′",
      "nakshatra": "Dhanishtha",
      "pada": 1,
      "retrograde": false
@@ -176,7 +176,7 @@
      "name": "Venus",
      "sign": "Meena",
      "house": 4,
-     "degree": "14°39′",
+     "degree": "14°40′",
      "nakshatra": "Uttara Bhadrapada",
      "pada": 4,
      "retrograde": false
@@ -185,7 +185,7 @@
      "name": "Mars",
      "sign": "Meena",
      "house": 4,
-     "degree": "13°16′",
+     "degree": "13°17′",
      "nakshatra": "Uttara Bhadrapada",
      "pada": 3,
      "retrograde": false
@@ -194,7 +194,7 @@
      "name": "Jupiter",
      "sign": "Makara",
      "house": 2,
-     "degree": "7°33′",
+     "degree": "7°34′",
      "nakshatra": "Uttara Ashadha",
      "pada": 4,
      "retrograde": false
@@ -212,7 +212,7 @@
      "name": "Rahu",
      "sign": "Mesha",
      "house": 5,
-     "degree": "29°16′",
+     "degree": "29°17′",
      "nakshatra": "Krittika",
      "pada": 1,
      "retrograde": true
@@ -221,7 +221,7 @@
      "name": "Ketu",
      "sign": "Tula",
      "house": 11,
-     "degree": "29°16′",
+     "degree": "29°17′",
      "nakshatra": "Vishakha",
      "pada": 3,
      "retrograde": true
@@ -229,107 +229,107 @@
    ],
    "currentDasha": {
     "mahadasha": "Mercury",
-    "mahadashaStart": "2014-08-01",
-    "mahadashaEnd": "2031-08-02",
+    "mahadashaStart": "2014-07-28",
+    "mahadashaEnd": "2031-07-28",
     "antardasha": "Jupiter",
-    "antardashaStart": "2026-08-17",
-    "antardashaEnd": "2028-11-21"
+    "antardashaStart": "2026-08-12",
+    "antardashaEnd": "2028-11-17"
    }
   },
   "startLord": "Jupiter",
-  "balanceYearsAtBirth": 10.47,
+  "balanceYearsAtBirth": 10.45,
   "mahadashas": [
    {
     "lord": "Jupiter",
-    "start": "1979-08-02",
-    "end": "1995-08-02"
+    "start": "1979-07-28",
+    "end": "1995-07-28"
    },
    {
     "lord": "Saturn",
-    "start": "1995-08-02",
-    "end": "2014-08-01"
+    "start": "1995-07-28",
+    "end": "2014-07-28"
    },
    {
     "lord": "Mercury",
-    "start": "2014-08-01",
-    "end": "2031-08-02"
+    "start": "2014-07-28",
+    "end": "2031-07-28"
    },
    {
     "lord": "Ketu",
-    "start": "2031-08-02",
-    "end": "2038-08-01"
+    "start": "2031-07-28",
+    "end": "2038-07-28"
    },
    {
     "lord": "Venus",
-    "start": "2038-08-01",
-    "end": "2058-08-01"
+    "start": "2038-07-28",
+    "end": "2058-07-28"
    },
    {
     "lord": "Sun",
-    "start": "2058-08-01",
-    "end": "2064-08-01"
+    "start": "2058-07-28",
+    "end": "2064-07-27"
    },
    {
     "lord": "Moon",
-    "start": "2064-08-01",
-    "end": "2074-08-01"
+    "start": "2064-07-27",
+    "end": "2074-07-28"
    },
    {
     "lord": "Mars",
-    "start": "2074-08-01",
-    "end": "2081-08-01"
+    "start": "2074-07-28",
+    "end": "2081-07-28"
    },
    {
     "lord": "Rahu",
-    "start": "2081-08-01",
-    "end": "2099-08-02"
+    "start": "2081-07-28",
+    "end": "2099-07-28"
    }
   ],
   "currentAntardashas": [
    {
     "lord": "Mercury",
-    "start": "2014-08-01",
-    "end": "2016-12-28"
+    "start": "2014-07-28",
+    "end": "2016-12-23"
    },
    {
     "lord": "Ketu",
-    "start": "2016-12-28",
-    "end": "2017-12-25"
+    "start": "2016-12-23",
+    "end": "2017-12-21"
    },
    {
     "lord": "Venus",
-    "start": "2017-12-25",
-    "end": "2020-10-25"
+    "start": "2017-12-21",
+    "end": "2020-10-21"
    },
    {
     "lord": "Sun",
-    "start": "2020-10-25",
-    "end": "2021-08-31"
+    "start": "2020-10-21",
+    "end": "2021-08-27"
    },
    {
     "lord": "Moon",
-    "start": "2021-08-31",
-    "end": "2023-01-31"
+    "start": "2021-08-27",
+    "end": "2023-01-26"
    },
    {
     "lord": "Mars",
-    "start": "2023-01-31",
-    "end": "2024-01-28"
+    "start": "2023-01-26",
+    "end": "2024-01-24"
    },
    {
     "lord": "Rahu",
-    "start": "2024-01-28",
-    "end": "2026-08-17"
+    "start": "2024-01-24",
+    "end": "2026-08-12"
    },
    {
     "lord": "Jupiter",
-    "start": "2026-08-17",
-    "end": "2028-11-21"
+    "start": "2026-08-12",
+    "end": "2028-11-17"
    },
    {
     "lord": "Saturn",
-    "start": "2028-11-21",
-    "end": "2031-08-02"
+    "start": "2028-11-17",
+    "end": "2031-07-28"
    }
   ]
  },
@@ -427,7 +427,7 @@
    {
     "name": "Bhakoot Dosha",
     "present": true,
-    "cancelled": false
+    "cancelled": true
    }
   ]
  },
@@ -517,7 +517,7 @@
    {
     "name": "Bhakoot Dosha",
     "present": true,
-    "cancelled": false
+    "cancelled": true
    }
   ]
  },
@@ -753,12 +753,12 @@
   "k": {
    "rahu": {
     "sign": "Vrishabha",
-    "degree": "22°26′",
+    "degree": "22°27′",
     "house": 9
    },
    "ketu": {
     "sign": "Vrischika",
-    "degree": "22°26′",
+    "degree": "22°27′",
     "house": 3
    },
    "rahuToKetu": [
@@ -794,16 +794,16 @@
     "lon": 77.5946
    },
    "ayanamsa": "24°12′",
-   "ayanamsaDeg": 24.1999,
+   "ayanamsaDeg": 24.1919,
    "lagna": {
     "sign": "Kumbha",
     "western": "Aquarius",
-    "degree": "13°08′"
+    "degree": "13°09′"
    },
    "rashi": "Vrishabha",
    "rashiIndex": 1,
    "moonDegree": "26°04′",
-   "moonLongitude": 56.0646,
+   "moonLongitude": 56.0727,
    "nakshatra": {
     "name": "Mrigashira",
     "pada": 1,
@@ -814,7 +814,7 @@
      "name": "Sun",
      "sign": "Makara",
      "house": 12,
-     "degree": "7°23′",
+     "degree": "7°24′",
      "nakshatra": "Uttara Ashadha",
      "pada": 4,
      "retrograde": false
@@ -832,7 +832,7 @@
      "name": "Mercury",
      "sign": "Dhanu",
      "house": 11,
-     "degree": "15°34′",
+     "degree": "15°35′",
      "nakshatra": "Purva Ashadha",
      "pada": 1,
      "retrograde": false
@@ -868,7 +868,7 @@
      "name": "Saturn",
      "sign": "Kumbha",
      "house": 1,
-     "degree": "11°08′",
+     "degree": "11°09′",
      "nakshatra": "Shatabhisha",
      "pada": 2,
      "retrograde": false
@@ -894,11 +894,11 @@
    ],
    "currentDasha": {
     "mahadasha": "Mars",
-    "mahadashaStart": "2022-08-16",
-    "mahadashaEnd": "2029-08-16",
+    "mahadashaStart": "2022-08-14",
+    "mahadashaEnd": "2029-08-14",
     "antardasha": "Mercury",
-    "antardashaStart": "2026-02-14",
-    "antardashaEnd": "2027-02-11"
+    "antardashaStart": "2026-02-13",
+    "antardashaEnd": "2027-02-10"
    }
   },
   "gana": "Deva",

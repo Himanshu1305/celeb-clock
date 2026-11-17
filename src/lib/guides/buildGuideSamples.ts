@@ -10,7 +10,7 @@ import { computeSadeSati } from '@/lib/vedic/sadeSati';
 import { statusAt } from '@/lib/vedic/sadeSatiRashi';
 import { readName, matchByName } from '@/lib/vedic/nameMatching';
 import { buildChildKundli } from '@/lib/vedic/childKundli';
-import { getSiderealLongitude, getLahiriAyanamsa } from '@/lib/vedic/engine/vedicEngine';
+import { getSiderealLongitude, getDrikAyanamsa } from '@/lib/vedic/engine/vedicEngine';
 import { GANA, NADI, YONI } from '@/lib/vedic/nakshatraAttributes';
 import { calculateDateOnlyRashi } from '@/utils/celebrityCalculations';
 import { grahaPositions } from '@/lib/vedic/sky';
@@ -133,7 +133,7 @@ export async function buildGuideSamples() {
   };
 
   // ── Sade Sati for chart A + all 12 Moon signs on the reference date ──────────
-  const saturnSignAt = (d: Date) => Math.floor((((getSiderealLongitude('Saturn', d) % 360) + 360) % 360) / 30);
+  const saturnSignAt = (d: Date) => Math.floor((((getSiderealLongitude('Saturn', d, 'drik') % 360) + 360) % 360) / 30);
   const ss = computeSadeSati(a.rashiIndex, ref, saturnSignAt, birthUtc(SAMPLE_BIRTHS.a.input));
   const sadeSati = {
     moonSign: RASHI[a.rashiIndex],
@@ -205,8 +205,8 @@ export async function buildGuideSamples() {
   const sunEntries = (tropical: boolean) => {
     const lonAt = (ms: number) => {
       const d = new Date(ms);
-      const sid = getSiderealLongitude('Sun', d);
-      return (((tropical ? sid + getLahiriAyanamsa(d) : sid) % 360) + 360) % 360;
+      const sid = getSiderealLongitude('Sun', d, 'drik');
+      return (((tropical ? sid + getDrikAyanamsa(d) : sid) % 360) + 360) % 360;
     };
     const signAt = (ms: number) => Math.floor(lonAt(ms) / 30);
     const start = Date.UTC(2026, 11, 31, 18, 30), end = Date.UTC(2027, 11, 31, 18, 30); // 1 Jan – 31 Dec 2027 IST

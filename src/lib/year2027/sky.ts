@@ -66,7 +66,7 @@ const IST = 5.5 * HOUR;
 export const istISO = (ms: number): string => new Date(ms + IST).toISOString().slice(0, 10);
 
 function lon(planet: YPlanet | 'Moon', zodiac: Zodiac, at: Date): number {
-  if (zodiac === 'sidereal') return getSiderealLongitude(planet, at);
+  if (zodiac === 'sidereal') return getSiderealLongitude(planet, at, 'drik');
   return tropicalLongitudeAt(planet, at);
 }
 export function signAt(planet: YPlanet | 'Moon', zodiac: Zodiac, at: Date): number {
