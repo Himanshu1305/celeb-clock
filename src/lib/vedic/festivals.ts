@@ -378,7 +378,7 @@ interface FestivalRule {
   prefer?: 'first' | 'second'; // when two days qualify equally
   dayOffset?: number;      // observed this many days after the resolved tithi day (Holi)
   minMuhurtas?: number;    // udaya rule: tithi must last this many muhurtas after sunrise
-  special?: 'janmashtami' | 'holika';
+  special?: 'janmashtami' | 'holika' | 'mahanavami';
 }
 
 // Major festivals by amanta (lunar month, paksha, tithi) and the kala rule each
@@ -673,4 +673,146 @@ export function computeFestivalCalendar(year: number): FestivalCalendar {
 /** Major festivals only (for compact listings / previews). */
 export function majorFestivals(year: number): Festival[] {
   return computeFestivalCalendar(year).festivals.filter(f => f.type === 'festival' || f.name.startsWith('Diwali') || f.name.startsWith('Karwa'));
+}
+
+// ── B14: per-festival detail for the dated festival pages (/festivals/2027/:slug) ──
+// Same rules and the same date resolution as computeFestivalCalendar (it calls the same
+// functions), plus the instants the pages show: the tithi's start / end and the kala window
+// the rule uses (the puja window). Two extra observances that are not separate rows in the
+// calendar are resolved here with the classical rule and the same machinery:
+//   • Chaitra Navratri Ghatasthapana — Chaitra Shukla Pratipada, first third of the day (as
+//     Sharad Navratri's Ghatasthapana rule above);
+//   • Maha Navami — Ashwina Shukla Navami. Drik Panchang states the two rules
+//     (drikpanchang.com/navratri/durga-puja/maha-navami-date-time.html?year=2027, opened
+//     17 Nov 2026): most states follow Purva-Viddha — the earlier day, when Navami prevails
+//     for at least three muhurtas before sunset; Bengal follows Para-Viddha — the day Navami
+//     lasts at least one muhurta after sunrise. The North date is the main one; the Bengal
+//     date is returned as `alt` when it differs.
+const EXTRA_RULES: FestivalRule[] = [
+  { name: 'Chaitra Navratri begins (Ghatasthapana)', month: 'Chaitra', paksha: 'Shukla', tithi: 1, type: 'festival', kala: 'pratah', note: 'Ghatasthapana in the first third of the day while Pratipada prevails.' },
+  { name: 'Maha Navami', month: 'Ashwina', paksha: 'Shukla', tithi: 9, type: 'festival', kala: 'udaya', special: 'mahanavami', note: 'Ashwina Shukla Navami (Purva-Viddha rule: Navami for at least three muhurtas before sunset).' },
+];
+
+/** Maha Navami — North (Purva-Viddha) and Bengal (Para-Viddha) dates; see EXTRA_RULES. */
+function mahaNavamiDates(m: AmantaMonth): { north: string; bengal: string } {
+  const { start, end } = tithiSpan(m, 'Shukla', 9);
+  const d0 = istDate(new Date(start));
+  const t0 = dayTimes(d0);
+  const beforeSunset = t0.set - Math.max(start, t0.rise);
+  const north = beforeSunset >= 3 * 48 * MIN ? d0 : isoAddDays(d0, 1);
+  // Para-Viddha: the sunrise day on which Navami still lasts one muhurta after sunrise.
+  let bengal = north;
+  for (let iso = d0; iso <= isoAddDays(d0, 2); iso = isoAddDays(iso, 1)) {
+    const r = dayTimes(iso).rise;
+    if (r >= start && r < end && end - r >= 48 * MIN) { bengal = iso; break; }
+  }
+  return { north, bengal };
+}
+
+export interface FestivalDetail {
+  name: string;
+  dateISO: string;
+  type: FestivalType;
+  note?: string;
+  /** Amanta month and the purnimanta (North Indian) name of the same paksha. */
+  month: string;
+  monthPurnimanta: string;
+  paksha: 'Shukla' | 'Krishna';
+  tithi: number;
+  /** Tithi start / end (UTC ms). */
+  tithiStart: number;
+  tithiEnd: number;
+  /** The part of the day the rule uses, and its New Delhi window (UTC ms) on dateISO
+   *  (point kalas — sunrise, moonrise — have start === end). Null for Holi (the day after
+   *  Holika Dahan): the colours are played in the morning after the bonfire. */
+  kala: Kala | null;
+  window: [number, number] | null;
+  /** A second traditional date when a regional rule differs (Maha Navami in Bengal). */
+  alt?: { dateISO: string; rule: 'para-viddha' };
+}
+
+function detailFor(rule: FestivalRule, m: AmantaMonth, dateISO: string): FestivalDetail {
+  const { start, end } = tithiSpan(m, rule.paksha, rule.tithi);
+  const kala = rule.dayOffset ? null : rule.kala;
+  return {
+    name: rule.name, dateISO, type: rule.type, note: rule.note, month: rule.month,
+    monthPurnimanta: purnimantaMonthName(rule.month, rule.paksha), paksha: rule.paksha, tithi: rule.tithi,
+    tithiStart: start, tithiEnd: end, kala, window: kala ? kalaWindow(dateISO, kala) : null,
+  };
+}
+
+/**
+ * The named festivals of a year (computeFestivalCalendar's FESTIVAL_RULES plus the two extra
+ * observances above) with their tithi span and puja window. Dates come from exactly the same
+ * resolution as the calendar, so a festival present in both always has the same date
+ * (checked in src/lib/year2027/__tests__).
+ */
+export function festivalDetails(year: number): FestivalDetail[] {
+  const months = amantaMonths(year);
+  const out: FestivalDetail[] = [];
+  for (const rule of [...FESTIVAL_RULES, ...EXTRA_RULES]) {
+    for (const m of months.filter(x => x.name === rule.month)) {
+      if (rule.special === 'mahanavami') {
+        const { north, bengal } = mahaNavamiDates(m);
+        if (north.startsWith(String(year))) out.push({ ...detailFor(rule, m, north), ...(bengal !== north ? { alt: { dateISO: bengal, rule: 'para-viddha' as const } } : {}) });
+        continue;
+      }
+      let d = rule.special === 'janmashtami' ? janmashtamiDate(m)
+        : rule.special === 'holika' ? holikaDahanDate(m)
+        : observanceDate(m, rule.paksha, rule.tithi, rule.kala, rule.prefer ?? 'first', rule.minMuhurtas ?? 0);
+      if (rule.dayOffset) d = isoAddDays(d, rule.dayOffset);
+      if (d.startsWith(String(year))) out.push(detailFor(rule, m, d));
+    }
+  }
+  return out.sort((a, b) => (a.dateISO < b.dateISO ? -1 : a.dateISO > b.dateISO ? 1 : 0));
+}
+
+export interface TithiDay {
+  kind: 'ekadashi' | 'purnima' | 'amavasya';
+  /** Calendar name, identical to the computeFestivalCalendar row (e.g. "Kamada Ekadashi"). */
+  name: string;
+  dateISO: string;
+  month: string;
+  monthPurnimanta: string;
+  paksha: 'Shukla' | 'Krishna';
+  tithiStart: number;
+  tithiEnd: number;
+}
+
+/** Every Ekadashi, Purnima and Amavasya of a year with its tithi start / end — the same
+ *  dates and names as the calendar's recurring rows (same functions). */
+export function tithiDays(year: number): TithiDay[] {
+  const out: TithiDay[] = [];
+  const inYear = (d: string) => d.startsWith(String(year));
+  for (const m of amantaMonths(year)) {
+    for (const paksha of ['Shukla', 'Krishna'] as const) {
+      const ek = ekadashiDate(m, paksha);
+      if (inYear(ek)) {
+        const s = tithiSpan(m, paksha, 11);
+        out.push({ kind: 'ekadashi', name: `${ekadashiName(m.name, paksha)} Ekadashi`, dateISO: ek, month: m.name, monthPurnimanta: purnimantaMonthName(m.name, paksha), paksha, tithiStart: s.start, tithiEnd: s.end });
+      }
+    }
+    const pu = observanceDate(m, 'Shukla', 15, 'udaya');
+    if (inYear(pu)) {
+      const s = tithiSpan(m, 'Shukla', 15);
+      out.push({ kind: 'purnima', name: `${m.name} Purnima`, dateISO: pu, month: m.name, monthPurnimanta: m.name, paksha: 'Shukla', tithiStart: s.start, tithiEnd: s.end });
+    }
+    const am = observanceDate(m, 'Krishna', 15, 'udaya');
+    const amP = purnimantaMonthName(m.name, 'Krishna');
+    if (inYear(am)) {
+      const s = tithiSpan(m, 'Krishna', 15);
+      out.push({ kind: 'amavasya', name: amP === m.name ? `${m.name} Amavasya` : `${amP} Amavasya (purnimanta) / ${m.name} Amavasya (amanta)`, dateISO: am, month: m.name, monthPurnimanta: amP, paksha: 'Krishna', tithiStart: s.start, tithiEnd: s.end });
+    }
+  }
+  return out.sort((a, b) => (a.dateISO < b.dateISO ? -1 : a.dateISO > b.dateISO ? 1 : 0));
+}
+
+/** The exact instant (UTC ms) of each sidereal Sankranti whose festival date is in the year. */
+export function sankrantiInstants(year: number): Array<{ sign: number; dateISO: string; instant: number }> {
+  const raw = sankrantis(new Date(Date.UTC(year - 1, 11, 20)), new Date(Date.UTC(year + 1, 0, 10)));
+  return computeSankrantis(year).map(d => {
+    const near = raw.filter(r => r.sign === d.sign)
+      .sort((a, b) => Math.abs(a.instant.getTime() - Date.parse(d.dateISO)) - Math.abs(b.instant.getTime() - Date.parse(d.dateISO)))[0];
+    return { sign: d.sign, dateISO: d.dateISO, instant: near.instant.getTime() };
+  });
 }

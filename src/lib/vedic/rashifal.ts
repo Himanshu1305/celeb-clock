@@ -100,7 +100,7 @@ const PLANET_LABEL_HI: Record<PlanetName, string> = {
 };
 
 /** Planet lens: how the planet colours whatever house it sits in, by tone. */
-const PLANET_LENS: Record<PlanetName, { pos: string; neg: string; mix: string }> = {
+export const PLANET_LENS: Record<PlanetName, { pos: string; neg: string; mix: string }> = {
   Sun: {
     pos: 'confidence, recognition and the backing of people in authority',
     neg: 'bruised ego, friction with authority and a pull to overwork',
@@ -150,7 +150,7 @@ const PLANET_LENS: Record<PlanetName, { pos: string; neg: string; mix: string }>
 
 /** House-from-Moon: life area + a short, practical "do" for the reader — one per
  *  tone (K14), so a "handle with care" reading never ends with "a good window to…". */
-const HOUSE_AREA: Record<number, { area: string; areaHi: string; tips: Record<Tone, string> }> = {
+export const HOUSE_AREA: Record<number, { area: string; areaHi: string; tips: Record<Tone, string> }> = {
   1: { area: 'self, body and the way you come across', areaHi: 'स्वयं, शरीर व व्यक्तित्व', tips: {
     favourable: 'Lead with your own plans — your energy and presence are on your side.',
     mixed: 'Pace yourself and look after your health and first impressions.',
@@ -292,7 +292,7 @@ function lensFor(planet: PlanetName, tone: Tone): string {
   return tone === 'favourable' ? L.pos : tone === 'challenging' ? L.neg : L.mix;
 }
 
-const TONE_FRAME: Record<Tone, string> = {
+export const TONE_FRAME: Record<Tone, string> = {
   favourable: 'Vedic astrology reads this as a supportive placement',
   challenging: 'Vedic astrology treats this as a placement to handle with care',
   mixed: 'Vedic astrology reads this as a mixed placement',
