@@ -51,7 +51,7 @@ describe('rashifal engine', () => {
   });
 
   it('house-from-Moon math matches the raw sidereal Saturn position', () => {
-    const saturnSign = Math.floor((((getSiderealLongitude('Saturn', REF) % 360) + 360) % 360) / 30);
+    const saturnSign = Math.floor((((getSiderealLongitude('Saturn', REF, 'drik') % 360) + 360) % 360) / 30);
     const r = computeRashifal(0, 'today', REF); // Moon sign Mesha
     const saturn = r.transits.find(t => t.planet === 'Saturn')!;
     const expectedHouse = (((saturnSign - 0) % 12) + 12) % 12 + 1;
@@ -59,7 +59,7 @@ describe('rashifal engine', () => {
   });
 
   it('flags Sade Sati when Saturn is in the 12th/1st/2nd from the Moon', () => {
-    const saturnSign = Math.floor((((getSiderealLongitude('Saturn', REF) % 360) + 360) % 360) / 30);
+    const saturnSign = Math.floor((((getSiderealLongitude('Saturn', REF, 'drik') % 360) + 360) % 360) / 30);
     const sadeSatiMoonSigns = [(saturnSign + 1) % 12, saturnSign, (saturnSign + 11) % 12];
     for (const ms of sadeSatiMoonSigns) {
       const r = computeRashifal(ms, 'today', REF);

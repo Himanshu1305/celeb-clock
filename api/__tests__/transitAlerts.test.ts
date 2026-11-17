@@ -46,7 +46,7 @@ const HOUR = 3600_000;
 
 // Test charts from the round-2 panel (scratchpad/round2/CONTEXT.md). Moon sign from our engine.
 // P1 Suchit: 1996-08-31 13:04 IST, Lucknow → 07:34 UTC.  P3: 1990-01-15 06:30 IST, New Delhi → 01:00 UTC.
-const moonSign = (utc: string) => Math.floor(E.getSiderealLongitude('Moon', new Date(utc)) / 30);
+const moonSign = (utc: string) => Math.floor(E.getSiderealLongitude('Moon', new Date(utc), 'natal') / 30);
 
 /** Tone + completeness checks shared by every rendered email. */
 function expectCalmAndComplete(mail: { subject: string; html: string } | null) {

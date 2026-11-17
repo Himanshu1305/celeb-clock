@@ -43,7 +43,7 @@ export interface VedicSky {
 }
 
 function changesOver(date: string, ref: Date, unit: number): MoonChange[] {
-  const idx = (t: number) => Math.floor(norm(getSiderealLongitude('Moon', new Date(t))) / unit);
+  const idx = (t: number) => Math.floor(norm(getSiderealLongitude('Moon', new Date(t), 'drik')) / unit);
   const start = istInstant(date, 0, 0).getTime();
   const end = start + 24 * 3600 * 1000;
   const out: MoonChange[] = [];
@@ -76,8 +76,8 @@ export function vedicSky(date: string): VedicSky {
   if (hit) return hit;
   const ref = istInstant(date, 12, 0);
   const sign = {} as Record<VedicPlanet, number>;
-  for (const p of VEDIC_PLANETS) sign[p] = Math.floor(norm(getSiderealLongitude(p, ref)) / 30);
-  const moonLon = norm(getSiderealLongitude('Moon', ref));
+  for (const p of VEDIC_PLANETS) sign[p] = Math.floor(norm(getSiderealLongitude(p, ref, 'drik')) / 30);
+  const moonLon = norm(getSiderealLongitude('Moon', ref, 'drik'));
   const [y, m, d] = date.split('-').map(Number);
   const pan = computeDayPanchang(new Date(Date.UTC(y, m - 1, d, 6)), DEFAULT_CITY.lat, DEFAULT_CITY.lon, DEFAULT_CITY.tz, DEFAULT_CITY.name);
   const sky: VedicSky = {

@@ -1,9 +1,13 @@
 /**
- * Ayanamsa convention regression (Oct 2026 fix).
+ * Ayanamsa convention regression (Oct 2026 fix; split in B14, Nov 2026).
  *
- * BornClock follows Drik Panchang's convention: mean Lahiri ayanamsa (no nutation
- * term) subtracted from apparent tropical longitudes, Rahu/Ketu = mean node.
- * Calibrated value: Swiss Ephemeris SIDM_LAHIRI MEAN ayanamsa + 24.4″.
+ * TWO conventions, routed explicitly (see vedicEngine.ts):
+ *  - getDrikAyanamsa — Panchang, festivals, sankranti, transit/ingress timing.
+ *    Drik Panchang's convention: mean Lahiri ayanamsa (no nutation term) subtracted
+ *    from apparent tropical longitudes, Rahu/Ketu = mean node. Calibrated value:
+ *    Swiss Ephemeris SIDM_LAHIRI MEAN ayanamsa + 24.4″. Tested in this file.
+ *  - getNatalAyanamsa — everything natal: Swiss TRUE Lahiri (AstroSage). Tested in
+ *    natalAyanamsa.test.ts.
  *
  * Reference sources:
  *  - Swiss Ephemeris: pyswisseph 2.10.03, swe.get_ayanamsa_ex_ut with/without
@@ -19,7 +23,7 @@
  *    https://www.drikpanchang.com/sankranti/karka-sankranti-date-time.html?year=2001 (Durazno UY, UTC-3)
  */
 import { describe, it, expect } from 'vitest';
-import { getLahiriAyanamsa, getSiderealLongitude, generateFullChart } from '../engine/vedicEngine';
+import { getDrikAyanamsa, getSiderealLongitude, generateFullChart } from '../engine/vedicEngine';
 import { dueTransitIngresses } from '../../../../api/_notify';
 import { computeSankrantis } from '../festivals';
 
@@ -35,20 +39,20 @@ describe('Lahiri ayanamsa = Swiss Ephemeris SIDM_LAHIRI mean + 24.4″ (Drik con
   ];
   for (const [iso, mean] of SWISS) {
     it(`${iso.slice(0, 10)}: within 0.2″ of Swiss mean + 24.4″`, () => {
-      const diffArcsec = (getLahiriAyanamsa(new Date(iso)) - mean) * 3600;
+      const diffArcsec = (getDrikAyanamsa(new Date(iso)) - mean) * 3600;
       expect(Math.abs(diffArcsec - 24.4)).toBeLessThan(0.2);
     });
   }
   it('the old J2000 constant 23.853222° was Swiss TRUE Lahiri at J2000 used as a mean value', () => {
     // documents the root cause: 23.853222 is the nutation-included value at 2000-01-01 12:00 TT/UT
     expect(SWISS[3][2]).toBeCloseTo(23.853222, 6);
-    expect(getLahiriAyanamsa(new Date(SWISS[3][0]))).toBeGreaterThan(23.86);
+    expect(getDrikAyanamsa(new Date(SWISS[3][0]))).toBeGreaterThan(23.86);
   });
 });
 
 /** Time (ms) the engine's sidereal longitude crosses `boundary`, searched ±3 days around `nearMs`. */
 function crossing(planet: string, boundary: number, nearMs: number): number {
-  const f = (ms: number) => ((getSiderealLongitude(planet, new Date(ms)) - boundary + 540) % 360) - 180;
+  const f = (ms: number) => ((getSiderealLongitude(planet, new Date(ms), 'drik') - boundary + 540) % 360) - 180;
   const step = 3600_000;
   let prevT = nearMs - 3 * 86400_000, prev = f(prevT);
   for (let t = prevT + step; t <= nearMs + 3 * 86400_000; t += step) {
@@ -121,10 +125,10 @@ describe('Jupiter and Saturn positions match Swiss Ephemeris (fuller VSOP87B ser
   for (const [iso, sat, jup] of SWISS_TROPICAL) {
     it(`${iso.slice(0, 10)}: Saturn and Jupiter within 2.5″ of Swiss`, () => {
       const d = new Date(iso);
-      const ay = getLahiriAyanamsa(d);
+      const ay = getDrikAyanamsa(d);
       const err = (lon: number, ref: number) => Math.abs(((lon + ay - ref + 540) % 360) - 180) * 3600;
-      expect(err(getSiderealLongitude('Saturn', d), sat)).toBeLessThan(2.5);
-      expect(err(getSiderealLongitude('Jupiter', d), jup)).toBeLessThan(2.5);
+      expect(err(getSiderealLongitude('Saturn', d, 'drik'), sat)).toBeLessThan(2.5);
+      expect(err(getSiderealLongitude('Jupiter', d, 'drik'), jup)).toBeLessThan(2.5);
     });
   }
   it('1908-06-19 chart: Saturn in Revati pada 1 (D9 Dhanu), as Swiss gives', () => {

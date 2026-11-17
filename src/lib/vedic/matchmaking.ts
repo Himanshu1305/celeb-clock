@@ -210,6 +210,8 @@ function nadi(a: PersonInput, b: PersonInput, L: MatchLabels): KootaDetail {
 }
 
 // ── Cancellation transparency (Part 2.2) — Nadi, Gana & Bhakoot ──────────────
+/** Both planets count each other as friends (natural relationship, BPHS). */
+function mutualFriends(x: string, y: string): boolean { return relation(x, y) === 'friend' && relation(y, x) === 'friend'; }
 function nadiCancellation(a: PersonInput, b: PersonInput): DoshaDetail {
   const present = (NADI[a.nakshatra] || 'Adi') === (NADI[b.nakshatra] || 'Adi');
   if (!present) return { name: 'Nadi Dosha', present: false, cancelled: false, reason: 'Different Nadi — no dosha.' };
@@ -221,14 +223,16 @@ function nadiCancellation(a: PersonInput, b: PersonInput): DoshaDetail {
   const sameNakDiffPada = a.nakshatra === b.nakshatra && a.pada !== b.pada;
   const sameRashiDiffNak = a.rashiIndex === b.rashiIndex && a.nakshatra !== b.nakshatra;
   const la = SIGN_LORDS[a.rashiIndex], lb = SIGN_LORDS[b.rashiIndex];
-  const friendlyOrSameLord = la === lb || relation(la, lb) === 'friend' || relation(lb, la) === 'friend';
+  // B14 F4: MUTUAL friendship only (a one-way "friend" — e.g. Moon→Mercury friend but
+  // Mercury→Moon enemy — is not a classical exception). Score is unaffected either way.
+  const friendlyOrSameLord = la === lb || mutualFriends(la, lb);
   const reasons: string[] = [];
   if (sameNakDiffPada) reasons.push('same Nakshatra but different padas');
   if (sameRashiDiffNak) reasons.push('same Moon sign but different Nakshatras');
-  if (friendlyOrSameLord) reasons.push(`Moon-sign lords are ${la === lb ? 'identical' : 'friendly'} (${la}/${lb})`);
+  if (friendlyOrSameLord) reasons.push(`Moon-sign lords are ${la === lb ? 'identical' : 'mutual friends'} (${la}/${lb})`);
   const cancelled = reasons.length > 0;
   return { name: 'Nadi Dosha', present: true, cancelled,
-    reason: cancelled ? `Present, but classically cancelled: ${reasons.join('; ')}.` : 'Present and not cancelled by the standard exceptions (different padas, same-sign, or friendly sign-lords) — treat as significant.' };
+    reason: cancelled ? `Present, but classically cancelled: ${reasons.join('; ')}.` : 'Present and not cancelled by the standard exceptions (different padas, same-sign, or sign-lords that are the same planet or mutual friends) — treat as significant.' };
 }
 function ganaCancellation(a: PersonInput, b: PersonInput): DoshaDetail {
   const ga = GANA[a.nakshatra] || 'Manushya', gb = GANA[b.nakshatra] || 'Manushya';
@@ -236,16 +240,17 @@ function ganaCancellation(a: PersonInput, b: PersonInput): DoshaDetail {
   if (!present) return { name: 'Gana Dosha', present: false, cancelled: false, reason: ga === gb ? 'Same Gana — no dosha.' : 'Deva–Manushya pairing — no significant Gana dosha.' };
   const la = SIGN_LORDS[a.rashiIndex], lb = SIGN_LORDS[b.rashiIndex];
   const sameSign = a.rashiIndex === b.rashiIndex;
-  const lordFriendly = la === lb || relation(la, lb) === 'friend' || relation(lb, la) === 'friend';
+  // B14 F4: mutual friendship only (see nadiCancellation).
+  const lordFriendly = la === lb || mutualFriends(la, lb);
   const nla = nakLord(NAK_ORDER.indexOf(a.nakshatra)), nlb = nakLord(NAK_ORDER.indexOf(b.nakshatra));
-  const nakLordFriendly = nla === nlb || relation(nla, nlb) === 'friend' || relation(nlb, nla) === 'friend';
+  const nakLordFriendly = nla === nlb || mutualFriends(nla, nlb);
   const reasons: string[] = [];
   if (sameSign) reasons.push('both share the same Moon sign');
-  if (lordFriendly) reasons.push(`Moon-sign lords are ${la === lb ? 'the same' : 'friends'} (${la}/${lb})`);
-  if (nakLordFriendly) reasons.push(`Nakshatra lords are ${nla === nlb ? 'the same' : 'friends'} (${nla}/${nlb})`);
+  if (lordFriendly) reasons.push(`Moon-sign lords are ${la === lb ? 'the same' : 'mutual friends'} (${la}/${lb})`);
+  if (nakLordFriendly) reasons.push(`Nakshatra lords are ${nla === nlb ? 'the same' : 'mutual friends'} (${nla}/${nlb})`);
   const cancelled = reasons.length > 0;
   return { name: 'Gana Dosha', present: true, cancelled,
-    reason: cancelled ? `Present (${ga}–${gb}), but classically cancelled: ${reasons.join('; ')}.` : `Present (${ga}–${gb}) and not cancelled by friendly sign-lords or Nakshatra-lords — a genuine temperament gap to be mindful of.` };
+    reason: cancelled ? `Present (${ga}–${gb}), but classically cancelled: ${reasons.join('; ')}.` : `Present (${ga}–${gb}) and not cancelled (the sign-lords and Nakshatra-lords are neither the same planet nor mutual friends) — a genuine temperament gap to be mindful of.` };
 }
 function bhakootDosha(a: PersonInput, b: PersonInput): DoshaDetail {
   const posAB = ((b.rashiIndex - a.rashiIndex + 12) % 12) + 1;
@@ -253,8 +258,17 @@ function bhakootDosha(a: PersonInput, b: PersonInput): DoshaDetail {
   const pair = [posAB, posBA].sort((x, y) => x - y).join('-');
   const present = pair === '2-12' || pair === '5-9' || pair === '6-8';
   if (!present) return { name: 'Bhakoot Dosha', present: false, cancelled: false, reason: 'No Bhakoot Dosha.' };
+  // B14 F3: classical cancellation — the two Moon-sign lords are the same planet
+  // (Aries/Scorpio, Taurus/Libra, Capricorn/Aquarius) or mutual friends. Reported as a
+  // note only: the Bhakoot SCORE stays 0, as AstroSage scores it (the AstroSage-verified
+  // couples' totals only add up with Bhakoot = 0 — matchmakingAstroSage.test.ts).
+  const la = SIGN_LORDS[a.rashiIndex], lb = SIGN_LORDS[b.rashiIndex];
+  const cancelled = la === lb || mutualFriends(la, lb);
+  const base = `the two Moon signs sit ${pair.replace('-', '/')} from each other, which scores 0 of 7 in Bhakoot`;
+  if (cancelled) return { name: 'Bhakoot Dosha', present: true, cancelled: true,
+    reason: `Present (${base}), but classically cancelled: the Moon-sign lords are ${la === lb ? `the same planet (${la})` : `mutual friends (${la}/${lb})`}. The score stays 0 of 7, as AstroSage counts it.` };
   return { name: 'Bhakoot Dosha', present: true, cancelled: false,
-    reason: `Present: the two Moon signs sit ${pair.replace('-', '/')} from each other, which scores 0 of 7 in Bhakoot. Held calmly as an area of emotional and financial rhythm to tend, not a verdict.` };
+    reason: `Present: ${base}. Held calmly as an area of emotional and financial rhythm to tend, not a verdict.` };
 }
 
 const METHODOLOGY =

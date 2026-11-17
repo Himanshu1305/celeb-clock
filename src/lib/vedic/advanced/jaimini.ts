@@ -121,7 +121,7 @@ export function computeCharaDasha(birthUTC: Date, lagnaSign: number, signOf: Rec
 }
 
 function karakasAt(d: Date) {
-  const lon = Object.fromEntries(PLANETS_9.map(p => [p, getSiderealLongitude(p, d)])) as Record<PlanetName, number>;
+  const lon = Object.fromEntries(PLANETS_9.map(p => [p, getSiderealLongitude(p, d, 'natal')])) as Record<PlanetName, number>;
   return { lon, karakas: charaKarakas(lon) };
 }
 

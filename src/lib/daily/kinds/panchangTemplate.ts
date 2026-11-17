@@ -52,6 +52,10 @@ export interface PanchangDayData {
   ms?: number[];
   /** Batch 10: vrat pages for this date (src/lib/vedic/vrats — New Delhi festival dates + weekday vrats) */
   vr?: string[];
+  /** B14 F5: polar day / night at this place — every clock time above is a placeholder and is not shown. */
+  pl?: 'day' | 'night';
+  /** B14 F5: indexes (0..6) of the `wk` days that are polar (no sunrise or no sunset). */
+  wkp?: number[];
 }
 
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -90,7 +94,7 @@ export function expandPanchangDay(date: string, d: PanchangDayData, city: string
     yoga: T.YOGAS[d.y[0]], karana: d.k[0],
     rahuKalam: { start: hhmm(d.w[0]), end: hhmm(d.w[1]) },
     city,
-    sunrise: hhmm(d.r), sunset: hhmm(d.s),
+    sunrise: hhmm(d.r), sunset: endText(d.s), // F6: "00:04 (next day)"
     rahuKaal: win('Rahu Kaal', d.w[0], d.w[1], 'bad'),
     gulikaKaal: win('Gulika Kaal', d.w[2], d.w[3], 'bad'),
     yamaganda: win('Yamaganda', d.w[4], d.w[5], 'bad'),
@@ -104,6 +108,42 @@ export function expandPanchangDay(date: string, d: PanchangDayData, city: string
     varjyam: pairs(d.v, 'Varjyam', 'bad'),
     amritKalam: pairs(d.a, 'Amrit Kalam', 'good'),
     dayLengthMin: d.dl,
+    ...(d.pl ? { polar: d.pl } : {}),
+  };
+}
+
+/**
+ * B14 F5 — polar day / night. With no sunrise (or no sunset) there is no Panchang day to
+ * divide, so we show NO clock times derived from it: only a clear note and the five limbs
+ * read at 06:00 local time (their end times are real instants).
+ */
+function polarNote(place: string, pl: 'day' | 'night', hi = false): string {
+  if (hi) return pl === 'day'
+    ? `${place} में आज ध्रुवीय दिन है — सूर्य अस्त नहीं होता। इसलिए आज सूर्योदय-सूर्यास्त नहीं है, और उनसे बनने वाले समय (राहु काल, चौघड़िया, अभिजित आदि) लागू नहीं होते। नीचे के पंचांग अंग स्थानीय समय 06:00 पर पढ़े गए हैं।`
+    : `${place} में आज ध्रुवीय रात है — सूर्य उदय नहीं होता। इसलिए आज सूर्योदय-सूर्यास्त नहीं है, और उनसे बनने वाले समय (राहु काल, चौघड़िया, अभिजित आदि) लागू नहीं होते। नीचे के पंचांग अंग स्थानीय समय 06:00 पर पढ़े गए हैं।`;
+  return pl === 'day'
+    ? `${place} has polar day on this date — the Sun does not set. There is no sunrise or sunset, so the times measured from them (Rahu Kaal, Gulika, Yamaganda, Choghadiya, Abhijit, Brahma Muhurta and the rest) do not apply today. The five limbs below are read at 06:00 local time.`
+    : `${place} has polar night on this date — the Sun does not rise. There is no sunrise or sunset, so the times measured from them (Rahu Kaal, Gulika, Yamaganda, Choghadiya, Abhijit, Brahma Muhurta and the rest) do not apply today. The five limbs below are read at 06:00 local time.`;
+}
+
+function renderPolarEntry(kind: PanchangPageKind, place: PlaceRef, date: string, p: DayPanchang, pl: 'day' | 'night', index: boolean): DailyEntry {
+  const meta = pageMeta(kind, place.name);
+  const im = index ? indexMeta(kind) : null;
+  const note = polarNote(place.name, pl);
+  const limbs = limbsSection(p);
+  return {
+    date, lang: 'en',
+    title: (im ?? meta).title.replace(' | BornClock', ` (${formatDateEn(date)}) | BornClock`),
+    description: `${place.name}, ${formatDateEn(date)}: polar ${pl} — no sunrise or sunset, so Rahu Kaal and the other day-based windows do not apply. Tithi ${p.paksha} ${p.tithiName}, ${p.nakshatra} Nakshatra.`,
+    h1: im ? im.h1 : meta.h1,
+    dateLabel: formatLongDateEn(date),
+    answer: note,
+    why: [{ label: `Polar ${pl} in ${place.name}`, text: 'Above the polar circles the Sun can stay above (or below) the horizon all day. The Panchang windows are fractions of the time between sunrise and sunset, so without them there is nothing to divide.' }],
+    sections: [
+      { id: 'polar', heading: pl === 'day' ? 'No sunset today (polar day)' : 'No sunrise today (polar night)', tone: 'care', text: note },
+      { ...limbs, heading: 'The five limbs at 06:00 local time' },
+    ],
+    faq: [{ q: `Is there a Rahu Kaal in ${place.name} on ${formatDateEn(date)}?`, a: note }],
   };
 }
 
@@ -262,11 +302,13 @@ function faqFor(kind: PanchangPageKind, place: PlaceRef, p: DayPanchang): DailyF
   ];
 }
 
-function weekSection(place: PlaceRef, date: string, wk: number[]): DailySection {
+function weekSection(place: PlaceRef, date: string, wk: number[], polarDays: number[] = []): DailySection {
   const items = Array.from({ length: 7 }, (_, i) => {
     const day = addDaysISO(date, i);
+    const label = `${WEEKDAYS_EN[weekdayOf(day)].slice(0, 3)}, ${formatDateEn(day).replace(/ \d{4}$/, '')}`;
+    if (polarDays.includes(i)) return item(label, 'none', 'no sunrise or sunset that day (polar day or night)');
     const [rs, re, gs, ge, ys, ye] = wk.slice(i * 6, i * 6 + 6).map(hhmm);
-    return item(`${WEEKDAYS_EN[weekdayOf(day)].slice(0, 3)}, ${formatDateEn(day).replace(/ \d{4}$/, '')}`, `${rs}–${re}`, `Gulika ${gs}–${ge} · Yamaganda ${ys}–${ye}`);
+    return item(label, `${rs}–${re}`, `Gulika ${gs}–${ge} · Yamaganda ${ys}–${ye}`);
   });
   return { id: 'week', heading: `Rahu Kaal for the next 7 days in ${place.name}`, items };
 }
@@ -277,6 +319,7 @@ function weekSection(place: PlaceRef, date: string, wk: number[]): DailySection 
  */
 export function renderPanchangEntry(kind: PanchangPageKind, place: PlaceRef, date: string, data: PanchangDayData, index = false): DailyEntry {
   const p = expandPanchangDay(date, data, place.name);
+  if (data.pl) return renderPolarEntry(kind, place, date, p, data.pl, index);
   const delhi = data.dz ? { sunrise: hhmm(data.dz[0]), sunset: hhmm(data.dz[1]) } : null;
   const meta = pageMeta(kind, place.name, p);
   const im = index ? indexMeta(kind) : null;
@@ -286,7 +329,7 @@ export function renderPanchangEntry(kind: PanchangPageKind, place: PlaceRef, dat
     sections = [
       { id: 'rahu-today', heading: `Rahu Kaal today in ${place.name}`, tone: 'care', items: [item('Rahu Kaal', w(p.rahuKaal)), item('Gulika Kaal', w(p.gulikaKaal)), item('Yamaganda', w(p.yamaganda))] },
       { id: 'other-avoid', heading: 'Other windows avoided for new starts', items: [item('Dur Muhurtam', windowsText(p.durMuhurtam)), item('Varjyam', windowsText(p.varjyam))] },
-      weekSection(place, date, data.wk),
+      weekSection(place, date, data.wk, data.wkp),
       goodSection(p),
     ];
   } else if (kind === 'choghadiya') {
@@ -381,6 +424,29 @@ export function renderPanchangHiEntry(slug: string, date: string, data: Panchang
   const place = custom ? { name: custom.name } : placeForSlug(slug);
   const city = custom ? custom.name : cityHi(place.slug!, place.name);
   const p = expandPanchangDay(date, data, place.name);
+  const sunsetHi = hiEnd(p.sunset); // F6: "(अगले दिन)" past local midnight
+  if (data.pl) {
+    // B14 F5: polar day / night — no clock times, only the note and the limbs at 06:00.
+    const note = polarNote(city, data.pl, true);
+    return {
+      date, lang: 'hi',
+      title: `${city} का पंचांग (${formatDateHi(date)}) | BornClock`,
+      description: `${city}, ${formatDateHi(date)}: ध्रुवीय ${data.pl === 'day' ? 'दिन' : 'रात'} — सूर्योदय-सूर्यास्त नहीं, इसलिए राहु काल आदि लागू नहीं। ${tithiHi(p)} तिथि, ${nakHi(p)} नक्षत्र।`,
+      h1: custom ? `पंचांग — ${city}` : hindiPanchangMeta(slug).h1,
+      dateLabel: formatLongDateHi(date),
+      answer: note,
+      why: [{ label: `${city} में ध्रुवीय ${data.pl === 'day' ? 'दिन' : 'रात'}`, text: 'ध्रुवीय क्षेत्रों में सूर्य पूरे दिन क्षितिज के ऊपर (या नीचे) रह सकता है। पंचांग के समय सूर्योदय और सूर्यास्त के बीच के भाग होते हैं, इसलिए उनके बिना ये समय नहीं बनते।' }],
+      sections: [
+        { id: 'polar', heading: data.pl === 'day' ? 'आज सूर्यास्त नहीं (ध्रुवीय दिन)' : 'आज सूर्योदय नहीं (ध्रुवीय रात)', tone: 'care', text: note },
+        { id: 'limbs', heading: 'स्थानीय समय 06:00 पर पंचांग के अंग', items: [
+          { label: 'तिथि (चंद्र दिवस)', value: tithiHi(p), note: `${hiEnd(p.tithiEnd)} तक` },
+          { label: 'नक्षत्र (चंद्रमा का तारा)', value: nakHi(p), note: `${hiEnd(p.nakshatraEnd)} तक` },
+          { label: 'वार', value: WEEKDAY_HI[p.weekday] || p.weekday },
+        ] },
+      ],
+      faq: [{ q: `${formatDateHi(date)} को ${city} में राहु काल कब है?`, a: note }],
+    };
+  }
   const dHi = formatDateHi(date);
   const dLong = formatLongDateHi(date);
   const abh = p.abhijitApplies ? `अभिजित मुहूर्त ${winHi(p.abhijit)} है।` : 'बुधवार को अभिजित मुहूर्त नहीं लिया जाता।';
@@ -393,11 +459,11 @@ export function renderPanchangHiEntry(slug: string, date: string, data: Panchang
     description: `${city} का पंचांग, ${dHi}: ${tithiHi(p)} तिथि, ${nakHi(p)} नक्षत्र, ${YOGA_HI[p.yoga] || p.yoga} योग, ${kar} करण। सूर्योदय ${p.sunrise}, राहु काल ${winHi(p.rahuKaal)}।`,
     h1: meta.h1,
     dateLabel: dLong,
-    answer: `${dLong} को ${city} में सूर्योदय ${p.sunrise} और सूर्यास्त ${p.sunset} पर है। `
+    answer: `${dLong} को ${city} में सूर्योदय ${p.sunrise} और सूर्यास्त ${sunsetHi} पर है। `
       + `सूर्योदय के समय ${tithiHi(p)} तिथि (${hiEnd(p.tithiEnd)} तक) और ${nakHi(p)} नक्षत्र (${hiEnd(p.nakshatraEnd)} तक) है। `
       + `राहु काल ${winHi(p.rahuKaal)} है; ${abh}`,
     why: [
-      { label: `${city} में सूर्योदय ${p.sunrise}, सूर्यास्त ${p.sunset}`, text: 'इस पृष्ठ का हर समय स्थानीय दिन या रात का एक भाग है, इसलिए घड़ी का समय इसी शहर का अपना है।' },
+      { label: `${city} में सूर्योदय ${p.sunrise}, सूर्यास्त ${sunsetHi}`, text: 'इस पृष्ठ का हर समय स्थानीय दिन या रात का एक भाग है, इसलिए घड़ी का समय इसी शहर का अपना है।' },
       { label: `चंद्रमा ${nakHi(p)} नक्षत्र में, ${tithiHi(p)}`, text: 'सूर्योदय के समय चंद्रमा की स्थिति से तिथि और नक्षत्र तय होते हैं; अमृत काल और वर्ज्यम् भी इसी से निकलते हैं।' },
     ],
     sections: [
@@ -409,7 +475,7 @@ export function renderPanchangHiEntry(slug: string, date: string, data: Panchang
         { label: 'वार', value: WEEKDAY_HI[p.weekday] || p.weekday },
       ] },
       ...(vratHi ? [vratHi] : []),
-      { id: 'sun', heading: `${city} में सूर्य`, items: [{ label: 'सूर्योदय', value: p.sunrise }, { label: 'सूर्यास्त', value: p.sunset }] },
+      { id: 'sun', heading: `${city} में सूर्य`, items: [{ label: 'सूर्योदय', value: p.sunrise }, { label: 'सूर्यास्त', value: sunsetHi }] },
       { id: 'good-times', heading: 'शुभ समय', tone: 'good', items: [
         { label: 'ब्रह्म मुहूर्त', value: winHi(p.brahmaMuhurta), note: 'भोर से पहले का शांत समय — पूजा, ध्यान और पढ़ाई के लिए' },
         { label: 'अभिजित मुहूर्त', value: p.abhijitApplies ? winHi(p.abhijit) : 'बुधवार को नहीं', note: p.abhijitApplies ? 'दोपहर का मुहूर्त' : 'बुधवार को यह मुहूर्त दुर्मुहूर्त होता है' },
@@ -424,7 +490,7 @@ export function renderPanchangHiEntry(slug: string, date: string, data: Panchang
           { label: 'दुर्मुहूर्त', value: winsHi(p.durMuhurtam) },
           { label: 'वर्ज्यम्', value: winsHi(p.varjyam) },
         ] },
-      { id: 'choghadiya-day', heading: `दिन का चौघड़िया (सूर्योदय ${p.sunrise} → सूर्यास्त ${p.sunset})`, items: choghHi(p.dayChoghadiya) },
+      { id: 'choghadiya-day', heading: `दिन का चौघड़िया (सूर्योदय ${p.sunrise} → सूर्यास्त ${sunsetHi})`, items: choghHi(p.dayChoghadiya) },
       { id: 'choghadiya-night', heading: 'रात का चौघड़िया (सूर्यास्त → अगला सूर्योदय)', items: choghHi(p.nightChoghadiya) },
     ],
     faq: [

@@ -59,7 +59,7 @@ export function buildBirthTimeEdges(
   // Moon — ±5 minutes only.
   const moonAt = new Map<number, number>();
   const moonLon = (k: number) => {
-    if (!moonAt.has(k)) moonAt.set(k, getSiderealLongitude('Moon', at(k)));
+    if (!moonAt.has(k)) moonAt.set(k, getSiderealLongitude('Moon', at(k), 'natal'));
     return moonAt.get(k)!;
   };
   const rNow = signOf(lons.Moon);

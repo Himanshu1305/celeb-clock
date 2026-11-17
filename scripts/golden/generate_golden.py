@@ -93,7 +93,14 @@ COUPLES = [
 
 
 def ayan(jd):
-    """Site convention: Swiss SIDM_LAHIRI mean (no nutation) + 24.4″ (ayanamsaDrik.test.ts)."""
+    """NATAL convention (B14, Nov 2026): Swiss SIDM_LAHIRI TRUE ayanamsa (nutation
+    included) — what AstroSage uses (natalAyanamsa.test.ts)."""
+    return swe.get_ayanamsa_ex_ut(jd, swe.FLG_SWIEPH)[1]
+
+
+def ayan_drik(jd):
+    """TRANSIT convention: Swiss SIDM_LAHIRI mean (no nutation) + 24.4″, the Drik Panchang
+    calibration used for ingress timing (ayanamsaDrik.test.ts). Saturn ingresses only."""
     return swe.get_ayanamsa_ex_ut(jd, swe.FLG_SWIEPH | swe.FLG_NONUT)[1] + 24.4 / 3600
 
 
@@ -152,7 +159,8 @@ def vimshottari(jd_birth, moon):
 
 
 def saturn_sign(jd):
-    return int(sid(jd, swe.SATURN) // 30)
+    # Transiting Saturn → Drik convention (ingress timing), as BornClock's getSaturnSignIndex.
+    return int(((swe.calc_ut(jd, swe.SATURN, swe.FLG_SWIEPH)[0][0] - ayan_drik(jd)) % 360) // 30)
 
 
 def saturn_ingresses(jd_from, jd_to):
@@ -296,7 +304,9 @@ def main():
             COUPLE_BIRTHS='Extra births used in the AstroSage couples (Round 2 audit probe round2/M/run3.mts).',
             IANA='Local time → UTC via the IANA tz database (Python zoneinfo), e.g. Asia/Kolkata 1942–45 = UTC+6:30, Europe/London 1968–71 = UTC+1.',
             SWISS='Swiss Ephemeris (pyswisseph 2.10.03, swe.calc_ut apparent geocentric positions; Ascendant from swe.houses_ex). '
-                  'Sidereal = tropical − (SIDM_LAHIRI mean ayanamsa, FLG_NONUT, + 24.4″), the Drik Panchang calibration BornClock uses '
+                  'Natal sidereal = tropical − SIDM_LAHIRI TRUE ayanamsa (nutation included; what AstroSage uses — '
+                  'src/lib/vedic/__tests__/natalAyanamsa.test.ts, B14 Nov 2026). Transiting Saturn (Sade Sati ingresses and status) = '
+                  'tropical − (SIDM_LAHIRI mean ayanamsa, FLG_NONUT, + 24.4″), the Drik Panchang calibration '
                   '(src/lib/vedic/__tests__/ayanamsaDrik.test.ts). Rahu = mean node, Ketu = Rahu + 180°. Whole-sign houses.',
             D9_RULE='Navamsa (D9): sign = floor(sidereal longitude / 3°20′) mod 12 (BPHS Ch. 6; same as Drik/AstroSage).',
             VIMSHOTTARI='Vimshottari Dasha (BPHS Ch. 46): balance from the Moon\'s position in its nakshatra; periods Ke7 Ve20 Su6 Mo10 Ma7 Ra18 Ju16 Sa19 Me17; '

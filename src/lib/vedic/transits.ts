@@ -99,8 +99,8 @@ export function computeYearTransit(planet: TransitPlanet, year: number): YearTra
 /** Apparent daily motion of a planet in degrees (central difference, wrap-safe). */
 function dailyMotion(planet: PlanetName, at: Date): number {
   const h = 12 * 3600 * 1000; // ±12h
-  const before = getSiderealLongitude(planet, new Date(at.getTime() - h));
-  const after = getSiderealLongitude(planet, new Date(at.getTime() + h));
+  const before = getSiderealLongitude(planet, new Date(at.getTime() - h), 'drik');
+  const after = getSiderealLongitude(planet, new Date(at.getTime() + h), 'drik');
   let d = after - before;            // span is 1 day
   if (d > 180) d -= 360;             // unwrap around 0/360
   if (d < -180) d += 360;
@@ -146,7 +146,7 @@ export function computeMercuryRetrogrades(year: number): RetroPeriod[] {
 }
 
 function signNameAt(planet: PlanetName, at: Date): string {
-  return RASHIS[Math.floor(((getSiderealLongitude(planet, at) % 360) + 360) % 360 / 30)].sanskrit;
+  return RASHIS[Math.floor(((getSiderealLongitude(planet, at, 'drik') % 360) + 360) % 360 / 30)].sanskrit;
 }
 
 function makeRetroPeriod(planet: PlanetName, startDate: Date, endDate: Date): RetroPeriod {
@@ -171,7 +171,7 @@ export interface PlanetStation {
 /** Apparent sidereal motion in degrees/day at an instant, from a ±1 hour difference. */
 function motionAt(planet: PlanetName, ms: number): number {
   const h = 3600_000;
-  let d = getSiderealLongitude(planet, new Date(ms + h)) - getSiderealLongitude(planet, new Date(ms - h));
+  let d = getSiderealLongitude(planet, new Date(ms + h), 'drik') - getSiderealLongitude(planet, new Date(ms - h), 'drik');
   if (d > 180) d -= 360;
   if (d < -180) d += 360;
   return d * 12; // 2-hour span → per day

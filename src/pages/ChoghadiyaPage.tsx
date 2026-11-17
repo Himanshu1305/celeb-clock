@@ -36,6 +36,7 @@ function NowLine({ lat, lon, tz, name, dateKey }: { lat: number; lon: number; tz
   useEffect(() => {
     if (typeof window !== 'undefined' && (window as { __PRERENDER__?: boolean }).__PRERENDER__) return;
     const p = computeDayPanchang(new Date(dateKey + 'T12:00:00Z'), lat, lon, tz, name);
+    if (p.polar) return; // B14 F5: no sunrise/sunset → no Choghadiya slots to point at
     const tick = () => {
       const local = new Date(Date.now() + tz * 3600e3).toISOString().slice(11, 16);
       const i = choghadiyaNowIndex(p, local);
