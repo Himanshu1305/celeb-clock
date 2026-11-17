@@ -18,6 +18,8 @@ import {
 } from '../src/lib/chineseCalendar.js';
 // Batch 9b: year muhurat pages — titles/descriptions shared with MuhuratYearPage.
 import { MUHURAT_YEAR_META, MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
+// B14: 2027 pages — titles / descriptions shared with the pages (src/lib/year2027/meta.js).
+import { year2027Meta } from '../src/lib/year2027/meta.js';
 
 // Indian born-on facet data (slug → {top3, count}) for /born-on/:slug/india titles.
 const INDIA_BORNON_MAP = new Map(
@@ -430,6 +432,10 @@ export function getTitleForRoute(route) {
     description: 'Everything your birth date reveals: your Vedic birth chart, celebrity birthday twins, numerology and zodiac, and longevity science — all from one date. Free at BornClock.',
   };
   if (FITNESS[route]) return FITNESS[route];
+  {
+    const y = year2027Meta(route);
+    if (y) return { title: y.title, description: y.description };
+  }
 
   // Batch 9b: /sade-sati/:rashi and /hi/sade-sati/:rashi — mirrors ssPageMeta() in
   // src/lib/vedic/sadeSatiRashiText.ts (checked by src/lib/vedic/__tests__/sadeSatiRashi.test.ts).

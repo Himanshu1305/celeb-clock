@@ -52,6 +52,11 @@ export function RashifalPeriodView({ rashi, period }: { rashi: RashiMeta; period
             <Link to={`/hi/rashifal/${RASHI_SLUGS_HI[idx]}`} lang="hi" className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-primary/5">हिंदी में (आज)</Link>
           </div>
 
+          <Link to={`/rashifal/${rashi.slug}/2027/`} data-testid="rashifal-2027-link" className={`block rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 mb-4 hover:shadow-sm transition ${period === 'year' ? '' : 'text-sm'}`}>
+            <span className="font-semibold text-brand-ink">Read your 2027 Rashifal →</span>{' '}
+            <span className="text-brand-ink-soft">{rashi.sanskrit} in 2027 — month by month, Sade Sati, eclipses and the best periods of the year.</span>
+          </Link>
+
           <DailyBody entry={entry} testId={`rashifal-${period}`} />
 
           <DailyTermStrip

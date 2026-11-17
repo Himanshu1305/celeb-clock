@@ -8,6 +8,7 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { computeFestivalCalendar, type Festival, type FestivalType } from '@/lib/vedic/festivals';
 import { MUHURAT_YEAR_META, MUHURAT_YEAR_YEARS } from '@/lib/muhuratYearMeta.js';
 import { VRAT_NAMES, VRAT_SLUGS, vratPath, vratSlugForFestival } from '@/lib/vedic/vrats/meta';
+import { FESTIVALS_2027 } from '@/lib/year2027/meta.js';
 
 const MIN_YEAR = 2020;
 const MAX_YEAR = 2039;
@@ -94,6 +95,15 @@ export default function FestivalsPage() {
                 {y}
               </Link>
             ))}
+          </div>
+
+          {/* B14: dated 2027 festival pages (tithi + puja times), linked from every year view. */}
+          <div className="rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 mb-6 text-sm" data-testid="festival-2027-pages">
+            <div className="font-semibold text-brand-ink mb-2">Festival dates 2027 — with tithi and puja times</div>
+            <div className="flex flex-wrap gap-2">
+              {FESTIVALS_2027.map(f => <Link key={f.slug} to={`/festivals/2027/${f.slug}/`} className="px-2.5 py-1 rounded-lg border border-brand-line bg-brand-paper text-brand-ink hover:bg-brand-gold/10">{f.en} 2027</Link>)}
+            </div>
+            <p className="mt-2"><Link to="/hindu-calendar-2027/" className="underline text-brand-ink">Hindu calendar 2027 →</Link> · <Link to="/ekadashi-2027/" className="underline text-brand-ink">Ekadashi 2027 →</Link> · <Link to="/purnima-2027/" className="underline text-brand-ink">Purnima 2027 →</Link> · <Link to="/amavasya-2027/" className="underline text-brand-ink">Amavasya 2027 →</Link></p>
           </div>
 
           {/* Major festivals */}

@@ -44,6 +44,10 @@ export default function RashifalIndex() {
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-4xl">
+          <Link to="/rashifal-2027/" data-testid="rashifal-2027-banner" className="block rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 mb-5 hover:shadow-sm transition">
+            <div className="font-semibold text-brand-ink">Rashifal 2027 — the yearly forecast for all 12 rashis →</div>
+            <div className="text-sm text-brand-ink-soft mt-1">Computed from the real 2027 transits: month-by-month notes, best and challenging periods, Sade Sati, eclipses and remedies.</div>
+          </Link>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" data-testid="rashifal-grid">
             {RASHIS.map(r => (
               <Link
@@ -60,6 +64,8 @@ export default function RashifalIndex() {
 
           <p className="text-sm text-muted-foreground mt-6">
             <Link to="/hi/rashifal/" lang="hi" className="underline">आज का राशिफल हिंदी में →</Link>
+            {' · '}<Link to="/hi/rashifal-2027/" lang="hi" className="underline">राशिफल 2027 हिंदी में →</Link>
+            {' · '}<Link to="/horoscope-2027/" className="underline">Horoscope 2027 (Western) →</Link>
             {' · '}Planning ahead? <Link to="/rashifal/mesh/tomorrow/" className="underline">Tomorrow’s rashifal →</Link>
             {' · '}Looking for the Western (Sun sign) daily horoscope? <Link to="/zodiac/aries/today/" className="underline">Western horoscope today →</Link>
           </p>

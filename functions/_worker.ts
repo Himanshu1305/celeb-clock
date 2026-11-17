@@ -48,6 +48,7 @@ import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../src/lib/seo/pancha
 import { MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
 import { matchDailyRoute } from '../src/lib/daily/registry.js';
 import { VRAT_SLUG_SET } from '../src/lib/vedic/vrats/meta.js';
+import { RASHI_SLUGS_2027, RASHI_SLUGS_HI_2027, SIGN_SLUGS_2027, FESTIVAL_SLUGS_2027, HI_FESTIVAL_SLUGS_2027 } from '../src/lib/year2027/meta.js';
 import { pageLangForPath, withHtmlLang } from '../src/lib/seo/pageLang.js';
 import { applyDailyContent } from './daily.js';
 
@@ -301,6 +302,13 @@ const worker = {
       if ((m = pathname.match(/^\/transit\/([a-z]+)\/(\d+)\/?$/)))    return !(TRP.has(m[1]) && validTY(parseInt(m[2], 10)));
       if ((m = pathname.match(/^\/mercury-retrograde\/(\d+)\/?$/)))   return !validTY(parseInt(m[1], 10));
       if ((m = pathname.match(/^\/festivals\/(\d+)\/?$/)))            return !validTY(parseInt(m[1], 10));
+      // B14: 2027 pages exist only for 2027 and the listed signs / festivals (src/lib/year2027/meta.js).
+      if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/(\d+)\/?$/)))     return !(m[2] === '2027' && RASHI_SLUGS_2027.includes(m[1]));
+      if ((m = pathname.match(/^\/hi\/rashifal\/([a-z]+)\/(\d+)\/?$/))) return !(m[2] === '2027' && RASHI_SLUGS_HI_2027.includes(m[1]));
+      if ((m = pathname.match(/^\/horoscope\/([a-z]+)\/(\d+)\/?$/)))    return !(m[2] === '2027' && SIGN_SLUGS_2027.includes(m[1]));
+      if ((m = pathname.match(/^\/horoscope(?:\/[a-z]+)?\/?$/)))         return true;
+      if ((m = pathname.match(/^\/festivals\/(\d+)\/([a-z-]+)\/?$/)))  return !(m[1] === '2027' && FESTIVAL_SLUGS_2027.includes(m[2]));
+      if ((m = pathname.match(/^\/hi\/festivals\/(\d+)\/([a-z-]+)\/?$/))) return !(m[1] === '2027' && HI_FESTIVAL_SLUGS_2027.includes(m[2]));
       // Batch 9b: year muhurat lists exist only for the precomputed occasions and years.
       if ((m = pathname.match(/^\/muhurat\/([a-z-]+)\/(\d+)\/?$/)))  return !(Object.prototype.hasOwnProperty.call(MUHURAT_YEAR_SLUGS, m[1]) && MUHURAT_YEAR_YEARS.includes(parseInt(m[2], 10)));
       // Planet-in-sign / planet-in-house: 9 planets × 12 signs / 12 houses.

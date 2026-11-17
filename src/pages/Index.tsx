@@ -102,6 +102,8 @@ function BornToday() {
 type Tool = { label: string; tag: string; to: string };
 const VEDIC_TOOLS: Tool[] = [
   { label: 'Kundli Chart', tag: 'free', to: '/kundali/' },
+  { label: 'Rashifal 2027', tag: 'yearly · new', to: '/rashifal-2027/' },
+  { label: 'Hindu Calendar 2027', tag: 'Holi · Diwali dates', to: '/hindu-calendar-2027/' },
   { label: 'Daily Rashifal', tag: 'today', to: '/rashifal/' },
   { label: 'Kundali Matching', tag: '36-point', to: '/kundali-match/' },
   { label: 'Dasha Timing', tag: 'to Pratyantar', to: '/kundali/' },
@@ -380,9 +382,9 @@ export default function Index() {
         {/* FOOTER SITEMAP (real routes; extended so every current-homepage link stays reachable) */}
         <div style={{ background: brandVar.navy, padding: '22px 24px 16px' }}>
           <div className="foot" style={{ display: 'flex', gap: 28 }}>
-            <FootCol color={ui.goldOnDark} title="VEDIC" links={[['Kundli', '/kundali'], ['Matching', '/kundali-match'], ['Sade Sati', '/sade-sati'], ['Muhurat', '/muhurat'], ['Gemstones', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'], ['Career', '/career-report'], ['AI Astrologer', '/astrologer']]} />
+            <FootCol color={ui.goldOnDark} title="VEDIC" links={[['Rashifal 2027', '/rashifal-2027/'], ['राशिफल 2027', '/hi/rashifal-2027/'], ['Festivals 2027', '/hindu-calendar-2027/'], ['Kundli', '/kundali'], ['Matching', '/kundali-match'], ['Sade Sati', '/sade-sati'], ['Muhurat', '/muhurat'], ['Gemstones', '/gemstones'], ['Rashi Ratna', '/rashi-ratna'], ['Career', '/career-report'], ['AI Astrologer', '/astrologer']]} />
             <FootCol color={ui.coralOnDark} title="BIRTHDAY" links={[['Who Shares My Birthday?', '/celebrity-birthday/'], ["Today's Birthdays", '/todays-birthdays'], ['Age Calculator', '/age-calculator'], ['Birthstone', '/birthstone'], ['Indian Celebrities', '/born-on/india'], ['Blueprint', '/birthday-report']]} />
-            <FootCol color={ui.purpleOnDark} title="MYSTIC" links={[['Numerology', '/numerology'], ['Name Numerology', '/name-numerology'], ['Western Zodiac', '/zodiac'], ['Chinese Zodiac', '/chinese-zodiac'], ['Tarot', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'], ['Biorhythm', '/biorhythm']]} />
+            <FootCol color={ui.purpleOnDark} title="MYSTIC" links={[['Numerology', '/numerology'], ['Numerology 2027', '/numerology-2027/'], ['Name Numerology', '/name-numerology'], ['Western Zodiac', '/zodiac'], ['Horoscope 2027', '/horoscope-2027/'], ['Chinese Zodiac', '/chinese-zodiac'], ['Tarot', '/tarot-card-by-birthday'], ['Compatibility', '/compatibility'], ['Biorhythm', '/biorhythm']]} />
             <FootCol color={ui.blueOnDark} title="SCIENCE" links={[['Life Expectancy', '/life-expectancy'], ['Biological Age', '/biological-age'], ['Country Comparison', '/country-comparison'], ['Planetary Age', '/planetary-age'], ['Planetary Weight', '/weight-on-planets']]} />
             <FootCol color="white" title="BORNCLOCK" links={[['How it works', '/how-it-works'], ['Accuracy', '/accuracy'], ['Answers', '/answers'], ['Articles', '/articles'], ['About', '/about'], ['Editorial Policy', '/editorial-policy'], ['Pricing', '/pricing'], ['Privacy', '/privacy'], ['Contact', '/contact']]} />
           </div>

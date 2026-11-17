@@ -42,6 +42,9 @@ export default function RashifalPage() {
                 </Link>
               ))}
             </div>
+            <p data-testid="hi-rashifal-2027-index" className="mt-6">
+              <Link to="/hi/rashifal-2027/" className="inline-block rounded-xl border border-brand-gold/50 bg-brand-gold/10 px-4 py-3 font-semibold text-brand-ink">राशिफल 2027 — सभी 12 राशियों का वार्षिक भविष्यफल →</Link>
+            </p>
             <p data-testid="hi-rashifal-index-tools" className="text-sm text-muted-foreground mt-6">
               और हिंदी में: <Link to="/hi/kundli-milan/" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan/" className="underline">नाम से कुंडली मिलान</Link> · <Link to="/hi/panchang/" className="underline">पंचांग</Link> · <Link to="/hi/upay/" className="underline">उपाय</Link>
             </p>
@@ -71,6 +74,10 @@ export default function RashifalPage() {
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl" lang="hi">
+          <Link to={`/hi/rashifal/${rashi}/2027/`} data-testid="hi-rashifal-2027-link" className="block rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 mb-4 text-sm">
+            <span className="font-semibold text-brand-ink">{meta.hindi} राशिफल 2027 पढ़ें →</span>{' '}
+            <span className="text-brand-ink-soft">पूरे वर्ष का भविष्यफल — महीनेवार फल, साढ़ेसाती, ग्रहण और शुभ समय।</span>
+          </Link>
           <DailyBody entry={entry} testId="rashifal-daily" />
 
           <DailyTermStrip
