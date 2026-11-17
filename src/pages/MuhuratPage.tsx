@@ -17,7 +17,7 @@ import { TrustStrip } from '@/components/paj/TrustStrip';
 import { Link } from '@/components/seo/CanonicalLink';
 import { MUHURAT_YEAR_META, MUHURAT_YEAR_YEARS } from '@/lib/muhuratYearMeta.js';
 
-interface Day { date: string; weekday: string; nakshatra: string; tithiName: string; paksha: string; yoga: string; rahuKalam: { start: string; end: string }; score: number; reasons: string[]; auspicious: boolean }
+interface Day { date: string; weekday: string; nakshatra: string; tithiName: string; paksha: string; yoga: string; rahuKalam: { start: string; end: string }; score: number; reasons: string[]; auspicious: boolean; polar?: 'day' | 'night' }
 
 // Look-ahead choices — custom range capped at 180 days (Part AI).
 const RANGES = [30, 60, 90, 120, 180] as const;
@@ -33,6 +33,7 @@ export default function MuhuratPage() {
   const [methodology, setMethodology] = useState('');
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [polar, setPolar] = useState(false);
 
   const onCity = async (v: string) => {
     setCityQuery(v); setCity(null);
@@ -43,7 +44,7 @@ export default function MuhuratPage() {
 
   const find = async () => {
     if (!city) return;
-    setLoading(true); setFailed(false); setResult(null);
+    setLoading(true); setFailed(false); setResult(null); setPolar(false);
     try {
       // fix-timezone-accuracy: send the place; the server applies the DST-correct offset for the start date.
       const params = new URLSearchParams({ purpose, days: String(days), tz: String(city.utcOffset), lat: String(city.lat), lon: String(city.lon), tzv: '2' });
@@ -53,6 +54,7 @@ export default function MuhuratPage() {
       const data = await res.json();
       setResult(data.auspicious as Day[]);
       setMethodology(data.methodology || '');
+      setPolar(!!data.polar);
     } catch { setFailed(true); } finally { setLoading(false); }
   };
   const fmt = (iso: string) => new Date(iso + 'T00:00:00Z').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
@@ -159,6 +161,13 @@ export default function MuhuratPage() {
 
         {result && (
           <div data-testid="muhurat-result" className="mt-6 space-y-3">
+            {polar && (
+              <div data-testid="muhurat-polar-warning" className="rounded-xl border-2 border-amber-500/60 bg-amber-50 text-amber-900 p-4 text-sm">
+                <strong>A note about this location:</strong> it is at a polar latitude, and on some days in this range the
+                Sun does not rise (polar night) or does not set (polar day). On those days there is no sunrise to read the
+                Panchang at and no Rahu Kalam, so we read the Tithi and Nakshatra at 06:00 local time and show no Rahu Kalam.
+              </div>
+            )}
             {methodology && (
               <div data-testid="muhurat-methodology" className="rounded-xl border border-brand-purple/30 bg-brand-purple/40 p-4 text-sm text-foreground">
                 <div className="font-semibold mb-1">How these dates are chosen</div>
@@ -175,14 +184,16 @@ export default function MuhuratPage() {
                 </div>
                 <div className="text-sm text-foreground mt-1">{d.nakshatra} <TermTip id="panchangNakshatra">Nakshatra</TermTip> · {d.tithiName} (<TermTip id="tithi">Tithi</TermTip>) (<TermTip id="paksha">{d.paksha} Paksha</TermTip>) · {d.yoga} <TermTip id="panchangYoga">Yoga</TermTip></div>
                 <div className="text-xs text-muted-foreground mt-1">{d.reasons.slice(0, 2).join(' · ')}</div>
-                <div className="text-xs text-amber-700 mt-1">Avoid the <TermTip id="rahuKalam">Rahu Kalam</TermTip> window that day: {d.rahuKalam.start}–{d.rahuKalam.end} (approx, local).</div>
+                {d.polar
+                  ? <div className="text-xs text-amber-700 mt-1">No sunrise or sunset at this place that day (polar {d.polar}), so there is no <TermTip id="rahuKalam">Rahu Kalam</TermTip>.</div>
+                  : <div className="text-xs text-amber-700 mt-1">Avoid the <TermTip id="rahuKalam">Rahu Kalam</TermTip> window that day: {d.rahuKalam.start}–{d.rahuKalam.end} (local time).</div>}
               </div>
             ))}
           </div>
         )}
 
         <p className="text-xs text-muted-foreground mt-6">
-          Scope: this evaluates each day’s Panchang at approximately local sunrise for your chosen location and reports the standard weekday Rahu Kalam. Finer intraday categories (<TermTip id="choghadiya">Choghadiya</TermTip>, <TermTip id="hora">Hora</TermTip>, exact-minute windows and personal-chart <TermTip id="chandrashtama">Chandrashtama</TermTip>) are a planned expansion. Treat Muhurat as classical guidance, not a guarantee.
+          Scope: this evaluates each day’s Panchang at the real local sunrise for your chosen location (with that day’s clock offset, including daylight saving) and reports that day’s Rahu Kalam, worked out the same way as on our Panchang page. Finer intraday categories (<TermTip id="choghadiya">Choghadiya</TermTip>, <TermTip id="hora">Hora</TermTip>, exact-minute windows and personal-chart <TermTip id="chandrashtama">Chandrashtama</TermTip>) are a planned expansion. Treat Muhurat as classical guidance, not a guarantee.
         </p>
         </section>
     </PajPage>

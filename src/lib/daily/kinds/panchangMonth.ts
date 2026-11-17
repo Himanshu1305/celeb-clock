@@ -29,7 +29,7 @@ export function computePanchangMonthData(place: MonthPlace, month: string, tzFor
   for (let day = 1; day <= days; day++) {
     const iso = `${month}-${String(day).padStart(2, '0')}`;
     const x = dayLimbsLite(new Date(Date.UTC(y, m - 1, day, 12)), place.lat, place.lon, tzFor ? tzFor(iso) : place.tz);
-    d.push([x.rise, x.set, x.tithi, x.tithiEnd, x.nak, x.nakEnd]);
+    d.push(x.polar ? [x.rise, x.set, x.tithi, x.tithiEnd, x.nak, x.nakEnd, x.polar === 'day' ? 1 : 2] : [x.rise, x.set, x.tithi, x.tithiEnd, x.nak, x.nakEnd]);
   }
   const f = festivalsOf(y).festivals
     .filter(x => x.dateISO.startsWith(month))

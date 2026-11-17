@@ -13,7 +13,7 @@ import { PANCHANG_TABLES } from '../../vedic/panchang';
 export interface PanchangMonthData {
   /** YYYY-MM */
   m: string;
-  /** Per day of the month: [sunrise, sunset, tithi 0..29, tithi end, nakshatra 0..26, nakshatra end]
+  /** Per day of the month: [sunrise, sunset, tithi 0..29, tithi end, nakshatra 0..26, nakshatra end, (polar: 1 day / 2 night — only when polar)]
    *  (minutes since local midnight; ends ≥ 1440 are after the next midnight). */
   d: number[][];
   /** Festivals / vrats: [day of month, name, type] (festival engine types). */
@@ -70,7 +70,8 @@ export function renderPanchangMonth(date: string, place: { name: string }, data:
       label: `${day} ${SHORT_WD[weekdayOf(iso(day))]}`,
       value: `${t.paksha === 'Shukla' ? 'Shukla' : 'Krishna'} ${t.name} · ${PANCHANG_TABLES.NAKSHATRAS[v[4]]}`,
       // Festivals on their own line (the calendar cell keeps line breaks in the note).
-      note: `Sunrise ${hhmm(v[0])} · Sunset ${hhmm(v[1])}${fest.length ? `\n${fest.map(f => f[0]).join(' · ')}` : ''}`,
+      // B14: v[6] = 1 polar day / 2 polar night (no real sunrise or sunset); sunset ≥ 1440 = next day.
+      note: `${v[6] ? `No ${v[6] === 1 ? 'sunset (polar day)' : 'sunrise (polar night)'}` : `Sunrise ${hhmm(v[0])} · Sunset ${hhmm(v[1])}${v[1] >= 1440 ? ' (next day)' : ''}`}${fest.length ? `\n${fest.map(f => f[0]).join(' · ')}` : ''}`,
     };
     if (isToday) cell.tag = 'Today';
     else if (tagType) cell.tag = TAG[tagType];

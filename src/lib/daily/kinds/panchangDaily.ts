@@ -32,9 +32,10 @@ function monotonic(list: string[]): number[] {
 const clockIST = (x: Date) => new Date(Math.round((x.getTime() + 5.5 * 3600e3) / 60000) * 60000).toISOString().slice(11, 16);
 
 /** Encode one computed day (+ the 7-day window table and Delhi's sun) as compact data. */
-export function encodePanchangDay(p: DayPanchang, week: number[], delhi: [number, number] | null): PanchangDayData {
+export function encodePanchangDay(p: DayPanchang, week: number[], delhi: [number, number] | null, weekPolar: number[] = []): PanchangDayData {
   const d: PanchangDayData = {
-    r: toMin(p.sunrise), s: toMin(p.sunset), dl: p.dayLengthMin,
+    // B14 F6: a sunset past local midnight is stored as ≥ 1440 (rendered "(next day)").
+    r: toMin(p.sunrise), s: endMin(p.sunset), dl: p.dayLengthMin,
     t: [(p.paksha === 'Shukla' ? 0 : 15) + p.tithi - 1, endMin(p.tithiEnd)],
     n: [p.nakshatraIndex, endMin(p.nakshatraEnd)],
     y: [PANCHANG_TABLES.YOGAS.indexOf(p.yoga), endMin(p.yogaEnd)],
@@ -45,6 +46,8 @@ export function encodePanchangDay(p: DayPanchang, week: number[], delhi: [number
     wk: week,
   };
   if (delhi) d.dz = delhi;
+  if (p.polar) d.pl = p.polar; // B14 F5: polar day / night — times are placeholders
+  if (weekPolar.length) d.wkp = weekPolar;
   return d;
 }
 
@@ -55,8 +58,10 @@ export function computePanchangDayData(place: PanchangPlaceInput, date: string):
   const hit = memo.get(key);
   if (hit) return hit;
   const p = computeDayPanchang(new Date(date + 'T12:00:00Z'), place.lat, place.lon, place.tz, place.name);
+  const weekPolar: number[] = [];
   const week = Array.from({ length: 7 }, (_, i) => {
     const x = dayWindowsLite(new Date(addDaysISO(date, i) + 'T12:00:00Z'), place.lat, place.lon, place.tz);
+    if (x.polar) weekPolar.push(i);
     return [x.rahuKaal, x.gulikaKaal, x.yamaganda].flatMap(w => [toMin(w.start), toMin(w.end)]);
   }).flat();
   let delhi: [number, number] | null = null;
@@ -65,7 +70,7 @@ export function computePanchangDayData(place: PanchangPlaceInput, date: string):
     const r = sunriseSunset(new Date(date + 'T12:00:00Z'), dc.lat, dc.lon, 5.5);
     delhi = [toMin(clockIST(r.rise)), toMin(clockIST(r.set))];
   }
-  const d = encodePanchangDay(p, week, delhi);
+  const d = encodePanchangDay(p, week, delhi, weekPolar);
   // Batch 10: Nakshatra and Moon-sign spans sunrise → next sunrise (Tarabalam / Chandrabalam).
   const sun = sunriseSunset(new Date(date + 'T12:00:00Z'), place.lat, place.lon, place.tz);
   const [yy, mm, dd] = date.split('-').map(Number);

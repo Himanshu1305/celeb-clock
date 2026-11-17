@@ -11,10 +11,11 @@
  *    a standard "auspicious for most works" Nakshatra set is used per purpose.
  *  • Vara: Wednesday best for trade, Thursday for advisory; a lighter avoid on
  *    Tuesday/Saturday for new ventures.
- *  • Rahu Kalam (a ~90-min inauspicious daily window) is reported to avoid within
- *    the day. Scope (documented): Panchang is evaluated at local sunrise-ish
- *    (06:00 local), and Rahu Kalam assumes a ~06:00–18:00 day — a useful first
- *    version, not full sunrise/sunset astronomy.
+ *  • Rahu Kalam (an eighth of daylight, inauspicious) is reported to avoid within
+ *    the day. B14 F2: the Muhurat API reads each day at the place's REAL sunrise, with
+ *    that day's UTC offset (DST) and the Panchang page's own Rahu Kalam windows (see
+ *    MuhuratDayFn / panchangDay.muhuratDayAtSunrise). computePanchang alone still
+ *    returns the old fixed 06:00–18:00 Rahu Kalam for callers that pass no place.
  *
  * `sunMoon` is injected so the finder is unit-testable without the ephemeris.
  */
@@ -152,7 +153,11 @@ const FAVOUR_VARA: Record<MuhuratPurpose, Set<string>> = {
   naming: new Set(['Monday', 'Wednesday', 'Thursday', 'Friday']), vidyarambh: new Set(['Wednesday', 'Thursday']),
 };
 
-export interface MuhuratDay extends Panchang { score: number; reasons: string[]; auspicious: boolean }
+export interface MuhuratDay extends Panchang {
+  score: number; reasons: string[]; auspicious: boolean;
+  /** B14 F5: polar day / night at the place — limbs read at 06:00 local, no Rahu Kalam (empty strings). */
+  polar?: 'day' | 'night';
+}
 
 /** Plain-language "what we checked" note for the Muhurat results (Item 2). */
 const PURPOSE_FOCUS: Record<MuhuratPurpose, string> = {
@@ -260,20 +265,49 @@ export function scoreMuhurat(p: Panchang, purpose: MuhuratPurpose, season?: Muhu
   return { score, reasons };
 }
 
-/** Find auspicious days for a purpose in the next `days` starting from `from`. */
-export function findMuhurats(purpose: MuhuratPurpose, from: Date, days: number, sunMoon: SunMoonFn, tzOffsetHours = 5.5): MuhuratDay[] {
+/**
+ * B14 F2: the place's real day for the Muhurat finder. Given a local calendar date it
+ * returns the instant to read the limbs at (that day's real sunrise), the UTC offset in
+ * force that day (DST-aware), the Rahu Kalam from the SAME window code the Panchang page
+ * uses, and `polar` when there is no sunrise/sunset (then Rahu Kalam is null).
+ * Built by muhuratDayAtSunrise() in ./panchangDay (kept out of this pure module).
+ */
+export interface MuhuratDayContext {
+  at: Date; tz: number;
+  rahuKalam: { start: string; end: string } | null;
+  polar?: 'day' | 'night';
+}
+export type MuhuratDayFn = (y: number, m: number, d: number) => MuhuratDayContext;
+
+/**
+ * Find auspicious days for a purpose in the next `days` starting from `from`.
+ * With `dayAt` (the API always passes it) each day is read at the place's real sunrise
+ * with that day's offset and real Rahu Kalam; without it (pure unit tests) the old
+ * fixed 06:00-local / 06:00–18:00 approximation is used.
+ */
+export function findMuhurats(purpose: MuhuratPurpose, from: Date, days: number, sunMoon: SunMoonFn, tzOffsetHours = 5.5, dayAt?: MuhuratDayFn): MuhuratDay[] {
   const out: MuhuratDay[] = [];
   let lunation: Lunation | undefined;
   for (let i = 0; i < days; i++) {
-    const d = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate() + i, 6 - tzOffsetHours, 0, 0)); // ~06:00 local
-    const p = computePanchang(d, sunMoon, tzOffsetHours);
+    let d: Date, p: Panchang, polar: 'day' | 'night' | undefined;
+    if (dayAt) {
+      const civil = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate() + i));
+      const ctx = dayAt(civil.getUTCFullYear(), civil.getUTCMonth() + 1, civil.getUTCDate());
+      d = ctx.at;
+      p = computePanchang(d, sunMoon, ctx.tz);
+      polar = ctx.polar;
+      p = { ...p, rahuKalam: ctx.rahuKalam ?? { start: '', end: '' } };
+    } else {
+      d = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate() + i, 6 - tzOffsetHours, 0, 0)); // ~06:00 local
+      p = computePanchang(d, sunMoon, tzOffsetHours);
+    }
     let season: MuhuratSeason | undefined;
     if (purpose === 'marriage') {
       if (!lunation || d.getTime() < lunation.start || d.getTime() >= lunation.end) lunation = lunarMonthAt(d, sunMoon);
       season = muhuratSeason(p, sunMoon(d).sun, lunation);
     }
     const { score, reasons } = scoreMuhurat(p, purpose, season);
-    out.push({ ...p, score, reasons, auspicious: score >= 3 });
+    out.push({ ...p, score, reasons, auspicious: score >= 3, ...(polar ? { polar } : {}) });
   }
   return out;
 }
