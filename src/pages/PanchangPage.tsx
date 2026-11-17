@@ -19,6 +19,8 @@ import { CityLocalGuide } from '@/components/panchang/CityLocalGuide';
 import { PanchangControls } from '@/components/panchang/PanchangControls';
 import { CityLinks, TermChips } from '@/components/panchang/PanchangSections';
 import { HINDI_PANCHANG_SLUGS } from '@/lib/seo/panchangSlugs';
+import { RelatedLinks } from '@/components/guide/Guide';
+import { related } from '@/content/guides/shared';
 
 const TERMS = ['Panchang', 'Tithi', 'Paksha', 'Nakshatra', 'Yoga', 'Karana', 'Vara', 'Brahma Muhurta', 'Abhijit Muhurta', 'Amrit Kalam', 'Rahu Kaal', 'Gulika Kaal', 'Yamaganda', 'Dur Muhurtam', 'Varjyam', 'Choghadiya', 'Gowri Panchangam', 'Nalla Neram', 'Tarabalam', 'Chandrabalam', 'Ashtama Chandra'];
 
@@ -83,6 +85,8 @@ export default function PanchangPage() {
           </div>
         </div>
       </section>
+      {/* B14: related tools + the 2027 yearly hubs (index page only). */}
+      {isIndex && <RelatedLinks title="Related tools" links={related(['kundali', 'rashifal', 'hiRashifal', 'moonSign', 'nakshatra', 'sadeSati'])} />}
     </ToolLayout>
   );
 }

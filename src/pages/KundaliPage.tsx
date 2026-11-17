@@ -47,6 +47,10 @@ const AshtakavargaSection = lazy(() => import('@/components/vedic/AshtakavargaSe
 const AdvancedSystems = lazy(() => import('@/components/vedic/advanced/AdvancedSystems'));
 import { findingsFromKundali, type KundaliLike } from '@/lib/vedic/remedies';
 import { brandVar, ui } from '../theme/palette';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { KundaliGuide } from '@/content/guides/KundaliGuide';
+
+const META = GUIDE_META['/kundali'];
 
 export default function KundaliPage() {
   const price = reportPrice(resolveCurrency(undefined));
@@ -217,8 +221,8 @@ export default function KundaliPage() {
       testId="kundali-page"
       seo={(
         <SEO
-          title="Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock"
-          description="Generate your free Vedic Kundali (Janam Kundali) — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, in accurate sidereal (Lahiri) astronomy."
+          title={META.title}
+          description={META.description}
           canonicalUrl="/kundali"
           ogType="website"
         />
@@ -242,7 +246,7 @@ export default function KundaliPage() {
           <div className="section-head">
             <div>
               <span className="eyebrow">Janam Kundali</span>
-              <h1>Your Kundali, computed.</h1>
+              <h1>{META.h1}</h1>
             </div>
             <p>Your Vedic birth chart — planetary positions, <TermTip id="lagna">Lagna</TermTip>, <TermTip id="nakshatra">Nakshatra</TermTip> and <TermTip id="dasha">Dasha</TermTip>, in accurate sidereal (<TermTip id="ayanamsa">Lahiri</TermTip>) astronomy. Free. (Our one paid report, the Birthday Blueprint, is {price}.)</p>
           </div>
@@ -521,6 +525,9 @@ export default function KundaliPage() {
             <p className="small"><Link className="textlink" to="/birthday-report/gift/">Gift a Birthday Blueprint ({price}) →</Link></p>
           </div>
         </section>
+
+        {/* B14: explanatory guide — always below the tool and its results. */}
+        <KundaliGuide />
     </PajPage>
   );
 }

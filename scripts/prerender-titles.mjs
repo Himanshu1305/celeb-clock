@@ -18,6 +18,8 @@ import {
 } from '../src/lib/chineseCalendar.js';
 // Batch 9b: year muhurat pages — titles/descriptions shared with MuhuratYearPage.
 import { MUHURAT_YEAR_META, MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
+// B14: the main astrology landing pages — one shared copy with the pages.
+import { guideMetaFor } from '../src/lib/seo/guideMeta.js';
 
 // Indian born-on facet data (slug → {top3, count}) for /born-on/:slug/india titles.
 const INDIA_BORNON_MAP = new Map(
@@ -212,7 +214,6 @@ const STATIC = {
   '/life-expectancy-brazil':    { title: 'Life Expectancy in Brazil — 2026 Data | BornClock', desc: `Brazil's life expectancy is ${LEY('Brazil')} years. Here's how inequality, violence, and regional gaps shape Brazilian longevity — and what's improving.` },
   '/meri-umar-kitni-hai':       { title: 'मेरी उम्र कितनी है — Age Calculator in Hindi | BornClock', desc: 'अपनी सटीक उम्र जानें — साल, महीने, दिन, घंटे और सेकंड में। BornClock का मुफ्त age calculator हिंदी में।' },
   '/jivan-kal-calculator':      { title: 'जीवन काल Calculator — Life Expectancy in Hindi | BornClock', desc: 'आप कितने साल जिएंगे? BornClock का मुफ्त life expectancy calculator आपकी lifestyle के आधार पर आपका जीवन काल बताता है।' },
-  '/rashifal-by-date-of-birth': { title: 'राशिफल by Date of Birth — Zodiac Sign in Hindi | BornClock', desc: 'अपनी राशि जानें जन्म तिथि से। BornClock का मुफ्त zodiac calculator हिंदी में — Western और Vedic दोनों।' },
   // Keep in sync with HINDI_BIO_AGE_TITLE / HINDI_BIO_AGE_DESC in src/content/biologicalAgeMeta.ts.
   '/biological-age-hindi':      { title: 'Biological Age Calculator हिंदी में — शरीर की उम्र | BornClock', desc: 'मुफ़्त Biological Age Calculator हिंदी में — 15 सवाल: धड़कन, पुश-अप, संतुलन, नींद, BMI, कमर, ब्लड प्रेशर, धूम्रपान, शराब और व्यायाम। lifestyle पर आधारित अंदाज़ा, लैब टेस्ट नहीं।' },
   '/embed':                     { title: 'Free Age Calculator Widget for Your Website | BornClock', desc: "Embed BornClock's live age calculator on your website in 30 seconds. Copy one line of code — free forever, no API key, we handle hosting and accuracy." },
@@ -303,7 +304,6 @@ const STATIC = {
   '/born-in':               { title: 'Born in Each Month — Birthstones & Zodiac | BornClock', desc: 'Browse all 12 birth months: the zodiac signs, birthstone and birth flowers of each, plus the famous people born in it. Cultural tradition and celebration — never a prediction.' },
   '/tarot-card-by-birthday':{ title: 'Tarot Card by Birthday — Your Major Arcana | BornClock', desc: 'Find your personal Major Arcana tarot card from your date of birth. Full card meaning, symbolism, and how it relates to your life path.' },
   '/tarot-reading':         { title: 'Free Interactive Tarot Reading — Daily, Yes/No & Love | BornClock', desc: 'Draw your own tarot cards free: a daily card and a 3-card love spread from the Major Arcana, plus a one-card yes/no answer from all 78 cards — each card explained.' },
-  '/moon-sign':             { title: 'Moon Sign Calculator — Find Your Vedic & Western Moon Sign | BornClock', desc: 'Calculate your Moon sign from date of birth. Understand how your Moon sign shapes emotions, instincts, and inner life in both Western and Vedic astrology.' },
   '/gift':                  { title: 'Gift a Birthday Blueprint — The Perfect Gift | BornClock', desc: 'Anyone can send a gift card. The Birthday Blueprint is a personalised 9-section keepsake built from their birth date — celebrity twins, zodiac, numerology, birthstone and more. Instant delivery.' },
   '/coach':                 { title: 'AI Longevity Coach — Your Life-Expectancy Forecast | BornClock', desc: 'A personal AI longevity coach that explains your life-expectancy forecast and health factors in plain language, with evidence-based next steps. It explains your data — it never diagnoses.' },
   '/name-numerology':       { title: 'Name Numerology Calculator — Chaldean Number & Meaning | BornClock', desc: 'Free name number calculator: your Chaldean name number, compound number and its traditional meaning (Cheiro), plus Western Expression, Soul Urge and Personality numbers.' },
@@ -316,18 +316,9 @@ const STATIC = {
   '/science-longevity':      { title: 'Life Expectancy & Longevity — A Real Statistical Model | BornClock', desc: 'Not a guess, not a horoscope — a real actuarial-style life-expectancy model factoring your exercise, stress, diet, sleep and 15+ health variables, benchmarked against UN, WHO and GBD data across 54 countries.' },
   '/birthday-fun':           { title: 'Birthday Fun & Celebrity Twins — Who Shares Your Birthday | BornClock', desc: "Find your celebrity birthday twin and the real depth most sites skip — their Nakshatra, zodiac sign and numerology. See who's celebrating today, your exact age to the second, and more. 3,000+ celebrities." },
   '/mystic-corner':          { title: 'Mystic Corner — Numerology, Zodiac & Chinese Sign | BornClock', desc: 'The mystical side of your birth date: numerology Life Path, Western zodiac, Chinese zodiac, tarot and compatibility — each one actually computed, not a templated horoscope.' },
-  '/kundali':               { title: 'Free Kundali (Janam Kundali) — Birth Chart & Dasha | BornClock', desc: 'Generate your free Vedic Kundali — North Indian birth chart, planetary positions, Lagna, Nakshatra and Vimshottari Dasha, in accurate sidereal (Lahiri) astronomy.' },
-  '/kundali-match':          { title: 'Kundali Matching — Free Guna Milan (Ashtakoota) | BornClock', desc: 'Free Kundali matching by the 36-point Ashtakoota (Guna Milan) system — Varna, Vashya, Tara, Yoni, Graha Maitri, Gana, Bhakoot and Nadi, with dosha checks.' },
-  // Batch 9b — must equal NAME_MATCH_META (src/pages/KundliMilanByNamePage.tsx) and HINDI_MILAN_META (src/pages/hi/KundliMilanPage.tsx).
-  '/kundli-milan-by-name':   { title: 'Kundli Milan by Name — Match Without Birth Details | BornClock', desc: 'Kundli milan by name: the first syllable of each name gives a nakshatra, and the 36 gunas are added up. An approximation — use birth details for an accurate match.' },
-  '/hi/kundli-milan':        { title: 'कुंडली मिलान हिंदी में — 36 गुण मिलान व मांगलिक | BornClock', desc: 'कुंडली मिलान हिंदी में: जन्म तिथि, समय और स्थान से 36 गुणों का अष्टकूट मिलान — वर्ण, वश्य, तारा, योनि, ग्रह मैत्री, गण, भकूट, नाड़ी — मांगलिक जाँच और सरल उपाय।' },
   '/hi/naam-se-kundli-milan': { title: 'नाम से कुंडली मिलान — बिना जन्म तिथि गुण मिलान | BornClock', desc: 'नाम से कुंडली मिलान: नाम के पहले अक्षर से नक्षत्र और राशि, फिर 36 गुणों का मिलान। यह अनुमान है — सटीक मिलान के लिए जन्म तिथि, समय और स्थान डालें।' },
   // Part AM: these were added to STATIC_ROUTES (prerendered) but had no title entry, so they
   // served the generic homepage <title> and got no WebPage schema. Real per-page metadata now:
-  '/sade-sati':              { title: "Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock", desc: "Free Sade Sati calculator — find whether Saturn's 7.5-year Sade Sati (or the 2.5-year Dhaiya) is active for you, which phase, and the real start and end dates of your current and next cycle." },
-  '/dasha-calculator':       { title: 'Dasha Calculator — Your Vimshottari Dasha Timeline | BornClock', desc: 'Free Vimshottari Dasha calculator — your full planetary-period timeline (Mahadasha to Prana), with real start and end dates from your birth chart.' },
-  '/manglik':                { title: 'Manglik Dosha Calculator — Check Mangal Dosha Free | BornClock', desc: 'Free Manglik (Mangal Dosha) calculator — check if your birth chart is Manglik, how strong, the classical cancellations, and calm, honest guidance for matching.' },
-  '/kaal-sarp-dosha':        { title: 'Kaal Sarp Dosha Calculator — Check Your Chart Free | BornClock', desc: 'Free Kaal Sarp Dosha calculator — check if all planets fall between Rahu and Ketu, the type and direction, with calm, honest guidance for your chart.' },
   '/personal-year-number':   { title: 'Personal Year Number Calculator — Numerology Cycle | BornClock', desc: 'Personal year number calculator — numerology cycle for this year and next. Enter birth day and month; no birth year needed. Pythagorean method, honestly framed.' },
   '/angel-numbers':          { title: 'Angel Numbers — Meanings of 111, 222, 333 & More | BornClock', desc: 'Angel number meanings: 111, 222, 333, 444, 777, 888, 999, 1111, 1212 and more. Honest guide — modern spiritual belief, not science, not birthday numerology.' },
   '/muhurat':                { title: 'Muhurat Finder — Auspicious Dates (Panchang) | BornClock', desc: 'Find auspicious Muhurat dates for marriage, house-warming, business, a vehicle, naming or travel — by Tithi, Nakshatra, Yoga and weekday for your own location, with the Rahu Kalam window to avoid.' },
@@ -430,6 +421,7 @@ export function getTitleForRoute(route) {
     description: 'Everything your birth date reveals: your Vedic birth chart, celebrity birthday twins, numerology and zodiac, and longevity science — all from one date. Free at BornClock.',
   };
   if (FITNESS[route]) return FITNESS[route];
+  { const g = guideMetaFor(route); if (g) return { title: g.title, description: g.description }; }
 
   // Batch 9b: /sade-sati/:rashi and /hi/sade-sati/:rashi — mirrors ssPageMeta() in
   // src/lib/vedic/sadeSatiRashiText.ts (checked by src/lib/vedic/__tests__/sadeSatiRashi.test.ts).
@@ -566,13 +558,7 @@ export function getTitleForRoute(route) {
     };
   }
 
-  // /rashifal and /rashifal/:rashi/:period  (computed horoscope by Moon sign)
-  if (route === '/rashifal') {
-    return {
-      title: 'Rashifal — Daily, Weekly, Monthly & Yearly Horoscope | BornClock',
-      description: 'Free Vedic rashifal for all 12 Moon signs — computed from the real sidereal planetary transits, with graded, plain-language predictions for love, career, money and health.',
-    };
-  }
+  // /rashifal/:rashi/:period  (computed horoscope by Moon sign; the /rashifal index is in guideMeta.js)
   {
     const m = route.match(/^\/rashifal\/([a-z]+)(?:\/(today|tomorrow|week|month|year))?$/);
     if (m) {
@@ -961,21 +947,11 @@ export function getTitleForRoute(route) {
     title: 'Life Report (Vedic) — Wealth, Education, Foreign & Health | BornClock',
     description: 'A graded Vedic life report: wealth & finances, education & learning, foreign travel & settlement, and health & wellbeing — each read from your real chart, honestly.',
   };
-  if (route === '/child-kundli') return {
-    title: 'Child (Bal) Kundli — Temperament, Talents & Care | BornClock',
-    description: "A free, gentle Child (Bal) Kundli: temperament, learning strengths, talents, favourable periods, name sounds and calm wellbeing guidance from your child's chart.",
-  };
 
   // /tarot/cards and /tarot/cards/:slug (Batch 7 / W5)
   if (TAROT_META[route]) return { title: TAROT_META[route].title, description: TAROT_META[route].description };
 
-  // /nakshatra and /nakshatra/:slug
-  if (route === '/nakshatra') {
-    return {
-      title: '27 Nakshatras — Vedic Birth Stars & Name Sounds | BornClock',
-      description: 'Explore all 27 Nakshatras (lunar mansions) — deity, symbol, ruling planet, meaning, Gana, Yoni, Nadi and traditional baby-name sounds. Find your birth star free.',
-    };
-  }
+  // /nakshatra/:slug (the /nakshatra index is in guideMeta.js)
   {
     const m = route.match(/^\/nakshatra\/([a-z-]+)$/);
     if (m) {

@@ -3,7 +3,11 @@ import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { DobInput, toISODate } from '@/components/DobInput';
 import { SavedDateOffer } from '@/components/SavedDateOffer';
-import { SEO, FAQSchema, WebApplicationSchema } from '@/components/SEO';
+import { SEO, WebApplicationSchema } from '@/components/SEO';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { MoonSignGuide, MOONSIGN_EXTRA_FAQ } from '@/content/guides/MoonSignGuide';
+
+const META = GUIDE_META['/moon-sign'];
 import { calculateMoonSignAndNakshatra, MOON_SIGN_DATA, NAKSHATRAS, getNakshatraLifeApplication } from '@/data/moonSignData';
 import { DateOnlyMoonNote } from '@/components/vedic/DateOnlyMoonNote';
 import { useReportPrice } from '@/hooks/useCurrency';
@@ -51,6 +55,8 @@ export default function MoonSignPage() {
       answer: 'A nakshatra is one of 27 lunar mansions used in Vedic (Indian) astrology. The Moon completes its cycle through all 27 nakshatras in approximately 27.3 days. Each nakshatra has its own ruling deity, quality, and meaning. Knowing your birth nakshatra gives much greater precision than your moon sign alone — it is considered fundamental in Jyotish (Vedic astrology) for reading personality, timing, and compatibility.' },
     { question: 'Is the moon sign calculator accurate?',
       answer: 'This calculator uses the real sidereal (Vedic, Lahiri) position of the Moon from the same engine as our Kundali, checked from 00:00 to 23:59 Indian Standard Time on your birth date. If the Moon stayed in one sign all day, that is your Moon sign; if it changed sign that day, both are shown and your birth time decides. For marriage matching and exact Nakshatra pada, use the Kundali with your birth time and place.' },
+    // B14: more Q&As from the guide below the tool (one FAQPage, rendered by MoonSignGuide).
+    ...MOONSIGN_EXTRA_FAQ,
   ];
 
   return (
@@ -60,8 +66,8 @@ export default function MoonSignPage() {
       seo={(
         <>
           <SEO
-            title="Moon Sign Calculator — Find Your Vedic & Western Moon Sign | BornClock"
-            description="Calculate your moon sign and nakshatra by date of birth. Free moon rashi calculator with full personality interpretations for all 12 moon signs and 27 nakshatras."
+            title={META.title}
+            description={META.description}
             keywords="moon sign calculator, what is my moon sign, nakshatra calculator, moon sign by date of birth India, moon rashi calculator"
             canonicalUrl="/moon-sign"
           />
@@ -70,7 +76,6 @@ export default function MoonSignPage() {
             description="Free moon sign and nakshatra calculator by date of birth with personality interpretations for all 12 moon signs and 27 nakshatras."
             url="/moon-sign"
           />
-          <FAQSchema items={faqItems} />
         </>
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Moon Sign Calculator' }}
@@ -295,18 +300,6 @@ export default function MoonSignPage() {
             </div>
           </div>
 
-          <div className="mt-10 pt-8 border-t border-gray-100">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-            <div className="space-y-4">
-              {faqItems.map(({ question, answer }) => (
-                <div key={question} className="border border-gray-200 rounded-xl p-4">
-                  <p className="font-semibold text-gray-900 mb-2">{question}</p>
-                  <p className="text-sm text-gray-600 leading-relaxed">{answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <div className="mt-8 pt-6 border-t border-gray-100">
             <p className="text-sm font-semibold text-gray-500 uppercase mb-3">Related Tools</p>
             <div className="grid grid-cols-2 gap-2">
@@ -343,6 +336,9 @@ export default function MoonSignPage() {
 
         </div>
       </section>
+
+      {/* B14: explanatory guide + the page's one FAQ (FAQPage) — below the tool. */}
+      <MoonSignGuide faq={faqItems} />
     </ToolLayout>
   );
 }

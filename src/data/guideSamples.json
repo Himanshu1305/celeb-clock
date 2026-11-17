@@ -1,0 +1,1182 @@
+{
+ "refDate": "2027-01-01",
+ "refLabel": "1 January 2027",
+ "kundali": {
+  "birth": {
+   "label": "Sample chart A",
+   "date": "15 August 1995",
+   "time": "06:30",
+   "place": "New Delhi",
+   "lat": 28.6139,
+   "lon": 77.209
+  },
+  "ayanamsa": "23°48′",
+  "ayanamsaDeg": 23.8027,
+  "lagna": {
+   "sign": "Simha",
+   "western": "Leo",
+   "degree": "5°43′"
+  },
+  "rashi": "Meena",
+  "rashiIndex": 11,
+  "moonDegree": "22°47′",
+  "moonLongitude": 352.785,
+  "nakshatra": {
+   "name": "Revati",
+   "pada": 2,
+   "lord": "Mercury"
+  },
+  "planets": [
+   {
+    "name": "Sun",
+    "sign": "Karka",
+    "house": 12,
+    "degree": "27°57′",
+    "nakshatra": "Ashlesha",
+    "pada": 4,
+    "retrograde": false
+   },
+   {
+    "name": "Moon",
+    "sign": "Meena",
+    "house": 8,
+    "degree": "22°47′",
+    "nakshatra": "Revati",
+    "pada": 2,
+    "retrograde": false
+   },
+   {
+    "name": "Mercury",
+    "sign": "Simha",
+    "house": 1,
+    "degree": "14°59′",
+    "nakshatra": "Purva Phalguni",
+    "pada": 1,
+    "retrograde": false
+   },
+   {
+    "name": "Venus",
+    "sign": "Karka",
+    "house": 12,
+    "degree": "26°19′",
+    "nakshatra": "Ashlesha",
+    "pada": 3,
+    "retrograde": false
+   },
+   {
+    "name": "Mars",
+    "sign": "Kanya",
+    "house": 2,
+    "degree": "21°13′",
+    "nakshatra": "Hasta",
+    "pada": 4,
+    "retrograde": false
+   },
+   {
+    "name": "Jupiter",
+    "sign": "Vrischika",
+    "house": 4,
+    "degree": "11°58′",
+    "nakshatra": "Anuradha",
+    "pada": 3,
+    "retrograde": false
+   },
+   {
+    "name": "Saturn",
+    "sign": "Kumbha",
+    "house": 7,
+    "degree": "29°42′",
+    "nakshatra": "Purva Bhadrapada",
+    "pada": 3,
+    "retrograde": true
+   },
+   {
+    "name": "Rahu",
+    "sign": "Tula",
+    "house": 3,
+    "degree": "6°00′",
+    "nakshatra": "Chitra",
+    "pada": 4,
+    "retrograde": true
+   },
+   {
+    "name": "Ketu",
+    "sign": "Mesha",
+    "house": 9,
+    "degree": "6°00′",
+    "nakshatra": "Ashwini",
+    "pada": 2,
+    "retrograde": true
+   }
+  ],
+  "currentDasha": {
+   "mahadasha": "Venus",
+   "mahadashaStart": "2011-10-26",
+   "mahadashaEnd": "2031-10-26",
+   "antardasha": "Saturn",
+   "antardashaStart": "2024-08-26",
+   "antardashaEnd": "2027-10-26"
+  }
+ },
+ "dasha": {
+  "chart": {
+   "birth": {
+    "label": "Sample chart G",
+    "date": "12 February 1985",
+    "time": "04:20",
+    "place": "Chennai",
+    "lat": 13.0827,
+    "lon": 80.2707
+   },
+   "ayanamsa": "23°39′",
+   "ayanamsaDeg": 23.656,
+   "lagna": {
+    "sign": "Dhanu",
+    "western": "Sagittarius",
+    "degree": "24°07′"
+   },
+   "rashi": "Tula",
+   "rashiIndex": 6,
+   "moonDegree": "24°37′",
+   "moonLongitude": 204.6108,
+   "nakshatra": {
+    "name": "Vishakha",
+    "pada": 2,
+    "lord": "Jupiter"
+   },
+   "planets": [
+    {
+     "name": "Sun",
+     "sign": "Makara",
+     "house": 2,
+     "degree": "29°31′",
+     "nakshatra": "Dhanishtha",
+     "pada": 2,
+     "retrograde": false
+    },
+    {
+     "name": "Moon",
+     "sign": "Tula",
+     "house": 11,
+     "degree": "24°37′",
+     "nakshatra": "Vishakha",
+     "pada": 2,
+     "retrograde": false
+    },
+    {
+     "name": "Mercury",
+     "sign": "Makara",
+     "house": 2,
+     "degree": "23°53′",
+     "nakshatra": "Dhanishtha",
+     "pada": 1,
+     "retrograde": false
+    },
+    {
+     "name": "Venus",
+     "sign": "Meena",
+     "house": 4,
+     "degree": "14°39′",
+     "nakshatra": "Uttara Bhadrapada",
+     "pada": 4,
+     "retrograde": false
+    },
+    {
+     "name": "Mars",
+     "sign": "Meena",
+     "house": 4,
+     "degree": "13°16′",
+     "nakshatra": "Uttara Bhadrapada",
+     "pada": 3,
+     "retrograde": false
+    },
+    {
+     "name": "Jupiter",
+     "sign": "Makara",
+     "house": 2,
+     "degree": "7°33′",
+     "nakshatra": "Uttara Ashadha",
+     "pada": 4,
+     "retrograde": false
+    },
+    {
+     "name": "Saturn",
+     "sign": "Vrischika",
+     "house": 12,
+     "degree": "4°00′",
+     "nakshatra": "Anuradha",
+     "pada": 1,
+     "retrograde": false
+    },
+    {
+     "name": "Rahu",
+     "sign": "Mesha",
+     "house": 5,
+     "degree": "29°16′",
+     "nakshatra": "Krittika",
+     "pada": 1,
+     "retrograde": true
+    },
+    {
+     "name": "Ketu",
+     "sign": "Tula",
+     "house": 11,
+     "degree": "29°16′",
+     "nakshatra": "Vishakha",
+     "pada": 3,
+     "retrograde": true
+    }
+   ],
+   "currentDasha": {
+    "mahadasha": "Mercury",
+    "mahadashaStart": "2014-08-01",
+    "mahadashaEnd": "2031-08-02",
+    "antardasha": "Jupiter",
+    "antardashaStart": "2026-08-17",
+    "antardashaEnd": "2028-11-21"
+   }
+  },
+  "startLord": "Jupiter",
+  "balanceYearsAtBirth": 10.47,
+  "mahadashas": [
+   {
+    "lord": "Jupiter",
+    "start": "1979-08-02",
+    "end": "1995-08-02"
+   },
+   {
+    "lord": "Saturn",
+    "start": "1995-08-02",
+    "end": "2014-08-01"
+   },
+   {
+    "lord": "Mercury",
+    "start": "2014-08-01",
+    "end": "2031-08-02"
+   },
+   {
+    "lord": "Ketu",
+    "start": "2031-08-02",
+    "end": "2038-08-01"
+   },
+   {
+    "lord": "Venus",
+    "start": "2038-08-01",
+    "end": "2058-08-01"
+   },
+   {
+    "lord": "Sun",
+    "start": "2058-08-01",
+    "end": "2064-08-01"
+   },
+   {
+    "lord": "Moon",
+    "start": "2064-08-01",
+    "end": "2074-08-01"
+   },
+   {
+    "lord": "Mars",
+    "start": "2074-08-01",
+    "end": "2081-08-01"
+   },
+   {
+    "lord": "Rahu",
+    "start": "2081-08-01",
+    "end": "2099-08-02"
+   }
+  ],
+  "currentAntardashas": [
+   {
+    "lord": "Mercury",
+    "start": "2014-08-01",
+    "end": "2016-12-28"
+   },
+   {
+    "lord": "Ketu",
+    "start": "2016-12-28",
+    "end": "2017-12-25"
+   },
+   {
+    "lord": "Venus",
+    "start": "2017-12-25",
+    "end": "2020-10-25"
+   },
+   {
+    "lord": "Sun",
+    "start": "2020-10-25",
+    "end": "2021-08-31"
+   },
+   {
+    "lord": "Moon",
+    "start": "2021-08-31",
+    "end": "2023-01-31"
+   },
+   {
+    "lord": "Mars",
+    "start": "2023-01-31",
+    "end": "2024-01-28"
+   },
+   {
+    "lord": "Rahu",
+    "start": "2024-01-28",
+    "end": "2026-08-17"
+   },
+   {
+    "lord": "Jupiter",
+    "start": "2026-08-17",
+    "end": "2028-11-21"
+   },
+   {
+    "lord": "Saturn",
+    "start": "2028-11-21",
+    "end": "2031-08-02"
+   }
+  ]
+ },
+ "match": {
+  "groom": {
+   "label": "Sample chart A",
+   "date": "15 August 1995",
+   "time": "06:30",
+   "place": "New Delhi",
+   "rashi": "Meena",
+   "nakshatra": "Revati",
+   "pada": 2,
+   "gana": "Deva",
+   "nadi": "Antya",
+   "yoni": "Elephant",
+   "manglik": "Low"
+  },
+  "bride": {
+   "label": "Sample chart B",
+   "date": "22 March 1997",
+   "time": "14:15",
+   "place": "Mumbai",
+   "rashi": "Simha",
+   "nakshatra": "Purva Phalguni",
+   "pada": 2,
+   "gana": "Manushya",
+   "nadi": "Madhya",
+   "yoni": "Rat",
+   "manglik": "None"
+  },
+  "total": 24.5,
+  "max": 36,
+  "compatibility": "Good",
+  "kootas": [
+   {
+    "key": "varna",
+    "label": "Varna",
+    "score": 1,
+    "max": 1
+   },
+   {
+    "key": "vashya",
+    "label": "Vashya",
+    "score": 1,
+    "max": 2
+   },
+   {
+    "key": "tara",
+    "label": "Tara",
+    "score": 1.5,
+    "max": 3
+   },
+   {
+    "key": "yoni",
+    "label": "Yoni",
+    "score": 2,
+    "max": 4
+   },
+   {
+    "key": "graha_maitri",
+    "label": "Graha Maitri",
+    "score": 5,
+    "max": 5
+   },
+   {
+    "key": "gana",
+    "label": "Gana",
+    "score": 6,
+    "max": 6
+   },
+   {
+    "key": "bhakoot",
+    "label": "Bhakoot",
+    "score": 0,
+    "max": 7
+   },
+   {
+    "key": "nadi",
+    "label": "Nadi",
+    "score": 8,
+    "max": 8
+   }
+  ],
+  "doshas": [
+   {
+    "name": "Nadi Dosha",
+    "present": false,
+    "cancelled": false
+   },
+   {
+    "name": "Gana Dosha",
+    "present": false,
+    "cancelled": false
+   },
+   {
+    "name": "Bhakoot Dosha",
+    "present": true,
+    "cancelled": false
+   }
+  ]
+ },
+ "matchHi": {
+  "groom": {
+   "date": "5 May 1993",
+   "time": "08:10",
+   "place": "Jaipur",
+   "rashiIndex": 6,
+   "nakshatra": "Swati",
+   "pada": 1,
+   "manglik": "None"
+  },
+  "bride": {
+   "date": "18 November 1995",
+   "time": "21:40",
+   "place": "Lucknow",
+   "rashiIndex": 5,
+   "nakshatra": "Uttara Phalguni",
+   "pada": 4,
+   "manglik": "None"
+  },
+  "total": 25.5,
+  "max": 36,
+  "compatibility": "Good",
+  "kootas": [
+   {
+    "key": "varna",
+    "label": "Varna",
+    "score": 0,
+    "max": 1
+   },
+   {
+    "key": "vashya",
+    "label": "Vashya",
+    "score": 2,
+    "max": 2
+   },
+   {
+    "key": "tara",
+    "label": "Tara",
+    "score": 1.5,
+    "max": 3
+   },
+   {
+    "key": "yoni",
+    "label": "Yoni",
+    "score": 3,
+    "max": 4
+   },
+   {
+    "key": "graha_maitri",
+    "label": "Graha Maitri",
+    "score": 5,
+    "max": 5
+   },
+   {
+    "key": "gana",
+    "label": "Gana",
+    "score": 6,
+    "max": 6
+   },
+   {
+    "key": "bhakoot",
+    "label": "Bhakoot",
+    "score": 0,
+    "max": 7
+   },
+   {
+    "key": "nadi",
+    "label": "Nadi",
+    "score": 8,
+    "max": 8
+   }
+  ],
+  "doshas": [
+   {
+    "name": "Nadi Dosha",
+    "present": false,
+    "cancelled": false
+   },
+   {
+    "name": "Gana Dosha",
+    "present": false,
+    "cancelled": false
+   },
+   {
+    "name": "Bhakoot Dosha",
+    "present": true,
+    "cancelled": false
+   }
+  ]
+ },
+ "nameMatch": {
+  "boy": {
+   "name": "Vivek",
+   "candidates": [
+    {
+     "nakshatra": "Rohini",
+     "pada": 3,
+     "rashiIndex": 1,
+     "syllable": "Vi",
+     "syllableHi": "वी"
+    }
+   ]
+  },
+  "girl": {
+   "name": "Kavya",
+   "candidates": [
+    {
+     "nakshatra": "Mrigashira",
+     "pada": 3,
+     "rashiIndex": 2,
+     "syllable": "Ka",
+     "syllableHi": "का"
+    }
+   ]
+  },
+  "result": {
+   "total": 27,
+   "max": 36,
+   "compatibility": "Good",
+   "kootas": [
+    {
+     "key": "varna",
+     "label": "Varna",
+     "score": 1,
+     "max": 1
+    },
+    {
+     "key": "vashya",
+     "label": "Vashya",
+     "score": 1,
+     "max": 2
+    },
+    {
+     "key": "tara",
+     "label": "Tara",
+     "score": 3,
+     "max": 3
+    },
+    {
+     "key": "yoni",
+     "label": "Yoni",
+     "score": 4,
+     "max": 4
+    },
+    {
+     "key": "graha_maitri",
+     "label": "Graha Maitri",
+     "score": 5,
+     "max": 5
+    },
+    {
+     "key": "gana",
+     "label": "Gana",
+     "score": 5,
+     "max": 6
+    },
+    {
+     "key": "bhakoot",
+     "label": "Bhakoot",
+     "score": 0,
+     "max": 7
+    },
+    {
+     "key": "nadi",
+     "label": "Nadi",
+     "score": 8,
+     "max": 8
+    }
+   ]
+  }
+ },
+ "sadeSati": {
+  "moonSign": "Meena",
+  "saturnSign": "Meena",
+  "active": true,
+  "phase": "Peak (on Moon sign)",
+  "dhaiya": null,
+  "currentCycle": {
+   "start": "2022-04-29",
+   "end": "2030-04-17",
+   "pauses": 2
+  },
+  "previousCycle": {
+   "start": "1993-03-05",
+   "end": "2000-06-06",
+   "pauses": 1
+  },
+  "nextCycle": {
+   "start": "2052-02-24",
+   "end": "2059-05-27",
+   "pauses": 0
+  },
+  "allSigns": [
+   {
+    "sign": "Mesha",
+    "kind": "sadeSati",
+    "phase": 1,
+    "type": null
+   },
+   {
+    "sign": "Vrishabha",
+    "kind": "none",
+    "phase": null,
+    "type": null
+   },
+   {
+    "sign": "Mithuna",
+    "kind": "none",
+    "phase": null,
+    "type": null
+   },
+   {
+    "sign": "Karka",
+    "kind": "none",
+    "phase": null,
+    "type": null
+   },
+   {
+    "sign": "Simha",
+    "kind": "dhaiya",
+    "phase": null,
+    "type": "ashtama"
+   },
+   {
+    "sign": "Kanya",
+    "kind": "none",
+    "phase": null,
+    "type": null
+   },
+   {
+    "sign": "Tula",
+    "kind": "none",
+    "phase": null,
+    "type": null
+   },
+   {
+    "sign": "Vrischika",
+    "kind": "none",
+    "phase": null,
+    "type": null
+   },
+   {
+    "sign": "Dhanu",
+    "kind": "dhaiya",
+    "phase": null,
+    "type": "kantaka"
+   },
+   {
+    "sign": "Makara",
+    "kind": "none",
+    "phase": null,
+    "type": null
+   },
+   {
+    "sign": "Kumbha",
+    "kind": "sadeSati",
+    "phase": 3,
+    "type": null
+   },
+   {
+    "sign": "Meena",
+    "kind": "sadeSati",
+    "phase": 2,
+    "type": null
+   }
+  ]
+ },
+ "manglik": {
+  "a": {
+   "hasDosha": true,
+   "level": "Low",
+   "marsHouseFromLagna": 2,
+   "marsHouseFromMoon": 7,
+   "fromLagna": false,
+   "fromMoon": true,
+   "cancellations": [],
+   "marsSign": "Kanya"
+  },
+  "b": {
+   "hasDosha": false,
+   "level": "None",
+   "marsHouseFromLagna": 3,
+   "marsHouseFromMoon": 2,
+   "fromLagna": false,
+   "fromMoon": false,
+   "cancellations": [
+    "Jupiter aspects Mars",
+    "Venus aspects Mars"
+   ],
+   "marsSign": "Kanya"
+  }
+ },
+ "kaalSarp": {
+  "a": {
+   "rahu": {
+    "sign": "Tula",
+    "degree": "6°00′",
+    "house": 3
+   },
+   "ketu": {
+    "sign": "Mesha",
+    "degree": "6°00′",
+    "house": 9
+   },
+   "rahuToKetu": [
+    "Moon",
+    "Jupiter",
+    "Saturn"
+   ],
+   "ketuToRahu": [
+    "Sun",
+    "Mars",
+    "Mercury",
+    "Venus"
+   ],
+   "present": false,
+   "isPartial": false,
+   "type": null
+  },
+  "k": {
+   "rahu": {
+    "sign": "Vrishabha",
+    "degree": "22°26′",
+    "house": 9
+   },
+   "ketu": {
+    "sign": "Vrischika",
+    "degree": "22°26′",
+    "house": 3
+   },
+   "rahuToKetu": [
+    "Sun",
+    "Moon",
+    "Mars",
+    "Mercury",
+    "Jupiter",
+    "Venus",
+    "Saturn"
+   ],
+   "ketuToRahu": [],
+   "present": true,
+   "isPartial": false,
+   "type": "Shankhachud",
+   "direction": "Descending",
+   "birth": {
+    "date": "9 July 2002",
+    "time": "12:00",
+    "place": "Hyderabad",
+    "lagna": "Kanya"
+   }
+  }
+ },
+ "child": {
+  "summary": {
+   "birth": {
+    "label": "Sample child chart",
+    "date": "22 January 2024",
+    "time": "09:00",
+    "place": "Bengaluru",
+    "lat": 12.9716,
+    "lon": 77.5946
+   },
+   "ayanamsa": "24°12′",
+   "ayanamsaDeg": 24.1999,
+   "lagna": {
+    "sign": "Kumbha",
+    "western": "Aquarius",
+    "degree": "13°08′"
+   },
+   "rashi": "Vrishabha",
+   "rashiIndex": 1,
+   "moonDegree": "26°04′",
+   "moonLongitude": 56.0646,
+   "nakshatra": {
+    "name": "Mrigashira",
+    "pada": 1,
+    "lord": "Mars"
+   },
+   "planets": [
+    {
+     "name": "Sun",
+     "sign": "Makara",
+     "house": 12,
+     "degree": "7°23′",
+     "nakshatra": "Uttara Ashadha",
+     "pada": 4,
+     "retrograde": false
+    },
+    {
+     "name": "Moon",
+     "sign": "Vrishabha",
+     "house": 4,
+     "degree": "26°04′",
+     "nakshatra": "Mrigashira",
+     "pada": 1,
+     "retrograde": false
+    },
+    {
+     "name": "Mercury",
+     "sign": "Dhanu",
+     "house": 11,
+     "degree": "15°34′",
+     "nakshatra": "Purva Ashadha",
+     "pada": 1,
+     "retrograde": false
+    },
+    {
+     "name": "Venus",
+     "sign": "Dhanu",
+     "house": 11,
+     "degree": "4°18′",
+     "nakshatra": "Mula",
+     "pada": 2,
+     "retrograde": false
+    },
+    {
+     "name": "Mars",
+     "sign": "Dhanu",
+     "house": 11,
+     "degree": "18°57′",
+     "nakshatra": "Purva Ashadha",
+     "pada": 2,
+     "retrograde": false
+    },
+    {
+     "name": "Jupiter",
+     "sign": "Mesha",
+     "house": 3,
+     "degree": "12°13′",
+     "nakshatra": "Ashwini",
+     "pada": 4,
+     "retrograde": false
+    },
+    {
+     "name": "Saturn",
+     "sign": "Kumbha",
+     "house": 1,
+     "degree": "11°08′",
+     "nakshatra": "Shatabhisha",
+     "pada": 2,
+     "retrograde": false
+    },
+    {
+     "name": "Rahu",
+     "sign": "Meena",
+     "house": 2,
+     "degree": "25°34′",
+     "nakshatra": "Revati",
+     "pada": 3,
+     "retrograde": true
+    },
+    {
+     "name": "Ketu",
+     "sign": "Kanya",
+     "house": 8,
+     "degree": "25°34′",
+     "nakshatra": "Chitra",
+     "pada": 1,
+     "retrograde": true
+    }
+   ],
+   "currentDasha": {
+    "mahadasha": "Mars",
+    "mahadashaStart": "2022-08-16",
+    "mahadashaEnd": "2029-08-16",
+    "antardasha": "Mercury",
+    "antardashaStart": "2026-02-14",
+    "antardashaEnd": "2027-02-11"
+   }
+  },
+  "gana": "Deva",
+  "nameLetters": [
+   "Ve (वे)"
+  ],
+  "sections": [
+   {
+    "title": "Temperament",
+    "body": "Your child's Moon sits in Vrishabha, in the Mrigashira birth star — a Deva (divine) nature. This suggests a gentle, cheerful and cooperative temperament — children with this birth star are often sensitive to harmony, kind-hearted and eager to please."
+   },
+   {
+    "title": "Learning & education",
+    "body": "With Moon touching the learning houses (4th foundation, 5th intelligence), your child's learning is coloured by imagination, memory and emotional learning. Every child learns in their own way — treat this as a hint about what may come easily, not a limit."
+   },
+   {
+    "title": "Natural talents",
+    "body": "The 5th house (creativity and self-expression) and the chart's prominent planets point gently toward craft, structure and long-form focus. Offer a range of activities and watch which they light up with."
+   },
+   {
+    "title": "Favourable periods through childhood",
+    "body": "The early Dasha periods set a steady tone; focus on consistency and warmth rather than any single \"best\" window."
+   }
+  ]
+ },
+ "moonSign": {
+  "timed": {
+   "date": "3 November 1988",
+   "time": "18:45",
+   "place": "Kolkata",
+   "rashi": "Simha",
+   "moonDegree": "10°50′",
+   "nakshatra": {
+    "name": "Magha",
+    "pada": 4,
+    "lord": "Ketu"
+   },
+   "lagna": {
+    "sign": "Vrishabha",
+    "western": "Taurus",
+    "degree": "17°43′"
+   },
+   "sunSign": "Tula"
+  },
+  "certainDay": {
+   "date": "2000-01-01",
+   "rashis": [
+    "Tula"
+   ],
+   "nakshatras": [
+    "Swati",
+    "Vishakha"
+   ],
+   "certain": true
+  },
+  "changeDay": {
+   "date": "2000-01-02",
+   "rashis": [
+    "Tula",
+    "Vrischika"
+   ],
+   "nakshatras": [
+    "Vishakha",
+    "Anuradha"
+   ],
+   "certain": false
+  }
+ },
+ "rashiByDob": {
+  "certainDay": {
+   "date": "1998-06-01",
+   "rashis": [
+    "Simha"
+   ],
+   "nakshatras": [
+    "Magha",
+    "Purva Phalguni"
+   ],
+   "certain": true
+  },
+  "changeDay": {
+   "date": "1998-06-03",
+   "rashis": [
+    "Simha",
+    "Kanya"
+   ],
+   "nakshatras": [
+    "Purva Phalguni",
+    "Uttara Phalguni"
+   ],
+   "certain": false
+  },
+  "sunVedic2027": [
+   {
+    "sign": "Makara",
+    "date": "2027-01-14"
+   },
+   {
+    "sign": "Kumbha",
+    "date": "2027-02-13"
+   },
+   {
+    "sign": "Meena",
+    "date": "2027-03-15"
+   },
+   {
+    "sign": "Mesha",
+    "date": "2027-04-14"
+   },
+   {
+    "sign": "Vrishabha",
+    "date": "2027-05-15"
+   },
+   {
+    "sign": "Mithuna",
+    "date": "2027-06-15"
+   },
+   {
+    "sign": "Karka",
+    "date": "2027-07-17"
+   },
+   {
+    "sign": "Simha",
+    "date": "2027-08-17"
+   },
+   {
+    "sign": "Kanya",
+    "date": "2027-09-17"
+   },
+   {
+    "sign": "Tula",
+    "date": "2027-10-18"
+   },
+   {
+    "sign": "Vrischika",
+    "date": "2027-11-17"
+   },
+   {
+    "sign": "Dhanu",
+    "date": "2027-12-16"
+   }
+  ],
+  "sunWestern2027": [
+   {
+    "sign": "Kumbha",
+    "date": "2027-01-20"
+   },
+   {
+    "sign": "Meena",
+    "date": "2027-02-19"
+   },
+   {
+    "sign": "Mesha",
+    "date": "2027-03-21"
+   },
+   {
+    "sign": "Vrishabha",
+    "date": "2027-04-20"
+   },
+   {
+    "sign": "Mithuna",
+    "date": "2027-05-21"
+   },
+   {
+    "sign": "Karka",
+    "date": "2027-06-21"
+   },
+   {
+    "sign": "Simha",
+    "date": "2027-07-23"
+   },
+   {
+    "sign": "Kanya",
+    "date": "2027-08-23"
+   },
+   {
+    "sign": "Tula",
+    "date": "2027-09-23"
+   },
+   {
+    "sign": "Vrischika",
+    "date": "2027-10-23"
+   },
+   {
+    "sign": "Dhanu",
+    "date": "2027-11-22"
+   },
+   {
+    "sign": "Makara",
+    "date": "2027-12-22"
+   }
+  ]
+ },
+ "gochar": {
+  "signs": {
+   "Sun": "Dhanu",
+   "Moon": "Tula",
+   "Mars": "Simha",
+   "Mercury": "Dhanu",
+   "Jupiter": "Simha",
+   "Venus": "Tula",
+   "Saturn": "Meena",
+   "Rahu": "Makara",
+   "Ketu": "Karka"
+  },
+  "byMoonSign": [
+   {
+    "sign": "Mesha",
+    "jupiterHouse": 5,
+    "saturnHouse": 12,
+    "rahuHouse": 10
+   },
+   {
+    "sign": "Vrishabha",
+    "jupiterHouse": 4,
+    "saturnHouse": 11,
+    "rahuHouse": 9
+   },
+   {
+    "sign": "Mithuna",
+    "jupiterHouse": 3,
+    "saturnHouse": 10,
+    "rahuHouse": 8
+   },
+   {
+    "sign": "Karka",
+    "jupiterHouse": 2,
+    "saturnHouse": 9,
+    "rahuHouse": 7
+   },
+   {
+    "sign": "Simha",
+    "jupiterHouse": 1,
+    "saturnHouse": 8,
+    "rahuHouse": 6
+   },
+   {
+    "sign": "Kanya",
+    "jupiterHouse": 12,
+    "saturnHouse": 7,
+    "rahuHouse": 5
+   },
+   {
+    "sign": "Tula",
+    "jupiterHouse": 11,
+    "saturnHouse": 6,
+    "rahuHouse": 4
+   },
+   {
+    "sign": "Vrischika",
+    "jupiterHouse": 10,
+    "saturnHouse": 5,
+    "rahuHouse": 3
+   },
+   {
+    "sign": "Dhanu",
+    "jupiterHouse": 9,
+    "saturnHouse": 4,
+    "rahuHouse": 2
+   },
+   {
+    "sign": "Makara",
+    "jupiterHouse": 8,
+    "saturnHouse": 3,
+    "rahuHouse": 1
+   },
+   {
+    "sign": "Kumbha",
+    "jupiterHouse": 7,
+    "saturnHouse": 2,
+    "rahuHouse": 12
+   },
+   {
+    "sign": "Meena",
+    "jupiterHouse": 6,
+    "saturnHouse": 1,
+    "rahuHouse": 11
+   }
+  ]
+ }
+}

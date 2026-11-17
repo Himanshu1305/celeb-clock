@@ -27,6 +27,7 @@ import { TermTip, GradeLegend } from '@/components/vedic/TermTip';
 import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { JsonLd } from '@/components/JsonLd';
+import { VedicGuide, VEDIC_EXTRA_FAQ } from '@/content/guides/VedicGuide';
 import { fetchReading } from '@/services/readingService';
 
 // Build the DOB carry-forward URL (Part AK): extends Birthday's ?dob= pattern to carry the
@@ -279,6 +280,8 @@ export default function VedicAstrologyLanding() {
     ['Do you predict exactly what will happen to me?', 'No. We show real planetary periods and classical combinations, always labelled as traditional association — never a guaranteed date or outcome. Where a period matters, we give the honest window, not a fabricated “on this day” claim.'],
     ['How is this different from a generic horoscope app?', 'Generic apps recycle one Sun-sign paragraph for millions. This is your individual chart — real planetary positions, your Dasha timeline, detected yogas graded by strength — computed, cross-verified and honest about its limits.'],
     ['Is my birth data private?', 'Yes. Your birth details are used to compute your chart and are stored only on your own device unless you explicitly choose to save them to your account. Nothing is sold or shared.'],
+    // B14: hub Q&As from the guide (same single FAQPage).
+    ...VEDIC_EXTRA_FAQ,
   ];
 
   return (
@@ -449,6 +452,9 @@ export default function VedicAstrologyLanding() {
             <span className="inline-bullet">No account needed to start.</span>
           </div>
         </section>
+
+        {/* B14: explanatory guide — below the chart tool, above the FAQ. */}
+        <VedicGuide />
 
         {/* FAQ */}
         <section className="section">

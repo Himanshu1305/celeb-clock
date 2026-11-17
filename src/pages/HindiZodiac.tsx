@@ -1,6 +1,10 @@
 import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO, WebApplicationSchema } from '@/components/SEO';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { RashiByDobGuide } from '@/content/guides/RashiByDobGuide';
+
+const META = GUIDE_META['/rashifal-by-date-of-birth'];
 
 const RELATED = [
   { path: '/zodiac/', label: 'Western Zodiac' },
@@ -17,8 +21,8 @@ const HindiZodiac = () => {
       seo={(
         <>
           <SEO
-            title="राशिफल by Date of Birth — Zodiac Sign in Hindi | BornClock"
-            description="अपनी राशि जानें जन्म तिथि से। BornClock का मुफ्त zodiac calculator हिंदी में — Western और Vedic दोनों।"
+            title={META.title}
+            description={META.description}
             keywords="rashifal by date of birth, rashi by date of birth, apni rashi jane, zodiac hindi"
             canonicalUrl="/rashifal-by-date-of-birth"
             ogImage="https://bornclock.com/og/calculator.png"
@@ -42,7 +46,7 @@ const HindiZodiac = () => {
         note: '© 2026 BornClock · Vedic astrology, computed with care.',
       }}
       eyebrow="राशिफल · Zodiac in Hindi"
-      h1="अपनी राशि जानें — Zodiac by Date of Birth"
+      h1={META.h1}
       lead={<>आपकी राशि आपकी जन्म तिथि से तय होती है। Western astrology में 12 राशियाँ हैं जो सूर्य की स्थिति पर आधारित हैं। Vedic astrology में चंद्रमा की स्थिति (moon sign या rashi) को ज्यादा महत्वपूर्ण माना जाता है।</>}
     >
       <section className="section">
@@ -54,6 +58,7 @@ const HindiZodiac = () => {
             <Link to="/zodiac/" className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity">
               Zodiac Calculator खोलें →
             </Link>
+            <p className="text-sm text-muted-foreground mt-4">वैदिक चंद्र राशि (जन्म राशि) चाहिए? <Link to="/moon-sign/" className="underline font-semibold text-foreground">Moon Sign Calculator →</Link></p>
           </div>
         </section>
 
@@ -85,6 +90,9 @@ const HindiZodiac = () => {
           </div>
         </section>
       </section>
+
+      {/* B14: explanatory guide (Hindi) + FAQPage/HowTo — below the tool. */}
+      <RashiByDobGuide />
     </ToolLayout>
   );
 };
