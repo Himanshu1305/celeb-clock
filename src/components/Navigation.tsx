@@ -54,6 +54,10 @@ const NAV_CATEGORIES: NavCategory[] = [
     key: 'vedic', trigger: 'Vedic Astrology', heading: 'Vedic Astrology', icon: Sparkles,
     items: [
       { path: '/vedic-astrology/', label: 'Vedic Astrology — overview', emoji: '🕉️' },
+      { path: '/rashifal-2027/', label: 'Rashifal 2027 (Yearly)', emoji: '✨' },
+      { path: '/rashifal/', label: 'Daily Rashifal', emoji: '☀️' },
+      { path: '/panchang/', label: "Today's Panchang", emoji: '📿' },
+      { path: '/hindu-calendar-2027/', label: 'Hindu Calendar & Festivals 2027', emoji: '📅' },
       { path: '/kundali/', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
       { path: '/kundali-match/', label: 'Kundali Matching', emoji: '💑' },
       { path: '/astrologer/', label: 'Ask an Astrologer (AI)', emoji: '💬' },
@@ -62,7 +66,9 @@ const NAV_CATEGORIES: NavCategory[] = [
       { path: '/career-report/', label: 'Career Analysis (Vedic)', emoji: '💼' },
       { path: '/gemstones/', label: 'Gemstone Suggestions', emoji: '💍' },
       { path: '/zodiac/', label: 'Western Zodiac', emoji: '♈' },
+      { path: '/horoscope-2027/', label: 'Horoscope 2027', emoji: '🌠' },
       { path: '/chinese-zodiac/', label: 'Chinese Zodiac', emoji: '🐉' },
+      { path: '/chinese-horoscope-2027/', label: 'Chinese Horoscope 2027', emoji: '🐐' },
       { path: '/vedic-zodiac/', label: 'Indian Zodiac (Vedic)', emoji: '🕉️' },
       { path: '/moon-sign/', label: 'Moon Sign Calculator', emoji: '🌙' },
       { path: '/compatibility/', label: 'Compatibility Calculator', emoji: '💕' },
@@ -75,6 +81,7 @@ const NAV_CATEGORIES: NavCategory[] = [
     items: [
       { path: '/mystic-corner/', label: 'Mystic Corner — overview', emoji: '🔮' },
       { path: '/numerology/', label: 'Numerology by Birthday', emoji: '🔢' },
+      { path: '/numerology-2027/', label: 'Numerology 2027', emoji: '🗝️' },
       { path: '/name-numerology/', label: 'Name Numerology', emoji: '✍️' },
       { path: '/tarot-card-by-birthday/', label: 'Tarot by Birthday', emoji: '🃏' },
     ],
