@@ -7,7 +7,7 @@
  * same formula the engine uses for its polar check and its Placidus 10th cusp.
  */
 import * as Astronomy from 'astronomy-engine';
-import { calculateLagna, getLahiriAyanamsa, normalize360 } from '../engine/vedicEngine';
+import { calculateLagna, getNatalAyanamsa, normalize360 } from '../engine/vedicEngine';
 
 export const PLANETS_9 = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn', 'Rahu', 'Ketu'] as const;
 export type PlanetName = typeof PLANETS_9[number];
@@ -32,7 +32,7 @@ export function siderealAngles(birthUTC: Date, latitude: number, longitude: numb
   const obl = Astronomy.e_tilt(time).tobl * Math.PI / 180;
   const r = ramc * Math.PI / 180;
   const mcTrop = normalize360(Math.atan2(Math.sin(r), Math.cos(r) * Math.cos(obl)) * 180 / Math.PI);
-  const ay = getLahiriAyanamsa(birthUTC);
+  const ay = getNatalAyanamsa(birthUTC);
   return { asc: calculateLagna(birthUTC, latitude, longitude).ascSidereal, mc: normalize360(mcTrop - ay) };
 }
 

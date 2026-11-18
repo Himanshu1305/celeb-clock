@@ -81,7 +81,7 @@ export function computeKp(birthUTC: Date, latitude: number, longitude: number): 
   });
   const houseOf = (L: number) => { for (let i = 0; i < 12; i++) if (inArc(L, cuspLon[i], cuspLon[(i + 1) % 12])) return i + 1; return 1; };
   const planets: KpPlanet[] = PLANETS_9.map(name => {
-    const L = normalize360(getSiderealLongitude(name, birthUTC) + KP_SHIFT_DEG);
+    const L = normalize360(getSiderealLongitude(name, birthUTC, 'natal') + KP_SHIFT_DEG);
     return { name, longitude: L, house: houseOf(L), ...kpLords(L), nearBoundary: distanceToSubBoundary(L) < EDGE_DEG };
   });
   const starOf = Object.fromEntries(planets.map(p => [p.name, p.star])) as Record<PlanetName, string>;

@@ -119,7 +119,7 @@ describe('Kundali PDF HTML — panel chart P1', () => {
     expect(t).toContain(P1.expected.dashaAtRef.antardasha);
     expect(t).toContain(`${fmtDate((data.dasha as any).mahadasha_start)} – ${fmtDate((data.dasha as any).mahadasha_end)}`);
     expect(t).toContain(`${fmtDate((data.dasha as any).antardasha_start)} – ${fmtDate((data.dasha as any).antardasha_end)}`);
-    expect(t).toContain('3 Jan 2017 – 3 Jan 2037'); // Swiss reference Mahadasha span
+    expect(t).toContain('31 Dec 2016 – 31 Dec 2036'); // Swiss reference Mahadasha span (true Lahiri, B14)
   });
 
   it('Manglik summary reflects the chart', () => {

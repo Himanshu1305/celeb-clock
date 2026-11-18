@@ -26,6 +26,9 @@ interface SEOProps {
    * exactly one Article. scripts/lib/headDedupe.mjs merges any leftover pair at prerender
    * and scripts/validate-dist.mjs fails the build on >1 Article. */
   articleSchema?: boolean;
+  /** B14: explicit BreadcrumbList (name + path) instead of one derived from the canonical
+   * path — for URLs whose intermediate segments are not pages (e.g. /horoscope/aries/2027). */
+  breadcrumbItems?: Array<{ name: string; path: string }>;
 }
 
 const SITE_NAME = 'BornClock - Age & Birthday Calculator';
@@ -51,6 +54,7 @@ export const SEO = ({
   noindexFollow = false,
   hreflang,
   articleSchema = true,
+  breadcrumbItems,
 }: SEOProps) => {
   // Brand exactly once. Most page titles already end with "… | BornClock"; appending
   // SITE_NAME again produced the doubled tab title "… | BornClock | BornClock - Age &
@@ -123,6 +127,16 @@ export const SEO = ({
 
   // Generate BreadcrumbList structured data
   const generateBreadcrumbData = () => {
+    if (breadcrumbItems?.length) {
+      return JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [{ name: 'Home', path: '/' }, ...breadcrumbItems].map((b, i) => ({
+          '@type': 'ListItem', position: i + 1, name: b.name,
+          item: b.path === '/' ? SITE_URL : `${SITE_URL}${b.path.replace(/\/+$/, '')}/`,
+        })),
+      });
+    }
     if (!canonicalUrl) return null;
     const pathParts = canonicalUrl.split('/').filter(Boolean);
     const items = [

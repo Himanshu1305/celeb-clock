@@ -39,6 +39,6 @@ describe('/accuracy page', () => {
       expect(text, s).toContain(s);
     }
     expect(text).not.toMatch(/100\s*%|most accurate|better than/i);
-    expect(text).toMatch(/In our tests \(October 2026\)/);
+    expect(text).toMatch(/In our tests \(November 2026\)/);
   });
 });

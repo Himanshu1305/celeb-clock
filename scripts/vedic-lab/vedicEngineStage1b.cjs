@@ -18,13 +18,19 @@ const COMBUSTION_ORBS_RETROGRADE = { Mercury: 12, Venus: 8 };
 function normalize360(deg) { return ((deg % 360) + 360) % 360; }
 // Oct 2026: kept in sync with src/lib/vedic/engine/vedicEngine.ts (Drik-calibrated
 // mean Lahiri = Swiss SIDM_LAHIRI mean + 24.4"; was 23.853222 / 5029.0966).
+// B14 (Nov 2026): natal positions use TRUE Lahiri (Drik value − 24.4" + nutation Δψ,
+// = Swiss SIDM_LAHIRI, as AstroSage); transiting Saturn keeps the Drik value.
 const LAHIRI_J2000_DEG = 23.8638692;
 
-function getLahiriAyanamsa(date) {
+function getDrikAyanamsa(date) {
   const time = Astronomy.MakeTime(date);
   const T = time.tt / 36525;
   const precessionArcsec = 5028.8030 * T + 1.11161 * T * T - 0.000113 * T * T * T;
   return LAHIRI_J2000_DEG + precessionArcsec / 3600;
+}
+
+function getLahiriAyanamsa(date) {
+  return getDrikAyanamsa(date) + (Astronomy.e_tilt(Astronomy.MakeTime(date)).dpsi - 24.4) / 3600;
 }
 
 function getMeanNodeTropicalLongitude(date) {
@@ -258,7 +264,7 @@ function generateFullChart(birthDateUTC, refDateUTC, latitude, longitude) {
   const kaalSarpDosha = allInRahuArcWS || allInKetuArcWS;
 
   const refTime = Astronomy.MakeTime(refDateUTC);
-  const refAyanamsa = getLahiriAyanamsa(refDateUTC);
+  const refAyanamsa = getDrikAyanamsa(refDateUTC);
   const transitingSaturnLon = getPlanetSiderealLongitude('Saturn', refTime, refAyanamsa);
   const transitingSaturnSignIdx = Math.floor(transitingSaturnLon / 30);
   const houseOfSaturnFromMoon = ((transitingSaturnSignIdx - moonSignIdx + 12) % 12) + 1;

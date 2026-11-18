@@ -8,7 +8,7 @@
  * daylight, and the day + night Choghadiya. All computed at request time.
  */
 import * as Astronomy from 'astronomy-engine';
-import { computePanchang, PANCHANG_TABLES, type Panchang } from './panchang';
+import { computePanchang, PANCHANG_TABLES, type Panchang, type MuhuratDayFn } from './panchang';
 import { getSiderealLongitude } from './engine/vedicEngine';
 import panchangCitiesData from '@/data/panchangCities.json';
 
@@ -46,9 +46,11 @@ export interface DayPanchang extends Panchang {
   amritKalam: TimeWindow[];
   /** Length of daylight in minutes (sunrise → sunset), rounded. */
   dayLengthMin: number;
+  /** B14 F5: set on polar day / night. sunrise, sunset and every time window are then placeholders (06:00/18:00) and must not be shown; the limbs are read at 06:00 local. */
+  polar?: PolarKind;
 }
 
-const sunMoon = (d: Date) => ({ sun: getSiderealLongitude('Sun', d), moon: getSiderealLongitude('Moon', d) });
+const sunMoon = (d: Date) => ({ sun: getSiderealLongitude('Sun', d, 'drik'), moon: getSiderealLongitude('Moon', d, 'drik') });
 const elong = (d: Date) => { const x = sunMoon(d); return x.moon - x.sun; };
 
 /** Round an instant to the nearest whole minute (Drik-style HH:MM, not truncated seconds). */
@@ -61,17 +63,35 @@ function fmtLocal(utc: Date, tzOffsetHours: number): string {
   return `${String(local.getUTCHours()).padStart(2, '0')}:${String(local.getUTCMinutes()).padStart(2, '0')}`;
 }
 
-/** Real sunrise/sunset (UTC Date objects) for a date + location. */
-export function sunriseSunset(date: Date, lat: number, lon: number, tzOffsetHours: number): { rise: Date; set: Date; nextRise: Date; prevSet: Date } {
+/** Polar day (the Sun never sets that local day) or polar night (it never rises). */
+export type PolarKind = 'day' | 'night';
+
+/**
+ * Real sunrise/sunset (UTC Date objects) for a date + location.
+ * B14 F5: when the Sun does not rise (polar night) or does not set (polar day) during
+ * that local day, `polar` is set and rise/set are only 06:00/18:00 local PLACEHOLDERS
+ * (kept so the limbs can still be read at a fixed hour) — callers must NOT show them,
+ * nor any window derived from them, as real times.
+ */
+export function sunriseSunset(date: Date, lat: number, lon: number, tzOffsetHours: number): { rise: Date; set: Date; nextRise: Date; prevSet: Date; polar?: PolarKind } {
   const observer = new Astronomy.Observer(lat, lon, 0);
   // Start searching from local midnight expressed in UTC.
   const localMidnightUTC = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0) - tzOffsetHours * 3600 * 1000);
-  const rise = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, +1, localMidnightUTC, 2);
-  const set = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, -1, rise ? rise.date : localMidnightUTC, 2);
-  const nextRise = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, +1, set ? set.date : localMidnightUTC, 2);
+  const dayEnd = localMidnightUTC.getTime() + 86400000;
+  let rise = Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, +1, localMidnightUTC, 2);
+  // A sunrise found only on a LATER local day means none today (polar night / day).
+  if (rise && rise.date.getTime() >= dayEnd) rise = null;
+  const set = rise ? Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, -1, rise.date, 2) : null;
+  const nextRise = set ? Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, +1, set.date, 2) : null;
   // The sunset before this sunrise (start of the night that this sunrise ends).
   const prevSet = rise ? Astronomy.SearchRiseSet(Astronomy.Body.Sun, observer, -1, new Date(rise.date.getTime() - 86400000), 1) : null;
-  // Fallbacks (polar day/night): approximate 06:00/18:00 local.
+  let polar: PolarKind | undefined;
+  if (!rise || !set) {
+    const noon = new Date(localMidnightUTC.getTime() + 12 * 3600 * 1000);
+    const eq = Astronomy.Equator(Astronomy.Body.Sun, noon, observer, true, true);
+    polar = Astronomy.Horizon(noon, observer, eq.ra, eq.dec).altitude > 0 ? 'day' : 'night';
+  }
+  // Placeholders for polar day/night: 06:00/18:00 local (never shown as real times).
   const approxRise = new Date(localMidnightUTC.getTime() + 6 * 3600 * 1000);
   const approxSet = new Date(localMidnightUTC.getTime() + 18 * 3600 * 1000);
   const approxNext = new Date(localMidnightUTC.getTime() + 30 * 3600 * 1000);
@@ -80,6 +100,7 @@ export function sunriseSunset(date: Date, lat: number, lon: number, tzOffsetHour
     set: set ? set.date : approxSet,
     nextRise: nextRise ? nextRise.date : approxNext,
     prevSet: prevSet && rise && prevSet.date.getTime() < rise.date.getTime() ? prevSet.date : new Date(approxSet.getTime() - 86400000),
+    ...(polar ? { polar } : {}),
   };
 }
 
@@ -122,7 +143,7 @@ type LimbKey = 'tithi' | 'nak' | 'yoga' | 'karana' | 'rashi';
 const LIMBS: Record<LimbKey, { f: (d: Date) => number; unit: number }> = {
   tithi: { f: elong, unit: 12 },
   nak: { f: d => sunMoon(d).moon, unit: 360 / 27 },
-  rashi: { f: d => getSiderealLongitude('Moon', d), unit: 30 },
+  rashi: { f: d => getSiderealLongitude('Moon', d, 'drik'), unit: 30 },
   yoga: { f: d => { const x = sunMoon(d); return x.sun + x.moon; }, unit: 360 / 27 },
   karana: { f: elong, unit: 6 },
 };
@@ -229,6 +250,8 @@ const DUR_TUESDAY_NIGHT = 6;
 export interface DayWindowsLite {
   date: string; weekday: string; sunrise: string; sunset: string;
   rahuKaal: TimeWindow; gulikaKaal: TimeWindow; yamaganda: TimeWindow;
+  /** B14 F5: polar day / night — the times above are placeholders, not real. */
+  polar?: PolarKind;
 }
 const WEEKDAY_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 /**
@@ -236,16 +259,38 @@ const WEEKDAY_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
  * for a 7-day Rahu Kaal table. Same formulas as computeDayPanchang.
  */
 export function dayWindowsLite(date: Date, lat: number, lon: number, tzOffsetHours: number): DayWindowsLite {
-  const { rise, set } = sunriseSunset(date, lat, lon, tzOffsetHours);
+  const { rise, set, polar } = sunriseSunset(date, lat, lon, tzOffsetHours);
   const local = new Date(rise.getTime() + tzOffsetHours * 3600 * 1000);
   const weekday = local.getUTCDay();
   const dayMs = set.getTime() - rise.getTime();
   return {
     date: local.toISOString().slice(0, 10), weekday: WEEKDAY_EN[weekday],
-    sunrise: fmtLocal(rise, tzOffsetHours), sunset: fmtLocal(set, tzOffsetHours),
+    // B14 F6: a sunset after local midnight (e.g. Reykjavik in June) says "(next day)".
+    sunrise: fmtLocal(rise, tzOffsetHours), sunset: fmtEnd(set, rise, tzOffsetHours),
     rahuKaal: windowFromPart(RAHU_PART[weekday], rise, dayMs, tzOffsetHours, 'Rahu Kaal', 'bad'),
     gulikaKaal: windowFromPart(GULIKA_PART[weekday], rise, dayMs, tzOffsetHours, 'Gulika Kaal', 'bad'),
     yamaganda: windowFromPart(YAMA_PART[weekday], rise, dayMs, tzOffsetHours, 'Yamaganda', 'bad'),
+    ...(polar ? { polar } : {}),
+  };
+}
+
+/**
+ * B14 F2: the Muhurat finder's per-day context for a place — the real local sunrise (the
+ * instant the limbs are read at), the UTC offset for THAT day (`tzFor`, DST-aware), and
+ * Rahu Kalam from dayWindowsLite, i.e. exactly the window the Panchang page shows.
+ * Polar day/night: limbs at the 06:00 placeholder, no Rahu Kalam, `polar` set.
+ */
+export function muhuratDayAtSunrise(lat: number, lon: number, tzFor: (y: number, m: number, d: number) => number): MuhuratDayFn {
+  return (y, m, d) => {
+    const tz = tzFor(y, m, d);
+    const date = new Date(Date.UTC(y, m - 1, d, 12));
+    const { rise } = sunriseSunset(date, lat, lon, tz);
+    const w = dayWindowsLite(date, lat, lon, tz);
+    return {
+      at: rise, tz,
+      rahuKalam: w.polar ? null : { start: w.rahuKaal.start, end: w.rahuKaal.end },
+      ...(w.polar ? { polar: w.polar } : {}),
+    };
   };
 }
 
@@ -255,8 +300,8 @@ export function dayWindowsLite(date: Date, lat: number, lon: number, tzOffsetHou
  * sunrise with the minute each ends (minutes since local midnight; ≥ 1440 = next day).
  * Same sunrise, limb and boundary code as computeDayPanchang, without the windows.
  */
-export function dayLimbsLite(date: Date, lat: number, lon: number, tzOffsetHours: number): { rise: number; set: number; tithi: number; tithiEnd: number; nak: number; nakEnd: number } {
-  const { rise, set } = sunriseSunset(date, lat, lon, tzOffsetHours);
+export function dayLimbsLite(date: Date, lat: number, lon: number, tzOffsetHours: number): { rise: number; set: number; tithi: number; tithiEnd: number; nak: number; nakEnd: number; polar?: PolarKind } {
+  const { rise, set, polar } = sunriseSunset(date, lat, lon, tzOffsetHours);
   const local = new Date(rise.getTime() + tzOffsetHours * 3600 * 1000);
   const midnight = Date.UTC(local.getUTCFullYear(), local.getUTCMonth(), local.getUTCDate()) - tzOffsetHours * 3600 * 1000;
   const rel = (t: Date) => Math.round((t.getTime() - midnight) / 60000);
@@ -264,13 +309,15 @@ export function dayLimbsLite(date: Date, lat: number, lon: number, tzOffsetHours
     rise: rel(rise), set: rel(set),
     tithi: limbIdx('tithi', rise.getTime()), tithiEnd: rel(limbEnd(rise, 'tithi')),
     nak: limbIdx('nak', rise.getTime()), nakEnd: rel(limbEnd(rise, 'nak')),
+    ...(polar ? { polar } : {}),
   };
 }
 
 /** Full daily Panchang for a city. `date` is the local calendar day (any time). */
 export function computeDayPanchang(date: Date, lat: number, lon: number, tzOffsetHours: number, city: string): DayPanchang {
   // Evaluate the five limbs at local sunrise (the classical convention).
-  const { rise, set, nextRise, prevSet } = sunriseSunset(date, lat, lon, tzOffsetHours);
+  // Polar day/night (F5): `rise` is a 06:00 local placeholder, flagged via `polar`.
+  const { rise, set, nextRise, prevSet, polar } = sunriseSunset(date, lat, lon, tzOffsetHours);
   const base = computePanchang(rise, sunMoon, tzOffsetHours);
 
   // Local weekday of this sunrise (base.weekday is computed the same way).
@@ -324,7 +371,7 @@ export function computeDayPanchang(date: Date, lat: number, lon: number, tzOffse
     ...base,
     city,
     sunrise: fmtLocal(rise, tzOffsetHours),
-    sunset: fmtLocal(set, tzOffsetHours),
+    sunset: fmtEnd(set, rise, tzOffsetHours), // F6: "00:04 (next day)" past local midnight
     rahuKaal,
     gulikaKaal,
     yamaganda,
@@ -346,6 +393,7 @@ export function computeDayPanchang(date: Date, lat: number, lon: number, tzOffse
     varjyam: varjyam.sort((a, b) => Number(!!a.startNextDay) - Number(!!b.startNextDay) || a.start.localeCompare(b.start)),
     amritKalam: amritKalam.sort((a, b) => Number(!!a.startNextDay) - Number(!!b.startNextDay) || a.start.localeCompare(b.start)),
     dayLengthMin: Math.round(dayMs / 60000),
+    ...(polar ? { polar } : {}),
   };
 }
 

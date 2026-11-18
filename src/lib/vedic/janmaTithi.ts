@@ -68,9 +68,9 @@ const wrap180 = (x: number) => { const v = norm(x); return v > 180 ? v - 360 : v
 /** Moon − Sun sidereal elongation (0–360°). */
 export function elongationAt(t: number): number {
   const d = new Date(t);
-  return norm(getSiderealLongitude('Moon', d) - getSiderealLongitude('Sun', d));
+  return norm(getSiderealLongitude('Moon', d, 'drik') - getSiderealLongitude('Sun', d, 'drik'));
 }
-const sunSign = (t: number) => Math.floor(getSiderealLongitude('Sun', new Date(t)) / 30);
+const sunSign = (t: number) => Math.floor(getSiderealLongitude('Sun', new Date(t), 'drik') / 30);
 
 /** Instant (ms) where wrap180(elongation − target) crosses zero upward inside [lo, hi]. */
 function solveElong(lo: number, hi: number, target = 0): number {

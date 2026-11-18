@@ -3,12 +3,12 @@
  *
  * 1. golden/dashaAvSwiss.json — produced by golden/dashaAvSwiss_ref.py: Swiss Ephemeris (pyswisseph,
  *    engine-audit venv, SIDM_LAHIRI) Moon + an INDEPENDENT Python implementation of the classical rule
- *    in BornClock's Drik convention (apparent longitude − SE mean Lahiri − 24.4″, see ayanamsaDrik.test.ts),
+ *    in BornClock's NATAL convention (B14: Swiss TRUE Lahiri, see natalAyanamsa.test.ts; was Drik before),
  *    ((nakshatra + 3) mod 8, 0 → Sankata; balance from the Moon's place in its nakshatra; Antardasha =
  *    maha × antar / 36 from the maha's own Yogini; 365.25-day year). Panel = round2/CONTEXT.md P1–P10.
  * 2. golden/pyjhoraPanel.json — PyJHora (github.com/naturalstupid/PyJHora, open-source JHora port),
  *    yogini.get_dhasa_bhukthi with LAHIRI and its mean sidereal year (365.256364 d); start dates in
- *    local time. Its true-Lahiri Moon differs from our Drik-convention Moon by ~40″ → we allow 3 days.
+ *    local time. Its year length (365.256 d) differs from ours (365.25 d) → we allow 3 days.
  * 3. Published worked examples — pdfcoffee.com "An Introduction to the Yogini Dasha" (opened 29 Oct 2026):
  *    Moon 7s10°00′ (Anuradha) → Bhramari with 24 months to run; Chart 1 (24 Apr 1985 17:39 IST,
  *    28°N39′ 77°E13′) had an event on 1 Oct 1989 "in Sankata–Siddha"; Chart 3 (5 Aug 1981 07:20 IST)

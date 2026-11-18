@@ -4,6 +4,8 @@ export type FooterLink = { label: string; to: string };
 
 const DEFAULT_NAV: FooterLink[] = [
   { label: 'Vedic Astrology', to: '/vedic-astrology/' },
+  { label: 'Rashifal 2027', to: '/rashifal-2027/' },
+  { label: 'Festivals 2027', to: '/hindu-calendar-2027/' },
   { label: 'Birthday & Celebrity', to: '/celebrity-birthday/' },
   { label: 'Mystic Corner', to: '/mystic-corner/' },
   { label: 'Science & Longevity', to: '/life-expectancy/' },

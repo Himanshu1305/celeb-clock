@@ -23,7 +23,7 @@
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { geocodeCity, type GeoResult } from '@/services/geocoding';
 import type { SavedCity } from '@/services/savedProfile';
-import { listTimezones, timezoneForCoordinates } from '@/lib/timezone/birthTimezone';
+import { listTimezones, timezoneForCoordinates, FIXED_IST_ZONE, isIndiaWarTimeBirth } from '@/lib/timezone/birthTimezone';
 import { resolveForPlace } from '@/lib/timezone/clientBirth';
 import { describeBirthZone, birthPlaceConfirmLine } from '@/lib/timezone/placeConfirm';
 
@@ -131,6 +131,15 @@ export function CityPicker({ testid, value, onPick, dob, time, id, placeholder =
     else onPick({ ...value, timezone: zone, manualTimezone: true });
   };
 
+  // B14 F7: India 1942–45 war time (+6:30). One click reads the time as already in IST
+  // (+5:30), as many birth records and AstroSage do; the default stays the tz database.
+  const autoZone = useMemo(() => {
+    if (!value) return undefined;
+    try { return timezoneForCoordinates(value.lat, value.lon); } catch { return undefined; }
+  }, [value]);
+  const usingIst = !!value?.manualTimezone && value?.timezone === FIXED_IST_ZONE;
+  const showIstToggle = birth && !!value && isIndiaWarTimeBirth(dob, autoZone) && (summary?.kind === 'war' || usingIst);
+
   const needsPick = !value && query.trim().length > 0 && !searching && options.length === 0;
   const open = options.length > 0;
 
@@ -187,6 +196,13 @@ export function CityPicker({ testid, value, onPick, dob, time, id, placeholder =
           </button>
         </div>
       )}
+      {showIstToggle && (
+        <p data-testid={`${testid}-war-ist`} className="text-[11px] text-foreground mt-1">
+          {usingIst
+            ? <>Reading this time as already in IST (UTC+5:30). <button type="button" data-testid={`${testid}-war-ist-off`} className="underline text-brand-purple" onClick={() => setManual('')}>Use the war-time clock (UTC+6:30) instead</button></>
+            : <>If the birth record already gives this time in IST (UTC+5:30), as many records and some websites do: <button type="button" data-testid={`${testid}-war-ist-on`} className="underline text-brand-purple" onClick={() => setManual(FIXED_IST_ZONE)}>Use IST (+5:30)</button></>}
+        </p>
+      )}
       {birth && value && summary?.changeoverNote && <p className="text-[11px] text-amber-700 mt-1">{summary.changeoverNote}</p>}
       {birth && value && summary?.pre1970Note && <p data-testid={`${testid}-pre1970`} className="text-[11px] text-muted-foreground mt-1">{summary.pre1970Note}</p>}
       {birth && value && (
@@ -197,6 +213,7 @@ export function CityPicker({ testid, value, onPick, dob, time, id, placeholder =
                   onChange={e => setManual(e.target.value)}
                   className="mt-1 w-full px-2 py-1 border border-border rounded-lg bg-background text-foreground text-xs">
             <option value="">Automatic (from birthplace)</option>
+            {usingIst && <option value={FIXED_IST_ZONE}>IST, fixed UTC+05:30</option>}
             {zones.map(z => <option key={z} value={z}>{z}</option>)}
           </select>
           {resolved && (

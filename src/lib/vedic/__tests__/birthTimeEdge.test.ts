@@ -32,7 +32,7 @@ const edgesAt = (ms: number, p: { lat: number; lon: number }) => {
   const d = new Date(ms);
   return buildBirthTimeEdges(d, p.lat, p.lon, {
     Lagna: calculateLagna(d, p.lat, p.lon).ascSidereal,
-    Moon: getSiderealLongitude('Moon', d),
+    Moon: getSiderealLongitude('Moon', d, 'natal'),
   });
 };
 const lagnaEdge = (ms: number, p: { lat: number; lon: number }) => edgesAt(ms, p).find(e => e.point === 'Lagna');

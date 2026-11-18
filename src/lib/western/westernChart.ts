@@ -16,7 +16,7 @@ import * as Astronomy from 'astronomy-engine';
 import {
   calculateLagna,
   calculatePlacidusCusps,
-  getLahiriAyanamsa,
+  getNatalAyanamsa,
   normalize360,
 } from '@/lib/vedic/engine/vedicEngine';
 
@@ -161,7 +161,7 @@ function houseOf(lon: number, cusps: number[]): number {
  */
 export function generateWesternChart(birthDateUTC: Date, latitude: number, longitude: number): WesternChart {
   const time = Astronomy.MakeTime(birthDateUTC);
-  const ayanamsa = getLahiriAyanamsa(birthDateUTC);
+  const ayanamsa = getNatalAyanamsa(birthDateUTC);
 
   // Ascendant (tropical) comes directly from the validated Lagna routine.
   const lagna = calculateLagna(birthDateUTC, latitude, longitude);

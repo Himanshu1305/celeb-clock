@@ -64,7 +64,7 @@ function chalitAt(birthUTC: Date, lat: number, lon: number) {
   const { asc, mc } = siderealAngles(birthUTC, lat, lon);
   const madhya = sripatiMadhya(asc, mc);
   const start = sripatiSandhi(madhya);
-  const pos = Object.fromEntries(PLANETS_9.map(p => [p, getSiderealLongitude(p, birthUTC)])) as Record<PlanetName, number>;
+  const pos = Object.fromEntries(PLANETS_9.map(p => [p, getSiderealLongitude(p, birthUTC, 'natal')])) as Record<PlanetName, number>;
   return { asc, madhya, start, pos };
 }
 

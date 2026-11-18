@@ -5,7 +5,6 @@
  * breakthroughs, not catastrophe.
  */
 import { useState } from 'react';
-import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -15,6 +14,10 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 import { Remedies } from '@/components/vedic/Remedies';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { KaalSarpGuide } from '@/content/guides/KaalSarpGuide';
+
+const META = GUIDE_META['/kaal-sarp-dosha'];
 
 interface KaalSarp {
   present: boolean;
@@ -93,8 +96,8 @@ export default function KaalSarpDoshaPage() {
       testId="kaalsarp-page"
       seo={(
         <SEO
-          title="Kaal Sarp Dosha Calculator — Check Your Chart Free | BornClock"
-          description="Free Kaal Sarp Dosha calculator — check if all planets fall between Rahu and Ketu, the type and direction, with calm, honest guidance for your chart."
+          title={META.title}
+          description={META.description}
           canonicalUrl="/kaal-sarp-dosha"
           ogType="website"
         />
@@ -115,7 +118,7 @@ export default function KaalSarpDoshaPage() {
 
       <section className="section">
         <div className="section-head">
-          <div><span className="eyebrow">Rahu–Ketu · Nodal axis</span><h1>Kaal Sarp Dosha Calculator.</h1></div>
+          <div><span className="eyebrow">Rahu–Ketu · Nodal axis</span><h1>{META.h1}</h1></div>
           <p>Check whether all seven classical planets fall between Rahu and Ketu in your birth chart, which of the 12 named types applies, and what it actually means — calmly, honestly, without fear.</p>
         </div>
         <TrustStrip claim="Every planet's position is worked out from your real birth chart. Kaal Sarp is reported only when all seven planets sit between Rahu and Ketu by exact degree — a near-miss is shown as a note, never as a dosha." href="/how-it-works/#vedic" />
@@ -233,8 +236,8 @@ export default function KaalSarpDoshaPage() {
           </div>
         )}
       </section>
-      {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
-      <PageFAQ variant="plain" items={faqItemsFromSchema(faqJsonLd)} />
+      {/* B14: explanatory guide below the tool; its FAQ (the page's one FAQPage) keeps the Batch 10 Q&As first. */}
+      <KaalSarpGuide baseFaq={faqItemsFromSchema(faqJsonLd)} />
     </PajPage>
   );
 }

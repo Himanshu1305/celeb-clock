@@ -8,6 +8,10 @@ import { useDailyEntry } from '@/lib/daily/useDailyEntry';
 import { DailyBody, DailyDate, DailyH1, DailyJsonLd } from '@/lib/daily/DailyParts';
 import { RASHI_SLUGS_HI } from '@/lib/daily/registry';
 import { DailyTermStrip } from '@/components/daily/DailyTermStrip';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { HiRashifalGuide } from '@/content/guides/HiRashifalGuide';
+
+const INDEX_META = GUIDE_META['/hi/rashifal'];
 
 /**
  * आज का राशिफल (Batch 7, W1). The daily Hindi rashifal now uses the shared daily-page
@@ -28,13 +32,13 @@ export default function RashifalPage() {
       <ToolLayout
         theme="vedic"
         testId="rashifal-page"
-        seo={<SEO title="राशिफल — आज का राशिफल | BornClock" description="अपनी राशि चुनें और आज का राशिफल पढ़ें — ग्रहों की वास्तविक चाल से गणना किया गया।" canonicalUrl="/hi/rashifal" />}
+        seo={<SEO title={INDEX_META.title} description={INDEX_META.description} canonicalUrl="/hi/rashifal" />}
         breadcrumb={{ current: 'राशिफल' }}
-        h1="राशिफल"
+        h1={INDEX_META.h1}
       >
         <section className="section">
           <div className="container mx-auto px-4 py-8 max-w-3xl">
-            <p className="text-muted-foreground mb-4">कृपया एक मान्य राशि चुनें:</p>
+            <p className="text-muted-foreground mb-4">अपनी चंद्र राशि चुनें और आज का राशिफल पढ़ें:</p>
             <div className="flex flex-wrap gap-2">
               {HI_SLUGS.map(s => (
                 <Link key={s} to={`/hi/rashifal/${s}`} className="px-3 py-1.5 rounded-lg border border-border text-foreground hover:bg-primary/5">
@@ -42,11 +46,16 @@ export default function RashifalPage() {
                 </Link>
               ))}
             </div>
+            <p data-testid="hi-rashifal-2027-index" className="mt-6">
+              <Link to="/hi/rashifal-2027/" className="inline-block rounded-xl border border-brand-gold/50 bg-brand-gold/10 px-4 py-3 font-semibold text-brand-ink">राशिफल 2027 — सभी 12 राशियों का वार्षिक भविष्यफल →</Link>
+            </p>
             <p data-testid="hi-rashifal-index-tools" className="text-sm text-muted-foreground mt-6">
               और हिंदी में: <Link to="/hi/kundli-milan/" className="underline">कुंडली मिलान (36 गुण)</Link> · <Link to="/hi/naam-se-kundli-milan/" className="underline">नाम से कुंडली मिलान</Link> · <Link to="/hi/panchang/" className="underline">पंचांग</Link> · <Link to="/hi/upay/" className="underline">उपाय</Link>
             </p>
           </div>
         </section>
+        {/* B14: explanatory guide (Hindi) + FAQPage — below the sign list. */}
+        <HiRashifalGuide />
       </ToolLayout>
     );
   }
@@ -71,6 +80,10 @@ export default function RashifalPage() {
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl" lang="hi">
+          <Link to={`/hi/rashifal/${rashi}/2027/`} data-testid="hi-rashifal-2027-link" className="block rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 mb-4 text-sm">
+            <span className="font-semibold text-brand-ink">{meta.hindi} राशिफल 2027 पढ़ें →</span>{' '}
+            <span className="text-brand-ink-soft">पूरे वर्ष का भविष्यफल — महीनेवार फल, साढ़ेसाती, ग्रहण और शुभ समय।</span>
+          </Link>
           <DailyBody entry={entry} testId="rashifal-daily" />
 
           <DailyTermStrip

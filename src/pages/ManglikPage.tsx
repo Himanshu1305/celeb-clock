@@ -4,7 +4,6 @@
  * Calm, non-fear tone — Manglik is an area for mindful matching, NOT a curse.
  */
 import { useState } from 'react';
-import { PageFAQ } from '@/components/PageFAQ';
 import { faqItemsFromSchema } from '@/lib/seo/faqFromSchema';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -14,6 +13,10 @@ import { TermTip } from '@/components/vedic/TermTip';
 import { TrustStrip } from '@/components/paj/TrustStrip';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 import { Remedies } from '@/components/vedic/Remedies';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { ManglikGuide } from '@/content/guides/ManglikGuide';
+
+const META = GUIDE_META['/manglik'];
 
 /** Shape of doshas.mangalDosha from /api/kundali — built by src/lib/vedic/manglik.ts. */
 interface MangalDosha {
@@ -113,8 +116,8 @@ export default function ManglikPage() {
       testId="manglik-page"
       seo={(
         <SEO
-          title="Manglik Dosha Calculator — Check Mangal Dosha Free | BornClock"
-          description="Free Manglik (Mangal Dosha) calculator — check if your birth chart is Manglik, how strong, the classical cancellations, and calm, honest guidance for matching."
+          title={META.title}
+          description={META.description}
           canonicalUrl="/manglik"
           ogType="website"
         />
@@ -135,7 +138,7 @@ export default function ManglikPage() {
 
       <section className="section">
         <div className="section-head">
-          <div><span className="eyebrow">Mangal · Mars placement</span><h1>Manglik Dosha Calculator.</h1></div>
+          <div><span className="eyebrow">Mangal · Mars placement</span><h1>{META.h1}</h1></div>
           <p>Find out whether your birth chart carries Mangal Dosha (Manglik), how strong it is, which reference points flag it, and — crucially — what the classical cancellations are. Calm, honest, non-fear-based.</p>
         </div>
         <TrustStrip claim="Your Mars placement is worked out from your real birth chart, not guessed from your star sign — checked from the Lagna and from the Moon, each shown separately." href="/how-it-works/#vedic" />
@@ -265,8 +268,8 @@ export default function ManglikPage() {
           </div>
         )}
       </section>
-      {/* Batch 10: FAQPage Q&As shown on the page (PageFAQ also emits the JSON-LD). */}
-      <PageFAQ variant="plain" items={faqItemsFromSchema(faqJsonLd)} />
+      {/* B14: explanatory guide below the tool; its FAQ (the page's one FAQPage) keeps the Batch 10 Q&As first. */}
+      <ManglikGuide baseFaq={faqItemsFromSchema(faqJsonLd)} />
     </PajPage>
   );
 }

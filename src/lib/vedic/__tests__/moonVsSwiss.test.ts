@@ -19,7 +19,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import * as Astronomy from 'astronomy-engine';
-import { getSiderealLongitude, getLahiriAyanamsa } from '../engine/vedicEngine';
+import { getSiderealLongitude, getNatalAyanamsa } from '../engine/vedicEngine';
 import ref from './moonSwiss1950_2050.json';
 
 const arcsec = (a: number, b: number) => {
@@ -31,7 +31,7 @@ const arcsec = (a: number, b: number) => {
 
 const rows = ref.rows.map(r => {
   const date = new Date(r.utc);
-  const ours = getSiderealLongitude('Moon', date) + getLahiriAyanamsa(date); // back to apparent tropical
+  const ours = getSiderealLongitude('Moon', date, 'natal') + getNatalAyanamsa(date); // back to apparent tropical
   const t = Astronomy.MakeTime(date);
   const ourDeltaT = (t.tt - t.ut) * 86400;
   const t2 = Astronomy.MakeTime(new Date(date.getTime() + 3600e3));

@@ -113,7 +113,7 @@ export function indexMeta(kind: PanchangPageKind): { title: string; description:
  * sunset compare with Delhi's on the same date (all from the engine).
  */
 export function cityContrast(place: string, p: { sunrise: string; sunset: string; dayLengthMin: number }, delhi: { sunrise: string; sunset: string } | null): string {
-  const toMin = (s: string) => { const [h, m] = s.split(':').map(Number); return h * 60 + m; };
+  const toMin = (s: string) => { const [h, m] = s.slice(0, 5).split(':').map(Number); return h * 60 + m + (s.includes('(next day)') ? 1440 : 0); };
   let s = `${place} gets ${hm(p.dayLengthMin)} of daylight on this date.`;
   if (delhi && place !== 'Delhi') {
     const dr = toMin(p.sunrise) - toMin(delhi.sunrise);

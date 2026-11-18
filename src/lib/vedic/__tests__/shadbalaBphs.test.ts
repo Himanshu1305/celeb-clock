@@ -34,7 +34,7 @@ import { getDrikBala } from '../engine/drikBala';
 import { getUcchaBala, getSaptavargajaBalaPanchadha, getOjayugmaBala, getDrekkanaBala } from '../engine/sthanaBala';
 import {
   getHoraSign, getDrekkanaSign, getSaptamsaSign, getNavamsaSign, getDwadasamsaSign,
-  getTrimsamsaSign, RASHI_NAMES, getSiderealLongitude, getLahiriAyanamsa,
+  getTrimsamsaSign, RASHI_NAMES, getSiderealLongitude, getNatalAyanamsa,
 } from '../engine/vedicEngine';
 import { REQUIRED_SHADBALA, shadbalaCategory, SHADBALA_COMPONENT_EXPLANATIONS } from '../strengthScale';
 
@@ -116,7 +116,7 @@ describe('K11 Shadbala vs B.V. Raman worked example [RAMAN]', () => {
       Mars: [22.23, 1.2], Mercury: [2.3, 4.5], Jupiter: [35.26, 1.2], Venus: [5.95, 1.2], Saturn: [21.14, 1.2],
     };
     for (const [n, [v, tol]] of Object.entries(exp)) {
-      const trop = (getSiderealLongitude(n, RAMAN_UTC) + getLahiriAyanamsa(RAMAN_UTC)) % 360;
+      const trop = (getSiderealLongitude(n, RAMAN_UTC, 'natal') + getNatalAyanamsa(RAMAN_UTC)) % 360;
       near(getChestaBala(n, trop, RAMAN_UTC)!, v, tol);
     }
   });

@@ -100,7 +100,7 @@ const PLANET_LABEL_HI: Record<PlanetName, string> = {
 };
 
 /** Planet lens: how the planet colours whatever house it sits in, by tone. */
-const PLANET_LENS: Record<PlanetName, { pos: string; neg: string; mix: string }> = {
+export const PLANET_LENS: Record<PlanetName, { pos: string; neg: string; mix: string }> = {
   Sun: {
     pos: 'confidence, recognition and the backing of people in authority',
     neg: 'bruised ego, friction with authority and a pull to overwork',
@@ -150,7 +150,7 @@ const PLANET_LENS: Record<PlanetName, { pos: string; neg: string; mix: string }>
 
 /** House-from-Moon: life area + a short, practical "do" for the reader — one per
  *  tone (K14), so a "handle with care" reading never ends with "a good window to…". */
-const HOUSE_AREA: Record<number, { area: string; areaHi: string; tips: Record<Tone, string> }> = {
+export const HOUSE_AREA: Record<number, { area: string; areaHi: string; tips: Record<Tone, string> }> = {
   1: { area: 'self, body and the way you come across', areaHi: 'स्वयं, शरीर व व्यक्तित्व', tips: {
     favourable: 'Lead with your own plans — your energy and presence are on your side.',
     mixed: 'Pace yourself and look after your health and first impressions.',
@@ -260,7 +260,7 @@ const PLANETS_ALL: PlanetName[] = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 
 const SLOW: PlanetName[] = ['Jupiter', 'Saturn', 'Rahu', 'Ketu'];
 
 function signIndexOf(planet: PlanetName, at: Date): number {
-  const lon = getSiderealLongitude(planet, at);
+  const lon = getSiderealLongitude(planet, at, 'drik');
   return Math.floor(((lon % 360) + 360) % 360 / 30);
 }
 
@@ -292,7 +292,7 @@ function lensFor(planet: PlanetName, tone: Tone): string {
   return tone === 'favourable' ? L.pos : tone === 'challenging' ? L.neg : L.mix;
 }
 
-const TONE_FRAME: Record<Tone, string> = {
+export const TONE_FRAME: Record<Tone, string> = {
   favourable: 'Vedic astrology reads this as a supportive placement',
   challenging: 'Vedic astrology treats this as a placement to handle with care',
   mixed: 'Vedic astrology reads this as a mixed placement',
@@ -507,7 +507,7 @@ export function rashifalSky(period: RashifalPeriod, ref: Date): RashifalSky {
     }
   }
   if (period === 'today') {
-    const moonLon = ((getSiderealLongitude('Moon', rep) % 360) + 360) % 360;
+    const moonLon = ((getSiderealLongitude('Moon', rep, 'drik') % 360) + 360) % 360;
     const next = signSegments('Moon', rep, new Date(rep.getTime() + 3 * DAY_MS))[1];
     sky.moon = { nak: Math.floor(moonLon / (360 / 27)) % 27, ...(next ? { next: { s: next.signIndex, f: next.fromISO } } : {}) };
   }

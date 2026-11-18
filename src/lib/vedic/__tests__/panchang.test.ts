@@ -58,7 +58,7 @@ describe('Muhurat scoring & finder', () => {
 // (Adhika Purnima 31 May 2026).
 
 describe('Marriage Muhurat exclusions (round-2 T4)', () => {
-  const real: SunMoonFn = d => ({ sun: getSiderealLongitude('Sun', d), moon: getSiderealLongitude('Moon', d) });
+  const real: SunMoonFn = d => ({ sun: getSiderealLongitude('Sun', d, 'drik'), moon: getSiderealLongitude('Moon', d, 'drik') });
 
   it('Pushya is not favoured for marriage (but still is for business)', () => {
     const day = { nakshatra: 'Pushya', tithi: 5, tithiName: 'Panchami', paksha: 'Shukla', weekday: 'Friday', yoga: 'Siddhi' } as unknown as Parameters<typeof scoreMuhurat>[0];

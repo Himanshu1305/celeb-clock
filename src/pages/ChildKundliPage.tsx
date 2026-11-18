@@ -14,6 +14,10 @@ import { TrustStrip } from '@/components/paj/TrustStrip';
 import { ClassicalRefs } from '@/components/vedic/ClassicalRefs';
 import { buildChildKundli, type ChildKundli } from '@/lib/vedic/childKundli';
 import { birthQuery } from '@/lib/timezone/clientBirth';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { ChildKundliGuide } from '@/content/guides/ChildKundliGuide';
+
+const META = GUIDE_META['/child-kundli'];
 
 export default function ChildKundliPage() {
   const { profile, save } = useSavedProfile();
@@ -46,8 +50,8 @@ export default function ChildKundliPage() {
       variant="editorial"
       testId="child-kundli-page"
       seo={<SEO
-        title="Child (Bal) Kundli — Temperament, Talents & Care | BornClock"
-        description="A free, gentle Child (Bal) Kundli from your child's birth chart: temperament, learning strengths, natural talents, favourable periods, name sounds and calm wellbeing guidance."
+        title={META.title}
+        description={META.description}
         canonicalUrl="/child-kundli" ogType="website" />}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Child Kundli', edition: 'Temperament · Talents · Care' }}
       footer={{
@@ -63,7 +67,7 @@ export default function ChildKundliPage() {
     >
       <section className="section">
         <div className="section-head">
-          <div><span className="eyebrow">Bal Kundli · for parents</span><h1>Your child's Kundli.</h1></div>
+          <div><span className="eyebrow">Bal Kundli · for parents</span><h1>{META.h1}</h1></div>
           <p>A gentle, parent-facing reading from your child's birth chart — their temperament, how they may learn, natural talents, favourable periods, the traditional name-starting sounds, and calm wellbeing guidance. Hints to understand your child, never a script for who they must become.</p>
         </div>
         <TrustStrip claim="Read from your child's real birth chart — their Moon, birth star and planetary placements. A gentle guide, never a verdict on your child's future or health." href="/how-it-works/#vedic" />
@@ -111,6 +115,9 @@ export default function ChildKundliPage() {
           </div>
         )}
       </section>
+
+      {/* B14: explanatory guide — always below the tool and its results. */}
+      <ChildKundliGuide />
     </PajPage>
   );
 }

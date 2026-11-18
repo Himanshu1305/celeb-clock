@@ -23,7 +23,7 @@ import {
   getDwadasamsaSign,
   getTrimsamsaSign,
   getKPSubLord,
-  getLahiriAyanamsa,
+  getNatalAyanamsa,
   calculatePlacidusCusps,
   RASHI_NAMES,
   DASHA_LORDS,
@@ -290,7 +290,7 @@ function buildShadbala(chart: FullChart, birthDateUTC: Date, input: BirthChartIn
   const seven = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'];
   const lons: Record<string, number> = {};
   const trop: Record<string, number> = {};
-  const ayanamsa = getLahiriAyanamsa(birthDateUTC);
+  const ayanamsa = getNatalAyanamsa(birthDateUTC);
   for (const n of seven) {
     lons[n] = chart.planets[n].siderealLongitude;
     trop[n] = (lons[n] + ayanamsa) % 360;
@@ -515,4 +515,4 @@ export async function calculateBirthChart(
   }
 }
 
-export { getLahiriAyanamsa };
+export { getNatalAyanamsa };

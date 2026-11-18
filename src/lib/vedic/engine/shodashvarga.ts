@@ -84,7 +84,7 @@ export interface ShodashvargaChart {
 /** Sidereal longitudes of Lagna + 9 grahas at an instant (same engine path as the chart). */
 export function pointLongitudes(dateUTC: Date, latitude: number, longitude: number): Record<string, number> {
   const out: Record<string, number> = { Lagna: calculateLagna(dateUTC, latitude, longitude).ascSidereal };
-  for (const g of GRAHAS) out[g] = getSiderealLongitude(g, dateUTC);
+  for (const g of GRAHAS) out[g] = getSiderealLongitude(g, dateUTC, 'natal');
   return out;
 }
 

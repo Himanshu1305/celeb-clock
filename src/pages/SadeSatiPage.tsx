@@ -16,6 +16,10 @@ import { birthQuery } from '@/lib/timezone/clientBirth';
 import { Remedies } from '@/components/vedic/Remedies';
 import { IST_ZONE, zoneDay, zoneMonth, zoneLabel } from '@/lib/viewerTime';
 import { useViewerTimeZone } from '@/hooks/useViewerTimeZone';
+import { GUIDE_META } from '@/lib/seo/guideMeta.js';
+import { SadeSatiGuide } from '@/content/guides/SadeSatiGuide';
+
+const META = GUIDE_META['/sade-sati'];
 
 interface Pause { start: string; end: string }
 interface Cycle { start: string; end: string; pauses?: Pause[]; startedBeforeBirth?: boolean }
@@ -142,8 +146,8 @@ export default function SadeSatiPage() {
       variant="editorial"
       testId="sadesati-page"
       seo={(
-        <SEO title="Sade Sati Calculator — Saturn's 7.5-Year Transit | BornClock"
-          description="Free Sade Sati calculator — find whether Saturn's 7.5-year Sade Sati (or the 2.5-year Dhaiya) is active for you, which phase, and the real start and end dates of your current and next cycle."
+        <SEO title={META.title}
+          description={META.description}
           canonicalUrl="/sade-sati" ogType="website" />
       )}
       breadcrumb={{ trail: [{ label: 'Vedic Astrology', to: '/vedic-astrology/' }], current: 'Sade Sati', edition: 'Shani · Saturn transit' }}
@@ -161,7 +165,7 @@ export default function SadeSatiPage() {
     >
         <section className="section">
           <div className="section-head">
-            <div><span className="eyebrow">Shani · Saturn transit</span><h1>Sade Sati Calculator.</h1></div>
+            <div><span className="eyebrow">Shani · Saturn transit</span><h1>{META.h1}</h1></div>
             <p>Saturn’s 7.5-year Sade Sati passes over the 12th, 1st and 2nd signs from your Moon — this shows whether it’s active now, which phase, the real start/end dates, plus the 2.5-year Dhaiya (small Panoti).</p>
           </div>
           {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts). */}
@@ -266,6 +270,9 @@ export default function SadeSatiPage() {
           </div>
         )}
         </section>
+
+        {/* B14: explanatory guide — always below the tool and its results. */}
+        <SadeSatiGuide />
     </PajPage>
   );
 }

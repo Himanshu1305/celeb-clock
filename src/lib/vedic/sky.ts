@@ -36,7 +36,7 @@ const H = 3600_000;
 /** Apparent sidereal speed in degrees per day (±1 hour difference). */
 export function speedAt(p: Graha, at: Date): number {
   const t = at.getTime();
-  let d = getSiderealLongitude(p, new Date(t + H)) - getSiderealLongitude(p, new Date(t - H));
+  let d = getSiderealLongitude(p, new Date(t + H), 'drik') - getSiderealLongitude(p, new Date(t - H), 'drik');
   if (d > 180) d -= 360;
   if (d < -180) d += 360;
   return d * 12;
@@ -62,9 +62,9 @@ export interface GrahaPosition {
 
 /** Positions of all nine grahas at an instant. */
 export function grahaPositions(at: Date): GrahaPosition[] {
-  const sun = getSiderealLongitude('Sun', at);
+  const sun = getSiderealLongitude('Sun', at, 'drik');
   return GRAHAS.map(p => {
-    const lon = norm(getSiderealLongitude(p, at));
+    const lon = norm(getSiderealLongitude(p, at, 'drik'));
     const speed = speedAt(p, at);
     return { planet: p, lon, speed, ...placeOf(lon), retro: speed < 0, combust: isCombust(p, lon, sun, speed) };
   });
@@ -72,11 +72,11 @@ export function grahaPositions(at: Date): GrahaPosition[] {
 
 /** The next moment a graha changes sidereal sign after `from` (to ~1 s), and the new sign. */
 export function nextSignChange(p: Graha, from: Date): { at: Date; to: number } | null {
-  const s0 = Math.floor(norm(getSiderealLongitude(p, from)) / 30);
+  const s0 = Math.floor(norm(getSiderealLongitude(p, from, 'drik')) / 30);
   // Step well below the shortest stay in a sign (Moon ≈ 2 days; others weeks or more).
   const step = p === 'Moon' ? 2 * H : p === 'Sun' || p === 'Mercury' || p === 'Venus' || p === 'Mars' ? 12 * H : 2 * DAY;
   const limit = from.getTime() + 1400 * DAY;
-  const sign = (t: number) => Math.floor(norm(getSiderealLongitude(p, new Date(t))) / 30);
+  const sign = (t: number) => Math.floor(norm(getSiderealLongitude(p, new Date(t), 'drik')) / 30);
   let a = from.getTime();
   for (let b = a + step; b < limit; a = b, b += step) {
     if (sign(b) !== s0) {
@@ -111,7 +111,7 @@ export function combustPeriods(p: Graha, year: number): Period[] {
   if (!COMBUST_ORBS[p]) return [];
   const f = (t: number) => {
     const at = new Date(t);
-    return isCombust(p, getSiderealLongitude(p, at), getSiderealLongitude('Sun', at), speedAt(p, at));
+    return isCombust(p, getSiderealLongitude(p, at, 'drik'), getSiderealLongitude('Sun', at, 'drik'), speedAt(p, at));
   };
   const start = Date.UTC(year, 0, 1) - 120 * DAY, end = Date.UTC(year + 1, 0, 1) + 120 * DAY;
   const step = 12 * H;
