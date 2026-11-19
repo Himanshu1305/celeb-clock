@@ -135,7 +135,7 @@ a real inbox. The founder never received anything.
   never renders (no false success); mocked 200 → success UI.
 
 **Real test send (the one permitted real email).** `POST https://bornclock.com/api/contact`
-from the deployed Worker with a valid payload (topic `support`, reply-to `usdvisionai@gmail.com`)
+from the deployed Worker with a valid payload (topic `support`, reply-to `support.bornclock@gmail.com`)
 → **HTTP 200 `{"ok":true}`**, and the Worker logged **`[contact] sent
 ffa2c734-9079-4c8e-9a2d-953473f95c37`** (Resend message id). Delivered to `ADMIN_EMAIL` (the
 founder's real inbox). `ADMIN_EMAIL` and `RESEND_API_KEY` are both confirmed set as Worker

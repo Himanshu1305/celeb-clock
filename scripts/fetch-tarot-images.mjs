@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const UA = 'BornClockTarotImages/1.0 (https://bornclock.com; usdvisionai@gmail.com)';
+const UA = 'BornClockTarotImages/1.0 (https://bornclock.com; hello@bornclock.com)';
 const MAJOR = ['Fool', 'Magician', 'High Priestess', 'Empress', 'Emperor', 'Hierophant', 'Lovers', 'Chariot',
   'Strength', 'Hermit', 'Wheel of Fortune', 'Justice', 'Hanged Man', 'Death', 'Temperance', 'Devil', 'Tower',
   'Star', 'Moon', 'Sun', 'Judgement', 'World'];

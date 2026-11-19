@@ -129,19 +129,19 @@ grant execute on function public.redeem_report_credit(uuid, text) to service_rol
 
 -- A. reset a test profile to 3 credits (matches the launch handoff)
 -- set local role service_role;
--- update public.profiles set report_credits = 3 where email = 'hdixit@rediffmail.com';
+-- update public.profiles set report_credits = 3 where email = '<test-user-email>';
 
 -- B. redeem a genuinely locked report → expect ok=true, already_paid=false,
 --    credits_remaining=2, and the row now is_paid=true, unlock_source='credit'.
 -- select public.redeem_report_credit(
---   (select user_id from public.profiles where email = 'hdixit@rediffmail.com'),
+--   (select user_id from public.profiles where email = '<test-user-email>'),
 --   'PUT_LOCKED_SLUG_HERE');
 
 -- C. call it AGAIN with the same slug → expect ok=true, already_paid=true,
 --    credits_remaining STILL 2. The reload/double-fire must not burn a credit.
 -- select public.redeem_report_credit(
---   (select user_id from public.profiles where email = 'hdixit@rediffmail.com'),
+--   (select user_id from public.profiles where email = '<test-user-email>'),
 --   'PUT_LOCKED_SLUG_HERE');
 
 -- D. confirm the balance held at 2.
--- select report_credits from public.profiles where email = 'hdixit@rediffmail.com';
+-- select report_credits from public.profiles where email = '<test-user-email>';

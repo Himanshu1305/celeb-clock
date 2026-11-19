@@ -9,7 +9,7 @@ import { opsClient } from './_ops.js';
 import { isCronAuthorized, unauthorized } from './_cronAuth.js';
 
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
-const ADMIN_EMAIL_FALLBACK = 'himanshu1305@gmail.com';
+const ADMIN_EMAIL_FALLBACK = 'support.bornclock@gmail.com';
 const SEV_ORDER: Record<string, number> = { urgent: 0, warning: 1, info: 2 };
 const SEV_TAG: Record<string, string> = { urgent: '🔴', warning: '🟠', info: '🔵' };
 
