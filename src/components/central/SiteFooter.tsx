@@ -1,4 +1,5 @@
 import { Link } from '@/components/seo/CanonicalLink';
+import { LANGS } from '@/lib/lang/langs.js';
 
 export type FooterLink = { label: string; to: string };
 
@@ -39,6 +40,13 @@ export function SiteFooter({
           {nav.map((l) => <Link key={l.to + l.label} to={l.to}>{l.label}</Link>)}
         </nav>
       </div>
+      {/* B18: "Read in" — the language landing pages (src/lib/lang/langs.js). */}
+      <nav className="footer-nav" aria-label="Read in" data-testid="footer-read-in" style={{ display: 'flex', padding: '0 0 12px', flexWrap: 'wrap' }}>
+        <span>Read in:</span>
+        <Link to="/" lang="en">English</Link>
+        <Link to="/hi/rashifal/" lang="hi">हिन्दी</Link>
+        {LANGS.map(l => <Link key={l.code} to={`/${l.code}/`} lang={l.code}>{l.native}</Link>)}
+      </nav>
       <div className="footer-bottom"><span>{note}</span></div>
     </footer>
   );

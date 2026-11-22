@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { OtherLanguages } from '@/components/lang/OtherLanguages';
 import { Link } from '@/components/seo/CanonicalLink';
 import { PajPage } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -178,6 +179,7 @@ export default function KundaliMatchPage() {
           {/* Batch 8: dated claim backed by /accuracy (src/lib/accuracy/evidence.ts; AstroSage values entered 17 Oct 2026). */}
           <TrustStrip claim="The classical 36-point compatibility score (Ashtakoota) — all eight parts shown and added up in front of you. In our tests (October 2026), the total matched AstroSage for all 7 test couples." href="/accuracy/" linkLabel="How we check accuracy" />
           <KundaliTabs active="match" />
+          <OtherLanguages path="/kundali-match" />
           {/* Batch 9b: the name-only (approximate) matcher and the Hindi version. */}
           <p data-testid="kmatch-alt-links" className="subtle" style={{ marginTop: 8 }}>
             No birth time? <Link to="/kundli-milan-by-name/" className="textlink">Kundli milan by name</Link> gives an approximate score from the first syllable of each name.

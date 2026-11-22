@@ -10,6 +10,7 @@ import { HelmetProvider } from "react-helmet-async";
 
 // Core Page Imports
 import Index from "./pages/Index";
+import { LANGS, langRoutePatterns } from '@/lib/lang/langs.js';
 const BirthdayResults = lazyWithReload(() => import("./pages/BirthdayResults"));
 const Auth = lazyWithReload(() => import("./pages/Auth"));
 const Profile = lazyWithReload(() => import("./pages/Profile"));
@@ -191,6 +192,13 @@ const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
 const HindiPanchangPage = lazyWithReload(() => import('@/pages/hi/PanchangPage'));
 // Batch 9b: Hindi Kundli milan + Kundli milan by name (English + Hindi).
 const HindiKundliMilanPage = lazyWithReload(() => import('@/pages/hi/KundliMilanPage'));
+// B18 — regional-language pages (Tamil … Punjabi); routes built from src/lib/lang/langs.js.
+const LangLandingPage = lazyWithReload(() => import('@/pages/lang/LangLandingPage'));
+const LangRashifalPage = lazyWithReload(() => import('@/pages/lang/LangRashifalPage'));
+const LangYearPage = lazyWithReload(() => import('@/pages/lang/LangYearPage'));
+const LangYearHubPage = lazyWithReload(() => import('@/pages/lang/LangYearPage').then(m => ({ default: m.LangYearHubPage })));
+const LangPanchangPage = lazyWithReload(() => import('@/pages/lang/LangPanchangPage'));
+const LangKundaliPage = lazyWithReload(() => import('@/pages/lang/LangKundaliPage'));
 const KundliMilanByNamePage = lazyWithReload(() => import('@/pages/KundliMilanByNamePage'));
 const RashifalIndex = lazyWithReload(() => import('@/pages/RashifalIndex'));
 const RashifalSign = lazyWithReload(() => import('@/pages/RashifalSign'));
@@ -495,6 +503,11 @@ const App = () => (
               <Route path="/gemstones" element={<GemstonePage />} />
               <Route path="/baby-names" element={<BabyNamesPage />} />
               <Route path="/baby-names/nakshatra/:slug" element={<BabyNamesNakshatraPage />} />
+              {/* B18 — regional languages: one route set per language (src/lib/lang/langs.js langRoutePatterns). */}
+              {LANGS.flatMap(l => langRoutePatterns(l).map(r => {
+                const C = { landing: LangLandingPage, rashifalHub: LangRashifalPage, rashifal: LangRashifalPage, yearHub: LangYearHubPage, year: LangYearPage, panchang: LangPanchangPage, panchangCity: LangPanchangPage, kundali: LangKundaliPage }[r.page];
+                return <Route key={r.path} path={r.path} element={<C code={l.code} />} />;
+              }))}
               <Route path="/hi/rashifal/:rashi" element={<RashifalPage />} />
               <Route path="/hi/rashifal" element={<RashifalPage />} />
               <Route path="/hi/panchang" element={<HindiPanchangPage />} />
