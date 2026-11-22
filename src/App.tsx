@@ -172,6 +172,8 @@ const BirthdayReportGiftPage = lazyWithReload(() => import('@/pages/BirthdayRepo
 const ForBusinessPage = lazyWithReload(() => import('@/pages/ForBusinessPage'));
 const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
+// B18: Lal Kitab Kundli (English + Hindi).
+const LalKitabPage = lazyWithReload(() => import('@/pages/LalKitabPage'));
 const AstrologerPage = lazyWithReload(() => import('@/pages/AstrologerPage'));
 const SadeSatiPage = lazyWithReload(() => import('@/pages/SadeSatiPage'));
 const SadeSatiRashiPage = lazyWithReload(() => import('@/pages/SadeSatiRashiPage'));
@@ -476,6 +478,8 @@ const App = () => (
               <Route path="/for-business" element={<ForBusinessPage />} />
               <Route path="/kundali" element={<KundaliPage />} />
               <Route path="/kundali-match" element={<KundaliMatchPage />} />
+              <Route path="/lal-kitab" element={<LalKitabPage />} />
+              <Route path="/hi/lal-kitab" element={<LalKitabPage lang="hi" />} />
               <Route path="/kundli-milan-by-name" element={<KundliMilanByNamePage lang="en" />} />
               <Route path="/hi/kundli-milan" element={<HindiKundliMilanPage />} />
               <Route path="/hi/naam-se-kundli-milan" element={<KundliMilanByNamePage lang="hi" />} />

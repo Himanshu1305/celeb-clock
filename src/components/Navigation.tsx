@@ -60,6 +60,7 @@ const NAV_CATEGORIES: NavCategory[] = [
       { path: '/hindu-calendar-2027/', label: 'Hindu Calendar & Festivals 2027', emoji: '📅' },
       { path: '/kundali/', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
       { path: '/kundali-match/', label: 'Kundali Matching', emoji: '💑' },
+      { path: '/lal-kitab/', label: 'Lal Kitab Kundli', emoji: '📕' },
       { path: '/astrologer/', label: 'Ask an Astrologer (AI)', emoji: '💬' },
       { path: '/sade-sati/', label: 'Sade Sati Calculator', emoji: '🪐' },
       { path: '/muhurat/', label: 'Muhurat Finder', emoji: '🗓️' },

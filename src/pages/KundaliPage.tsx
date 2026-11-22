@@ -69,6 +69,8 @@ export default function KundaliPage() {
   const [readingTime, setReadingTime] = useState('');
   const [usedPlace, setUsedPlace] = useState('');
   const [usedCoords, setUsedCoords] = useState<{ lat: number; lon: number } | null>(null);
+  // B18: the same birth details, carried to the Lal Kitab chart (/lal-kitab/?dob=…&time=…&place=…&lat=…&lon=…&tz=…).
+  const [lalKitabHref, setLalKitabHref] = useState('/lal-kitab/');
   const [displayName, setDisplayName] = useState('');
   const [historyKey, setHistoryKey] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -136,6 +138,12 @@ export default function KundaliPage() {
     const loc = details.city;
     setUsedPlace(details.city.name);
     setUsedCoords({ lat: details.city.lat, lon: details.city.lon });
+    {
+      const q = new URLSearchParams({ dob: details.dob, time: details.time, place: details.city.name, lat: String(details.city.lat), lon: String(details.city.lon), tz: String(details.city.tz) });
+      if (details.city.manualTimezone && details.city.timezone) q.set('tzid', details.city.timezone);
+      if (details.name) q.set('name', details.name);
+      setLalKitabHref(`/lal-kitab/?${q.toString()}`);
+    }
     try {
       const k = await fetchKundali(details.dob, details.time, loc);
       setData(k);
@@ -475,6 +483,7 @@ export default function KundaliPage() {
                   onClick={() => void downloadPdf()}>
                   Download Kundli (PDF) — free
                 </button>
+                <Link data-testid="kundali-lal-kitab-link" className="btn secondary" to={lalKitabHref}>See your Lal Kitab chart →</Link>
                 <Link className="btn secondary" to="/birthday-report/gift/">Gift a Birthday Blueprint ({price}) →</Link>
               </div>
               <Suspense fallback={null}>

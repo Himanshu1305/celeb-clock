@@ -30,6 +30,17 @@ export const GUIDE_META = {
     description: 'कुंडली मिलान हिंदी में: जन्म तिथि, समय और स्थान से 36 गुणों का अष्टकूट मिलान, नाड़ी-भकूट दोष, मांगलिक जाँच और सरल उपाय — मुफ़्त।',
     h1: 'कुंडली मिलान (गुण मिलान)',
   },
+  // B18: Lal Kitab Kundli (English + Hindi).
+  '/lal-kitab': {
+    title: 'Lal Kitab Kundli — Free Chart & Remedies | BornClock',
+    description: 'Free Lal Kitab Kundli: your Lal Kitab chart, pakka ghar, sleeping planets, Rin (debts), this year’s Varshphal and simple, free Lal Kitab remedies.',
+    h1: 'Lal Kitab Kundli — Free Lal Kitab Chart & Remedies',
+  },
+  '/hi/lal-kitab': {
+    title: 'लाल किताब कुंडली — मुफ़्त चार्ट व उपाय | BornClock',
+    description: 'मुफ़्त लाल किताब कुंडली: लाल किताब चार्ट, पक्का घर, सोये ग्रह, पितृ ऋण आदि ऋण, इस साल का वर्षफल और सरल, मुफ़्त लाल किताब उपाय।',
+    h1: 'लाल किताब कुंडली — मुफ़्त चार्ट और उपाय',
+  },
   '/sade-sati': {
     title: 'Sade Sati Calculator — Shani Sade Sati Dates | BornClock',
     description: 'Free Sade Sati calculator: is Shani’s 7.5-year Sade Sati or the 2.5-year Dhaiya active for your Moon sign, which phase, and the real start and end dates.',

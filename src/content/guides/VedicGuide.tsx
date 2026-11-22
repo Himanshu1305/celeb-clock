@@ -59,7 +59,7 @@ export function VedicGuide() {
         <p>Every term, with Hindi names: <Link to="/glossary/" className="underline">astrology glossary</Link>.</p>
       </GuideSection>
 
-      <RelatedLinks title="Popular Vedic tools" links={related(['kundali', 'match', 'rashifal', 'panchang', 'moonSign', 'remedies'])} />
+      <RelatedLinks title="Popular Vedic tools" links={related(['kundali', 'match', 'lalKitab', 'rashifal', 'panchang', 'moonSign', 'remedies'])} />
     </Guide>
   );
 }

@@ -40,6 +40,7 @@ export const TOOLS: Record<string, GuideLink> = {
   panchang: { to: '/panchang/', label: 'Today’s Panchang', note: 'Tithi, Nakshatra, Rahu Kaal for your city.' },
   vedic: { to: '/vedic-astrology/', label: 'Vedic Astrology hub', note: 'Every Vedic tool in one place.' },
   remedies: { to: '/remedies/', label: 'Remedies (Upay)', note: 'Free-first traditional practices.' },
+  lalKitab: { to: '/lal-kitab/', label: 'Lal Kitab Kundli', note: 'Your chart the Lal Kitab way, with free remedies.' },
   glossary: { to: '/glossary/', label: 'Astrology Glossary', note: 'Every term in plain language.' },
 };
 
