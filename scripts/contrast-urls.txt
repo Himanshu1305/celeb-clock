@@ -40,6 +40,8 @@
 /tarot-card-by-birthday
 /kundali
 /kundali-match
+/lal-kitab
+/hi/lal-kitab
 /marriage-biodata-maker
 /meri-umar-kitni-hai
 /hi/life-expectancy-calculator

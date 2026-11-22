@@ -432,6 +432,9 @@ export const STATIC_ROUTES = [
   '/kundli-milan-by-name',
   '/hi/kundli-milan',
   '/hi/naam-se-kundli-milan',
+  // B18: Lal Kitab Kundli (English + Hindi).
+  '/lal-kitab',
+  '/hi/lal-kitab',
   // Part AL Step 7: prerender the redesigned Vedic tool pages so crawlers see real content
   // on first load (previously served a bare SPA shell before React hydrated).
   '/sade-sati',

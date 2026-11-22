@@ -340,6 +340,8 @@ const worker = {
       if ((m = pathname.match(/^\/numerology\/(\d+)\/?$/)))          return !NUM.has(parseInt(m[1], 10));
       const ANG = new Set(['000','111','222','333','444','555','666','777','888','999','1010','1111','1212','1234','2222']); // = src/data/angelNumbersSeo.json keys
       if ((m = pathname.match(/^\/angel-numbers\/([^/]+)\/?$/)))    return !ANG.has(m[1]);
+      // B18: the Lal Kitab Kundli is two single pages (/lal-kitab, /hi/lal-kitab) — nothing lives below them.
+      if (/^\/(?:hi\/)?lal-kitab\/[^/]+/.test(pathname))           return true;
       return false;
     })();
 
