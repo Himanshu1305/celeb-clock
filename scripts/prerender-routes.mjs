@@ -10,6 +10,8 @@ import { muhuratYearRoutes } from '../src/lib/muhuratYearMeta.js';
 // B14: the 2027 pages (yearly rashifal / horoscope, festival dates, tithi lists, calendar,
 // numerology, Chinese horoscope) — one list shared with App.tsx, the Worker and the titles.
 import { year2027Routes } from '../src/lib/year2027/meta.js';
+// B18: the regional-language pages (Tamil … Punjabi) — one list shared with App.tsx and the Worker.
+import { langRoutes } from '../src/lib/lang/langs.js';
 
 /** Batch 10 vrat page slugs (mirror of VRAT_SLUGS, src/lib/vedic/vrats/meta.ts). */
 export const VRAT_SLUGS_MJS = ['ekadashi', 'satyanarayan-katha', 'pradosh-vrat', 'sankashti-chaturthi', 'karwa-chauth', 'somvar-vrat', 'mangalvar-vrat', 'navratri', 'mahashivratri', 'janmashtami'];
@@ -194,6 +196,7 @@ export const STATIC_ROUTES = [
   '/',
   // B14: 2027 pages near the front so they always prerender within the time budget.
   ...year2027Routes(),
+  ...langRoutes(),
   // Growth pages FIRST (Overnight Batch 2): the prerender has a 25-min budget and
   // skips its tail; keeping these 18 high-value pages near the front guarantees they
   // prerender before the large born-on/india tail can exhaust the budget.

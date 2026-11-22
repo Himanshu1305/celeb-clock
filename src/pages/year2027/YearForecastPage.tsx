@@ -8,6 +8,7 @@
  * The page is fixed to the calendar year 2027 (no "today" content), so the prerendered HTML
  * never goes stale.
  */
+import { OtherLanguages } from '@/components/lang/OtherLanguages';
 import { useMemo } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { Link } from '@/components/seo/CanonicalLink';
@@ -163,6 +164,7 @@ export default function YearForecastPage({ system, lang = 'en' }: { system: Syst
           </p>
         </div>
 
+        {!western && <OtherLanguages label={lang === 'en' ? 'Read this in' : 'दूसरी भाषाओं में'} />}
         <H2 id="brief">{t.brief}</H2>
         <div className="space-y-3 text-brand-ink leading-relaxed" data-testid="year2027-brief">
           {r.brief.map(p => <p key={p.slice(0, 40)}>{p}</p>)}

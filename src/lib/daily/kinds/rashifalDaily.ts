@@ -108,7 +108,7 @@ function nakClauseHi(sky: VedicSky): string {
   return c ? ` (${c.at} बजे तक, फिर ${NAK_HI[c.to]})` : '';
 }
 
-interface Factors {
+export interface Factors {
   rashi: number;
   moonHouse: number;
   moonTone: T3;
@@ -121,7 +121,7 @@ interface Factors {
   taras: { nak: number; tara: number; tone: T3 }[];
 }
 
-function factors(sky: VedicSky, rashi: number): Factors {
+export function factors(sky: VedicSky, rashi: number): Factors {
   const h = (p: PlanetName) => houseFrom(sky.sign[p], rashi);
   const t = (p: PlanetName) => toT3(gocharTone(p, h(p)));
   const sh = h('Saturn');

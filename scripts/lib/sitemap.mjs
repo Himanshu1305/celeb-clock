@@ -29,6 +29,8 @@ export const SECTIONS = [
   { id: 'celebrity', file: 'sitemap-celebrity.xml' },
   { id: 'birthday', file: 'sitemap-birthday.xml' },
   { id: 'hindi', file: 'sitemap-hindi.xml' },
+  // B18: Tamil, Telugu, Bengali, Marathi, Gujarati, Kannada, Malayalam, Punjabi pages.
+  { id: 'languages', file: 'sitemap-languages.xml' },
   { id: 'articles', file: 'sitemap-articles.xml' },
 ];
 
@@ -57,7 +59,9 @@ const BIRTHDAY_FIRST = new Set([
 
 /** Section id of a route (no trailing slash, '/' for home). */
 export function sectionOf(route) {
-  if (pageLangForPath(route) === 'hi') return 'hindi';
+  const docLang = pageLangForPath(route);
+  if (docLang === 'hi') return 'hindi';
+  if (docLang !== 'en') return 'languages';
   const f = first(route);
   if (PANCHANG_FIRST.has(f)) return 'panchang';
   if (ARTICLE_FIRST.has(f)) return 'articles';

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { palette } from '../theme/palette';
+import { hreflangCluster } from '../lib/lang/langs.js';
 
 interface SEOProps {
   title: string;
@@ -68,6 +69,11 @@ export const SEO = ({
     ? (canonicalUrl === '/' ? '/' : canonicalUrl.replace(/\/+$/, '') + '/')
     : undefined;
   const fullCanonicalUrl = canonicalPath ? `${SITE_URL}${canonicalPath}` : undefined;
+  // B18: the Rashifal / Rashifal 2027 / Panchang / Kundali-matching pages exist in English,
+  // Hindi and eight regional languages — every member of a cluster declares the SAME full,
+  // reciprocal hreflang set (src/lib/lang/langs.js hreflangCluster), whatever a page passed.
+  const cluster = canonicalPath && !noindex ? hreflangCluster(canonicalPath) : [];
+  const alternates = cluster.length > 1 ? cluster : hreflang;
 
   // Batch 11 (GSC "Duplicate without user-selected canonical"): a URL that has no
   // prerendered file is served the SPA shell (index.html), whose static head carries the
@@ -185,7 +191,7 @@ export const SEO = ({
       {fullCanonicalUrl && <link rel="canonical" href={fullCanonicalUrl} />}
 
       {/* hreflang alternates — international SEO */}
-      {hreflang && hreflang.map(h => (
+      {alternates && alternates.map(h => (
         <link key={h.lang} rel="alternate" hrefLang={h.lang} href={h.url} />
       ))}
       

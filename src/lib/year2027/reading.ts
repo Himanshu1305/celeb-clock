@@ -37,11 +37,13 @@ const val = (t: Tone) => (t === 'favourable' ? 1 : t === 'challenging' ? -1 : 0)
 
 export type System = 'vedic' | 'western';
 
-export interface Window { from: string; to: string; why: string }
-export interface MonthNote { month: number; name: string; tone: Tone; verdict: string; text: string; score: number }
-export interface AreaReading { key: Domain; title: string; tone: Tone; impact: string; reasons: string[]; todo: string }
-export interface TransitRow { planet: YPlanet; planetLabel: string; sign: string; house: number; from: string; to: string; when: string; tone: Tone; toneLabel: string }
-export interface EclipseRow { name: string; date: string; time: string; house: number; area: string; india: boolean; text: string }
+/** B18: `bits` = the planets (and houses) behind the window, for the regional-language pages. */
+export interface Window { from: string; to: string; why: string; bits?: Array<{ p: YPlanet; h: number }> }
+export type MonthEvent = { iso: string; kind: 'ingress' | 'retro' | 'direct' | 'eclipse'; p?: YPlanet; h: number; t?: Tone; to?: string; solar?: boolean };
+export interface MonthNote { month: number; name: string; tone: Tone; verdict: string; text: string; score: number; verdictKey?: 'best' | 'good' | 'mixed' | 'care' | 'hard'; events?: MonthEvent[]; lead?: { p: YPlanet; h: number; t: Tone } }
+export interface AreaReading { key: Domain; title: string; tone: Tone; impact: string; reasons: string[]; todo: string; factors?: Array<{ p: YPlanet; h: number; spans: Array<[string, string]> }> }
+export interface TransitRow { signIdx?: number; planet: YPlanet; planetLabel: string; sign: string; house: number; from: string; to: string; when: string; tone: Tone; toneLabel: string }
+export interface EclipseRow { name: string; date: string; time: string; house: number; area: string; india: boolean; text: string; body?: 'solar' | 'lunar'; type?: string }
 export interface SaturnRow { from: string; to: string; when: string; label: string; house: number }
 
 export interface YearReading {
@@ -59,9 +61,9 @@ export interface YearReading {
   best: Window[];
   challenging: Window[];
   loveWindows: Window[];
-  saturn: { status: 'sadeSati' | 'dhaiya' | 'none'; rows: SaturnRow[]; text: string; short: string };
+  saturn: { status: 'sadeSati' | 'dhaiya' | 'none'; rows: SaturnRow[]; text: string; short: string; ssSpan?: { start: string; end: string } };
   eclipses: EclipseRow[];
-  lucky: { months: string[]; colours: string[]; numbers: number[]; day: string; text: string };
+  lucky: { months: string[]; colours: string[]; numbers: number[]; day: string; text: string; monthIdx?: number[]; helper?: YPlanet; weekday?: number };
   /** Planets whose remedies the page shows (most demanding influence first). */
   remedyPlanets: YPlanet[];
   remedyKeys: string[];
@@ -138,6 +140,17 @@ function runs(n: number, pred: (i: number) => boolean, minLen: number): Array<[n
   return merged.filter(r => r[1] - r[0] + 1 >= minLen);
 }
 
+function windowBits(ref: number, sky: YearSky, parts: Array<Record<string, Tone>>, days: number[], a: number, b: number, want: Tone): Array<{ p: YPlanet; h: number }> {
+  const n = b - a + 1;
+  const mid = days[Math.floor((a + b) / 2)];
+  return sky.planets
+    .map(p => { let c = 0; for (let i = a; i <= b; i++) if (parts[i][p] === want) c++; return { p, share: c / n }; })
+    .filter(x => x.share >= 0.6)
+    .sort((x, y) => WEIGHT[y.p] - WEIGHT[x.p])
+    .slice(0, 3)
+    .map(({ p }) => ({ p, h: houseFrom(ref, signOn(sky, p, mid)) }));
+}
+
 function windowWhy(system: System, lang: Lang, ref: number, sky: YearSky, parts: Array<Record<string, Tone>>, days: number[], a: number, b: number, want: Tone): string {
   const n = b - a + 1;
   const hits = sky.planets
@@ -190,7 +203,7 @@ export function computeYearReading(ref: number, system: System, lang: Lang): Yea
     for (const s of sky.segs[p]) {
       const h = houseFrom(ref, s.sign);
       const t = toneOf(system, p, h);
-      transits.push({ planet: p, planetLabel: pName(p, lang, false), sign: signLabel(system, s.sign, lang), house: h, from: s.from, to: s.to, when: range(s.from, s.to, lang), tone: t, toneLabel: TONE_WORD[lang][t] });
+      transits.push({ signIdx: s.sign, planet: p, planetLabel: pName(p, lang, false), sign: signLabel(system, s.sign, lang), house: h, from: s.from, to: s.to, when: range(s.from, s.to, lang), tone: t, toneLabel: TONE_WORD[lang][t] });
     }
   }
 
@@ -223,6 +236,7 @@ export function computeYearReading(ref: number, system: System, lang: Lang): Yea
   // ── Windows ───────────────────────────────────────────────────────────────
   const toWin = (rs: Array<[number, number]>, want: Tone): Window[] => rs.map(([a, b]) => ({
     from: istISO(days[a]), to: istISO(days[b]), why: windowWhy(system, lang, ref, sky, parts, days, a, b, want),
+    bits: windowBits(ref, sky, parts, days, a, b, want),
   }));
   const best = toWin(pickWindows(scores, days, true), 'favourable');
   const challenging = toWin(pickWindows(scores, days, false), 'challenging');
@@ -238,6 +252,7 @@ export function computeYearReading(ref: number, system: System, lang: Lang): Yea
   const loveWindows = runs(days.length, lovePred, 10).slice(0, 4).map(([a, b]) => ({
     from: istISO(days[a]), to: istISO(days[b]),
     why: windowWhy(system, lang, ref, sky, parts, days, a, b, 'favourable'),
+    bits: windowBits(ref, sky, parts, days, a, b, 'favourable'),
   }));
 
   // ── Life areas ────────────────────────────────────────────────────────────
@@ -256,7 +271,7 @@ export function computeYearReading(ref: number, system: System, lang: Lang): Yea
       : en
         ? `Falls in your ${ORD_EN[h]} house from the Moon — ${AREA.en[h]}. ${angular ? 'An angular house: expect a reset here.' : 'A point of review, not a time to push.'} ${e.india ? 'Listed as visible from India.' : 'Not visible from India.'}`
         : `आपकी राशि से ${ORD_HI[h]} भाव — ${AREA.hi[h]} — में। ${angular ? 'केंद्र भाव: यहाँ नए सिरे से सोचने का समय।' : 'समीक्षा का समय, ज़ोर लगाने का नहीं।'} ${e.india ? 'भारत से दिखाई देने वाला बताया गया है।' : 'भारत से दिखाई नहीं देगा।'}`;
-    return { name: nm, date: e.istDate, time: e.istTime, house: h, area: area(system, h, lang), india: e.india, text };
+    return { name: nm, date: e.istDate, time: e.istTime, house: h, area: area(system, h, lang), india: e.india, text, body: e.body, type: e.type };
   });
 
   // ── Lucky ─────────────────────────────────────────────────────────────────
@@ -342,7 +357,7 @@ export function computeYearReading(ref: number, system: System, lang: Lang): Yea
 
   return {
     system, lang, signIndex: ref, name, tone, headline, brief, transits, areas, months, best, challenging, loveWindows,
-    saturn, eclipses, lucky: { months: luckyMonths, colours, numbers, day, text: luckyText }, remedyPlanets, remedyKeys, faq,
+    saturn, eclipses, lucky: { months: luckyMonths, colours, numbers, day, text: luckyText, monthIdx: top3.slice().sort((a, b) => a - b), helper, weekday: lordWeekday }, remedyPlanets, remedyKeys, faq,
   };
 }
 
@@ -396,6 +411,7 @@ function buildArea(system: System, lang: Lang, ref: number, sky: YearSky, k: Dom
     impact: system === 'western' ? WESTERN_IMPACT[k][tone] : DOMAIN_IMPACT[lang][k][tone],
     reasons,
     todo,
+    factors: top.map(({ p, h, spans }) => ({ p, h, spans })),
   };
 }
 
@@ -407,7 +423,7 @@ function buildMonth(system: System, lang: Lang, ref: number, sky: YearSky, m: nu
   const tone: Tone = score - mean > 0.6 ? 'favourable' : score - mean < -0.6 ? 'challenging' : 'mixed';
   const verdict = isTop ? V.best : isBottom ? V.hard : tone === 'favourable' ? V.good : tone === 'challenging' ? V.care : V.mixed;
   // Events of the month, in date order; slow planets, eclipses and stations first in priority.
-  const ev: Array<{ iso: string; pri: number; text: string }> = [];
+  const ev: Array<{ iso: string; pri: number; text: string; e: MonthEvent }> = [];
   const E = en || system === 'western';
   for (const p of sky.planets) {
     for (const s of sky.segs[p].slice(1)) {
@@ -420,16 +436,16 @@ function buildMonth(system: System, lang: Lang, ref: number, sky: YearSky, m: nu
         : en
           ? `${shortDate(s.from, 'en')}: ${p} enters your ${ORD_EN[h]} house (${AREA.en[h]}) — ${TONE_WORD.en[t]}${SLOW.includes(p) ? `: ${LENS.en[p][t]}` : ''}.`
           : `${shortDate(s.from, 'hi')}: ${pName(p, 'hi')} आपके ${ORD_HI[h]} भाव (${AREA.hi[h]}) में — ${TONE_WORD.hi[t]}${SLOW.includes(p) ? `: ${LENS.hi[p][t]}` : ''}।`;
-      ev.push({ iso: s.from, pri, text });
+      ev.push({ iso: s.from, pri, text, e: { iso: s.from, kind: 'ingress', p, h, t } });
     }
   }
   for (const r of sky.retro) {
     const rh = houseFrom(ref, signOn(sky, r.planet, Math.max(r.startMs, Date.UTC(sky.year, 0, 1))));
     const rArea = system === 'western' ? WESTERN_AREA[rh] : AREA[lang][rh];
-    if (inMonth(r.from)) ev.push({ iso: r.from, pri: 1, text: E
+    if (inMonth(r.from)) ev.push({ iso: r.from, pri: 1, e: { iso: r.from, kind: 'retro', p: r.planet, h: rh, to: r.to }, text: E
       ? `${shortDate(r.from, 'en')}: ${r.planet} turns retrograde in your ${ORD_EN[rh]} ${system === 'western' ? 'solar ' : ''}house until ${shortDate(r.to, 'en')} — ${r.planet === 'Mercury' ? 're-check plans and paperwork about' : 'review rather than start anything new in'} ${rArea}.`
       : `${shortDate(r.from, 'hi')}: ${pName(r.planet, 'hi')} ${shortDate(r.to, 'hi')} तक ${ORD_HI[rh]} भाव में वक्री — ${rArea} से जुड़े ${r.planet === 'Mercury' ? 'योजनाएँ और काग़ज़ दोबारा जाँचें' : 'मामलों में नया शुरू करने के बजाय पुराना पूरा करें'}।` });
-    if (inMonth(r.to) && r.to.startsWith(String(sky.year))) ev.push({ iso: r.to, pri: 3, text: E
+    if (inMonth(r.to) && r.to.startsWith(String(sky.year))) ev.push({ iso: r.to, pri: 3, e: { iso: r.to, kind: 'direct', p: r.planet, h: houseFrom(ref, signOn(sky, r.planet, r.endMs)) }, text: E
       ? `${shortDate(r.to, 'en')}: ${r.planet} turns direct in your ${ORD_EN[houseFrom(ref, signOn(sky, r.planet, r.endMs))]} ${system === 'western' ? 'solar ' : ''}house.`
       : `${shortDate(r.to, 'hi')}: ${pName(r.planet, 'hi')} ${ORD_HI[houseFrom(ref, signOn(sky, r.planet, r.endMs))]} भाव में मार्गी।` });
   }
@@ -437,12 +453,13 @@ function buildMonth(system: System, lang: Lang, ref: number, sky: YearSky, m: nu
     if (!inMonth(e.istDate)) continue;
     const h = houseFrom(ref, e.sign);
     const kind = e.name.replace(/ \(.*\)$/, '').toLowerCase();
-    ev.push({ iso: e.istDate, pri: 0, text: system === 'western'
+    ev.push({ iso: e.istDate, pri: 0, e: { iso: e.istDate, kind: 'eclipse', h, solar: e.body === 'solar' }, text: system === 'western'
       ? `${shortDate(e.istDate, 'en')}: ${kind} in your ${ORD_EN[h]} solar house.`
       : en ? `${shortDate(e.istDate, 'en')}: ${kind} in your ${ORD_EN[h]} house — keep the day quiet.`
         : `${shortDate(e.istDate, 'hi')}: ${e.body === 'solar' ? 'सूर्य' : 'चंद्र'} ग्रहण, आपके ${ORD_HI[h]} भाव में — उस दिन शांति रखें।` });
   }
-  const events = ev.sort((a, b) => a.pri - b.pri || (a.iso < b.iso ? -1 : 1)).slice(0, 2).sort((a, b) => (a.iso < b.iso ? -1 : a.iso > b.iso ? 1 : a.pri - b.pri)).map(x => x.text);
+  const picked = ev.sort((a, b) => a.pri - b.pri || (a.iso < b.iso ? -1 : 1)).slice(0, 2).sort((a, b) => (a.iso < b.iso ? -1 : a.iso > b.iso ? 1 : a.pri - b.pri));
+  const events = picked.map(x => x.text);
   // The month's backdrop: the strongest influence at mid-month that matches the verdict.
   const mid = Date.UTC(sky.year, m, 15, 6, 30);
   const infl = sky.planets.map(p => {
@@ -459,7 +476,8 @@ function buildMonth(system: System, lang: Lang, ref: number, sky: YearSky, m: nu
       : `इस महीने का मुख्य प्रभाव: ${pName(lead.p, 'hi')} आपके ${ORD_HI[lead.h]} भाव (${AREA.hi[lead.h]}) में।`;
   const todo = tip(system, lead.h, lead.t, lang);
   const text = [events.length ? '' : backdrop, ...events, (en || system === 'western' ? 'What to do: ' : 'क्या करें: ') + todo].filter(Boolean).join(' ');
-  return { month: m, name: en || system === 'western' ? MONTHS_EN[m] : MONTHS_HI[m], tone, verdict, text, score };
+  const verdictKey = isTop ? 'best' : isBottom ? 'hard' : tone === 'favourable' ? 'good' : tone === 'challenging' ? 'care' : 'mixed';
+  return { month: m, name: en || system === 'western' ? MONTHS_EN[m] : MONTHS_HI[m], tone, verdict, text, score, verdictKey, events: picked.map(x => x.e), lead: { p: lead.p, h: lead.h, t: lead.t } };
 }
 
 function buildSaturn(system: System, lang: Lang, ref: number, sky: YearSky, fullName: string): YearReading['saturn'] {
@@ -509,7 +527,7 @@ function buildSaturn(system: System, lang: Lang, ref: number, sky: YearSky, full
   const short = en
     ? (status === 'none' ? `No — neither Sade Sati nor Shani Dhaiya applies to ${fullName} in 2027.` : `Yes — ${first!.label.toLowerCase()} from ${first!.when}${rows.filter(r => [12, 1, 2, 4, 8].includes(r.house)).length > 1 ? ', with Saturn moving back and forth across a sign boundary during the year' : ''}.${span}`)
     : (status === 'none' ? `नहीं — 2027 में ${fullName} पर न साढ़ेसाती है, न शनि ढैया।` : `हाँ — ${first!.label} (${first!.when})${rows.filter(r => [12, 1, 2, 4, 8].includes(r.house)).length > 1 ? '; वर्ष के दौरान शनि राशि की सीमा पर आगे-पीछे होते हैं' : ''}।${span}`);
-  return { status, rows, text, short };
+  return { status, rows, text, short, ...(ss ? { ssSpan: { start: ss.start.slice(0, 10), end: ss.end.slice(0, 10) } } : {}) };
 }
 
 function buildFaq(system: System, lang: Lang, ref: number, name: string, fullName: string, headline: string, areas: AreaReading[], best: Window[], challenging: Window[], love: Window[], saturn: YearReading['saturn'], eclipses: EclipseRow[], luckyMonths: string[]): Array<{ question: string; answer: string }> {

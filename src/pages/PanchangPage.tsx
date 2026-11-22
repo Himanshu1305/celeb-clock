@@ -5,6 +5,7 @@
  * Today's content for built-in cities comes from the shared daily-page mechanism
  * (src/lib/daily) so it never goes stale between deploys.
  */
+import { OtherLanguages } from '@/components/lang/OtherLanguages';
 import { useMemo } from 'react';
 import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
@@ -48,6 +49,7 @@ export default function PanchangPage() {
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-3xl">
           <PanchangControls ctl={ctl} shared={shared} />
+          <OtherLanguages />
 
           <DailyBody entry={entry} testId="panchang-daily" />
           <DailyJsonLd entry={entry} path={path} />

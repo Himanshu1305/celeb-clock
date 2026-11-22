@@ -5,6 +5,7 @@
  * Batch 10: `when="tomorrow"` renders /rashifal/:rashi/tomorrow — the next India date's
  * reading (daily kind 'rashifal-tomorrow'), with its own dated title and canonical.
  */
+import { OtherLanguages } from '@/components/lang/OtherLanguages';
 import { Link } from '@/components/seo/CanonicalLink';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
@@ -56,6 +57,7 @@ export function RashifalDailyView({ rashi, when = 'today' }: { rashi: RashiMeta;
             <Link to={`/hi/rashifal/${RASHI_SLUGS_HI[idx]}`} lang="hi" className="px-3 py-1.5 rounded-lg border border-border text-sm text-foreground hover:bg-primary/5">हिंदी में</Link>
           </div>
 
+          <OtherLanguages />
           <DailyBody entry={entry} testId={tomorrow ? 'rashifal-tomorrow' : 'rashifal-daily'} />
           {tomorrow && (
             <p className="text-xs text-muted-foreground mb-6" data-testid="rashifal-tomorrow-note">

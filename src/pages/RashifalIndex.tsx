@@ -1,4 +1,5 @@
 import { Link } from '@/components/seo/CanonicalLink';
+import { OtherLanguages } from '@/components/lang/OtherLanguages';
 import { ToolLayout } from '@/components/central';
 import { SEO } from '@/components/SEO';
 import { TermTip } from '@/components/vedic/TermTip';
@@ -47,6 +48,7 @@ export default function RashifalIndex() {
     >
       <section className="section">
         <div className="container mx-auto px-4 py-6 max-w-4xl">
+          <OtherLanguages />
           <Link to="/rashifal-2027/" data-testid="rashifal-2027-banner" className="block rounded-xl border border-brand-gold/50 bg-brand-gold/10 p-4 mb-5 hover:shadow-sm transition">
             <div className="font-semibold text-brand-ink">Rashifal 2027 — the yearly forecast for all 12 rashis →</div>
             <div className="text-sm text-brand-ink-soft mt-1">Computed from the real 2027 transits: month-by-month notes, best and challenging periods, Sade Sati, eclipses and remedies.</div>
