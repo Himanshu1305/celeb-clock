@@ -20,6 +20,8 @@ import {
 import { MUHURAT_YEAR_META, MUHURAT_YEAR_SLUGS, MUHURAT_YEAR_YEARS } from '../src/lib/muhuratYearMeta.js';
 // B14: 2027 pages — titles / descriptions shared with the pages (src/lib/year2027/meta.js).
 import { year2027Meta } from '../src/lib/year2027/meta.js';
+// B18: regional-language titles (src/lib/lang/vocab/<code>.js meta).
+import { langMetaFor } from '../src/lib/lang/registry.js';
 // B14: the main astrology landing pages — one shared copy with the pages.
 import { guideMetaFor } from '../src/lib/seo/guideMeta.js';
 
@@ -427,6 +429,7 @@ export function getTitleForRoute(route) {
     const y = year2027Meta(route);
     if (y) return { title: y.title, description: y.description };
   }
+  { const l = langMetaFor(route); if (l) return { title: l.title, description: l.description }; }
   { const g = guideMetaFor(route); if (g) return { title: g.title, description: g.description }; }
 
   // Batch 9b: /sade-sati/:rashi and /hi/sade-sati/:rashi — mirrors ssPageMeta() in

@@ -50,6 +50,7 @@ import { matchDailyRoute } from '../src/lib/daily/registry.js';
 import { VRAT_SLUG_SET } from '../src/lib/vedic/vrats/meta.js';
 import { RASHI_SLUGS_2027, RASHI_SLUGS_HI_2027, SIGN_SLUGS_2027, FESTIVAL_SLUGS_2027, HI_FESTIVAL_SLUGS_2027 } from '../src/lib/year2027/meta.js';
 import { pageLangForPath, withHtmlLang } from '../src/lib/seo/pageLang.js';
+import { regionalLangOf, isLangRoute } from '../src/lib/lang/langs.js';
 import { applyDailyContent } from './daily.js';
 
 type Env = {
@@ -302,6 +303,8 @@ const worker = {
       if ((m = pathname.match(/^\/transit\/([a-z]+)\/(\d+)\/?$/)))    return !(TRP.has(m[1]) && validTY(parseInt(m[2], 10)));
       if ((m = pathname.match(/^\/mercury-retrograde\/(\d+)\/?$/)))   return !validTY(parseInt(m[1], 10));
       if ((m = pathname.match(/^\/festivals\/(\d+)\/?$/)))            return !validTY(parseInt(m[1], 10));
+      // B18: regional-language pages (/ta/, /te/, … — src/lib/lang/langs.js) exist only as listed.
+      if (regionalLangOf(pathname)) return !isLangRoute(pathname);
       // B14: 2027 pages exist only for 2027 and the listed signs / festivals (src/lib/year2027/meta.js).
       if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/(\d+)\/?$/)))     return !(m[2] === '2027' && RASHI_SLUGS_2027.includes(m[1]));
       if ((m = pathname.match(/^\/hi\/rashifal\/([a-z]+)\/(\d+)\/?$/))) return !(m[2] === '2027' && RASHI_SLUGS_HI_2027.includes(m[1]));
@@ -395,9 +398,11 @@ const worker = {
         // already carry it; this also covers the SPA shell served for any Hindi URL that has
         // no prerendered file (and daily-injected shells). Same byte length → no
         // Content-Length change, but drop it anyway in case the source tag differed.
-        if (htmlBody !== null && pageLangForPath(pathname) === 'hi') {
+        // B18: and the regional languages (/ta/*, /te/*, … → lang="ta" …).
+        const docLang = pageLangForPath(pathname);
+        if (htmlBody !== null && docLang !== 'en') {
           const text = typeof htmlBody === 'string' ? htmlBody : await new Response(htmlBody).text();
-          htmlBody = withHtmlLang(text, 'hi');
+          htmlBody = withHtmlLang(text, docLang);
           headers.delete('Content-Length');
         }
         // Fix 3: a validated-invalid address returns a real 404 (noindex — a genuine

@@ -53,7 +53,7 @@ function priority(route) {
 // Batch 7: daily-changing pages (src/lib/daily/registry.ts) — content changes every
 // India day, so they are marked daily with the build date as lastmod.
 // W7 adds /panchang, /rahu-kaal, /choghadiya (+ 50 cities) and /hi/panchang (+ 10 cities).
-const DAILY_ROUTE = /^\/(?:rashifal\/[a-z]+\/(?:today|tomorrow)|hi\/rashifal\/[a-z]+|zodiac\/[a-z]+\/(?:today|tomorrow)|(?:hi\/)?(?:panchang|rahu-kaal|choghadiya|vrat)(?:\/[a-z-]+)?|panchang-calendar|planets-today|moon-phase)$/;
+const DAILY_ROUTE = /^\/(?:rashifal\/[a-z]+\/(?:today|tomorrow)|hi\/rashifal\/[a-z]+|zodiac\/[a-z]+\/(?:today|tomorrow)|(?:hi\/)?(?:panchang|rahu-kaal|choghadiya|vrat)(?:\/[a-z-]+)?|panchang-calendar|planets-today|moon-phase|(?:ta|te|bn|mr|gu|kn|ml|pa)\/(?:(?:rasi-palan|rasi-phalalu|rashifal|rashi-bhavishya|rashiphalam)\/[a-z]+|(?:panchangam|panjika|panchang|panchanga)(?:\/[a-z-]+)?))$/;
 // Pages whose prerendered content is today's list (fresh every build) also count as daily.
 const DAILY_EXTRA = new Set(['/todays-birthdays']);
 const isDaily = route => DAILY_ROUTE.test(route) || DAILY_EXTRA.has(route);
