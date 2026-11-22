@@ -108,9 +108,13 @@ function detectRajYoga(ctx: ReturnType<typeof buildContext>): YogaResult {
   if (present) {
     const anyStrong = [...planetsInvolved].some(p => ctx.strongSb(p) === true);
     const involvesBest = [...planetsInvolved].some(p => ctx.housesRuledBy(p).some(h => [9,10].includes(h)));
-    if (yogakarakas.length && anyStrong) grade = 'full';
-    else if (yogakarakas.length || (conditions.length >= 2 && involvesBest)) grade = 'strong';
-    else if (conditions.length >= 1 && involvesBest) grade = 'moderate';
+    // A Yogakaraka is built into the Lagna (half of all Lagnas have one), so on
+    // its own it is graded 'moderate'; 'full' needs it strong AND an actual
+    // Kendra/Trikona-lord association. Keeps "full Raj Yoga" meaningful.
+    const assocCount = conditions.length - yogakarakas.length;
+    if (yogakarakas.length && anyStrong && assocCount >= 1) grade = 'full';
+    else if ((yogakarakas.length && (anyStrong || assocCount >= 1)) || (assocCount >= 2 && involvesBest)) grade = 'strong';
+    else if (yogakarakas.length || (assocCount >= 1 && involvesBest)) grade = 'moderate';
     else grade = 'partial';
     // Delivery tempering: a DEBILITATED Yogakaraka (or all involved planets weak)
     // cannot deliver at full strength, even if the formation is textbook.
@@ -255,6 +259,10 @@ function detectNeechaBhanga(ctx: ReturnType<typeof buildContext>): YogaResult[] 
     add(kendraFromLagna(p), `the debilitated ${planet} is itself in a Kendra`, `the debilitated ${planet} is not in a Kendra`);
     add(disp && (ctx.conjunct(p, disp) || ctx.mutualAspect(p, disp)), `${planet} is conjunct or in mutual aspect with its dispositor ${dispositor}`, `${planet} is not conjunct/aspected by its dispositor ${dispositor}`);
     add(disp && ctx.parivartana(p, disp), `sign exchange (Parivartana) between ${planet} and ${dispositor}`, `no sign exchange between ${planet} and ${dispositor}`);
+    // Classical condition: the planet that is EXALTED in this debilitation sign sits in a Kendra.
+    const exaltedHere = CLASSICAL.find(x => EXALT_SIGN[x] === p.signIdx);
+    const exH = exaltedHere ? ctx.byName[exaltedHere] : undefined;
+    if (exaltedHere) add(!!exH && (kendraFromLagna(exH) || kendraFromMoon(exH)), `${exaltedHere}, which is exalted in this sign, is in a Kendra from Lagna or Moon`, `${exaltedHere} (exalted in this sign) is not in a Kendra from Lagna or Moon`);
 
     // Condition 6 — Navamsa cross-check (commonly, wrongly skipped): still debilitated in D9 negates.
     const debilInNavamsa = p.navamsaIdx === DEBIL_SIGN[planet];

@@ -73,6 +73,7 @@ export default function KundaliPage() {
   const [historyKey, setHistoryKey] = useState(0);
   const [loading, setLoading] = useState(false);
   const [failed, setFailed] = useState(false);
+  const [dateError, setDateError] = useState('');
   const [reading, setReading] = useState<ReadingPayload | null>(null);
   const [readingLoading, setReadingLoading] = useState(false);
   const [readingFailed, setReadingFailed] = useState(false);
@@ -122,6 +123,12 @@ export default function KundaliPage() {
         : undefined;
 
   const generate = async (details: BirthDetails) => {
+    // Same rule as Kundali Match: no future birth dates; and a sane earliest year
+    // (the ephemeris and time-zone data are unreliable before 1800).
+    const d = new Date(); const todayIso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    if (details.dob > todayIso) { setData(null); setDateError('A birth date cannot be in the future.'); return; }
+    if (details.dob < '1800-01-01') { setData(null); setDateError('Please enter a birth year from 1800 onwards.'); return; }
+    setDateError('');
     setLoading(true); setFailed(false); setReading(null); setReadingFailed(false);
     setReadingDob(details.dob);
     setReadingTime(details.time);
@@ -311,6 +318,9 @@ export default function KundaliPage() {
             </label>
           </div>
 
+          {dateError && (
+            <p data-testid="kundali-date-error" className="subtle" style={{ marginTop: 16 }}>{dateError}</p>
+          )}
           {failed && (
             <p className="subtle" style={{ marginTop: 16 }}>Kundali service is temporarily unavailable. Please try again shortly.</p>
           )}
@@ -474,7 +484,7 @@ export default function KundaliPage() {
 
             <section className="section">
               <div data-testid="kundali-interpretation">
-                <div className="section-head"><div><span className="eyebrow">Read the chart</span><h2 data-testid="kundali-interp-heading">{displayName ? `${displayName}’s chart, interpreted` : 'Your chart, interpreted'}</h2></div></div>
+                <div className="section-head"><div><span className="eyebrow">Read the chart</span><h2 data-testid="kundali-interp-heading" style={{ overflowWrap: 'anywhere' }}>{displayName ? `${displayName}’s chart, interpreted` : 'Your chart, interpreted'}</h2></div></div>
                 <div className="honesty-items" style={{ gridTemplateColumns: '1fr 1fr' }}>
                   {buildInterpretationBlocks(data).map((b, i) => (
                     <div key={i} data-testid="kundali-interp-block">

@@ -31,7 +31,7 @@ export default function RashiRatnaPage() {
         <SEO
           title="Rashi Ratna — Gemstone by Zodiac Sign (Indian Vedic Birthstones) | BornClock"
           description="Find your Rashi Ratna — the Indian Vedic birthstone for your zodiac sign. Complete guide to Navratna gems: Ruby, Pearl, Emerald, Diamond, Yellow Sapphire, Blue Sapphire, and more."
-          keywords="rashi ratna, rashi ratna by zodiac, gemstone by rashi, vedic birthstone, navratna, moonga for aries, pukhraj for leo, neelam for capricorn, heera for taurus"
+          keywords="rashi ratna, rashi ratna by zodiac, gemstone by rashi, vedic birthstone, navratna, moonga for aries, manik for leo, pukhraj for sagittarius, neelam for capricorn, heera for taurus"
           canonicalUrl="/rashi-ratna"
         />
       )}
