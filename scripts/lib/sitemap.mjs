@@ -40,7 +40,7 @@ const VEDIC_FIRST = new Set([
   '/festivals', '/eclipses', '/mercury-retrograde', '/dasha-calculator', '/manglik', '/kaal-sarp-dosha',
   '/pitra-dosha', '/mool-dosha', '/grahan-dosha', '/nadi-dosha', '/career-report', '/life-report',
   '/child-kundli', '/astrologer', '/janma-tithi-calculator', '/moon-sign', '/sun-vs-moon-sign', '/glossary',
-  '/marriage-biodata-maker',
+  '/marriage-biodata-maker', '/varshphal',
   // B14: 2027 pages
   '/rashifal-2027', '/horoscope-2027', '/horoscope', '/hindu-calendar-2027', '/ekadashi-2027', '/purnima-2027', '/amavasya-2027',
 ]);

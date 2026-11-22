@@ -14,6 +14,7 @@ import { getSiderealLongitude, getDrikAyanamsa } from '@/lib/vedic/engine/vedicE
 import { GANA, NADI, YONI } from '@/lib/vedic/nakshatraAttributes';
 import { calculateDateOnlyRashi } from '@/utils/celebrityCalculations';
 import { grahaPositions } from '@/lib/vedic/sky';
+import { computeVarshphal } from '@/lib/vedic/varshphal';
 
 /** Fixed "as of" date for current Dasha / Sade Sati / transit snapshots. */
 export const SAMPLE_REF_ISO = '2027-01-01T00:00:00.000Z';
@@ -238,8 +239,28 @@ export async function buildGuideSamples() {
     })),
   };
 
+  // ── B18: Varshphal 2027 of chart A (cast for the birth place, IST) ─────────────
+  const VA = SAMPLE_BIRTHS.a;
+  const vr = computeVarshphal({
+    birthUTC: birthUtc(VA.input), birthLat: VA.input.latitude, birthLon: VA.input.longitude,
+    lat: VA.input.latitude, lon: VA.input.longitude, timezone: 'Asia/Kolkata', year: 2027,
+  });
+  const istDate = (iso: string) => new Date(Date.parse(iso) + 5.5 * 3600_000).toISOString().slice(0, 10);
+  const varshphal = {
+    birth: { date: VA.dateLabel, time: VA.timeLabel, place: VA.place }, year: vr.year, completedYears: vr.completedYears,
+    pravesh: { date: vr.varshaPravesh.localDate, time: vr.varshaPravesh.localTime, isDay: vr.varshaPravesh.isDay },
+    natalLagna: RASHI[vr.natal.lagnaSign], nakshatra: vr.natal.moonNakshatra, nakshatraNumber: vr.natal.nakshatraNumber,
+    lagna: { sign: RASHI[vr.lagna.sign], degree: dms(vr.lagna.longitude), lord: vr.lagna.lord },
+    muntha: { sign: RASHI[vr.muntha.sign], house: vr.muntha.house, lord: vr.muntha.lord },
+    adhikaris: vr.adhikaris.map(x => ({ role: x.role, planet: x.planet })),
+    candidates: vr.candidates.map(c => ({ planet: c.planet, aspectsLagna: c.aspectsLagna, house: c.houseFromLagna, vimshopaka: round(c.vimshopaka, 1) })),
+    varshesh: vr.varshesh.planet,
+    sahams: vr.sahams.map(x => ({ key: x.key, sign: RASHI[x.sign], degree: dms(x.longitude), house: x.house })),
+    mudda: vr.mudda.map(m => ({ lord: m.lord, start: istDate(m.start), end: istDate(m.end) })),
+  };
+
   return {
     refDate: SAMPLE_REF_ISO.slice(0, 10), refLabel: SAMPLE_REF_LABEL,
-    kundali: a, dasha, match, matchHi, nameMatch, sadeSati, manglik, kaalSarp, child, moonSign, rashiByDob, gochar,
+    kundali: a, dasha, match, matchHi, nameMatch, sadeSati, manglik, kaalSarp, child, moonSign, rashiByDob, gochar, varshphal,
   };
 }

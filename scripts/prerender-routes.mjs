@@ -425,6 +425,9 @@ export const STATIC_ROUTES = [
   '/mystic-corner',
   '/kundali',
   '/kundali-match',
+  // B18: Varshphal (Tajik annual chart) — English + Hindi tool pages.
+  '/varshphal',
+  '/hi/varshphal',
   // Batch 9b: Hindi Kundli milan + Kundli milan by name (English + Hindi).
   '/kundli-milan-by-name',
   '/hi/kundli-milan',

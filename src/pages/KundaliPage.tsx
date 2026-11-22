@@ -210,6 +210,8 @@ export default function KundaliPage() {
     : '';
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(shareText).replace(/'/g, '%27')}`;
   const kundaliFindings = data ? findingsFromKundali(data as unknown as KundaliLike) : [];
+  // B18: the Varshphal year offered from the result (current year; must be after the birth year).
+  const varshphalYear = Math.max(new Date().getFullYear(), Number(readingDob.slice(0, 4) || 0) + 1);
   const shareBirth = useMemo(() => ({ name: displayName, dob: readingDob, time: readingTime, place: usedPlace }), [displayName, readingDob, readingTime, usedPlace]);
   // Batch 9b: the print builder (and its chart drawing) loads only when asked for.
   const downloadPdf = async () => {
@@ -477,6 +479,17 @@ export default function KundaliPage() {
                 </button>
                 <Link className="btn secondary" to="/birthday-report/gift/">Gift a Birthday Blueprint ({price}) →</Link>
               </div>
+              {/* B18: the free Varshphal for this year, carried forward with the same birth details. */}
+              {usedCoords && readingDob && readingTime && (
+                <p data-testid="kundali-varshphal-link" className="text-sm" style={{ marginTop: 12 }}>
+                  <Link className="textlink underline" to={`/varshphal/?${new URLSearchParams({
+                    dob: readingDob, time: readingTime, place: usedPlace, lat: String(usedCoords.lat), lon: String(usedCoords.lon),
+                    tz: String(lastLoc.current?.loc?.tz ?? ''), year: String(varshphalYear),
+                    ...(lastLoc.current?.loc?.manualTimezone && lastLoc.current.loc.timezone ? { tzid: lastLoc.current.loc.timezone } : {}),
+                    ...(displayName ? { name: displayName } : {}),
+                  }).toString()}`}>See your Varshphal for {varshphalYear} (annual horoscope, free) →</Link>
+                </p>
+              )}
               <Suspense fallback={null}>
                 <KundaliShareCard data={data} chartStyle={chartStyle} birth={shareBirth} shareText={shareText} whatsappHref={whatsappHref} />
               </Suspense>

@@ -96,6 +96,14 @@ export default function YearHubPage({ system, lang = 'en' }: { system: System; l
           </p>
         </div>
 
+        {/* B18: the personal annual chart (Varshphal) complements the Moon-sign forecasts. */}
+        {!western && (
+          <p data-testid="year2027-varshphal-link" className="text-sm text-brand-ink !mb-4">
+            {L === 'hi' ? 'राशि से आगे, अपनी जन्म कुंडली से बना वर्ष का फल: ' : 'Want a forecast built from your own birth chart, not just your Moon sign? '}
+            <Link to={L === 'hi' ? '/hi/varshphal/' : '/varshphal/'} className="underline font-semibold">{L === 'hi' ? 'अपना वर्षफल 2027 देखें (मुफ़्त) →' : 'See your Varshphal 2027 — free annual horoscope →'}</Link>
+          </p>
+        )}
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" data-testid="year2027-hub-grid">
           {readings.map(r => (
             <Link key={r.signIndex} to={`${pathFor(r.signIndex)}/`} className="block rounded-xl border border-brand-line bg-brand-paper p-4 hover:shadow-sm transition">

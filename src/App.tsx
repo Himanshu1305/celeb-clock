@@ -172,6 +172,7 @@ const BirthdayReportGiftPage = lazyWithReload(() => import('@/pages/BirthdayRepo
 const ForBusinessPage = lazyWithReload(() => import('@/pages/ForBusinessPage'));
 const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
+const VarshphalPage = lazyWithReload(() => import('@/pages/VarshphalPage'));
 const AstrologerPage = lazyWithReload(() => import('@/pages/AstrologerPage'));
 const SadeSatiPage = lazyWithReload(() => import('@/pages/SadeSatiPage'));
 const SadeSatiRashiPage = lazyWithReload(() => import('@/pages/SadeSatiRashiPage'));
@@ -476,6 +477,9 @@ const App = () => (
               <Route path="/for-business" element={<ForBusinessPage />} />
               <Route path="/kundali" element={<KundaliPage />} />
               <Route path="/kundali-match" element={<KundaliMatchPage />} />
+              {/* B18: free Varshphal (Tajik annual chart), English + Hindi. */}
+              <Route path="/varshphal" element={<VarshphalPage />} />
+              <Route path="/hi/varshphal" element={<VarshphalPage lang="hi" />} />
               <Route path="/kundli-milan-by-name" element={<KundliMilanByNamePage lang="en" />} />
               <Route path="/hi/kundli-milan" element={<HindiKundliMilanPage />} />
               <Route path="/hi/naam-se-kundli-milan" element={<KundliMilanByNamePage lang="hi" />} />

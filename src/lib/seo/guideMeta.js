@@ -80,6 +80,17 @@ export const GUIDE_META = {
     description: 'Free Vedic rashifal for all 12 Moon signs — today, tomorrow, week, month and year — computed from the real sidereal transits, not a template.',
     h1: 'Rashifal — horoscope by your Moon sign',
   },
+  // B18: Varshphal (Tajik annual chart) — free tool, English + Hindi.
+  '/varshphal': {
+    title: 'Varshphal 2027 — Free Annual Horoscope (Tajik) | BornClock',
+    description: 'Free Varshphal 2027: your Tajik annual chart from the exact Sun return — year lord, Muntha, Sahams, Mudda dasha and a month-by-month outlook.',
+    h1: 'Varshphal — Free Annual Horoscope (Tajik)',
+  },
+  '/hi/varshphal': {
+    title: 'वर्षफल 2027 — मुफ़्त वार्षिक कुंडली (ताजिक) | BornClock',
+    description: 'मुफ़्त वर्षफल 2027: सूर्य के ठीक जन्म-अंश पर लौटने से बनी ताजिक वर्ष कुंडली — वर्षेश, मुंथा, सहम, मुद्दा दशा और महीनेवार फल।',
+    h1: 'वर्षफल — मुफ़्त वार्षिक कुंडली (ताजिक)',
+  },
 };
 
 /** Meta for a route, or null. */

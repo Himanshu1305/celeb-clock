@@ -55,6 +55,7 @@ const NAV_CATEGORIES: NavCategory[] = [
     items: [
       { path: '/vedic-astrology/', label: 'Vedic Astrology — overview', emoji: '🕉️' },
       { path: '/rashifal-2027/', label: 'Rashifal 2027 (Yearly)', emoji: '✨' },
+      { path: '/varshphal/', label: 'Varshphal (Annual Horoscope)', emoji: '🌅' },
       { path: '/rashifal/', label: 'Daily Rashifal', emoji: '☀️' },
       { path: '/panchang/', label: "Today's Panchang", emoji: '📿' },
       { path: '/hindu-calendar-2027/', label: 'Hindu Calendar & Festivals 2027', emoji: '📅' },

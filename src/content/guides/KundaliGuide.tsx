@@ -123,7 +123,7 @@ export function KundaliGuide() {
       </GuideSection>
 
       <GuideFAQ items={KUNDALI_FAQ} title="Kundli FAQ" />
-      <RelatedLinks title="Related tools" links={related(['match', 'dasha', 'manglik', 'sadeSati', 'kaalSarp', 'nakshatra', 'moonSign', 'child'])} />
+      <RelatedLinks title="Related tools" links={related(['match', 'dasha', 'varshphal', 'manglik', 'sadeSati', 'kaalSarp', 'nakshatra', 'moonSign', 'child'])} />
     </Guide>
   );
 }

@@ -31,6 +31,7 @@ export const TOOLS: Record<string, GuideLink> = {
   manglik: { to: '/manglik/', label: 'Manglik Dosh Check', note: 'Mars from the Lagna and from the Moon.' },
   kaalSarp: { to: '/kaal-sarp-dosha/', label: 'Kaal Sarp Dosh Check', note: 'All seven planets between Rahu and Ketu?' },
   dasha: { to: '/dasha-calculator/', label: 'Dasha Calculator', note: 'Mahadasha and Antardasha with dates.' },
+  varshphal: { to: '/varshphal/', label: 'Varshphal (Annual Horoscope)', note: 'Your Tajik annual chart and month-by-month outlook.' },
   nakshatra: { to: '/nakshatra/', label: 'The 27 Nakshatras', note: 'Every birth star, its lord and name sounds.' },
   moonSign: { to: '/moon-sign/', label: 'Moon Sign Calculator', note: 'Your Vedic Rashi from your date of birth.' },
   rashiDob: { to: '/rashifal-by-date-of-birth/', label: 'Rashi by Date of Birth (हिंदी)', note: 'जन्म तिथि से अपनी राशि।' },

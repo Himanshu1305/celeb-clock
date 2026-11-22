@@ -32,6 +32,7 @@ import { POST as vedicChat }            from '../api/vedic-chat.js';
 import { GET  as kundaliMatch }         from '../api/kundali-match.js';
 import { GET  as chartEvents }          from '../api/chart-events.js';
 import { GET  as sadeSati }             from '../api/sade-sati.js';
+import { GET  as varshphal }            from '../api/varshphal.js';
 import { GET  as muhurat }             from '../api/muhurat.js';
 import { GET  as careerReport }        from '../api/career-report.js';
 import { GET  as lifeReport }          from '../api/life-report.js';
@@ -114,6 +115,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/kundali-match':      kundaliMatch,
   '/api/chart-events':       chartEvents,
   '/api/sade-sati':          sadeSati,
+  '/api/varshphal':          varshphal,
   '/api/muhurat':            muhurat,
   '/api/career-report':      careerReport,
   '/api/life-report':        lifeReport,
@@ -293,6 +295,8 @@ const worker = {
       // (src/lib/vedic/sadeSatiRashiText.ts SS_EN_SLUGS / SS_HI_SLUGS).
       if ((m = pathname.match(/^\/sade-sati\/([a-z]+)\/?$/)))       return !R.has(m[1]);
       if ((m = pathname.match(/^\/hi\/sade-sati\/([a-z]+)\/?$/)))   return !RH.has(m[1]);
+      // B18: the Varshphal tool is one page per language (year chosen in the form) — no sub-pages.
+      if (/^\/(?:hi\/)?varshphal\/[^/]+(?:\/.*)?$/.test(pathname)) return true;
       const NAK = new Set(['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati']);
       if ((m = pathname.match(/^\/nakshatra\/([a-z-]+)\/?$/)))        return !NAK.has(m[1]);
       if ((m = pathname.match(/^\/baby-names\/nakshatra\/([a-z-]+)\/?$/))) return !NAK.has(m[1]);
