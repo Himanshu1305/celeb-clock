@@ -28,7 +28,7 @@ export function LanguageToggle() {
       <button type="button" onClick={() => set('en')} className={btn(current === 'en')} aria-pressed={current === 'en'}>EN</button>
       <button type="button" onClick={() => set('hi')} className={btn(current === 'hi')} aria-pressed={current === 'hi'}>हि</button>
       <details data-testid="language-menu" className="relative">
-        <summary className="list-none cursor-pointer px-2 py-1 text-xs font-semibold rounded text-white/75 hover:text-white" aria-label="More languages">भाषा ▾</summary>
+        <summary className="list-none cursor-pointer px-2 py-1 text-xs font-semibold rounded text-white/75 hover:text-white" aria-label="More languages" title="More languages">🌐 ▾</summary>
         <ul className="absolute right-0 z-50 mt-1 w-40 rounded-lg border border-border bg-white p-1 shadow-lg">
           {ALL_LANGS.map(l => (
             <li key={l.code}>
