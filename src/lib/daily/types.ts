@@ -4,7 +4,8 @@
  * import this file.
  */
 
-export type DailyLang = 'en' | 'hi';
+/** B18: plus the regional languages (src/lib/lang/langs.js). */
+export type DailyLang = 'en' | 'hi' | 'ta' | 'te' | 'bn' | 'mr' | 'gu' | 'kn' | 'ml' | 'pa';
 
 /** A tone marker for a section — drives a small coloured dot, never fear wording. */
 export type DailyTone = 'good' | 'mixed' | 'care';
@@ -79,7 +80,7 @@ export interface DailyEntry {
   faq: DailyFaq[];
   /** Optional block headings instead of the daily defaults ("Today in brief", "Why
    *  today", "Questions about today") — e.g. "This week in brief" on a weekly page. */
-  labels?: { answer?: string; why?: string; faq?: string };
+  labels?: { answer?: string; why?: string; faq?: string; good?: string; mixed?: string; care?: string };
 }
 
 /** One month file: `dist/daily/<kind>/<slug>/<YYYY-MM>.json`. */

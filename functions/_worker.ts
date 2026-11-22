@@ -32,6 +32,7 @@ import { POST as vedicChat }            from '../api/vedic-chat.js';
 import { GET  as kundaliMatch }         from '../api/kundali-match.js';
 import { GET  as chartEvents }          from '../api/chart-events.js';
 import { GET  as sadeSati }             from '../api/sade-sati.js';
+import { GET  as varshphal }            from '../api/varshphal.js';
 import { GET  as muhurat }             from '../api/muhurat.js';
 import { GET  as careerReport }        from '../api/career-report.js';
 import { GET  as lifeReport }          from '../api/life-report.js';
@@ -50,6 +51,7 @@ import { matchDailyRoute } from '../src/lib/daily/registry.js';
 import { VRAT_SLUG_SET } from '../src/lib/vedic/vrats/meta.js';
 import { RASHI_SLUGS_2027, RASHI_SLUGS_HI_2027, SIGN_SLUGS_2027, FESTIVAL_SLUGS_2027, HI_FESTIVAL_SLUGS_2027 } from '../src/lib/year2027/meta.js';
 import { pageLangForPath, withHtmlLang } from '../src/lib/seo/pageLang.js';
+import { regionalLangOf, isLangRoute } from '../src/lib/lang/langs.js';
 import { applyDailyContent } from './daily.js';
 
 type Env = {
@@ -114,6 +116,7 @@ const apiRoutes: Record<string, (r: Request) => Promise<Response>> = {
   '/api/kundali-match':      kundaliMatch,
   '/api/chart-events':       chartEvents,
   '/api/sade-sati':          sadeSati,
+  '/api/varshphal':          varshphal,
   '/api/muhurat':            muhurat,
   '/api/career-report':      careerReport,
   '/api/life-report':        lifeReport,
@@ -293,6 +296,8 @@ const worker = {
       // (src/lib/vedic/sadeSatiRashiText.ts SS_EN_SLUGS / SS_HI_SLUGS).
       if ((m = pathname.match(/^\/sade-sati\/([a-z]+)\/?$/)))       return !R.has(m[1]);
       if ((m = pathname.match(/^\/hi\/sade-sati\/([a-z]+)\/?$/)))   return !RH.has(m[1]);
+      // B18: the Varshphal tool is one page per language (year chosen in the form) — no sub-pages.
+      if (/^\/(?:hi\/)?varshphal\/[^/]+(?:\/.*)?$/.test(pathname)) return true;
       const NAK = new Set(['ashwini','bharani','krittika','rohini','mrigashira','ardra','punarvasu','pushya','ashlesha','magha','purva-phalguni','uttara-phalguni','hasta','chitra','swati','vishakha','anuradha','jyeshtha','mula','purva-ashadha','uttara-ashadha','shravana','dhanishtha','shatabhisha','purva-bhadrapada','uttara-bhadrapada','revati']);
       if ((m = pathname.match(/^\/nakshatra\/([a-z-]+)\/?$/)))        return !NAK.has(m[1]);
       if ((m = pathname.match(/^\/baby-names\/nakshatra\/([a-z-]+)\/?$/))) return !NAK.has(m[1]);
@@ -302,6 +307,8 @@ const worker = {
       if ((m = pathname.match(/^\/transit\/([a-z]+)\/(\d+)\/?$/)))    return !(TRP.has(m[1]) && validTY(parseInt(m[2], 10)));
       if ((m = pathname.match(/^\/mercury-retrograde\/(\d+)\/?$/)))   return !validTY(parseInt(m[1], 10));
       if ((m = pathname.match(/^\/festivals\/(\d+)\/?$/)))            return !validTY(parseInt(m[1], 10));
+      // B18: regional-language pages (/ta/, /te/, … — src/lib/lang/langs.js) exist only as listed.
+      if (regionalLangOf(pathname)) return !isLangRoute(pathname);
       // B14: 2027 pages exist only for 2027 and the listed signs / festivals (src/lib/year2027/meta.js).
       if ((m = pathname.match(/^\/rashifal\/([a-z]+)\/(\d+)\/?$/)))     return !(m[2] === '2027' && RASHI_SLUGS_2027.includes(m[1]));
       if ((m = pathname.match(/^\/hi\/rashifal\/([a-z]+)\/(\d+)\/?$/))) return !(m[2] === '2027' && RASHI_SLUGS_HI_2027.includes(m[1]));
@@ -336,6 +343,8 @@ const worker = {
       if ((m = pathname.match(/^\/numerology\/(\d+)\/?$/)))          return !NUM.has(parseInt(m[1], 10));
       const ANG = new Set(['000','111','222','333','444','555','666','777','888','999','1010','1111','1212','1234','2222']); // = src/data/angelNumbersSeo.json keys
       if ((m = pathname.match(/^\/angel-numbers\/([^/]+)\/?$/)))    return !ANG.has(m[1]);
+      // B18: the Lal Kitab Kundli is two single pages (/lal-kitab, /hi/lal-kitab) — nothing lives below them.
+      if (/^\/(?:hi\/)?lal-kitab\/[^/]+/.test(pathname))           return true;
       return false;
     })();
 
@@ -395,9 +404,11 @@ const worker = {
         // already carry it; this also covers the SPA shell served for any Hindi URL that has
         // no prerendered file (and daily-injected shells). Same byte length → no
         // Content-Length change, but drop it anyway in case the source tag differed.
-        if (htmlBody !== null && pageLangForPath(pathname) === 'hi') {
+        // B18: and the regional languages (/ta/*, /te/*, … → lang="ta" …).
+        const docLang = pageLangForPath(pathname);
+        if (htmlBody !== null && docLang !== 'en') {
           const text = typeof htmlBody === 'string' ? htmlBody : await new Response(htmlBody).text();
-          htmlBody = withHtmlLang(text, 'hi');
+          htmlBody = withHtmlLang(text, docLang);
           headers.delete('Content-Length');
         }
         // Fix 3: a validated-invalid address returns a real 404 (noindex — a genuine

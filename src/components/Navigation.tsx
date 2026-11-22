@@ -55,11 +55,13 @@ const NAV_CATEGORIES: NavCategory[] = [
     items: [
       { path: '/vedic-astrology/', label: 'Vedic Astrology — overview', emoji: '🕉️' },
       { path: '/rashifal-2027/', label: 'Rashifal 2027 (Yearly)', emoji: '✨' },
+      { path: '/varshphal/', label: 'Varshphal (Annual Horoscope)', emoji: '🌅' },
       { path: '/rashifal/', label: 'Daily Rashifal', emoji: '☀️' },
       { path: '/panchang/', label: "Today's Panchang", emoji: '📿' },
       { path: '/hindu-calendar-2027/', label: 'Hindu Calendar & Festivals 2027', emoji: '📅' },
       { path: '/kundali/', label: 'Free Kundali (Birth Chart)', emoji: '🪔' },
       { path: '/kundali-match/', label: 'Kundali Matching', emoji: '💑' },
+      { path: '/lal-kitab/', label: 'Lal Kitab Kundli', emoji: '📕' },
       { path: '/astrologer/', label: 'Ask an Astrologer (AI)', emoji: '💬' },
       { path: '/sade-sati/', label: 'Sade Sati Calculator', emoji: '🪐' },
       { path: '/muhurat/', label: 'Muhurat Finder', emoji: '🗓️' },

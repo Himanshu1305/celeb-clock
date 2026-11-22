@@ -1178,5 +1178,183 @@
     "rahuHouse": 11
    }
   ]
+ },
+ "varshphal": {
+  "birth": {
+   "date": "15 August 1995",
+   "time": "06:30",
+   "place": "New Delhi"
+  },
+  "year": 2027,
+  "completedYears": 32,
+  "pravesh": {
+   "date": "2027-08-15",
+   "time": "11:15:23",
+   "isDay": true
+  },
+  "natalLagna": "Simha",
+  "nakshatra": "Revati",
+  "nakshatraNumber": 27,
+  "lagna": {
+   "sign": "Tula",
+   "degree": "8°06′",
+   "lord": "Venus"
+  },
+  "muntha": {
+   "sign": "Mesha",
+   "house": 7,
+   "lord": "Mars"
+  },
+  "adhikaris": [
+   {
+    "role": "muntha",
+    "planet": "Mars"
+   },
+   {
+    "role": "janmaLagna",
+    "planet": "Sun"
+   },
+   {
+    "role": "varshaLagna",
+    "planet": "Venus"
+   },
+   {
+    "role": "triRashi",
+    "planet": "Mercury"
+   },
+   {
+    "role": "dinRatri",
+    "planet": "Moon"
+   }
+  ],
+  "candidates": [
+   {
+    "planet": "Mars",
+    "aspectsLagna": false,
+    "house": 12,
+    "vimshopaka": 11.3
+   },
+   {
+    "planet": "Sun",
+    "aspectsLagna": true,
+    "house": 10,
+    "vimshopaka": 6.1
+   },
+   {
+    "planet": "Venus",
+    "aspectsLagna": true,
+    "house": 10,
+    "vimshopaka": 5.7
+   },
+   {
+    "planet": "Mercury",
+    "aspectsLagna": true,
+    "house": 11,
+    "vimshopaka": 11
+   },
+   {
+    "planet": "Saturn",
+    "aspectsLagna": true,
+    "house": 7,
+    "vimshopaka": 8.6
+   }
+  ],
+  "varshesh": "Mercury",
+  "sahams": [
+   {
+    "key": "punya",
+    "sign": "Meena",
+    "degree": "15°36′",
+    "house": 6
+   },
+   {
+    "key": "vidya",
+    "sign": "Mithuna",
+    "degree": "0°35′",
+    "house": 9
+   },
+   {
+    "key": "yasha",
+    "sign": "Mesha",
+    "degree": "2°27′",
+    "house": 7
+   },
+   {
+    "key": "mitra",
+    "sign": "Dhanu",
+    "degree": "23°13′",
+    "house": 3
+   },
+   {
+    "key": "mahatmya",
+    "sign": "Meena",
+    "degree": "29°22′",
+    "house": 6
+   },
+   {
+    "key": "vivaha",
+    "sign": "Meena",
+    "degree": "3°20′",
+    "house": 6
+   },
+   {
+    "key": "karyasiddhi",
+    "sign": "Kanya",
+    "degree": "11°07′",
+    "house": 12
+   }
+  ],
+  "mudda": [
+   {
+    "lord": "Mars",
+    "start": "2027-08-15",
+    "end": "2027-08-26"
+   },
+   {
+    "lord": "Rahu",
+    "start": "2027-08-26",
+    "end": "2027-10-20"
+   },
+   {
+    "lord": "Jupiter",
+    "start": "2027-10-20",
+    "end": "2027-12-08"
+   },
+   {
+    "lord": "Saturn",
+    "start": "2027-12-08",
+    "end": "2028-02-04"
+   },
+   {
+    "lord": "Mercury",
+    "start": "2028-02-04",
+    "end": "2028-03-27"
+   },
+   {
+    "lord": "Ketu",
+    "start": "2028-03-27",
+    "end": "2028-04-17"
+   },
+   {
+    "lord": "Venus",
+    "start": "2028-04-17",
+    "end": "2028-06-17"
+   },
+   {
+    "lord": "Sun",
+    "start": "2028-06-17",
+    "end": "2028-07-05"
+   },
+   {
+    "lord": "Moon",
+    "start": "2028-07-05",
+    "end": "2028-08-04"
+   },
+   {
+    "lord": "Mars",
+    "start": "2028-08-04",
+    "end": "2028-08-14"
+   }
+  ]
  }
 }

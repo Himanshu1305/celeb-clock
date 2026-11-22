@@ -29,6 +29,8 @@ export const SECTIONS = [
   { id: 'celebrity', file: 'sitemap-celebrity.xml' },
   { id: 'birthday', file: 'sitemap-birthday.xml' },
   { id: 'hindi', file: 'sitemap-hindi.xml' },
+  // B18: Tamil, Telugu, Bengali, Marathi, Gujarati, Kannada, Malayalam, Punjabi pages.
+  { id: 'languages', file: 'sitemap-languages.xml' },
   { id: 'articles', file: 'sitemap-articles.xml' },
 ];
 
@@ -40,7 +42,9 @@ const VEDIC_FIRST = new Set([
   '/festivals', '/eclipses', '/mercury-retrograde', '/dasha-calculator', '/manglik', '/kaal-sarp-dosha',
   '/pitra-dosha', '/mool-dosha', '/grahan-dosha', '/nadi-dosha', '/career-report', '/life-report',
   '/child-kundli', '/astrologer', '/janma-tithi-calculator', '/moon-sign', '/sun-vs-moon-sign', '/glossary',
-  '/marriage-biodata-maker',
+  '/marriage-biodata-maker', '/varshphal',
+  // B18
+  '/lal-kitab',
   // B14: 2027 pages
   '/rashifal-2027', '/horoscope-2027', '/horoscope', '/hindu-calendar-2027', '/ekadashi-2027', '/purnima-2027', '/amavasya-2027',
 ]);
@@ -55,7 +59,9 @@ const BIRTHDAY_FIRST = new Set([
 
 /** Section id of a route (no trailing slash, '/' for home). */
 export function sectionOf(route) {
-  if (pageLangForPath(route) === 'hi') return 'hindi';
+  const docLang = pageLangForPath(route);
+  if (docLang === 'hi') return 'hindi';
+  if (docLang !== 'en') return 'languages';
   const f = first(route);
   if (PANCHANG_FIRST.has(f)) return 'panchang';
   if (ARTICLE_FIRST.has(f)) return 'articles';

@@ -10,6 +10,7 @@ import { HelmetProvider } from "react-helmet-async";
 
 // Core Page Imports
 import Index from "./pages/Index";
+import { LANGS, langRoutePatterns } from '@/lib/lang/langs.js';
 const BirthdayResults = lazyWithReload(() => import("./pages/BirthdayResults"));
 const Auth = lazyWithReload(() => import("./pages/Auth"));
 const Profile = lazyWithReload(() => import("./pages/Profile"));
@@ -172,6 +173,9 @@ const BirthdayReportGiftPage = lazyWithReload(() => import('@/pages/BirthdayRepo
 const ForBusinessPage = lazyWithReload(() => import('@/pages/ForBusinessPage'));
 const KundaliPage = lazyWithReload(() => import('@/pages/KundaliPage'));
 const KundaliMatchPage = lazyWithReload(() => import('@/pages/KundaliMatchPage'));
+const VarshphalPage = lazyWithReload(() => import('@/pages/VarshphalPage'));
+// B18: Lal Kitab Kundli (English + Hindi).
+const LalKitabPage = lazyWithReload(() => import('@/pages/LalKitabPage'));
 const AstrologerPage = lazyWithReload(() => import('@/pages/AstrologerPage'));
 const SadeSatiPage = lazyWithReload(() => import('@/pages/SadeSatiPage'));
 const SadeSatiRashiPage = lazyWithReload(() => import('@/pages/SadeSatiRashiPage'));
@@ -191,6 +195,13 @@ const RashifalPage = lazyWithReload(() => import('@/pages/hi/RashifalPage'));
 const HindiPanchangPage = lazyWithReload(() => import('@/pages/hi/PanchangPage'));
 // Batch 9b: Hindi Kundli milan + Kundli milan by name (English + Hindi).
 const HindiKundliMilanPage = lazyWithReload(() => import('@/pages/hi/KundliMilanPage'));
+// B18 — regional-language pages (Tamil … Punjabi); routes built from src/lib/lang/langs.js.
+const LangLandingPage = lazyWithReload(() => import('@/pages/lang/LangLandingPage'));
+const LangRashifalPage = lazyWithReload(() => import('@/pages/lang/LangRashifalPage'));
+const LangYearPage = lazyWithReload(() => import('@/pages/lang/LangYearPage'));
+const LangYearHubPage = lazyWithReload(() => import('@/pages/lang/LangYearPage').then(m => ({ default: m.LangYearHubPage })));
+const LangPanchangPage = lazyWithReload(() => import('@/pages/lang/LangPanchangPage'));
+const LangKundaliPage = lazyWithReload(() => import('@/pages/lang/LangKundaliPage'));
 const KundliMilanByNamePage = lazyWithReload(() => import('@/pages/KundliMilanByNamePage'));
 const RashifalIndex = lazyWithReload(() => import('@/pages/RashifalIndex'));
 const RashifalSign = lazyWithReload(() => import('@/pages/RashifalSign'));
@@ -476,6 +487,11 @@ const App = () => (
               <Route path="/for-business" element={<ForBusinessPage />} />
               <Route path="/kundali" element={<KundaliPage />} />
               <Route path="/kundali-match" element={<KundaliMatchPage />} />
+              {/* B18: free Varshphal (Tajik annual chart), English + Hindi. */}
+              <Route path="/varshphal" element={<VarshphalPage />} />
+              <Route path="/hi/varshphal" element={<VarshphalPage lang="hi" />} />
+              <Route path="/lal-kitab" element={<LalKitabPage />} />
+              <Route path="/hi/lal-kitab" element={<LalKitabPage lang="hi" />} />
               <Route path="/kundli-milan-by-name" element={<KundliMilanByNamePage lang="en" />} />
               <Route path="/hi/kundli-milan" element={<HindiKundliMilanPage />} />
               <Route path="/hi/naam-se-kundli-milan" element={<KundliMilanByNamePage lang="hi" />} />
@@ -495,6 +511,11 @@ const App = () => (
               <Route path="/gemstones" element={<GemstonePage />} />
               <Route path="/baby-names" element={<BabyNamesPage />} />
               <Route path="/baby-names/nakshatra/:slug" element={<BabyNamesNakshatraPage />} />
+              {/* B18 — regional languages: one route set per language (src/lib/lang/langs.js langRoutePatterns). */}
+              {LANGS.flatMap(l => langRoutePatterns(l).map(r => {
+                const C = { landing: LangLandingPage, rashifalHub: LangRashifalPage, rashifal: LangRashifalPage, yearHub: LangYearHubPage, year: LangYearPage, panchang: LangPanchangPage, panchangCity: LangPanchangPage, kundali: LangKundaliPage }[r.page];
+                return <Route key={r.path} path={r.path} element={<C code={l.code} />} />;
+              }))}
               <Route path="/hi/rashifal/:rashi" element={<RashifalPage />} />
               <Route path="/hi/rashifal" element={<RashifalPage />} />
               <Route path="/hi/panchang" element={<HindiPanchangPage />} />

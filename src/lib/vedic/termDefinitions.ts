@@ -24,10 +24,11 @@
  * AstroSage and South Indian practice) and match how BornClock's own engine computes them.
  */
 import { ADVANCED_TERMS } from './termDefinitionsAdvanced';
+import { VARSHPHAL_TERMS } from './termDefinitionsVarshphal';
 
 export type TermCategory =
   | 'basics' | 'dasha' | 'matching' | 'porutham' | 'panchang' | 'dosha' | 'strength'
-  | 'divisional' | 'yoga' | 'transit' | 'gemstone' | 'numerology' | 'tarot' | 'chinese' | 'biorhythm';
+  | 'divisional' | 'yoga' | 'transit' | 'varshphal' | 'gemstone' | 'numerology' | 'tarot' | 'chinese' | 'biorhythm';
 
 export const CATEGORY_LABELS: Record<TermCategory, { en: string; hi: string }> = {
   basics: { en: 'Birth chart basics', hi: 'कुंडली की मूल बातें' },
@@ -40,6 +41,7 @@ export const CATEGORY_LABELS: Record<TermCategory, { en: string; hi: string }> =
   divisional: { en: 'Divisional charts (Vargas)', hi: 'वर्ग कुंडलियाँ' },
   yoga: { en: 'Yogas (planetary combinations)', hi: 'योग' },
   transit: { en: 'Transits & Rashifal', hi: 'गोचर व राशिफल' },
+  varshphal: { en: 'Varshphal (annual chart)', hi: 'वर्षफल' },
   gemstone: { en: 'Gemstones', hi: 'रत्न' },
   numerology: { en: 'Numerology', hi: 'अंक ज्योतिष' },
   tarot: { en: 'Tarot', hi: 'टैरो' },
@@ -75,6 +77,8 @@ export interface TermDef {
 export const VEDIC_TERMS: Record<string, TermDef> = {
   // Batch 10: Bhava Chalit / KP / Jaimini terms (own file, see termDefinitionsAdvanced.ts).
   ...ADVANCED_TERMS,
+  // B18: Varshphal (Tajik annual chart) terms (own file, see termDefinitionsVarshphal.ts).
+  ...VARSHPHAL_TERMS,
   // ─────────────────────────── Birth chart basics ───────────────────────────
   kundali: {
     term: 'Kundali (birth chart)', category: 'basics', hiTerm: 'कुंडली / जन्म पत्री',

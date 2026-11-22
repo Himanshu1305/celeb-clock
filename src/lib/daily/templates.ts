@@ -15,6 +15,8 @@ import { tomorrowOf } from './kinds/tomorrow';
 import { renderPanchangMonth, type PanchangMonthData } from './kinds/panchangMonthTemplate';
 import { renderPlanetsToday, renderMoonPhase, type PlanetDayData, type MoonDayData } from './kinds/skyTemplate';
 import { vratTemplate } from './kinds/vratTemplate';
+import { rashifalLangTemplate, panchangLangTemplate } from '../lang/daily';
+import { LANG_CODES } from '../lang/langs.js';
 
 export type DailyTemplate = (dateIST: string, slug: string, data: unknown) => DailyEntry;
 
@@ -37,6 +39,11 @@ export const DAILY_TEMPLATES: Record<string, DailyTemplate> = {
   'moon-phase': (date, _slug, data) => renderMoonPhase(date, data as MoonDayData),
   'vrat': vratTemplate('en'),
   'vrat-hi': vratTemplate('hi'),
+  // B18 — regional languages.
+  ...Object.fromEntries(LANG_CODES.flatMap(code => [
+    [`rashifal-${code}`, rashifalLangTemplate(code)],
+    [`panchang-${code}`, panchangLangTemplate(code)],
+  ])),
 };
 
 /** The page's entry for `date` from a loaded month file (either format), else null. */

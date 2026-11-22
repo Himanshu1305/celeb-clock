@@ -30,6 +30,17 @@ export const GUIDE_META = {
     description: 'कुंडली मिलान हिंदी में: जन्म तिथि, समय और स्थान से 36 गुणों का अष्टकूट मिलान, नाड़ी-भकूट दोष, मांगलिक जाँच और सरल उपाय — मुफ़्त।',
     h1: 'कुंडली मिलान (गुण मिलान)',
   },
+  // B18: Lal Kitab Kundli (English + Hindi).
+  '/lal-kitab': {
+    title: 'Lal Kitab Kundli — Free Chart & Remedies | BornClock',
+    description: 'Free Lal Kitab Kundli: your Lal Kitab chart, pakka ghar, sleeping planets, Rin (debts), this year’s Varshphal and simple, free Lal Kitab remedies.',
+    h1: 'Lal Kitab Kundli — Free Lal Kitab Chart & Remedies',
+  },
+  '/hi/lal-kitab': {
+    title: 'लाल किताब कुंडली — मुफ़्त चार्ट व उपाय | BornClock',
+    description: 'मुफ़्त लाल किताब कुंडली: लाल किताब चार्ट, पक्का घर, सोये ग्रह, पितृ ऋण आदि ऋण, इस साल का वर्षफल और सरल, मुफ़्त लाल किताब उपाय।',
+    h1: 'लाल किताब कुंडली — मुफ़्त चार्ट और उपाय',
+  },
   '/sade-sati': {
     title: 'Sade Sati Calculator — Shani Sade Sati Dates | BornClock',
     description: 'Free Sade Sati calculator: is Shani’s 7.5-year Sade Sati or the 2.5-year Dhaiya active for your Moon sign, which phase, and the real start and end dates.',
@@ -79,6 +90,17 @@ export const GUIDE_META = {
     title: 'Rashifal — Daily, Weekly & Yearly Horoscope | BornClock',
     description: 'Free Vedic rashifal for all 12 Moon signs — today, tomorrow, week, month and year — computed from the real sidereal transits, not a template.',
     h1: 'Rashifal — horoscope by your Moon sign',
+  },
+  // B18: Varshphal (Tajik annual chart) — free tool, English + Hindi.
+  '/varshphal': {
+    title: 'Varshphal 2027 — Free Annual Horoscope (Tajik) | BornClock',
+    description: 'Free Varshphal 2027: your Tajik annual chart from the exact Sun return — year lord, Muntha, Sahams, Mudda dasha and a month-by-month outlook.',
+    h1: 'Varshphal — Free Annual Horoscope (Tajik)',
+  },
+  '/hi/varshphal': {
+    title: 'वर्षफल 2027 — मुफ़्त वार्षिक कुंडली (ताजिक) | BornClock',
+    description: 'मुफ़्त वर्षफल 2027: सूर्य के ठीक जन्म-अंश पर लौटने से बनी ताजिक वर्ष कुंडली — वर्षेश, मुंथा, सहम, मुद्दा दशा और महीनेवार फल।',
+    h1: 'वर्षफल — मुफ़्त वार्षिक कुंडली (ताजिक)',
   },
 };
 

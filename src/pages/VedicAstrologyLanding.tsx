@@ -242,6 +242,7 @@ const FEATURES: Array<{ title: string; desc: string; to: string }> = [
 ];
 const DEEPER: Array<{ title: string; desc: string; to: string }> = [
   { title: 'Kundli Milan by Name', desc: 'No birth time? An approximate 36-guna match from the first syllable of each name.', to: '/kundli-milan-by-name/' },
+  { title: 'Lal Kitab Kundli', desc: 'Your chart read the Lal Kitab way — pakka ghar, sleeping planets, Rin and simple, free remedies.', to: '/lal-kitab/' },
   { title: 'Sade Sati', desc: 'Where Saturn’s 7½-year cycle stands for you.', to: '/sade-sati/' },
   { title: 'Muhurat Finder', desc: 'Auspicious timing for what matters.', to: '/muhurat/' },
   { title: 'Career Report', desc: 'Vedic career analysis from your 10th house.', to: '/career-report/' },
@@ -475,12 +476,14 @@ export default function VedicAstrologyLanding() {
             {([
               ['Kundli', '/kundali'], ['Kundali Matching', '/kundali-match'],
               ['Kundli Milan by Name', '/kundli-milan-by-name'], ['कुंडली मिलान (हिंदी)', '/hi/kundli-milan'],
+              ['Lal Kitab Kundli', '/lal-kitab'], ['लाल किताब कुंडली', '/hi/lal-kitab'],
               ['Rashifal', '/rashifal'], ['Daily Panchang', '/panchang'],
               ['Festival Calendar', '/festivals'],
               ['Planetary Transits', '/transit'], ['Mercury Retrograde', '/mercury-retrograde'],
               ['27 Nakshatras', '/nakshatra'], ['Rashi', '/moon-sign'],
               ['Planet in Sign', '/planet-in-sign'], ['Planet in House', '/planet-in-house'],
               ['Vedic Yogas', '/yoga'], ['Divisional Charts', '/divisional-charts'], ['Astrology Glossary', '/glossary'],
+              ['Varshphal (Annual Horoscope)', '/varshphal'], ['वर्षफल (हिंदी)', '/hi/varshphal'],
               ['Sade Sati', '/sade-sati'], ['Dasha Calculator', '/dasha-calculator'],
               ['Manglik', '/manglik'], ['Kaal Sarp Dosha', '/kaal-sarp-dosha'],
               ['Pitra Dosha', '/pitra-dosha'], ['Mool Nakshatra Dosha', '/mool-dosha'],
