@@ -1,0 +1,7 @@
+{
+ "_source": "B18: Panchang cities used only by the regional-language pages (not in the 50-city English list). Coordinates from the Wikipedia infoboxes of Kochi and Thiruvananthapuram (opened 22 Nov 2026). IST.",
+ "cities": [
+  { "slug": "kochi", "name": "Kochi", "state": "Kerala", "lat": 9.9312, "lon": 76.2673 },
+  { "slug": "thiruvananthapuram", "name": "Thiruvananthapuram", "state": "Kerala", "lat": 8.5241, "lon": 76.9366 }
+ ]
+}

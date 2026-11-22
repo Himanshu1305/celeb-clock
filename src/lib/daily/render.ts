@@ -43,12 +43,12 @@ function calendarHtml(s: DailySection): string {
   return `<ol class="daily-calendar mt-3 grid grid-cols-1 sm:grid-cols-7 gap-1">${head}${cells}</ol>`;
 }
 
-function tableHtml(s: DailySection, lang: 'en' | 'hi'): string {
+function tableHtml(s: DailySection, lang: string): string {
   const cols = s.columns ?? [];
   const head = `<thead><tr>${cols.map(c => `<th scope="col" class="text-left font-semibold text-foreground px-2 py-1 border-b border-border whitespace-nowrap">${escapeHtml(c)}</th>`).join('')}</tr></thead>`;
   const body = `<tbody>${(s.rows ?? []).map(r => `<tr class="border-b border-border/60">${r.map((c, i) =>
     i === 0 ? `<th scope="row" class="text-left font-medium text-foreground px-2 py-1 whitespace-nowrap">${escapeHtml(c)}</th>` : `<td class="px-2 py-1 text-muted-foreground">${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody>`;
-  return `<p class="mt-2 text-xs text-muted-foreground sm:hidden">${escapeHtml(SWIPE[lang] ?? SWIPE.en)}</p>` +
+  return `<p class="mt-2 text-xs text-muted-foreground sm:hidden">${escapeHtml(SWIPE[lang as 'en' | 'hi'] ?? SWIPE.en)}</p>` +
     `<figure class="daily-table mt-2 overflow-x-auto"><table class="min-w-[640px] w-full text-sm">${head}${body}</table></figure>`;
 }
 
@@ -60,7 +60,7 @@ const TONE_CLASS: Record<DailyTone, string> = {
 
 /** The daily content block's inner HTML (no wrapping div). */
 export function renderDailyBodyHtml(e: DailyEntry): string {
-  const L = { ...(LABELS[e.lang] ?? LABELS.en), ...(e.labels ?? {}) };
+  const L = { ...(LABELS[e.lang as 'en' | 'hi'] ?? LABELS.en), ...(e.labels ?? {}) };
   const out: string[] = [];
 
   out.push(
@@ -130,7 +130,7 @@ export function dailyJsonLd(e: DailyEntry, canonicalUrl: string): Record<string,
       name: e.title,
       description: e.description,
       url: canonicalUrl,
-      inLanguage: e.lang === 'hi' ? 'hi-IN' : 'en-IN',
+      inLanguage: `${e.lang}-IN`,
       datePublished: e.date,
       dateModified: e.date,
       isPartOf: { '@type': 'WebSite', name: 'BornClock', url: 'https://bornclock.com/' },

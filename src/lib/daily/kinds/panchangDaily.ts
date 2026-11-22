@@ -11,6 +11,10 @@ import { PANCHANG_TABLES } from '../../vedic/panchang';
 import type { PanchangPageKind } from '../../vedic/panchangText';
 import { vratsOnDate } from '../../vedic/vrats/next';
 import { renderPanchangEntry, renderPanchangHiEntry, PANCHANG_INDEX_SLUG, type PanchangDayData } from './panchangTemplate';
+import langExtraCities from '../../../data/langExtraCities.json';
+
+/** B18: the regional-language pages also use two Kerala cities outside the English list. */
+const LANG_EXTRA_CITIES = (langExtraCities as { cities: Array<{ slug: string; name: string; lat: number; lon: number }> }).cities.map(c => ({ ...c, tz: 5.5 }));
 
 export { PANCHANG_INDEX_SLUG };
 export interface PanchangPlaceInput { name: string; lat: number; lon: number; tz: number; slug?: string }
@@ -87,7 +91,7 @@ export function computePanchangDayData(place: PanchangPlaceInput, date: string):
 
 /** Data computer for the registered data kind 'panchang-day' (data slug = city slug). */
 export function computePanchangDayDataForCity(date: string, citySlug: string): PanchangDayData {
-  const c = panchangCityBySlug(citySlug);
+  const c = panchangCityBySlug(citySlug) ?? LANG_EXTRA_CITIES.find(x => x.slug === citySlug);
   if (!c) throw new Error(`panchang daily: unknown city "${citySlug}"`);
   return computePanchangDayData({ name: c.name, lat: c.lat, lon: c.lon, tz: c.tz, slug: c.slug }, date);
 }

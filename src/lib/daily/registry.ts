@@ -10,6 +10,7 @@ import type { DailyLang } from './types';
 import { addDaysISO, istDateISO, monthKey, periodKeyOf, type DailyPeriod } from './dates';
 import { PANCHANG_CITY_SLUGS, HINDI_PANCHANG_SLUGS } from '../seo/panchangSlugs';
 import { VRAT_PAGE_SLUGS, vratPath } from '../vedic/vrats/meta';
+import { LANGS, langPaths } from '../lang/langs.js';
 
 export interface DailyPageDef {
   /** Folder name under /daily/ (and the key in DAILY_COMPUTERS). */
@@ -100,6 +101,16 @@ export const DAILY_PAGES: DailyPageDef[] = [
   // per-day file (data kind 'vrat-next') computed by our festival engine. The title stays static.
   { kind: 'vrat', lang: 'en', slugs: VRAT_PAGE_SLUGS, path: s => vratPath(s, 'en'), data: { kind: 'vrat-next', slug: ALL } },
   { kind: 'vrat-hi', lang: 'hi', slugs: VRAT_PAGE_SLUGS, path: s => vratPath(s, 'hi'), data: { kind: 'vrat-next', slug: ALL } },
+  // B18 — regional languages (src/lib/lang): daily rashifal at /<code>/<seg>/<rashi> from the
+  // SAME vedic-sky data, and the Panchang (Delhi index + the language's own cities) from the
+  // same per-city panchang-day data as the English pages.
+  ...LANGS.flatMap((l): DailyPageDef[] => {
+    const p = langPaths(l);
+    return [
+      { kind: `rashifal-${l.code}`, lang: l.code, slugs: RASHI_SLUGS, path: s => p.rashifal(RASHI_SLUGS.indexOf(s as typeof RASHI_SLUGS[number])), data: { kind: 'vedic-sky', slug: ALL } },
+      { kind: `panchang-${l.code}`, lang: l.code, slugs: ['index', ...l.cities], path: s => p.panchang(s === 'index' ? null : s), data: { kind: 'panchang-day', slug: CITY } },
+    ];
+  }),
 ];
 
 let routeMap: Map<string, { def: DailyPageDef; slug: string }> | null = null;
