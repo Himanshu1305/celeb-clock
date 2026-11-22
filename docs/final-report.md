@@ -53,7 +53,7 @@ never touched.
 
 `npm run build:staging` → `wrangler deploy --env staging` (dry-run first; worker
 confirmed `bornclock-staging`, `routes=[]`, `workers_dev=true`; account
-`usdvisionai@gmail.com`; `SUPPRESS_OUTBOUND_EMAIL=true`,
+(BornClock Cloudflare account); `SUPPRESS_OUTBOUND_EMAIL=true`,
 `EMAIL_ALLOWLIST=hello@bornclock.com` — no real email can leave staging).
 Deployed twice (initial, then the FINAL-BUG-1 fix). Final build prerendered
 **4055/4055** routes (0 failed after a targeted `PRERENDER_ONLY` backfill of 5

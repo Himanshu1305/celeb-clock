@@ -4,7 +4,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 const FROM = 'BornClock <hello@bornclock.com>';
-const to = process.env.ADMIN_EMAIL || 'himanshu1305@gmail.com';
+const to = process.env.ADMIN_EMAIL || 'support.bornclock@gmail.com';
 const apiKey = process.env.RESEND_API_KEY;
 if (!apiKey) { console.error('RESEND_API_KEY missing'); process.exit(1); }
 

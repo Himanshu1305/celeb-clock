@@ -169,7 +169,7 @@ export function computeMoolDosha(input: DoshaChartInput): MoolResult {
       detail: `The Moon's birth star (${nak}) is not one of the six mool/gandanta nakshatras, so the Mool-Nakshatra reading does not apply.` };
   }
   const intense = INTENSE_PADA[nak] === input.moonPada;
-  const grade: DoshaGrade = nak === 'Revati' ? 'mild' : intense ? 'strong' : 'moderate';
+  const grade: DoshaGrade = intense ? 'strong' : nak === 'Revati' ? 'mild' : 'moderate';
   return {
     present: true, grade, nakshatra: nak, pada: input.moonPada,
     relationNote: MOOL_RELATION[nak] || '',

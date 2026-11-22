@@ -11,7 +11,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 const FROM_EMAIL = 'BornClock <hello@bornclock.com>';
-const ADMIN_EMAIL_FALLBACK = 'himanshu1305@gmail.com';
+const ADMIN_EMAIL_FALLBACK = 'support.bornclock@gmail.com';
 
 export type Severity = 'urgent' | 'warning' | 'info';
 
