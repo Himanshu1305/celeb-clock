@@ -4,7 +4,7 @@
 // Do not add Supabase writes or content logging here.
 
 import { QUIZ_COUNTRIES } from '../src/services/LongevityCalculationService.js';
-import { geminiKey } from './_gemini.js';
+import { geminiKey, geminiFetch } from './_gemini.js';
 import { detectCrisis } from '../src/lib/vedic/chatGuardrails.js';
 import { getAuthedUser, userIsPremium, serviceClient } from './_userAuth.js';
 
@@ -241,13 +241,7 @@ async function callAnthropic(systemPrompt: string, message: string): Promise<str
 // Gemini's default thresholds and would refuse the very questions it exists to answer.
 // All four categories are set to the least restrictive generally-available threshold.
 async function callGemini(systemPrompt: string, message: string): Promise<string> {
-  const apiKey = geminiKey()!;
-  const response = await fetch(
-    'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-      body: JSON.stringify({
+  const response = await geminiFetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent', JSON.stringify({
         systemInstruction: { parts: [{ text: systemPrompt }] },
         contents: [{ role: 'user', parts: [{ text: message }] }],
         generationConfig: { maxOutputTokens: 300 },
@@ -257,10 +251,7 @@ async function callGemini(systemPrompt: string, message: string): Promise<string
           { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
           { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
         ],
-      }),
-    },
-  );
-  if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
+      }));
   const data = await response.json();
   // A prompt-level block or a non-STOP finishReason with no text degrades to a friendly
   // message — never a 500 and never a broken empty reply.
