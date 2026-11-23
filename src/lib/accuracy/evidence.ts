@@ -50,11 +50,18 @@
  * SADE SATI 22/22 unchanged. DATE-ONLY MOON: 3,043/3,043 same sign(s) vs Swiss true
  * Lahiri; the same four pre-1210 dates exceed 60″, largest now 566.4″ (Aryabhata).
  * Panchang / ingress / festival rows are unchanged (they keep the Drik convention).
+ *
+ * B19 (23 Nov 2026): PORUTHAM / PAPASAMYAM — 12 couples (both born Ujjain) submitted through
+ * ProKerala's own Tamil and Kerala porutham forms (fetched in the browser, 23 Nov 2026),
+ * stored in vedic/__tests__/golden/prokeralaPorutham.json and re-checked by
+ * prokeralaPorutham.test.ts: Tamil poruthams 106/120 same (Dina 7, Rasi Adhipathi 6, Rasi 1
+ * differ); Papasamyam positions 288/288 and verdict 12/12. Against ProKerala's KERALA porutham
+ * rules the agreement was 96/120 — the Malayalam page discloses that Kerala rules differ.
  */
 
 export const TESTED_MONTH = 'November 2026';
-export const PAGE_UPDATED_ISO = '2026-11-17';
-export const PAGE_UPDATED = '17 November 2026';
+export const PAGE_UPDATED_ISO = '2026-11-23';
+export const PAGE_UPDATED = '23 November 2026';
 
 export interface EvidenceRow {
   id: string;
@@ -97,6 +104,13 @@ export const COUNTS = {
   kaalSarpCharts: 2,
   ancientMoonDates: 4,
   ancientMoonBeforeYear: 1210,
+  // B19 (23 Nov 2026): 12 couples through ProKerala's Tamil + Kerala porutham calculators —
+  // golden/prokeralaPorutham.json, checked by vedic/__tests__/prokeralaPorutham.test.ts.
+  poruthamCouples: 12,
+  poruthamChecks: 120,
+  poruthamAgree: 106,
+  poruthamDiffs: { Dina: 7, Rasi: 1, Rasiyathipathi: 6 } as Record<string, number>,
+  papaPositions: 288,
   ancientMoonMaxArcsec: 566, // Aryabhata, 476 CE (566.4″ ≈ 9.4 arc-minutes; B14 re-run vs Swiss true Lahiri)
 } as const;
 
@@ -135,6 +149,22 @@ export const EVIDENCE: EvidenceRow[] = [
     howMany: `${COUNTS.couples} couples`,
     result: `${COUNTS.couples} of ${COUNTS.couples} same total`,
     date: '17 Oct 2026',
+  },
+  {
+    id: 'porutham',
+    what: '10 Porutham (Tamil): each porutham agrees or not',
+    reference: 'ProKerala Tamil porutham calculator',
+    howMany: `${COUNTS.poruthamCouples} couples, ${COUNTS.poruthamChecks} poruthams`,
+    result: `${COUNTS.poruthamAgree} of ${COUNTS.poruthamChecks} same. Differences: Dina (${COUNTS.poruthamDiffs.Dina}) — we use the published count list (2, 4, 6, 8, 9, 11, 13, 15, 18, 20, 24, 26), which ProKerala’s own Dina article gives but its calculator does not follow; Rasi Adhipathi (${COUNTS.poruthamDiffs.Rasiyathipathi}) — ProKerala gives half a point where one lord is neutral and the other unfriendly, we count it as not agreeing; Rasi (${COUNTS.poruthamDiffs.Rasi}) — the 4th sign, which sources disagree on`,
+    date: '23 Nov 2026',
+  },
+  {
+    id: 'papasamyam',
+    what: 'Papasamyam (Kerala): malefic positions and verdict',
+    reference: 'ProKerala Kerala porutham calculator',
+    howMany: `${COUNTS.poruthamCouples} couples, ${COUNTS.papaPositions} planet positions`,
+    result: `${COUNTS.papaPositions} of ${COUNTS.papaPositions} same house from Lagna, Moon and Venus; ${COUNTS.poruthamCouples} of ${COUNTS.poruthamCouples} same verdict (who carries more dosha)`,
+    date: '23 Nov 2026',
   },
   {
     id: 'manglik',

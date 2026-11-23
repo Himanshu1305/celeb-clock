@@ -12,6 +12,7 @@ import { chartBasisFromResult } from '../src/lib/vedic/chartBasis.js';
 import { calculateGunaMilan, type PersonInput } from '../src/lib/vedic/matchmaking.js';
 import { assessManglik, MANGLIK_CONVENTION, type ManglikAssessment } from '../src/lib/vedic/manglik.js';
 import { calculatePorutham } from '../src/lib/vedic/porutham.js';
+import { calculatePapasamyam, papaInputFromChart } from '../src/lib/vedic/papasamyam.js';
 import { buildMatchSynthesis } from '../src/lib/vedic/matchSynthesis.js';
 import { categoryTiming, describeWindow, formatWindowRange, upcomingSubPeriods, type ActivationWindow } from '../src/lib/vedic/yogaTiming.js';
 import { RASHI_NAMES } from '../src/lib/vedic/engine/vedicEngine.js';
@@ -116,6 +117,9 @@ async function handler(request) {
     const gunaMilan = calculateGunaMilan(gPI, bPI, labels);
     // 10-porutham (South-Indian) view alongside the 36-guna Ashtakoota.
     const porutham = calculatePorutham({ nakshatra: bPI.nakshatra, rashiIndex: bPI.rashiIndex }, { nakshatra: gPI.nakshatra, rashiIndex: gPI.rashiIndex });
+    // B19: Kerala Papasamyam (balance of malefics), bride vs groom.
+    const [gChart, bChart] = groom === 'A' ? [chartA, chartB] : [chartB, chartA];
+    const papasamyam = calculatePapasamyam(papaInputFromChart(bChart), papaInputFromChart(gChart));
     // M8: the same birth details entered twice.
     const samePerson = A.year === B.year && A.month === B.month && A.day === B.day && A.hour === B.hour && A.minute === B.minute
       && Math.abs(A.latitude - B.latitude) < 0.01 && Math.abs(A.longitude - B.longitude) < 0.01;
@@ -192,6 +196,7 @@ async function handler(request) {
         ...(minor ? { minorNote: 'One or both people are under 18. Kundali matching for marriage is meant for adults, so marriage-timing guidance is not shown.' } : {}),
       },
       porutham,
+      papasamyam,
       manglik,
       synthesis,
       timing,

@@ -144,6 +144,16 @@ export default function AccuracyPage() {
               tables, including which way round the boy and girl are counted.
             </li>
             <li>
+              <strong className="text-foreground">10 Porutham: Tamil tables</strong> — counted from the girl’s star and sign to
+              the boy’s; each porutham is shown as agreeing or not (no half points). Kerala astrologers use somewhat different
+              rules for Rajju, Rasi and Yoni, so a Kerala calculator can differ.
+            </li>
+            <li>
+              <strong className="text-foreground">Papasamyam: base method</strong> — Mars, Saturn, Sun and Rahu in the 1st, 2nd,
+              4th, 7th, 8th or 12th from the Lagna (1 point), Moon (½) and Venus (¼); balanced when the bride’s total is not
+              higher than the groom’s. Dignity adjustments are not applied.
+            </li>
+            <li>
               <strong className="text-foreground"><TermTip id="manglik">Manglik</TermTip>: AstroSage’s convention</strong> —
               Mars in house 1, 4, 7, 8 or 12 counted from the Lagna and, separately, from the Moon. Both = High, one = Low,
               none = not Manglik. Classical cancellations are not applied to the level.

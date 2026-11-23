@@ -1,0 +1,545 @@
+{
+ "source": "prokerala.com — Tamil porutham calculator (/astrology/jathagam-porutham-tamil.php) for 'tamil'; Kerala calculator (/astrology/jathaka-porutham.php) papa table for 'papa' (position + papam per planet from Ascendant, Moon, Venus) and the 'Boy/Girl has more dosha' line for 'papaMore'. Both partners born in Ujjain (lat 23.1765, lon 75.7885, IST). Submitted through the site's own form, 23 Nov 2026.",
+ "couples": [
+  {
+   "girl": [
+    "1995",
+    "3",
+    "14",
+    "10",
+    "30",
+    "am"
+   ],
+   "boy": [
+    "1992",
+    "7",
+    "8",
+    "6",
+    "15",
+    "pm"
+   ],
+   "nakshatra": [
+    "Ashlesha",
+    "Swati"
+   ],
+   "tamil": {
+    "Dina": 1.0,
+    "Gana": 0.0,
+    "Mahendra": 1.0,
+    "Stree Deergha": 0.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 1.0,
+    "Rasi": 0.0,
+    "Rasiyathipathi": 0.5,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,3,0,1,1,7,1",
+    "Saturn,10,0,8,1,2,1",
+    "Sun,10,0,8,1,2,1",
+    "Rahu,6,0,4,1,10,0",
+    "Mars,5,0,7,1,11,0",
+    "Saturn,2,1,4,1,8,1",
+    "Sun,7,1,9,0,1,1",
+    "Rahu,1,1,3,0,7,1"
+   ],
+   "papaMore": "Boy"
+  },
+  {
+   "girl": [
+    "1990",
+    "1",
+    "5",
+    "7",
+    "45",
+    "am"
+   ],
+   "boy": [
+    "1987",
+    "11",
+    "21",
+    "11",
+    "20",
+    "pm"
+   ],
+   "nakshatra": [
+    "Revati",
+    "Anuradha"
+   ],
+   "tamil": {
+    "Dina": 1.0,
+    "Gana": 1.0,
+    "Mahendra": 0.0,
+    "Stree Deergha": 1.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 1.0,
+    "Rasi": 1.0,
+    "Rasiyathipathi": 1.0,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,12,1,9,0,11,0",
+    "Saturn,1,1,10,0,12,1",
+    "Sun,1,1,10,0,12,1",
+    "Rahu,2,1,11,0,1,1",
+    "Mars,4,1,12,1,12,1",
+    "Saturn,5,0,1,1,1,1",
+    "Sun,5,0,1,1,1,1",
+    "Rahu,9,0,5,0,5,0"
+   ],
+   "papaMore": "Girl"
+  },
+  {
+   "girl": [
+    "1993",
+    "6",
+    "30",
+    "3",
+    "10",
+    "pm"
+   ],
+   "boy": [
+    "1989",
+    "2",
+    "17",
+    "9",
+    "5",
+    "am"
+   ],
+   "nakshatra": [
+    "Vishaka",
+    "Punarvasu"
+   ],
+   "tamil": {
+    "Dina": 1.0,
+    "Gana": 0.0,
+    "Mahendra": 1.0,
+    "Stree Deergha": 1.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 0.0,
+    "Rasi": 0.0,
+    "Rasiyathipathi": 0.5,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,11,0,10,0,4,1",
+    "Saturn,5,0,4,1,10,0",
+    "Sun,9,0,8,1,2,1",
+    "Rahu,2,1,1,1,7,1",
+    "Mars,2,1,11,0,4,1",
+    "Saturn,10,0,7,1,12,1",
+    "Sun,12,1,9,0,2,1",
+    "Rahu,12,1,9,0,2,1"
+   ],
+   "papaMore": "Boy"
+  },
+  {
+   "girl": [
+    "1998",
+    "9",
+    "9",
+    "12",
+    "40",
+    "am"
+   ],
+   "boy": [
+    "1995",
+    "12",
+    "25",
+    "4",
+    "30",
+    "pm"
+   ],
+   "nakshatra": [
+    "Revati",
+    "Dhanishta"
+   ],
+   "tamil": {
+    "Dina": 1.0,
+    "Gana": 0.0,
+    "Mahendra": 0.0,
+    "Stree Deergha": 1.0,
+    "Yoni": 0.0,
+    "Veda": 1.0,
+    "Rajju": 1.0,
+    "Rasi": 1.0,
+    "Rasiyathipathi": 0.5,
+    "Vasya": 1.0
+   },
+   "papa": [
+    "Mars,2,1,5,0,12,1",
+    "Saturn,11,0,2,1,9,0",
+    "Sun,3,0,6,0,1,1",
+    "Rahu,3,0,6,0,1,1",
+    "Mars,8,1,12,1,12,1",
+    "Saturn,10,0,2,1,2,1",
+    "Sun,8,1,12,1,12,1",
+    "Rahu,5,0,9,0,9,0"
+   ],
+   "papaMore": "Boy"
+  },
+  {
+   "girl": [
+    "1991",
+    "4",
+    "18",
+    "8",
+    "0",
+    "pm"
+   ],
+   "boy": [
+    "1988",
+    "8",
+    "3",
+    "5",
+    "55",
+    "am"
+   ],
+   "nakshatra": [
+    "Mrigashirsha",
+    "Revati"
+   ],
+   "tamil": {
+    "Dina": 1.0,
+    "Gana": 1.0,
+    "Mahendra": 0.0,
+    "Stree Deergha": 1.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 1.0,
+    "Rasi": 1.0,
+    "Rasiyathipathi": 0.5,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,9,0,2,1,2,1",
+    "Saturn,4,1,9,0,9,0",
+    "Sun,7,1,12,1,12,1",
+    "Rahu,3,0,8,1,8,1",
+    "Mars,9,0,1,1,10,0",
+    "Saturn,6,0,10,0,7,1",
+    "Sun,1,1,5,0,2,1",
+    "Rahu,8,1,12,1,9,0"
+   ],
+   "papaMore": "Girl"
+  },
+  {
+   "girl": [
+    "1996",
+    "10",
+    "2",
+    "2",
+    "25",
+    "pm"
+   ],
+   "boy": [
+    "1994",
+    "5",
+    "11",
+    "10",
+    "10",
+    "am"
+   ],
+   "nakshatra": [
+    "Rohini",
+    "Krithika"
+   ],
+   "tamil": {
+    "Dina": 1.0,
+    "Gana": 0.0,
+    "Mahendra": 0.0,
+    "Stree Deergha": 1.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 1.0,
+    "Rasi": 1.0,
+    "Rasiyathipathi": 1.0,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,7,1,3,0,12,1",
+    "Saturn,3,0,11,0,8,1",
+    "Sun,9,0,5,0,2,1",
+    "Rahu,9,0,5,0,2,1",
+    "Mars,10,0,11,0,11,0",
+    "Saturn,9,0,10,0,10,0",
+    "Sun,11,0,12,1,12,1",
+    "Rahu,6,0,7,1,7,1"
+   ],
+   "papaMore": "Girl"
+  },
+  {
+   "girl": [
+    "1997",
+    "12",
+    "12",
+    "6",
+    "50",
+    "am"
+   ],
+   "boy": [
+    "1993",
+    "3",
+    "29",
+    "7",
+    "35",
+    "pm"
+   ],
+   "nakshatra": [
+    "Krithika",
+    "Mrigashirsha"
+   ],
+   "tamil": {
+    "Dina": 0.5,
+    "Gana": 0.0,
+    "Mahendra": 0.0,
+    "Stree Deergha": 0.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 1.0,
+    "Rasi": 0.0,
+    "Rasiyathipathi": 0.5,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,3,0,10,0,1,1",
+    "Saturn,5,0,12,1,3,0",
+    "Sun,1,1,8,1,11,0",
+    "Rahu,10,0,5,0,8,1",
+    "Mars,10,0,2,1,4,1",
+    "Saturn,6,0,10,0,12,1",
+    "Sun,7,1,11,0,1,1",
+    "Rahu,3,0,7,1,9,0"
+   ],
+   "papaMore": "Boy"
+  },
+  {
+   "girl": [
+    "1992",
+    "2",
+    "26",
+    "11",
+    "15",
+    "am"
+   ],
+   "boy": [
+    "1990",
+    "9",
+    "14",
+    "1",
+    "45",
+    "pm"
+   ],
+   "nakshatra": [
+    "Jyeshta",
+    "Punarvasu"
+   ],
+   "tamil": {
+    "Dina": 1.0,
+    "Gana": 0.0,
+    "Mahendra": 0.0,
+    "Stree Deergha": 1.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 1.0,
+    "Rasi": 0.0,
+    "Rasiyathipathi": 0.5,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,9,0,3,0,1,1",
+    "Saturn,9,0,3,0,1,1",
+    "Sun,10,0,4,1,2,1",
+    "Rahu,8,1,2,1,12,1",
+    "Mars,6,0,12,1,10,0",
+    "Saturn,1,1,7,1,5,0",
+    "Sun,9,0,3,0,1,1",
+    "Rahu,2,1,8,1,6,0"
+   ],
+   "papaMore": "Boy"
+  },
+  {
+   "girl": [
+    "1999",
+    "7",
+    "7",
+    "9",
+    "30",
+    "pm"
+   ],
+   "boy": [
+    "1996",
+    "1",
+    "19",
+    "3",
+    "20",
+    "am"
+   ],
+   "nakshatra": [
+    "Ashwini",
+    "Moola"
+   ],
+   "tamil": {
+    "Dina": 1.0,
+    "Gana": 0.0,
+    "Mahendra": 1.0,
+    "Stree Deergha": 1.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 0.0,
+    "Rasi": 1.0,
+    "Rasiyathipathi": 1.0,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,10,0,7,1,3,0",
+    "Saturn,4,1,1,1,9,0",
+    "Sun,6,0,3,0,11,0",
+    "Rahu,7,1,4,1,12,1",
+    "Mars,3,0,2,1,12,1",
+    "Saturn,4,1,3,0,1,1",
+    "Sun,3,0,2,1,12,1",
+    "Rahu,11,0,10,0,8,1"
+   ],
+   "papaMore": "Girl"
+  },
+  {
+   "girl": [
+    "1994",
+    "11",
+    "23",
+    "4",
+    "5",
+    "am"
+   ],
+   "boy": [
+    "1991",
+    "6",
+    "6",
+    "8",
+    "50",
+    "pm"
+   ],
+   "nakshatra": [
+    "Punarvasu",
+    "Uttara Bhadrapada"
+   ],
+   "tamil": {
+    "Dina": 1.0,
+    "Gana": 0.5,
+    "Mahendra": 0.0,
+    "Stree Deergha": 1.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 1.0,
+    "Rasi": 1.0,
+    "Rasiyathipathi": 0.5,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,11,0,3,0,11,0",
+    "Saturn,5,0,9,0,5,0",
+    "Sun,2,1,6,0,2,1",
+    "Rahu,1,1,5,0,1,1",
+    "Mars,8,1,5,0,1,1",
+    "Saturn,2,1,11,0,7,1",
+    "Sun,6,0,3,0,11,0",
+    "Rahu,1,1,10,0,6,0"
+   ],
+   "papaMore": "Boy"
+  },
+  {
+   "girl": [
+    "2000",
+    "5",
+    "15",
+    "5",
+    "15",
+    "pm"
+   ],
+   "boy": [
+    "1997",
+    "10",
+    "30",
+    "12",
+    "5",
+    "pm"
+   ],
+   "nakshatra": [
+    "Chitra",
+    "Chitra"
+   ],
+   "tamil": {
+    "Dina": 0.5,
+    "Gana": 1.0,
+    "Mahendra": 0.0,
+    "Stree Deergha": 0.0,
+    "Yoni": 0.5,
+    "Veda": 1.0,
+    "Rajju": 0.0,
+    "Rasi": 0.0,
+    "Rasiyathipathi": 1.0,
+    "Vasya": 0.0
+   },
+   "papa": [
+    "Mars,8,1,9,0,2,1",
+    "Saturn,7,1,8,1,1,1",
+    "Sun,8,1,9,0,2,1",
+    "Rahu,10,0,11,0,4,1",
+    "Mars,12,1,2,1,1,1",
+    "Saturn,4,1,6,0,5,0",
+    "Sun,11,0,1,1,12,1",
+    "Rahu,9,0,11,0,10,0"
+   ],
+   "papaMore": "Girl"
+  },
+  {
+   "girl": [
+    "1989",
+    "8",
+    "20",
+    "1",
+    "0",
+    "am"
+   ],
+   "boy": [
+    "1985",
+    "4",
+    "4",
+    "6",
+    "40",
+    "am"
+   ],
+   "nakshatra": [
+    "Uttara Bhadrapada",
+    "Uttara Phalguni"
+   ],
+   "tamil": {
+    "Dina": 0.0,
+    "Gana": 1.0,
+    "Mahendra": 0.0,
+    "Stree Deergha": 1.0,
+    "Yoni": 1.0,
+    "Veda": 1.0,
+    "Rajju": 1.0,
+    "Rasi": 1.0,
+    "Rasiyathipathi": 0.5,
+    "Vasya": 1.0
+   },
+   "papa": [
+    "Mars,4,1,6,0,12,1",
+    "Saturn,8,1,10,0,4,1",
+    "Sun,4,1,6,0,12,1",
+    "Rahu,10,0,12,1,6,0",
+    "Mars,2,1,8,1,2,1",
+    "Saturn,9,0,3,0,9,0",
+    "Sun,1,1,7,1,1,1",
+    "Rahu,2,1,8,1,2,1"
+   ],
+   "papaMore": "Boy"
+  }
+ ]
+}

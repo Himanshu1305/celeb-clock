@@ -97,6 +97,9 @@ const RASI_VASYA: number[][] = [
 ];
 const RASI_NAMES = ['Mesha', 'Vrishabha', 'Mithuna', 'Karka', 'Simha', 'Kanya', 'Tula', 'Vrischika', 'Dhanu', 'Makara', 'Kumbha', 'Meena'];
 
+// Rasi porutham: boy's sign counted from the girl's sign landing on these does not agree.
+const RASI_BAD_COUNTS = new Set([2, 6, 8, 12]);
+
 // Mahendra: boy's star counted from girl's star landing on these is favourable.
 const MAHENDRA_COUNTS = new Set([4, 7, 10, 13, 16, 19, 22, 25]);
 
@@ -150,13 +153,17 @@ export function calculatePorutham(a: PoruthamPerson, b: PoruthamPerson): Porutha
   poruthams.push({ key: 'yoni', label: 'Yoni', met: yoniMet,
     explanation: `Instinctive and physical compatibility via the nakshatra animal — ${ya} and ${yb}. ${ya === yb ? 'Same animal: naturally in tune.' : yoniMet ? 'Neutral/compatible animals.' : 'Natural adversary animals.'}` });
 
-  // 6. Rasi (Moon-sign relationship) — dosha on the 2/12, 5/9, 6/8 pairs.
+  // 6. Rasi (Moon-sign relationship) — counted from the girl's sign to the boy's.
+  // B19: the earlier symmetric 2/12-5/9-6/8 (Bhakoot) rule rejected the 9th, which every
+  // porutham source treats as agreeing. Sources (fetched 2026-11-23): findyourfate.com
+  // 10porutham ("if the Rasi of the boy is 2, 4, 6, 8, 12 there is no proper agreement"),
+  // astroved.com/articles/rasi-porutham (6th, 8th, 12th incompatible; 1, 3, 4, 5, 9, 10, 11
+  // matching; 7th best), prokerala.com Tamil calculator (2nd and 8th rejected, 7th, 9th,
+  // 10th, 11th accepted). Rejected here: 2, 6, 8, 12 — the counts the sources share.
   const posAB = ((b.rashiIndex - a.rashiIndex + 12) % 12) + 1;
-  const posBA = ((a.rashiIndex - b.rashiIndex + 12) % 12) + 1;
-  const rasiPair = [posAB, posBA].sort((x, y) => x - y).join('-');
-  const rasiMet = !(rasiPair === '2-12' || rasiPair === '5-9' || rasiPair === '6-8');
+  const rasiMet = !RASI_BAD_COUNTS.has(posAB);
   poruthams.push({ key: 'rasi', label: 'Rasi', met: rasiMet,
-    explanation: `Emotional and material harmony via the Moon-sign pair (positions ${posAB}/${posBA}). ${rasiMet ? 'No adverse pairing.' : `An adverse ${rasiPair} pairing — an area to approach consciously.`}` });
+    explanation: `Emotional and material harmony via the Moon signs — the boy's sign is ${posAB === 1 ? 'the same as the girl\'s' : `count ${posAB} from the girl's`}. ${rasiMet ? 'Not an adverse count.' : `Count ${posAB} is one of the adverse counts (2, 6, 8, 12) — an area to approach consciously.`}` });
 
   // 7. Rasyadhipathi (Moon-sign lords' friendship).
   const la = SIGN_LORDS[a.rashiIndex], lb = SIGN_LORDS[b.rashiIndex];
@@ -193,7 +200,7 @@ export function calculatePorutham(a: PoruthamPerson, b: PoruthamPerson): Porutha
           : 'Challenging';
 
   const methodology =
-    'Computed by the ten-porutham (Dravidian / Tamil Jothidam) system used in South India and Sri Lanka, from each person’s Moon Nakshatra and Moon sign (Lahiri ayanamsa). Rajju and Dina are the essential poruthams. The directional poruthams (Stree Deergha, Mahendra) use the boy and girl you selected on the form. Dina, Vasya and Vedha use the standard Tamil tables; where tiers are simplified (Yoni, Rasi) the mainstream convention is used; this is disclosed and the reading is offered calmly as guidance, never a verdict.';
+    'Computed by the ten-porutham (Dravidian / Tamil Jothidam) system used in South India and Sri Lanka, from each person’s Moon Nakshatra and Moon sign (Lahiri ayanamsa). Rajju and Dina are the essential poruthams. The directional poruthams (Stree Deergha, Mahendra) use the boy and girl you selected on the form. Dina, Vasya and Vedha use the standard Tamil tables; Rasi counts from the girl’s sign to the boy’s (2, 6, 8, 12 do not agree); where tiers are simplified (Yoni, Rasyadhipathi) the mainstream convention is used; this is disclosed and the reading is offered calmly as guidance, never a verdict.';
 
   return { poruthams, metCount, total: 10, essentialsMet, verdict, methodology };
 }

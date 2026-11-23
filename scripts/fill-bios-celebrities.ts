@@ -8,7 +8,7 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
 const BIOS_PATH = 'src/data/celebrity-bios.json';
-const GEMINI_KEY = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+const GEMINI_KEY = process.env.NEW_GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent';
 
 interface Celeb { name: string; slug: string; known_for?: string; category?: string; occupation?: string; sitelinks?: number | null; nationality_code?: string; }

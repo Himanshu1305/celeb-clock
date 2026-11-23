@@ -205,6 +205,26 @@ export interface KundaliNarration {
   remedies: { nadi: string; bhakoot: string; gana: string; manglik: string; general: string };
   answer: string;
 }
+/** B19 — South-Indian (Tamil / Kerala) ten-porutham view, plus Kerala Papasamyam. */
+export type PoruthamKey = 'dina' | 'gana' | 'mahendra' | 'stree-deergha' | 'yoni' | 'rasi' | 'rasyadhipathi' | 'vasya' | 'rajju' | 'vedha';
+export interface PapaText {
+  title: string; lead: string;
+  refs: Record<'lagna' | 'moon' | 'venus', string>;
+  total: (who: string, points: string) => string;
+  hit: (planet: string, ref: string, house: number, points: string) => string;
+  noHits: string;
+  balanced: string; unbalanced: string; method: string;
+}
+export interface SouthMatchText {
+  title: string; lead: string; essential: string; met: string; notMet: string;
+  names: Record<PoruthamKey, string>;
+  what: Record<PoruthamKey, string>;
+  verdict: Record<'Excellent' | 'Good' | 'Average' | 'Challenging', string>;
+  countNote: (met: number, essentialsMet: boolean) => string;
+  method: string;
+  gunaTitle: string;
+  papa?: PapaText;
+}
 export interface LangCopy {
   landing: { lead: string; intro: readonly IntroBlock[]; faq: readonly FaqQA[]; cards: Record<'rashifal' | 'year' | 'panchang' | 'kundali', string> };
   rashifal: { intro: readonly IntroBlock[]; faq: readonly FaqQA[]; hubLead: string };
@@ -215,5 +235,7 @@ export interface LangCopy {
   remedies: Record<Graha | 'sadeSati' | 'dhaiya', string>;
   year2027: YearNarration;
   kundaliText: KundaliNarration;
+  /** Ten-porutham block shown first on the matching page (ta, ml). */
+  south?: SouthMatchText;
   faqTitle: string;
 }
