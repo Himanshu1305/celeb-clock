@@ -69,7 +69,7 @@ async function generateBio(celeb: Celeb, key: string): Promise<string | null> {
 }
 
 export async function run(limit: number): Promise<{ generated: number; skipped: number }> {
-  const key = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+  const key = process.env.NEW_GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
   const todo = missingBios(limit);
   if (todo.length === 0) {
     console.log('✅ No missing bios — nothing to do.');

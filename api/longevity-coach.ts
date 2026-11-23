@@ -4,6 +4,7 @@
 // Do not add Supabase writes or content logging here.
 
 import { QUIZ_COUNTRIES } from '../src/services/LongevityCalculationService.js';
+import { geminiKey } from './_gemini.js';
 import { detectCrisis } from '../src/lib/vedic/chatGuardrails.js';
 import { getAuthedUser, userIsPremium, serviceClient } from './_userAuth.js';
 
@@ -240,7 +241,7 @@ async function callAnthropic(systemPrompt: string, message: string): Promise<str
 // Gemini's default thresholds and would refuse the very questions it exists to answer.
 // All four categories are set to the least restrictive generally-available threshold.
 async function callGemini(systemPrompt: string, message: string): Promise<string> {
-  const apiKey = process.env.GEMINI_API_KEY!;
+  const apiKey = geminiKey()!;
   const response = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent',
     {
@@ -318,7 +319,7 @@ async function handler(request: Request): Promise<Response> {
   const provider = process.env.COACH_PROVIDER === 'anthropic' ? 'anthropic' : 'gemini';
   const keyPresent = provider === 'anthropic'
     ? !!process.env.ANTHROPIC_API_KEY
-    : !!process.env.GEMINI_API_KEY;
+    : !!geminiKey();
   if (!keyPresent) {
     return json({ error: 'API key not configured' }, 500);
   }
