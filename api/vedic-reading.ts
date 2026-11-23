@@ -5,7 +5,7 @@
 // render every section even when the AI is unavailable (graceful degradation).
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
-import { geminiKey } from './_gemini.js';
+import { geminiKey, geminiFetch } from './_gemini.js';
 import { chartBasisFromResult } from '../src/lib/vedic/chartBasis.js';
 import { resolveRequestBirthTz } from './_birthParams.js';
 import {
@@ -86,12 +86,7 @@ async function setCached(sb, cacheKey, chartData) {
 // throws — the caller degrades gracefully on any throw. Mirrors the longevity-
 // coach's safetySettings + block/empty handling.
 async function generateReading(systemPrompt, userPrompt) {
-  const apiKey = geminiKey();
-  if (!apiKey) throw new Error('GEMINI_API_KEY / NEW_GEMINI_API_KEY not configured');
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-    body: JSON.stringify({
+  const res = await geminiFetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`, JSON.stringify({
       systemInstruction: { parts: [{ text: systemPrompt }] },
       contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
       generationConfig: {
@@ -110,9 +105,7 @@ async function generateReading(systemPrompt, userPrompt) {
         { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
         { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
       ],
-    }),
-  });
-  if (!res.ok) throw new Error(`Gemini API error: ${res.status}`);
+    }));
   const data = await res.json();
   if (data?.promptFeedback?.blockReason) throw new Error(`Gemini blocked: ${data.promptFeedback.blockReason}`);
   const candidate = data?.candidates?.[0];

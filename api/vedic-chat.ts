@@ -8,7 +8,7 @@
 // hit their daily question cap. The crisis guardrail overrides everything.
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
-import { geminiKey } from './_gemini.js';
+import { geminiKey, geminiFetch } from './_gemini.js';
 import { extractReadingFacts } from '../src/lib/vedic/readingPrompts.js';
 import { ageInYears } from '../src/lib/vedic/yogaTiming.js';
 import { gemstoneChatContext } from '../src/lib/vedic/gemstones.js';
@@ -40,12 +40,7 @@ function json(body, status = 200) {
 }
 
 async function callGemini(systemPrompt, contents) {
-  const apiKey = geminiKey();
-  if (!apiKey) throw new Error('GEMINI_API_KEY / NEW_GEMINI_API_KEY not configured');
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-    body: JSON.stringify({
+  const res = await geminiFetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`, JSON.stringify({
       systemInstruction: { parts: [{ text: systemPrompt }] },
       contents,
       // gemini-flash-latest ignores thinkingBudget:0 and still spends ~700 hidden
@@ -58,9 +53,7 @@ async function callGemini(systemPrompt, contents) {
         { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_ONLY_HIGH' },
         { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_ONLY_HIGH' },
       ],
-    }),
-  });
-  if (!res.ok) throw new Error(`Gemini API error: ${res.status}`);
+    }));
   const data = await res.json();
   if (data?.promptFeedback?.blockReason) throw new Error(`blocked: ${data.promptFeedback.blockReason}`);
   const text = (data?.candidates?.[0]?.content?.parts ?? []).map(p => p?.text).filter(Boolean).join('') || '';
