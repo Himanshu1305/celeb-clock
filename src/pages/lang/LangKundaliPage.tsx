@@ -12,20 +12,24 @@ import { type SavedCity, sanitizeName, NAME_MAX } from '@/services/savedProfile'
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import type { ManglikAssessment } from '@/lib/vedic/manglik';
 import { PANCHANG_TABLES } from '@/lib/vedic/panchang';
-import type { KootaKey, LangCode } from '@/lib/lang/types';
+import type { PoruthamResult } from '@/lib/vedic/porutham';
+import type { PapasamyamResult, PapaPerson } from '@/lib/vedic/papasamyam';
+import type { KootaKey, LangCode, PoruthamKey } from '@/lib/lang/types';
 import { LangShell, LangHeader, Intro, LangFaq, ToolLinks, useLang } from './LangParts';
 
 interface MatchPerson { rashi: string; nakshatra: string; pada: number; lagna: string }
 interface ManglikMatch { status: 'clear' | 'mutual' | 'cancelled' | 'one-sided'; a?: ManglikAssessment; b?: ManglikAssessment }
-interface MatchResponse { gunaMilan: GunaMilanResult; manglik?: ManglikMatch | null; people: { a: MatchPerson; b: MatchPerson }; warnings?: { samePerson?: boolean; minor?: boolean } }
+interface MatchResponse { gunaMilan: GunaMilanResult; porutham?: PoruthamResult | null; papasamyam?: PapasamyamResult | null; manglik?: ManglikMatch | null; people: { a: MatchPerson; b: MatchPerson }; warnings?: { samePerson?: boolean; minor?: boolean } }
 
 const ENGINE_RASHI = ['Mesha', 'Vrishabha', 'Mithuna', 'Karka', 'Simha', 'Kanya', 'Tula', 'Vrischika', 'Dhanu', 'Makara', 'Kumbha', 'Meena'];
 const DOSHA_KEY: Record<string, 'nadi' | 'bhakoot' | 'gana'> = { 'Nadi Dosha': 'nadi', 'Bhakoot Dosha': 'bhakoot', 'Gana Dosha': 'gana' };
+const fmtPts = (n: number) => String(Math.round(n * 100) / 100);
 const input = 'w-full px-3 py-2 border border-brand-line rounded-lg bg-white text-brand-ink';
 
 export default function LangKundaliPage({ code }: { code: LangCode }) {
   const { v, cp, p } = useLang(code);
   const K = cp.kundaliText;
+  const SM = cp.south;
   const m = v.meta.kundali;
   const today = (() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; })();
   const [f, setF] = useState({ nameB: '', dobB: '', timeB: '', nameG: '', dobG: '', timeG: '' });
@@ -100,6 +104,47 @@ export default function LangKundaliPage({ code }: { code: LangCode }) {
               <strong className="text-brand-ink">{dispB}</strong> ({K.boy}): {person(result.people.a)}<br />
               <strong className="text-brand-ink">{dispG}</strong> ({K.girl}): {person(result.people.b)}
             </p>
+            {SM && result.porutham && (
+              <div data-testid="lkm-porutham" className="rounded-xl border border-brand-purple/30 p-4 space-y-3">
+                <h2 className="text-lg font-bold text-brand-ink">{SM.title}</h2>
+                <p className="text-sm text-brand-ink-soft">{SM.lead}</p>
+                <div className="text-center">
+                  <div data-testid="lkm-porutham-count" className="text-4xl font-black text-brand-purple">{result.porutham.metCount} / 10</div>
+                  <div className="font-semibold text-brand-ink">{SM.verdict[result.porutham.verdict]}</div>
+                  <p className="text-sm text-brand-ink-soft !mt-1">{SM.countNote(result.porutham.metCount, result.porutham.essentialsMet)}</p>
+                </div>
+                <ul className="space-y-2" data-testid="lkm-porutham-list">
+                  {result.porutham.poruthams.map(pr => (
+                    <li key={pr.key} data-testid={`lkm-porutham-${pr.key}`} data-met={pr.met ? '1' : '0'} className={`rounded-lg border p-3 text-sm ${pr.met ? 'border-emerald-200 bg-emerald-50 text-emerald-900' : 'border-amber-200 bg-amber-50 text-amber-900'}`}>
+                      <span className="font-semibold">{pr.essential && <span title={SM.essential} aria-label={SM.essential}>★ </span>}{SM.names[pr.key as PoruthamKey] ?? pr.label} — {pr.met ? `✓ ${SM.met}` : `✗ ${SM.notMet}`}</span>
+                      <span className="block !mt-1">{SM.what[pr.key as PoruthamKey]}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-xs text-brand-muted">{SM.method}</p>
+              </div>
+            )}
+            {SM?.papa && result.papasamyam && (() => {
+              const P = SM.papa!; const ps = result.papasamyam!;
+              const person = (who: string, x: PapaPerson) => (
+                <div className="rounded-lg border border-brand-line p-3 text-sm">
+                  <div className="font-semibold text-brand-ink">{P.total(who, fmtPts(x.total))}</div>
+                  <ul className="list-disc pl-5 !mt-1 space-y-0.5 text-brand-ink-soft">
+                    {x.hits.length === 0 ? <li>{P.noHits}</li> : x.hits.map((h, i) => <li key={i}>{P.hit(v.grahas[h.planet], P.refs[h.ref], h.house, fmtPts(h.points))}</li>)}
+                  </ul>
+                </div>
+              );
+              return (
+                <div data-testid="lkm-papa" data-balanced={ps.balanced ? '1' : '0'} className="rounded-xl border border-brand-purple/30 p-4 space-y-3">
+                  <h2 className="text-lg font-bold text-brand-ink">{P.title}</h2>
+                  <p className="text-sm text-brand-ink-soft">{P.lead}</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">{person(dispB, ps.groom)}{person(dispG, ps.bride)}</div>
+                  <p data-testid="lkm-papa-verdict" className={`rounded-lg border p-3 text-sm ${ps.balanced ? 'border-emerald-200 bg-emerald-50 text-emerald-900' : 'border-amber-200 bg-amber-50 text-amber-900'}`}>{ps.balanced ? P.balanced : P.unbalanced}</p>
+                  <p className="text-xs text-brand-muted">{P.method}</p>
+                </div>
+              );
+            })()}
+            {SM && <h2 className="text-lg font-bold text-brand-ink !mt-6">{SM.gunaTitle}</h2>}
             <div className="text-center rounded-xl border border-brand-line p-4">
               <div className="text-sm text-brand-muted">{K.total}</div>
               <div data-testid="lkm-total" className="text-4xl font-black text-brand-purple">{g.total} / 36</div>

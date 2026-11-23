@@ -11,6 +11,7 @@ import { kootaScoreNote, gunaTotalNote, poruthamCountNote, degreeNote } from '@/
 import { useSavedProfile } from '@/hooks/useSavedProfile';
 import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import type { PoruthamResult } from '@/lib/vedic/porutham';
+import type { PapasamyamResult } from '@/lib/vedic/papasamyam';
 import { CityPicker } from '@/components/CityPicker';
 import { birthQuery } from '@/lib/timezone/clientBirth';
 import { METHOD_LINE } from '@/lib/timezone/birthTimezone';
@@ -43,6 +44,7 @@ interface MatchResponse {
   groom?: 'A' | 'B';
   warnings?: { samePerson?: boolean; minor?: boolean; samePersonNote?: string; minorNote?: string };
   porutham?: PoruthamResult | null;
+  papasamyam?: PapasamyamResult | null;
   manglik?: ManglikMatch | null;
   synthesis?: { verdict: string; paragraphs: string[] } | null;
   timing: {
@@ -407,6 +409,30 @@ export default function KundaliMatchPage() {
                   ))}
                 </div>
                 <p className="mt-2 text-xs text-muted-foreground">{result.porutham.methodology}</p>
+              </details>
+            )}
+
+            {/* B19: Kerala Papasamyam — balance of malefics (Mars, Saturn, Sun, Rahu) */}
+            {result.papasamyam && (
+              <details data-testid="kmatch-papa" className="rounded-xl border border-brand-purple/30 p-4">
+                <summary className="cursor-pointer font-semibold text-foreground">
+                  Kerala Papasamyam — groom {Math.round(result.papasamyam.groom.total * 100) / 100} · bride {Math.round(result.papasamyam.bride.total * 100) / 100} · {result.papasamyam.balanced ? 'balanced' : 'not balanced'}
+                </summary>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Papasamyam (papa samyam) compares how much malefic weight each chart carries. Mars, Saturn, the Sun and Rahu are counted when they sit in the 1st, 2nd, 4th, 7th, 8th or 12th sign from the Lagna (1 point), the Moon (½) and Venus (¼). The tradition asks that the bride’s total is not higher than the groom’s; equal, or the groom higher, counts as balanced.
+                </p>
+                <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {([['Groom', result.papasamyam.groom], ['Bride', result.papasamyam.bride]] as const).map(([who, x]) => (
+                    <div key={who} className="rounded-lg border border-border p-3 text-sm">
+                      <div className="font-semibold text-foreground">{who}: {Math.round(x.total * 100) / 100} points</div>
+                      <ul className="list-disc pl-5 mt-1 text-muted-foreground">
+                        {x.hits.length === 0 ? <li>No malefic in these houses (0)</li> : x.hits.map((h, i) => <li key={i}>{h.planet} — {h.house}{h.house === 1 ? 'st' : h.house === 2 ? 'nd' : 'th'} from the {h.ref === 'lagna' ? 'Lagna' : h.ref === 'moon' ? 'Moon' : 'Venus'} ({h.points})</li>)}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-2 text-sm text-foreground">{result.papasamyam.balanced ? 'Balanced: the bride’s malefic total is not higher than the groom’s.' : 'Not balanced: the bride’s malefic total is higher than the groom’s. On its own this is one factor to weigh calmly with the full charts, never a verdict.'}</p>
+                <p className="mt-2 text-xs text-muted-foreground">Base method only: some astrologers add per-house and dignity (exaltation, own sign) adjustments, which are not applied here, so their totals can differ slightly.</p>
               </details>
             )}
 

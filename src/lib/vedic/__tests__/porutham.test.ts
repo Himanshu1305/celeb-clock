@@ -95,3 +95,10 @@ describe('porutham (10-porutham South Indian matching)', () => {
     expect(vs(2, 8)).toBe(false);   // Mithuna–Dhanu
   });
 });
+
+describe('porutham Rasi — counted from the girl sign to the boy sign (B19)', () => {
+  const rasi = (g: number, b: number) => calculatePorutham({ nakshatra: 'Ashwini', rashiIndex: g }, { nakshatra: 'Hasta', rashiIndex: b }).poruthams.find(p => p.key === 'rasi')!.met;
+  it('9th agrees (was wrongly rejected by the 5/9 rule)', () => { expect(rasi(0, 8)).toBe(true); expect(rasi(11, 7)).toBe(true); });
+  it('2, 6, 8, 12 do not agree', () => { for (const n of [2, 6, 8, 12]) expect(rasi(0, n - 1)).toBe(false); });
+  it('1, 3, 4, 5, 7, 9, 10, 11 agree', () => { for (const n of [1, 3, 4, 5, 7, 9, 10, 11]) expect(rasi(0, n - 1)).toBe(true); });
+});
