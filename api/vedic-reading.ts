@@ -5,6 +5,7 @@
 // render every section even when the AI is unavailable (graceful degradation).
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
+import { geminiKey } from './_gemini.js';
 import { chartBasisFromResult } from '../src/lib/vedic/chartBasis.js';
 import { resolveRequestBirthTz } from './_birthParams.js';
 import {
@@ -85,8 +86,8 @@ async function setCached(sb, cacheKey, chartData) {
 // throws — the caller degrades gracefully on any throw. Mirrors the longevity-
 // coach's safetySettings + block/empty handling.
 async function generateReading(systemPrompt, userPrompt) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_API_KEY not configured');
+  const apiKey = geminiKey();
+  if (!apiKey) throw new Error('GEMINI_API_KEY / NEW_GEMINI_API_KEY not configured');
   const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },

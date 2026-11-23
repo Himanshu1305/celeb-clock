@@ -8,6 +8,7 @@
 // hit their daily question cap. The crisis guardrail overrides everything.
 
 import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
+import { geminiKey } from './_gemini.js';
 import { extractReadingFacts } from '../src/lib/vedic/readingPrompts.js';
 import { ageInYears } from '../src/lib/vedic/yogaTiming.js';
 import { gemstoneChatContext } from '../src/lib/vedic/gemstones.js';
@@ -39,8 +40,8 @@ function json(body, status = 200) {
 }
 
 async function callGemini(systemPrompt, contents) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_API_KEY not configured');
+  const apiKey = geminiKey();
+  if (!apiKey) throw new Error('GEMINI_API_KEY / NEW_GEMINI_API_KEY not configured');
   const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
