@@ -16,6 +16,7 @@ import { pageLangForPath } from '@/lib/seo/pageLang.js';
 import { year2027Routes } from '../meta.js';
 import YearForecastPage from '@/pages/year2027/YearForecastPage';
 import FestivalDatePage from '@/pages/year2027/FestivalDatePage';
+import PradoshVrat2027 from '@/pages/year2027/PradoshVrat2027';
 
 afterEach(() => cleanup());
 
@@ -115,6 +116,16 @@ describe('B14 — rendered pages', () => {
     expect(container.querySelector('section[lang="hi"]')).toBeTruthy();
     expect(container.querySelector('[data-testid="festival2027-date"]')?.getAttribute('data-date')).toBe('2027-10-29');
     expect(container.textContent).not.toMatch(/\{d:/);
+  });
+
+  it('Pradosh Vrat 2027 page lists every engine date with FAQ schema and no fear wording', () => {
+    const { container } = renderAt('/pradosh-vrat-2027', '/pradosh-vrat-2027', <PradoshVrat2027 />);
+    expect(container.querySelector('[data-testid="pradosh2027-h1"]')?.textContent).toBe('Pradosh Vrat 2027 — all dates with puja time');
+    expect(container.querySelectorAll('[data-testid="pradosh2027-table"] tbody tr')).toHaveLength(25);
+    expect(container.querySelector('[data-testid="pradosh2027-table"] tr[data-date="2027-08-14"]')?.textContent).toMatch(/Shani Pradosh/);
+    expect(container.querySelector('[data-testid="jsonld-year2027-faq"]')).toBeTruthy();
+    expect(container.textContent).toMatch(/Mahashivratri 2027/);
+    expect(container.textContent).not.toMatch(/scientifically|guarantee|death|disease/i);
   });
 
   it('English Vedic page links to the other 11 rashis and to Hindi', () => {

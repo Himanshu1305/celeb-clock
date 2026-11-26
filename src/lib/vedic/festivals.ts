@@ -807,6 +807,32 @@ export function tithiDays(year: number): TithiDay[] {
   return out.sort((a, b) => (a.dateISO < b.dateISO ? -1 : a.dateISO > b.dateISO ? 1 : 0));
 }
 
+export interface PradoshDay {
+  /** Calendar name, identical to the computeFestivalCalendar row ("Pradosh Vrat (Shukla)"). */
+  name: string;
+  dateISO: string;
+  month: string;
+  monthPurnimanta: string;
+  paksha: 'Shukla' | 'Krishna';
+  tithiStart: number;
+  tithiEnd: number;
+}
+
+/** Every Pradosh Vrat (Trayodashi covering pradosh kaal) of a year with its Trayodashi
+ *  start / end — the same dates and names as the calendar's recurring rows (same rule). */
+export function pradoshDays(year: number): PradoshDay[] {
+  const out: PradoshDay[] = [];
+  for (const m of amantaMonths(year)) {
+    for (const paksha of ['Shukla', 'Krishna'] as const) {
+      const d = observanceDate(m, paksha, 13, 'pradosh');
+      if (!d.startsWith(String(year))) continue;
+      const s = tithiSpan(m, paksha, 13);
+      out.push({ name: `Pradosh Vrat (${paksha})`, dateISO: d, month: m.name, monthPurnimanta: purnimantaMonthName(m.name, paksha), paksha, tithiStart: s.start, tithiEnd: s.end });
+    }
+  }
+  return out.sort((a, b) => (a.dateISO < b.dateISO ? -1 : a.dateISO > b.dateISO ? 1 : 0));
+}
+
 /** The exact instant (UTC ms) of each sidereal Sankranti whose festival date is in the year. */
 export function sankrantiInstants(year: number): Array<{ sign: number; dateISO: string; instant: number }> {
   const raw = sankrantis(new Date(Date.UTC(year - 1, 11, 20)), new Date(Date.UTC(year + 1, 0, 10)));

@@ -46,7 +46,7 @@ const VEDIC_FIRST = new Set([
   // B18
   '/lal-kitab',
   // B14: 2027 pages
-  '/rashifal-2027', '/horoscope-2027', '/horoscope', '/hindu-calendar-2027', '/ekadashi-2027', '/purnima-2027', '/amavasya-2027',
+  '/rashifal-2027', '/horoscope-2027', '/horoscope', '/hindu-calendar-2027', '/ekadashi-2027', '/purnima-2027', '/amavasya-2027', '/pradosh-vrat-2027',
 ]);
 const PANCHANG_FIRST = new Set(['/panchang', '/rahu-kaal', '/choghadiya', '/panchang-calendar', '/planets-today', '/moon-phase']);
 const ARTICLE_FIRST = new Set(['/articles', '/blog', '/answers']);

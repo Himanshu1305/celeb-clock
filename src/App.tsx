@@ -217,6 +217,7 @@ const YearForecastPage = lazyWithReload(() => import('@/pages/year2027/YearForec
 const YearHubPage = lazyWithReload(() => import('@/pages/year2027/YearHubPage'));
 const FestivalDatePage = lazyWithReload(() => import('@/pages/year2027/FestivalDatePage'));
 const TithiListPage = lazyWithReload(() => import('@/pages/year2027/TithiListPage'));
+const PradoshVrat2027 = lazyWithReload(() => import('@/pages/year2027/PradoshVrat2027'));
 const HinduCalendar2027 = lazyWithReload(() => import('@/pages/year2027/HinduCalendar2027'));
 const Numerology2027 = lazyWithReload(() => import('@/pages/year2027/Numerology2027'));
 const ChineseHoroscope2027 = lazyWithReload(() => import('@/pages/year2027/ChineseHoroscope2027'));
@@ -532,6 +533,7 @@ const App = () => (
               <Route path="/ekadashi-2027" element={<TithiListPage kind="ekadashi" />} />
               <Route path="/purnima-2027" element={<TithiListPage kind="purnima" />} />
               <Route path="/amavasya-2027" element={<TithiListPage kind="amavasya" />} />
+              <Route path="/pradosh-vrat-2027" element={<PradoshVrat2027 />} />
               <Route path="/hindu-calendar-2027" element={<HinduCalendar2027 />} />
               <Route path="/numerology-2027" element={<Numerology2027 />} />
               <Route path="/chinese-horoscope-2027" element={<ChineseHoroscope2027 />} />

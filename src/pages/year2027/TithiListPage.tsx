@@ -102,6 +102,7 @@ export default function TithiListPage({ kind }: { kind: Kind }) {
         <LinkChips items={[
           info.link,
           ...(['ekadashi', 'purnima', 'amavasya'] as const).filter(k => k !== kind).map(k => ({ label: `${k.charAt(0).toUpperCase() + k.slice(1)} 2027`, to: `/${k}-2027/` })),
+          { label: 'Pradosh Vrat 2027', to: '/pradosh-vrat-2027/' },
           { label: 'Hindu calendar 2027', to: '/hindu-calendar-2027/' },
           { label: 'Festival & vrat calendar 2027', to: '/festivals/2027/' },
           { label: 'Rashifal 2027', to: '/rashifal-2027/' },

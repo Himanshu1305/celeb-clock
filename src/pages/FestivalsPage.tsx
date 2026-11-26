@@ -103,7 +103,7 @@ export default function FestivalsPage() {
             <div className="flex flex-wrap gap-2">
               {FESTIVALS_2027.map(f => <Link key={f.slug} to={`/festivals/2027/${f.slug}/`} className="px-2.5 py-1 rounded-lg border border-brand-line bg-brand-paper text-brand-ink hover:bg-brand-gold/10">{f.en} 2027</Link>)}
             </div>
-            <p className="mt-2"><Link to="/hindu-calendar-2027/" className="underline text-brand-ink">Hindu calendar 2027 →</Link> · <Link to="/ekadashi-2027/" className="underline text-brand-ink">Ekadashi 2027 →</Link> · <Link to="/purnima-2027/" className="underline text-brand-ink">Purnima 2027 →</Link> · <Link to="/amavasya-2027/" className="underline text-brand-ink">Amavasya 2027 →</Link></p>
+            <p className="mt-2"><Link to="/hindu-calendar-2027/" className="underline text-brand-ink">Hindu calendar 2027 →</Link> · <Link to="/ekadashi-2027/" className="underline text-brand-ink">Ekadashi 2027 →</Link> · <Link to="/purnima-2027/" className="underline text-brand-ink">Purnima 2027 →</Link> · <Link to="/amavasya-2027/" className="underline text-brand-ink">Amavasya 2027 →</Link> · <Link to="/pradosh-vrat-2027/" className="underline text-brand-ink">Pradosh Vrat 2027 →</Link></p>
           </div>
 
           {/* Major festivals */}
