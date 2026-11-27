@@ -1,6 +1,6 @@
 # B20 report — 27 November 2026
 
-Prompt: `docs/B20-PROMPT.md`. Branches `b20-ml`, `b20-festivals`, `b20-accuracy` → `b20` → `main` (commit e2d9509).
+Prompt: `docs/B20-PROMPT.md`. Branches `b20-ml`, `b20-festivals`, `b20-accuracy` → `b20` → `main` (deployed as 3539395; `develop` synced).
 
 ## What shipped
 
@@ -99,7 +99,18 @@ BASE_URL=https://bornclock.com npx playwright test -c playwright.b20.config.ts  
 
 ## Live checks
 
-LIVE_RESULTS
+Checked on bornclock.com on 27 Nov 2026, after deploy run 45987341250 went green.
+
+- **First deploy attempt:** it failed on M3, because the deploy runner has no `openpyxl`. Production stayed on the old version. M3 now skips when that library is missing, and the second run deployed.
+
+| ID | Result |
+|---|---|
+| L1 | Pass. All four festival URLs (plus holika-dahan and dhanteras) return 200 with the muhurat section, the city table, Event, FAQPage and BreadcrumbList data, and `og:image` set to `/og/vedic.png`. `/og/vedic.png` returns 200 `image/png` (149,882 bytes). |
+| L2 | Pass. `/ml/jathaka-porutham/` opens on Kerala; the Tamil toggle shows the Tamil card and switches back. `/ta/jathaga-porutham/` has no Kerala toggle. |
+| L3 | Pass. `/accuracy/` (updated 27 November 2026) shows the `porutham-kerala`, `panchang-swiss` and `varshphal` rows. The sitemaps list all four festival URLs. |
+| L4 | Pass. Couple 1 entered in the production form (groom 8 Jul 1992 18:15, bride 14 Mar 1995 10:30, both Ujjain) gave Kerala total 2.5. All 10 scores match ProKerala: Dina 0, Gana 0, Mahendra 1, Stree Deergha 0, Yoni 0, Vedha 1, Rajju ½, Rasi 0, Rasiyathipathi 0, Vasya 0. |
+
+- **Minor, open:** on production, `/accuracy/`'s share image is still the default card, although the local prerender gives it `vedic.png`. The festival and `/ml/` pages are correct.
 
 ## Owner's actions
 
