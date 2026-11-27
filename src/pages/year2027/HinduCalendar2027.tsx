@@ -80,7 +80,7 @@ export default function HinduCalendar2027() {
         <FaqList items={faq} testId="hc2027-faq" />
         <H2 id="more">Dated lists</H2>
         <LinkChips items={[
-          { label: 'Ekadashi 2027', to: '/ekadashi-2027/' }, { label: 'Purnima 2027', to: '/purnima-2027/' }, { label: 'Amavasya 2027', to: '/amavasya-2027/' },
+          { label: 'Ekadashi 2027', to: '/ekadashi-2027/' }, { label: 'Purnima 2027', to: '/purnima-2027/' }, { label: 'Amavasya 2027', to: '/amavasya-2027/' }, { label: 'Pradosh Vrat 2027', to: '/pradosh-vrat-2027/' },
           { label: 'Festival & vrat calendar 2027', to: '/festivals/2027/' }, { label: 'Eclipses 2027', to: '/eclipses/2027/' },
           { label: 'Rashifal 2027', to: '/rashifal-2027/' }, { label: 'राशिफल 2027', to: '/hi/rashifal-2027/', lang: 'hi' },
         ]} />

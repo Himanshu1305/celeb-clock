@@ -75,6 +75,7 @@ export const p2027 = {
   /** @param {string} slug */ festival: slug => `/festivals/2027/${slug}`,
   /** @param {string} slug */ festivalHi: slug => `/hi/festivals/2027/${slug}`,
   hinduCalendar: '/hindu-calendar-2027',
+  pradosh: '/pradosh-vrat-2027',
   numerology: '/numerology-2027',
   chinese: '/chinese-horoscope-2027',
 };
@@ -85,7 +86,7 @@ export function year2027Routes() {
     p2027.rashifalHub, ...RASHI_SLUGS_2027.map((_, i) => p2027.rashifal(i)),
     p2027.rashifalHubHi, ...RASHI_SLUGS_HI_2027.map((_, i) => p2027.rashifalHi(i)),
     p2027.horoscopeHub, ...SIGN_SLUGS_2027.map((_, i) => p2027.horoscope(i)),
-    p2027.hinduCalendar, ...TITHI_LIST_SLUGS_2027.map(s => `/${s}`),
+    p2027.hinduCalendar, ...TITHI_LIST_SLUGS_2027.map(s => `/${s}`), p2027.pradosh,
     ...FESTIVAL_SLUGS_2027.map(p2027.festival),
     ...HI_FESTIVAL_SLUGS_2027.map(p2027.festivalHi),
     p2027.numerology, p2027.chinese,
@@ -170,6 +171,11 @@ export function year2027Meta(route) {
       h1: `${SIGN_EN[i]} Horoscope 2027 — yearly forecast`,
     };
   }
+  if (r === p2027.pradosh) return {
+    title: 'Pradosh Vrat 2027 Dates: Full List & Puja Time | BornClock',
+    description: 'All 25 Pradosh Vrat dates of 2027 with Som, Bhaum and Shani Pradosh, the evening puja window and Trayodashi start and end times (IST, New Delhi) — computed from real Sun and Moon positions.',
+    h1: 'Pradosh Vrat 2027 — all dates with puja time',
+  };
   if ((m = r.match(/^\/(ekadashi|purnima|amavasya)-2027$/))) return TITHI_LIST[/** @type {'ekadashi-2027'} */ (`${m[1]}-2027`)];
   if ((m = r.match(/^\/festivals\/2027\/([a-z-]+)$/))) {
     const f = FESTIVALS_2027.find(x => x.slug === m?.[1]);

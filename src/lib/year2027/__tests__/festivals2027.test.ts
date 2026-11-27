@@ -3,7 +3,7 @@
  * and equals the date the /festivals/2027 calendar shows.
  */
 import { describe, it, expect } from 'vitest';
-import { computeFestivalCalendar, festivalDetails, tithiDays } from '@/lib/vedic/festivals';
+import { computeFestivalCalendar, festivalDetails, tithiDays, pradoshDays } from '@/lib/vedic/festivals';
 import { festivals2027 } from '../festivalData';
 import { FESTIVALS_2027 } from '../meta.js';
 import { FESTIVAL_TEXT_EN, FESTIVAL_TEXT_HI } from '../festivalContent';
@@ -83,5 +83,19 @@ describe('B14 — festival page dates == festival engine', () => {
     const MONTHS = /\b\d{1,2} (January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b|\d{1,2} (जनवरी|फ़रवरी|मार्च|अप्रैल|मई|जून|जुलाई|अगस्त|सितंबर|अक्टूबर|नवंबर|दिसंबर)/;
     // The only day-month in the text: Makar Sankranti's general "14 or 15 January" (not a 2027 date).
     expect(all.replace(/14 or 15 January/g, '').replace(/14 या 15 जनवरी/g, '')).not.toMatch(MONTHS);
+  });
+});
+
+describe('Pradosh Vrat 2027 list == festival engine calendar', () => {
+  const rows = pradoshDays(2027);
+  it('has the same dates as the calendar\'s Pradosh rows', () => {
+    const calRows = cal.filter(f => f.name.startsWith('Pradosh Vrat')).map(f => `${f.dateISO} ${f.name}`).sort();
+    expect(rows.map(r => `${r.dateISO} ${r.name}`).sort()).toEqual(calRows);
+    expect(rows).toHaveLength(25);
+  });
+  it('Trayodashi covers the evening of each vrat day and Drik reference dates match', () => {
+    for (const r of rows) expect(r.tithiEnd).toBeGreaterThan(r.tithiStart);
+    // drikpanchang.com Shani Pradosha 2027 page: 14 Aug 2027; Mahashivratri eve 5 Mar 2027.
+    expect(rows.map(r => r.dateISO)).toEqual(expect.arrayContaining(['2027-08-14', '2027-03-05']));
   });
 });

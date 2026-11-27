@@ -38,8 +38,8 @@ const worker404 = new Function('pathname', 'RASHI_SLUGS_2027', 'RASHI_SLUGS_HI_2
 const is404 = (p: string) => worker404(p, RASHI_SLUGS_2027, RASHI_SLUGS_HI_2027, SIGN_SLUGS_2027, FESTIVAL_SLUGS_2027, HI_FESTIVAL_SLUGS_2027);
 
 describe('B14 — 2027 routes in sync', () => {
-  it('has the expected pages (13 + 13 + 13 hubs/signs, 26 festivals, 10 Hindi festivals, 4 calendar pages, 2 more)', () => {
-    expect(routes.length).toBe(13 + 13 + 13 + 26 + 10 + 4 + 2);
+  it('has the expected pages (13 + 13 + 13 hubs/signs, 26 festivals, 10 Hindi festivals, 5 calendar pages, 2 more)', () => {
+    expect(routes.length).toBe(13 + 13 + 13 + 26 + 10 + 5 + 2);
     expect(new Set(routes).size).toBe(routes.length);
     expect(FESTIVALS_2027.length).toBe(26);
     expect(HI_FESTIVAL_SLUGS_2027.sort()).toEqual(['chhath-puja', 'dhanteras', 'diwali', 'holi', 'janmashtami', 'karwa-chauth', 'mahashivratri', 'makar-sankranti', 'navratri', 'raksha-bandhan']);
@@ -74,6 +74,7 @@ describe('B14 — 2027 routes in sync', () => {
     expect(year2027Meta('/hi/rashifal/mesha/2027')!.title).toBe('मेष राशिफल 2027 — वार्षिक भविष्यफल | BornClock');
     expect(year2027Meta('/festivals/2027/holi')!.title).toMatch(/^Holi 2027/);
     expect(year2027Meta('/horoscope/sagittarius/2027')!.title).toMatch(/^Sagittarius Horoscope 2027/);
+    expect(year2027Meta('/pradosh-vrat-2027')!.title).toMatch(/^Pradosh Vrat 2027/);
   });
 
   it('the Worker 404s the addresses that are not pages', () => {
