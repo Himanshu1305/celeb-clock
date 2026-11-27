@@ -13,13 +13,14 @@ import type { GunaMilanResult } from '@/lib/vedic/matchmaking';
 import type { ManglikAssessment } from '@/lib/vedic/manglik';
 import { PANCHANG_TABLES } from '@/lib/vedic/panchang';
 import type { PoruthamResult } from '@/lib/vedic/porutham';
+import type { KeralaResult } from '@/lib/vedic/poruthamKerala';
 import type { PapasamyamResult, PapaPerson } from '@/lib/vedic/papasamyam';
 import type { KootaKey, LangCode, PoruthamKey } from '@/lib/lang/types';
 import { LangShell, LangHeader, Intro, LangFaq, ToolLinks, useLang } from './LangParts';
 
 interface MatchPerson { rashi: string; nakshatra: string; pada: number; lagna: string }
 interface ManglikMatch { status: 'clear' | 'mutual' | 'cancelled' | 'one-sided'; a?: ManglikAssessment; b?: ManglikAssessment }
-interface MatchResponse { gunaMilan: GunaMilanResult; porutham?: PoruthamResult | null; papasamyam?: PapasamyamResult | null; manglik?: ManglikMatch | null; people: { a: MatchPerson; b: MatchPerson }; warnings?: { samePerson?: boolean; minor?: boolean } }
+interface MatchResponse { gunaMilan: GunaMilanResult; porutham?: PoruthamResult | null; poruthamKerala?: KeralaResult | null; papasamyam?: PapasamyamResult | null; manglik?: ManglikMatch | null; people: { a: MatchPerson; b: MatchPerson }; warnings?: { samePerson?: boolean; minor?: boolean } }
 
 const ENGINE_RASHI = ['Mesha', 'Vrishabha', 'Mithuna', 'Karka', 'Simha', 'Kanya', 'Tula', 'Vrischika', 'Dhanu', 'Makara', 'Kumbha', 'Meena'];
 const DOSHA_KEY: Record<string, 'nadi' | 'bhakoot' | 'gana'> = { 'Nadi Dosha': 'nadi', 'Bhakoot Dosha': 'bhakoot', 'Gana Dosha': 'gana' };
@@ -38,6 +39,8 @@ export default function LangKundaliPage({ code }: { code: LangCode }) {
   const [result, setResult] = useState<MatchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // B20: the Malayalam page shows Kerala scoring first; the Tamil table stays one tap away.
+  const [system, setSystem] = useState<'kerala' | 'tamil'>('kerala');
   const set = (k: keyof typeof f) => (e: { target: { value: string } }) => { setF(s => ({ ...s, [k]: e.target.value })); setResult(null); };
   const ok = (dob: string, time: string, city: SavedCity | null) => /^\d{4}-\d{2}-\d{2}$/.test(dob) && dob <= today && /^\d{2}:\d{2}$/.test(time) && !!city;
   const canCalc = ok(f.dobB, f.timeB, cityB) && ok(f.dobG, f.timeG, cityG);
@@ -104,7 +107,41 @@ export default function LangKundaliPage({ code }: { code: LangCode }) {
               <strong className="text-brand-ink">{dispB}</strong> ({K.boy}): {person(result.people.a)}<br />
               <strong className="text-brand-ink">{dispG}</strong> ({K.girl}): {person(result.people.b)}
             </p>
-            {SM && result.porutham && (
+            {SM?.kerala && result.poruthamKerala && result.porutham && (
+              <div role="group" aria-label={SM.kerala.toggleLabel} className="flex gap-2" data-testid="lkm-system-toggle">
+                {(['kerala', 'tamil'] as const).map(s => (
+                  <button key={s} type="button" data-testid={`lkm-system-${s}`} aria-pressed={system === s} onClick={() => setSystem(s)}
+                    className={`px-3 py-1.5 rounded-full text-sm font-semibold border ${system === s ? 'bg-brand-purple text-white border-brand-purple' : 'bg-white text-brand-ink border-brand-line'}`}>
+                    {s === 'kerala' ? SM.kerala!.toggleKerala : SM.kerala!.toggleTamil}
+                  </button>
+                ))}
+              </div>
+            )}
+            {SM?.kerala && result.poruthamKerala && system === 'kerala' && (() => {
+              const KE = SM.kerala!; const kr = result.poruthamKerala!;
+              const label = (sc: number) => sc === 1 ? `✓ ${KE.full}` : sc === 0.5 ? `½ ${KE.partial}` : `✗ ${KE.none}`;
+              const tone = (sc: number) => sc === 1 ? 'border-emerald-200 bg-emerald-50 text-emerald-900' : sc === 0.5 ? 'border-sky-200 bg-sky-50 text-sky-900' : 'border-amber-200 bg-amber-50 text-amber-900';
+              return (
+                <div data-testid="lkm-porutham-kerala" data-total={kr.total} className="rounded-xl border border-brand-purple/30 p-4 space-y-3">
+                  <h2 className="text-lg font-bold text-brand-ink">{KE.title}</h2>
+                  <p className="text-sm text-brand-ink-soft">{KE.lead}</p>
+                  <div className="text-center">
+                    <div data-testid="lkm-kerala-total" className="text-4xl font-black text-brand-purple">{fmtPts(kr.total)} / 10</div>
+                    <p className="text-sm text-brand-ink-soft !mt-1">{KE.total(fmtPts(kr.total))}</p>
+                  </div>
+                  <ul className="space-y-2">
+                    {kr.poruthams.map(pr => (
+                      <li key={pr.key} data-testid={`lkm-kerala-${pr.key}`} data-score={pr.score} className={`rounded-lg border p-3 text-sm ${tone(pr.score)}`}>
+                        <span className="font-semibold">{SM.names[pr.key as PoruthamKey] ?? pr.label} — {label(pr.score)}</span>
+                        <span className="block !mt-1">{KE.what[pr.key as PoruthamKey] ?? SM.what[pr.key as PoruthamKey]}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-xs text-brand-muted">{KE.method}</p>
+                </div>
+              );
+            })()}
+            {SM && result.porutham && (!SM.kerala || !result.poruthamKerala || system === 'tamil') && (
               <div data-testid="lkm-porutham" className="rounded-xl border border-brand-purple/30 p-4 space-y-3">
                 <h2 className="text-lg font-bold text-brand-ink">{SM.title}</h2>
                 <p className="text-sm text-brand-ink-soft">{SM.lead}</p>

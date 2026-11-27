@@ -43,6 +43,14 @@ describe('/api/kundali-match — deterministic accuracy', () => {
     expect(j.people.a.lagna !== j.people.b.lagna || j.people.a.nakshatra !== j.people.b.nakshatra).toBe(true);
   });
 
+  it('B20 — returns Kerala porutham scores (bride = the non-groom person) alongside the Tamil view', async () => {
+    const j = await (await GET(new Request('http://localhost/api/kundali-match?' + q({ ...PAIR, groom: 'A' })))).json();
+    expect(j.poruthamKerala.poruthams).toHaveLength(10);
+    expect(j.poruthamKerala.total).toBe(j.poruthamKerala.poruthams.reduce((s: number, p: any) => s + p.score, 0));
+    for (const p of j.poruthamKerala.poruthams) expect([0, 0.5, 1]).toContain(p.score);
+    expect(j.porutham.poruthams).toHaveLength(10);
+  });
+
   it('400s when birth details are missing', async () => {
     const res = await GET(new Request('http://localhost/api/kundali-match?yA=1988'));
     expect(res.status).toBe(400);

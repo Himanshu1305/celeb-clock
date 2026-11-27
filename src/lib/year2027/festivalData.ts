@@ -8,7 +8,7 @@
  * for New Delhi (sunrise / sunset / moonrise from the engine). Nothing is typed by hand.
  */
 import {
-  computeFestivalCalendar, festivalDetails, tithiDays, sankrantiInstants, delhiSunTimes, kalaWindowDelhi,
+  computeFestivalCalendar, festivalDetails, tithiDays, sankrantiInstants, delhiSunTimes, kalaWindowDelhi, tithiFractionInstant,
   type FestivalDetail, type Kala,
 } from '../vedic/festivals';
 import { FESTIVALS_2027 } from './meta.js';
@@ -127,8 +127,8 @@ export function festivals2027(lang: Lang): Festival2027[] {
       if (f.slug === 'holi') {
         notes.push(en ? 'Holi (Dhulandi) is played on the morning after the Holika Dahan bonfire, so it has no separate tithi muhurat.' : 'होली (धुलंडी) होलिका दहन के अगले दिन सुबह खेली जाती है, इसलिए इसका अलग तिथि-मुहूर्त नहीं होता।');
       } else if (f.slug === 'holika-dahan' || f.slug === 'raksha-bandhan') {
-        // Bhadra (Vishti karana) = the first half of Purnima.
-        const bhadraEnd = (d.tithiStart + d.tithiEnd) / 2;
+        // Bhadra (Vishti karana) = the first half of Purnima — by the Moon–Sun angle (B20; was clock-time midpoint).
+        const bhadraEnd = tithiFractionInstant(2027, d.month, 'Shukla', 15, 0.5);
         timings.push({ label: en ? 'Bhadra (first half of Purnima) ends' : 'भद्रा (पूर्णिमा का पहला आधा भाग) समाप्त', value: stamp(bhadraEnd, lang) });
         if (f.slug === 'raksha-bandhan') {
           const a = Math.max(bhadraEnd, sun.rise), b = d.tithiEnd;
@@ -137,8 +137,8 @@ export function festivals2027(lang: Lang): Festival2027[] {
           const pd = kalaWindowDelhi(d.dateISO, 'pradosh');
           timings.push({ label: en ? 'Pradosh kaal (evening)' : 'प्रदोष काल (शाम)', value: `${istTime(pd[0])} – ${istTime(pd[1])}` });
           if (bhadraEnd > pd[0]) notes.push(en
-            ? `In 2027 Bhadra lasts until ${stamp(bhadraEnd, 'en')}, so it covers the whole evening of ${dayLabel(d.dateISO, 'en')}. The tradition avoids the bonfire during Bhadra; when Bhadra covers the evening, Panchangs give a special time (often the tail of Bhadra, "Bhadra Puchha") — follow your local Panchang or temple for the exact minute.`
-            : `2027 में भद्रा ${stamp(bhadraEnd, 'hi')} तक है, यानी ${dayLabel(d.dateISO, 'hi')} की पूरी शाम भद्रा रहेगी। परंपरा में भद्रा में होलिका दहन नहीं किया जाता; ऐसे वर्षों में पंचांग विशेष समय (अक्सर "भद्रा पुच्छ") बताते हैं — सटीक मिनट के लिए स्थानीय पंचांग या मंदिर की सूचना देखें।`);
+            ? `In 2027 Bhadra lasts until ${stamp(bhadraEnd, 'en')}, past midnight. When Bhadra runs past midnight the tradition allows Holika Dahan in Pradosh kaal (never in Bhadra Mukha); some families wait until Bhadra ends, before sunrise. Both times are given in the muhurat section below.`
+            : `2027 में भद्रा ${stamp(bhadraEnd, 'hi')} तक, यानी मध्यरात्रि के बाद तक है। ऐसे में परंपरा प्रदोष काल में होलिका दहन की अनुमति देती है (भद्रा मुख में कभी नहीं); कुछ परिवार सूर्योदय से पहले भद्रा समाप्त होने की प्रतीक्षा करते हैं। दोनों समय नीचे मुहूर्त वाले भाग में दिए हैं।`);
         }
       } else if (d.kala === 'moonrise' && d.window) {
         timings.push({ label: en ? 'Moonrise in New Delhi (fast ends)' : 'नई दिल्ली में चंद्रोदय (व्रत खोलने का समय)', value: istTime(d.window[0]) });

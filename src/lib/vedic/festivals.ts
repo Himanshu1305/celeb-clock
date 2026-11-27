@@ -267,6 +267,17 @@ export function tithiSpan(month: AmantaMonth, paksha: 'Shukla' | 'Krishna', tith
 }
 
 /**
+ * B20 — the instant inside a tithi at which a given fraction of its 12° has passed (by the
+ * Moon–Sun angle, not by clock time). Bhadra (Vishti karana) in Purnima is the first half:
+ * fraction 0.5 gives its end. `month` is the amanta month name (e.g. 'Phalguna').
+ */
+export function tithiFractionInstant(year: number, month: string, paksha: 'Shukla' | 'Krishna', tithi: number, fraction: number): number {
+  const m = amantaMonths(year).find(x => x.name === month && !x.adhik) ?? amantaMonths(year).find(x => x.name === month);
+  if (!m) throw new Error(`No ${month} in ${year}`);
+  return elongInstant(m, (tithiIndex(paksha, tithi) + fraction) * 12);
+}
+
+/**
  * The civil date (IST, New Delhi sunrise-to-sunrise day) on which a tithi of a
  * lunar month is observed under the given kala rule. Always returns a date —
  * kshaya (skipped) and vriddhi (repeated) tithis are resolved, never dropped.

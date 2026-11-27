@@ -9,6 +9,7 @@
  *    (https://ia800104.us.archive.org/22/items/AIFASBooks/Varshphal%20Eng%20AIFAS.pdf).
  */
 import { describe, it, expect } from 'vitest';
+import { COUNTS } from '../../accuracy/evidence';
 import ref from './fixtures/varshphalSwiss.json';
 import {
   computeVarshphal, saham, muddaStartIndex, MUDDA_ORDER, MUDDA_DAYS, haddaLord, decanLord, tajikAspect, pairYoga,
@@ -23,6 +24,19 @@ const ROWS = (ref as unknown as { rows: Row[] }).rows;
 const angDiff = (a: number, b: number) => Math.abs(((a - b + 540) % 360) - 180);
 
 describe('Varshphal vs Swiss Ephemeris (independent reference)', () => {
+  it('A3 — the counts on /accuracy: every chart × 2026 and 2027, year start within the stated seconds, same Lagna and Muntha', () => {
+    expect(ROWS).toHaveLength(COUNTS.varshphalRows);
+    expect(new Set(ROWS.map(r => r.id)).size).toBe(COUNTS.varshphalCharts);
+    let worst = 0, same = 0;
+    for (const r of ROWS) {
+      const v = computeVarshphal({ birthUTC: new Date(r.birthUTC), birthLat: r.birthLat, birthLon: r.birthLon, lat: r.lat, lon: r.lon, timezone: 'UTC', year: r.year });
+      worst = Math.max(worst, Math.abs(Date.parse(v.varshaPravesh.utc) - Date.parse(r.varshaPravesh)) / 1000);
+      if (v.lagna.sign === r.lagnaSign && v.muntha.sign === r.munthaSign) same++;
+    }
+    expect(worst).toBeLessThanOrEqual(COUNTS.varshphalMaxSeconds);
+    expect(same).toBe(COUNTS.varshphalRows);
+  }, 300_000);
+
   it('covers ≥ 12 charts × 2 years', () => {
     expect(new Set(ROWS.map(r => r.id)).size).toBeGreaterThanOrEqual(12);
     expect(new Set(ROWS.map(r => r.year))).toEqual(new Set([2026, 2027]));

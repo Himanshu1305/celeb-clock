@@ -224,6 +224,17 @@ export interface SouthMatchText {
   method: string;
   gunaTitle: string;
   papa?: PapaText;
+  /** B20 — Kerala (Dashakoota) scoring with half points; shown by default where present (ml). */
+  kerala?: KeralaMatchText;
+}
+export interface KeralaMatchText {
+  title: string; lead: string;
+  full: string; partial: string; none: string;
+  toggleKerala: string; toggleTamil: string; toggleLabel: string;
+  total: (points: string) => string;
+  /** Kerala wording for the poruthams whose rule differs from the Tamil table. */
+  what: Partial<Record<PoruthamKey, string>>;
+  method: string;
 }
 export interface LangCopy {
   landing: { lead: string; intro: readonly IntroBlock[]; faq: readonly FaqQA[]; cards: Record<'rashifal' | 'year' | 'panchang' | 'kundali', string> };
