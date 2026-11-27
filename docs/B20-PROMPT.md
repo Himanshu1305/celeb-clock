@@ -50,7 +50,7 @@ user-visible Malayalam string:
 Today `/ml/` matching uses the Tamil 10-porutham rules plus Kerala Papasamyam, with a method note
 saying Kerala rules differ. Add a real Kerala mode.
 
-**Ground truth:** `src/lib/vedic/__tests__/golden/prokeralaKerala.json` — 13 couples from
+**Ground truth:** `src/lib/vedic/__tests__/golden/prokeralaKerala.json` — 12 couples from
 ProKerala's Kerala calculator (`/astrology/jathaka-porutham.php`), 23 Nov 2026. Per couple:
 - `g` = **girl** birth `[Y,M,D,h,m,am/pm]`, `b` = **boy** birth. Both born in **Ujjain**
   (lat 23.1765, lon 75.7885, IST) — same as `prokeralaPorutham.json`.
@@ -65,7 +65,7 @@ ProKerala's Kerala calculator (`/astrology/jathaka-porutham.php`), 23 Nov 2026. 
    cases for Dina, Gana, Yoni, Rasi, Rasiyathipathi, Rajju, Vedha, Vasya, Mahendra, Stree Deergha.
 2. `src/lib/vedic/poruthamKerala.ts` → `calculatePoruthamKerala(girl, boy)` returning per
    porutham `{ key, score: 0 | 0.5 | 1, reason }` and `total` out of 10.
-3. Target: agree with ProKerala on all 130 scores (13 × 10). Remaining differences are listed in
+3. Target: agree with ProKerala on all 120 scores (12 × 10). Remaining differences are listed in
    the test and shown on `/accuracy` with the rule each school uses.
 4. Re-check Papasamyam against the `papa` rows (houses, counted flags, `pv`).
 5. UI on the Malayalam matching page: Kerala results by default, a toggle "തമിഴ് രീതി" (Tamil
@@ -133,7 +133,7 @@ updated, re-run by `accuracyEvidence.test.ts`. Fix an engine only for a genuine 
 ### Unit / data tests (vitest)
 
 **Kerala porutham** (`poruthamKerala.test.ts`, `prokeralaKerala.test.ts`)
-- K1 All 13 couples × 10 poruthams vs ProKerala: report agree count; expect = `COUNTS`.
+- K1 All 12 couples × 10 poruthams vs ProKerala: report agree count; expect = `COUNTS`.
 - K2 Each porutham with at least one 0, one 0.5 (where the rule allows) and one 1 case.
 - K3 Same nakshatra couple (e.g. couple 12, Chitra–Chitra): Dina/Rajju/Vedha handled per rule.
 - K4 Girl/boy swap gives the documented result (direction-sensitive poruthams change; symmetric
