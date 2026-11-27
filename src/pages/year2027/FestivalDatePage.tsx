@@ -16,6 +16,7 @@ import { FESTIVAL_TEXT_EN, FESTIVAL_TEXT_HI } from '@/lib/year2027/festivalConte
 import { FESTIVALS_2027, p2027, year2027Meta } from '@/lib/year2027/meta.js';
 import type { Lang } from '@/lib/year2027/text';
 import { H2, Card, FaqList, LinkChips, KV, YearJsonLd } from './parts';
+import { HoliDiwaliMuhurat, muhuratFaq, muhuratKindFor } from './HoliDiwaliMuhurat';
 
 const SITE = 'https://bornclock.com';
 const MON_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -65,7 +66,8 @@ export default function FestivalDatePage({ lang = 'en' }: { lang?: Lang }) {
         ...(f.timings.length ? [{ question: `${name} 2027 का समय क्या है?`, answer: f.timings.map(t => `${t.label}: ${t.value}`).join('; ') + ' (IST, नई दिल्ली)।' }] : []),
         { question: `क्या ${name} की तारीख़ हर शहर में एक ही होती है?`, answer: 'आम तौर पर हाँ, पर हमेशा नहीं। तिथि हर जगह एक ही क्षण बदलती है, पर सूर्योदय, सूर्यास्त और चंद्रोदय शहर के अनुसार बदलते हैं — इसलिए सूर्योदय, शाम या चंद्रोदय से तय होने वाला पर्व किसी दूसरे शहर में कभी-कभी एक दिन आगे-पीछे हो सकता है और पूजा का समय कुछ मिनट बदलता है। यहाँ सभी समय नई दिल्ली के (IST) हैं।' },
       ];
-  const faq = [...computedFaq, ...text.faq.map(x => ({ question: x.q, answer: fillDates(x.a, lang) }))];
+  const kind = muhuratKindFor(slug);
+  const faq = [...computedFaq, ...(kind ? muhuratFaq(kind, lang) : []), ...text.faq.map(x => ({ question: x.q, answer: fillDates(x.a, lang) }))];
 
   // Event schema (date only; the event takes place across India — Place = India).
   const event = {
@@ -135,6 +137,8 @@ export default function FestivalDatePage({ lang = 'en' }: { lang?: Lang }) {
             <Link to="/accuracy/" className="underline">{en ? 'How we check our dates →' : 'हम तारीख़ें कैसे जाँचते हैं →'}</Link>
           </p>
         </Card>
+
+        {kind && <HoliDiwaliMuhurat kind={kind} lang={lang} slug={slug} />}
 
         <H2 id="what">{en ? `What is ${name}?` : `${name} क्या है?`}</H2>
         <div className="space-y-3 text-brand-ink leading-relaxed" data-testid="festival2027-what">
