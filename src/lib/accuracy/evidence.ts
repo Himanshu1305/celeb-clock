@@ -60,8 +60,8 @@
  */
 
 export const TESTED_MONTH = 'November 2026';
-export const PAGE_UPDATED_ISO = '2026-11-23';
-export const PAGE_UPDATED = '23 November 2026';
+export const PAGE_UPDATED_ISO = '2026-11-27';
+export const PAGE_UPDATED = '27 November 2026';
 
 export interface EvidenceRow {
   id: string;
@@ -111,6 +111,12 @@ export const COUNTS = {
   poruthamAgree: 106,
   poruthamDiffs: { Dina: 7, Rasi: 1, Rasiyathipathi: 6 } as Record<string, number>,
   papaPositions: 288,
+  // B20 — Kerala porutham vs ProKerala's Kerala calculator (poruthamKerala.test.ts).
+  keralaChecks: 120,
+  keralaAgree: 120,
+  keralaSweepPairs: 223,
+  keralaSweepChecks: 2230,
+  keralaSweepAgree: 2230,
   ancientMoonMaxArcsec: 566, // Aryabhata, 476 CE (566.4″ ≈ 9.4 arc-minutes; B14 re-run vs Swiss true Lahiri)
 } as const;
 
@@ -157,6 +163,14 @@ export const EVIDENCE: EvidenceRow[] = [
     howMany: `${COUNTS.poruthamCouples} couples, ${COUNTS.poruthamChecks} poruthams`,
     result: `${COUNTS.poruthamAgree} of ${COUNTS.poruthamChecks} same. Differences: Dina (${COUNTS.poruthamDiffs.Dina}) — we use the published count list (2, 4, 6, 8, 9, 11, 13, 15, 18, 20, 24, 26), which ProKerala’s own Dina article gives but its calculator does not follow; Rasi Adhipathi (${COUNTS.poruthamDiffs.Rasiyathipathi}) — ProKerala gives half a point where one lord is neutral and the other unfriendly, we count it as not agreeing; Rasi (${COUNTS.poruthamDiffs.Rasi}) — the 4th sign, which sources disagree on`,
     date: '23 Nov 2026',
+  },
+  {
+    id: 'porutham-kerala',
+    what: '10 Porutham (Kerala): each porutham scored 1, ½ or 0',
+    reference: 'ProKerala Kerala porutham calculator',
+    howMany: `${COUNTS.poruthamCouples} couples plus ${COUNTS.keralaSweepPairs} test pairs covering every star and sign, ${COUNTS.keralaChecks + COUNTS.keralaSweepChecks} scores`,
+    result: `${COUNTS.keralaAgree + COUNTS.keralaSweepAgree} of ${COUNTS.keralaChecks + COUNTS.keralaSweepChecks} same score, including every half point`,
+    date: '27 Nov 2026',
   },
   {
     id: 'papasamyam',

@@ -144,9 +144,10 @@ export default function AccuracyPage() {
               tables, including which way round the boy and girl are counted.
             </li>
             <li>
-              <strong className="text-foreground">10 Porutham: Tamil tables</strong> — counted from the girl’s star and sign to
-              the boy’s; each porutham is shown as agreeing or not (no half points). Kerala astrologers use somewhat different
-              rules for Rajju, Rasi and Yoni, so a Kerala calculator can differ.
+              <strong className="text-foreground">10 Porutham: Tamil and Kerala tables</strong> — counted from the girl’s star and
+              sign to the boy’s. The Tamil view shows each porutham as agreeing or not. The Kerala view (on the Malayalam page)
+              uses the Kerala Dashakoota tables with half points: three rajjus, star gender for Yoni, and partial scores for
+              Gana, Stree Deergha and Rasi.
             </li>
             <li>
               <strong className="text-foreground">Papasamyam: base method</strong> — Mars, Saturn, Sun and Rahu in the 1st, 2nd,
