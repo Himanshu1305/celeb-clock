@@ -6,6 +6,7 @@
 import type { ReactNode } from 'react';
 import { TermTip } from '@/components/vedic/TermTip';
 import { CollapsibleSection } from '@/components/vedic/CollapsibleSection';
+import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import { computeAvakahada, computeGhatak, AVAKAHADA_HELP, SIGN_EN } from '@/lib/vedic/avakahada';
 
 const GANA_PLAIN: Record<string, string> = { Deva: 'gentle (Deva)', Manushya: 'practical (Manushya)', Rakshasa: 'intense (Rakshasa)' };
@@ -37,6 +38,8 @@ export function AvakahadaSection({ sun, moon, lagnaSignIndex }: { sun: number; m
         <strong>In one line:</strong> your Moon is in {a.rashi} in the star {a.nakshatra} (pada {a.pada}), which makes your nature {GANA_PLAIN[a.gana]},
         your Nadi {a.nadi} and your traditional name syllable “{a.nameAlphabet.en}”. These are the same values used when your Kundli is matched for marriage.
       </p>
+      <WhatsAppShareButton className="mb-3" label="Share my birth summary"
+        message={`My Vedic birth summary: Moon in ${a.rashi}, star ${a.nakshatra} (pada ${a.pada}), ${a.gana} Gana, ${a.nadi} Nadi, ${a.yoni} Yoni. Find yours free on BornClock: https://bornclock.com/kundali/`} />
       <p className="text-sm text-muted-foreground" style={{ marginBottom: 8 }}>
         The <TermTip id="avakahada">Avkahada Chakra</TermTip> is the summary table printed on every traditional Kundli. Nearly every entry comes from the Moon at your birth.
       </p>

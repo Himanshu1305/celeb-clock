@@ -9,6 +9,7 @@ import { SEO } from '@/components/SEO';
 import { CityPicker } from '@/components/CityPicker';
 import { TermTip } from '@/components/vedic/TermTip';
 import { ToolFaq, ToolSources } from '@/components/tools/ToolFaq';
+import { WhatsAppShareButton } from '@/components/WhatsAppShareButton';
 import type { SavedCity } from '@/services/savedProfile';
 import { resolveForPlace } from '@/lib/timezone/clientBirth';
 import { PRASHNA_TOPICS, type PrashnaTopic, type PrashnaResult } from '@/lib/vedic/prashna';
@@ -117,6 +118,8 @@ export default function PrashnaPage() {
                 <div className="text-2xl font-bold text-primary mb-2">{res.r.verdict === 'yes' ? 'Leans yes' : res.r.verdict === 'mixed' ? 'Possible — with delay or effort' : 'Not indicated for now'}</div>
                 <p className="text-foreground">{res.answer}</p>
                 <p className="text-xs text-muted-foreground mt-2">A traditional reading of which way the matter leans — not a certainty. Asked {res.when}{res.r.number ? `, number ${res.r.number}` : ''}.</p>
+                <WhatsAppShareButton className="mt-3" label="Ask a friend to try it"
+                  message={`I asked the stars one question on BornClock’s free Prashna (KP horary) — pick a number from 1 to 249 and see which way your question leans: https://bornclock.com/prashna/`} />
               </div>
 
               <h2 className="text-lg font-bold text-foreground mb-2">How the answer was reached</h2>
