@@ -117,7 +117,14 @@ async function main() {
   const bySection = new Map(SECTIONS.map(s => [s.id, []]));
   const manifestUrls = {};
   const stats = { hashed: 0, noHtml: 0, kept: 0, changed: 0, daily: 0, noindex: 0 };
+  // B21: celebrity profiles outside scripts/celebrity-sitemap.json stay live but are not listed.
+  let strongCelebs = null;
+  try { strongCelebs = new Set(JSON.parse(readFileSync(join(ROOT, 'scripts', 'celebrity-sitemap.json'), 'utf8'))); } catch { /* no list → list all */ }
+  const CELEB_HUBS = new Set(['bollywood', 'cricket', 'politics', 'business', 'music', 'sports']);
+  let celebLeftOut = 0;
   for (const route of routes) {
+    const cm = route.match(/^\/celebrity\/([^/]+)\/?$/);
+    if (strongCelebs && cm && !CELEB_HUBS.has(cm[1]) && !strongCelebs.has(cm[1])) { celebLeftOut++; continue; }
     const loc = locPath(route);
     const html = htmlFor(route);
     if (html && isNoindex(html)) { stats.noindex++; continue; }
@@ -151,6 +158,7 @@ async function main() {
   const total = Object.keys(manifestUrls).length;
   console.log(`   Written: dist/sitemap.xml (index of ${indexRows.length}) + ${MANIFEST_FILE} · ${total} URLs`);
   console.log(`   lastmod: ${stats.kept} kept (content unchanged), ${stats.changed} changed/new, ${stats.daily} daily · ${stats.noHtml} without prerendered HTML · ${stats.noindex} noindex pages left out`);
+  if (celebLeftOut) console.log(`   B21: ${celebLeftOut} weaker celebrity profiles left out of the sitemap (still live) — scripts/celebrity-sitemap.json`);
   console.log(`   lastmod spread: ${Object.entries(spread).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([d, n]) => `${d}×${n}`).join(', ')}`);
 }
 
