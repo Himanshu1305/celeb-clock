@@ -1,6 +1,25 @@
 # BornClock
 
-BornClock is a free birthday intelligence platform that turns a date of birth into a complete personal portrait. Core tools include a science-backed life expectancy calculator (using WHO, GBD 2024, and Blue Zones research), a biological age estimator, a celebrity birthday twin finder (sourced from Wikidata, 25,000+ records), zodiac profiling across three traditions (Western sun sign, Vedic Rashi/nakshatra, and Chinese animal), numerology life path calculation (Pythagorean method), planetary age across all 8 planets (NASA orbital data), birthstone lore, and generational identity. The paid Birthday Blueprint is an 11-section personalised gift report, downloadable as a PDF. All longevity inputs are processed client-side only — no health data is stored server-side.
+BornClock is a free Vedic astrology and birthday site, in English, Hindi and eight more Indian languages (Tamil, Telugu, Bengali, Marathi, Gujarati, Kannada, Malayalam, Punjabi). Its Vedic engine computes sidereal (Lahiri) charts and checks them against the Swiss Ephemeris and other published sources; every comparison, with counts and dates, is listed at https://bornclock.com/accuracy/. Every astrology term is explained in plain language, remedies start with free options, and predictions never claim certainty. The site also has science-backed longevity tools (WHO, GBD 2024, UN WPP data), celebrity birthday twins (Wikidata), numerology and Western/Chinese zodiac.
+
+## Vedic Astrology (free tools)
+
+- https://bornclock.com/kundali/ — Free Kundli (birth chart): North, South and East Indian charts; all 16 divisional charts (D1–D60); Vimshottari Dasha to 5 levels (Maha to Prana), Yogini and Jaimini Chara Dasha; Shadbala; Ashtakavarga with Prastarashtakavarga; KP tables; Bhava Chalit; Avkahada Chakra and Ghatak Chakra; yogas and doshas with remedies; ayanamsa choice (Lahiri, Raman, KP, Sayana)
+- https://bornclock.com/kundali-match/ — Kundli matching: 36-guna Ashtakoota, South Indian 10 porutham (Tamil and Kerala rules) and Papasamyam, Manglik check
+- https://bornclock.com/prashna/ — Prashna (horary) by the KP method: answer one question from a number 1–249 or the moment asked; no birth time needed
+- https://bornclock.com/rashifal/ — Daily, weekly, monthly and yearly Rashifal by Moon sign
+- https://bornclock.com/panchang/ — Daily Panchang for 50 cities (tithi, nakshatra, yoga, karana, sunrise, Rahu Kaal, Choghadiya)
+- https://bornclock.com/dasha-calculator/ — Vimshottari Dasha calculator
+- https://bornclock.com/sade-sati/ — Shani Sade Sati check with dates
+- https://bornclock.com/manglik/ — Manglik (Mangal) dosha check
+- https://bornclock.com/lal-kitab/ — Lal Kitab Kundli and remedies
+- https://bornclock.com/varshphal/ — Varshphal (Tajik annual chart)
+- https://bornclock.com/muhurat/ — Muhurat finder
+- https://bornclock.com/nakshatra/ — The 27 nakshatras explained
+- https://bornclock.com/planet-in-house/ — Every planet in every house, explained
+- https://bornclock.com/festivals/ — Hindu festival dates, with 2027 pages and muhurat times for 10 cities
+- https://bornclock.com/glossary/ — Plain-language glossary of Vedic astrology terms
+- https://bornclock.com/accuracy/ — How BornClock checks its calculations: dated comparisons against Swiss Ephemeris, PyJHora, ProKerala, Drik Panchang, AstroSage and FuturePoint
 
 ## Calculators and Tools
 

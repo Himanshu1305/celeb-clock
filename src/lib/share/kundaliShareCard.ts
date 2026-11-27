@@ -22,7 +22,7 @@ export interface ShareCardData {
   planets: Array<ChartPlanet & { signIndex?: number }>;
 }
 export interface ShareCardOptions {
-  chartStyle?: 'north' | 'south';
+  chartStyle?: 'north' | 'south' | 'east';
   /** Opt-in only. When false (the default) none of `birth` is drawn. */
   includeBirthDetails?: boolean;
   birth?: { name?: string; dob?: string; time?: string; place?: string };
@@ -46,7 +46,7 @@ export function shareBirthLines(opts: ShareCardOptions): string[] {
 }
 
 export function buildKundaliShareSvg(data: ShareCardData, opts: ShareCardOptions = {}): string {
-  const style = opts.chartStyle === 'south' ? 'south' : 'north';
+  const style = opts.chartStyle === 'south' || opts.chartStyle === 'east' ? opts.chartStyle : 'north';
   const moonIdx = data.planets.find(p => p.name === 'Moon')?.signIndex;
   const facts: Array<[string, string]> = [
     ['Lagna · rising sign', signLabel(data.lagna.sign, data.lagna.signIndex)],
@@ -76,7 +76,7 @@ export function buildKundaliShareSvg(data: ShareCardData, opts: ShareCardOptions
 ${chart}
 ${factSvg}
 ${bornLine ? `<text x="70" y="800" font-size="30" fill="${palette.lineBlue}" data-testid="share-born">${esc(bornLine)}</text>` : ''}
-<text x="70" y="${bornLine ? 860 : 820}" font-size="28" fill="${palette.lineBlue}">Sidereal (Lahiri) · ${style === 'south' ? 'South' : 'North'} Indian chart</text>
+<text x="70" y="${bornLine ? 860 : 820}" font-size="28" fill="${palette.lineBlue}">Sidereal (Lahiri) · ${style === 'south' ? 'South' : style === 'east' ? 'East' : 'North'} Indian chart</text>
 <rect x="60" y="930" width="960" height="90" rx="45" fill="#A8842C"/>
 <text x="540" y="988" font-size="36" font-weight="700" fill="${palette.navy}" text-anchor="middle">Make yours at ${SHARE_URL_LABEL}</text>
 </svg>`;

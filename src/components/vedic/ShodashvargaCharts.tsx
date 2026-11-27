@@ -41,7 +41,7 @@ export function sensitivityNote(timeSensitive: string[]): string {
 
 export function ShodashvargaCharts({ charts, chartStyle, birthTimeKnown = true }: {
   charts: ShodashvargaChartData[];
-  chartStyle: 'north' | 'south';
+  chartStyle: 'north' | 'south' | 'east';
   birthTimeKnown?: boolean;
 }) {
   const [selected, setSelected] = useState('D9');

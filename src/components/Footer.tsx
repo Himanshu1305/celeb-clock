@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { POPULAR_TOOLS } from '@/components/central/popularTools';
 import { Link } from '@/components/seo/CanonicalLink';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
@@ -215,6 +216,12 @@ export const Footer = () => {
             </Button>
           </div>
         )}
+
+        {/* B21 (SEO): the core Vedic tools, one click from every page. */}
+        <nav aria-label="Popular free tools" data-testid="footer-popular" className="mb-6 text-sm flex flex-wrap gap-x-4 gap-y-2">
+          <span className="font-semibold text-foreground">Free Vedic tools:</span>
+          {POPULAR_TOOLS.map(l => <Link key={l.to} to={l.to} className="text-muted-foreground hover:text-primary transition-colors">{l.label}</Link>)}
+        </nav>
 
         <Separator className="mb-6" />
 

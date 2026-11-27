@@ -2,6 +2,7 @@ import { calculateBirthChart } from '../src/lib/vedic/calculateBirthChart.js';
 import { birthRangeError, resolveRequestBirthTz } from './_birthParams.js';
 import { toKundaliLegacy } from '../src/lib/vedic/legacyAdapters.js';
 import { withLiveKundaliFields } from '../src/lib/vedic/liveTimeFields.js';
+import { withAyanamsa, isAyanamsaChoice, AYANAMSA_CHOICES, getNatalAyanamsa } from '../src/lib/vedic/engine/vedicEngine.js';
 
 async function getProKeralaToken(env) {
   const id = (env && env.VITE_PROKERALA_CLIENT_ID) || process.env.VITE_PROKERALA_CLIENT_ID;
@@ -226,6 +227,23 @@ async function handler(request, env?) {
   const btz = resolveRequestBirthTz(k => searchParams.get(k), { y, m, d, h, min, lat, lon });
   if ('error' in btz) return json({ error: btz.error }, 400);
   const tz = btz.tz, birthTimezone = btz.birthTimezone;
+
+  // B21: optional ayanamsa choice (default Lahiri). Non-default charts are computed fresh and never
+  // cached, so the shared cache only ever holds Lahiri charts.
+  const ayParam = searchParams.get('ayanamsa');
+  const ayanamsa = isAyanamsaChoice(ayParam) ? ayParam : 'lahiri';
+  if (ayanamsa !== 'lahiri') {
+    try {
+      const birthUTC = new Date(Date.UTC(y, m - 1, d, h, min) - tz * 3_600_000);
+      // Synchronous inside withAyanamsa: calculateBirthChart has no await on its success path.
+      const pending = withAyanamsa(ayanamsa, () => calculateBirthChart(
+        { year: y, month: m, day: d, hour: h, minute: min, latitude: lat, longitude: lon, timezoneOffset: tz },
+      ));
+      const chart = toKundaliLegacy(await pending);
+      const value = withAyanamsa(ayanamsa, () => getNatalAyanamsa(birthUTC));
+      return json({ ...chart, birthTimezone, ayanamsa: { id: ayanamsa, name: AYANAMSA_CHOICES[ayanamsa].name, valueDeg: Number(value.toFixed(6)) }, _cache: 'none' });
+    } catch (e) { return json({ error: 'calc-failed', detail: String(e.message || e) }, 500); }
+  }
 
   try {
     const sb = await getSupabase(env);

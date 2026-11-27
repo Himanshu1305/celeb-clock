@@ -104,3 +104,22 @@ export function computeAshtakavarga(signs: Record<AvContributor, number>, table:
 export function byHouse(perSign: number[], lagnaSignIndex: number, house: number): number {
   return perSign[(lagnaSignIndex + house - 1) % 12];
 }
+
+/**
+ * B21 — Prastarashtakavarga: the full "who gives the point" grid behind each planet's BAV.
+ * For planet P, row c (one of the 8 contributors) has a 1 in sign s when c gives P a bindu there.
+ * Column sums are P's BAV; this is what lets a reader see WHY a sign scored what it did.
+ * Checked against PyJHora's prastara output (golden/prastaraJHora.json).
+ */
+export function computePrastara(signs: Record<AvContributor, number>, table: AvTable = BPHS_ASHTAKAVARGA): Record<AvPlanet, Record<AvContributor, number[]>> {
+  const out = {} as Record<AvPlanet, Record<AvContributor, number[]>>;
+  for (const planet of AV_PLANETS) {
+    out[planet] = {} as Record<AvContributor, number[]>;
+    for (const c of AV_CONTRIBUTORS) {
+      const row = new Array(12).fill(0);
+      for (const h of table[planet][c]) row[(signs[c] + h - 1) % 12] = 1;
+      out[planet][c] = row;
+    }
+  }
+  return out;
+}

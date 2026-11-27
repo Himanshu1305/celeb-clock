@@ -6,6 +6,7 @@ import { createServer } from 'node:http';
 import { readFileSync, existsSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
 import { GET as match } from '../api/kundali-match.ts';
+import { GET as kundali } from '../api/kundali.ts';
 
 const PORT = Number(process.argv[2] ?? 4321);
 const DIST = 'dist';
@@ -13,8 +14,8 @@ const TYPES: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.j
 
 createServer(async (req, res) => {
   const url = new URL(req.url ?? '/', `http://localhost:${PORT}`);
-  if (url.pathname === '/api/kundali-match') {
-    const r: Response = await match(new Request(url.toString()));
+  if (url.pathname === '/api/kundali-match' || url.pathname === '/api/kundali') {
+    const r: Response = await (url.pathname === '/api/kundali' ? kundali : match)(new Request(url.toString()));
     res.writeHead(r.status, Object.fromEntries(r.headers));
     res.end(Buffer.from(await r.arrayBuffer()));
     return;

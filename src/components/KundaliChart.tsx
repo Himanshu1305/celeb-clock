@@ -3,11 +3,13 @@
  *
  * North: House 1 (Lagna) is the top-centre diamond; houses run anticlockwise;
  *   rashi number is fixed per house from the Lagna sign; planets by house.
+ * East (B21): 3×3 grid, fixed signs, Aries top-centre running anticlockwise, corners split diagonally.
  * South (Growth P2, GP2-SOUTH): a 4×4 grid with the twelve signs in FIXED cells
  *   (Pisces top-left, clockwise); the Lagna sign's cell is marked "La" with a
  *   corner diagonal; planets are placed by their sign.
  */
-import { abbr, SIGN_CELL, NORTH_HOUSE_POLY, layoutInPolygon, type Pt, type LabelRow, type ChartPlanet } from '@/lib/vedic/chartGeometry';
+import { abbr, SIGN_CELL, NORTH_HOUSE_POLY, EAST_SIGN_POLY, EAST_SIGN_LABEL, layoutInPolygon, type Pt, type LabelRow, type ChartPlanet } from '@/lib/vedic/chartGeometry';
+export type ChartStyle = 'north' | 'south' | 'east';
 import { palette, ui } from '../theme/palette';
 export { NORTH_HOUSE_POLY, textWidth, insideConvex, rowBox, layoutInPolygon, type LabelRow, type ChartPlanet } from '@/lib/vedic/chartGeometry';
 
@@ -74,7 +76,35 @@ function SouthChart({ lagnaSignIndex, planets, label }: { lagnaSignIndex: number
   );
 }
 
-export function KundaliChart({ lagnaSignIndex, planets, style = 'north', label = 'Kundali chart' }: { lagnaSignIndex: number; planets: ChartPlanet[]; style?: 'north' | 'south'; label?: string }) {
+/** B21 — East Indian (Bengali / Odia) chart: fixed signs, Aries top-centre, anticlockwise. */
+function EastChart({ lagnaSignIndex, planets, label }: { lagnaSignIndex: number; planets: ChartPlanet[]; label: string }) {
+  const bySign: Record<number, string[]> = {};
+  for (const p of planets) {
+    const si = p.signIndex ?? (((lagnaSignIndex - 1) + (p.house - 1)) % 12) + 1;
+    (bySign[si] ||= []).push(abbr(p.name));
+  }
+  return (
+    <svg data-testid="kundali-chart-east" viewBox="0 0 300 300" className="w-full max-w-xs mx-auto" role="img" aria-label={`East Indian ${label}`}>
+      <rect x="2" y="2" width="296" height="296" fill="white" stroke={palette.navy} strokeWidth="2" />
+      {Array.from({ length: 12 }, (_, i) => i + 1).map(sign => {
+        const poly = EAST_SIGN_POLY[sign];
+        const isLagna = sign === lagnaSignIndex;
+        const [lx, ly] = EAST_SIGN_LABEL[sign];
+        const anchor = lx > 250 ? 'end' : 'start';
+        return (
+          <g key={sign} data-sign={sign}>
+            <polygon points={poly.map(p => p.join(',')).join(' ')} fill={isLagna ? palette.purple : 'white'} fillOpacity={isLagna ? 0.1 : 1} stroke={palette.navy} strokeWidth="1" />
+            <text x={lx} y={ly} fontSize="8" fill={ui.gray400} textAnchor={anchor}>{sign}{isLagna ? ' La' : ''}</text>
+            <Rows rows={layoutInPolygon(poly, bySign[sign] || [])} />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+export function KundaliChart({ lagnaSignIndex, planets, style = 'north', label = 'Kundali chart' }: { lagnaSignIndex: number; planets: ChartPlanet[]; style?: ChartStyle; label?: string }) {
+  if (style === 'east') return <EastChart lagnaSignIndex={lagnaSignIndex} planets={planets} label={label} />;
   return style === 'south'
     ? <SouthChart lagnaSignIndex={lagnaSignIndex} planets={planets} label={label} />
     : <NorthChart lagnaSignIndex={lagnaSignIndex} planets={planets} label={label} />;

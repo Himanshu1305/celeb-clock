@@ -924,6 +924,10 @@ export function getTitleForRoute(route) {
     title: 'Love Calculator by Name — Just for Fun, No Random | BornClock',
     description: 'A love calculator by name that is honest: each name’s Chaldean number and how the two numbers get along, the same result every time. For fun — use Kundali matching for real matching.',
   };
+  if (route === '/prashna') return {
+    title: 'Prashna Kundli — Free KP Horary Answer (1–249) | BornClock',
+    description: 'Ask one question — marriage, job, money, going abroad or an exam — and get a KP Prashna (horary) answer from a number 1–249 or the moment you ask. No birth time needed; every step shown.',
+  };
   if (route === '/janma-tithi-calculator') return {
     title: 'Janma Tithi Calculator — Hindu Birthday by Tithi | BornClock',
     description: 'Find your Janma Tithi (birth tithi) and lunar month — amanta and purnimanta — and the dates of your Hindu tithi birthday for the next 10 years, with Adhik Maas and kshaya tithi handled.',

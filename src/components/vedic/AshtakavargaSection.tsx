@@ -5,7 +5,8 @@
  */
 import { TermTip } from '@/components/vedic/TermTip';
 import { CollapsibleSection } from '@/components/vedic/CollapsibleSection';
-import { AV_PLANETS, byHouse } from '@/lib/vedic/engine/ashtakavarga';
+import { useState } from 'react';
+import { AV_PLANETS, AV_CONTRIBUTORS, byHouse, computePrastara, type AvContributor, type AvPlanet } from '@/lib/vedic/engine/ashtakavarga';
 import { HOUSE_THEMES, SAV_STRONG, SAV_WEAK, savBand, SAV_BAND_LABEL } from '@/data/yoginiAshtakavarga';
 import { brandVar, ui } from '../../theme/palette';
 
@@ -13,6 +14,50 @@ export interface AshtakavargaData {
   bav: Record<string, number[]>;
   sav: number[];
   lagnaSignIndex: number;
+}
+
+/**
+ * B21 — Prastarashtakavarga: for one chosen planet, which of the 8 contributors gave a point in each
+ * house. Answers "why does this house have 6 points for Saturn?" at a glance.
+ */
+export function PrastaraTable({ signs, lagnaSignIndex }: { signs: Record<AvContributor, number>; lagnaSignIndex: number }) {
+  const [planet, setPlanet] = useState<AvPlanet>('Saturn');
+  const grid = computePrastara(signs)[planet];
+  const cell = { padding: '3px 5px', textAlign: 'center' as const, whiteSpace: 'nowrap' as const };
+  const totals = HOUSES.map(h => AV_CONTRIBUTORS.reduce((t, c) => t + byHouse(grid[c], lagnaSignIndex, h), 0));
+  const best = HOUSES[totals.indexOf(Math.max(...totals))];
+  return (
+    <div data-testid="av-prastara" style={{ marginTop: 16 }}>
+      <h4 style={{ margin: '0 0 4px' }}><TermTip id="prastarashtakavarga">Prastarashtakavarga</TermTip> — who gives each point</h4>
+      <p className="text-sm" style={{ margin: '0 0 6px' }} data-testid="av-prastara-answer">
+        For <strong>{planet}</strong>, the {ord(best)} house collects the most points ({Math.max(...totals)} of 8). A ● means that planet
+        (or your Lagna) gives {planet} a point in that house; the bottom row is the house total, the same number as {planet}’s row above.
+      </p>
+      <label className="text-sm" style={{ display: 'inline-flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
+        Planet
+        <select data-testid="av-prastara-planet" value={planet} onChange={e => setPlanet(e.target.value as AvPlanet)} className="border rounded px-2 py-1">
+          {AV_PLANETS.map(p => <option key={p} value={p}>{p}</option>)}
+        </select>
+      </label>
+      <div className="table-scroll">
+        <table className="data-table" style={{ fontSize: 12.5, borderCollapse: 'collapse' }} data-testid="av-prastara-table">
+          <thead><tr><th style={{ ...cell, textAlign: 'left' }}>Point from</th>{HOUSES.map(h => <th key={h} style={cell}>{h}</th>)}</tr></thead>
+          <tbody>
+            {AV_CONTRIBUTORS.map(c => (
+              <tr key={c} data-testid={`av-prastara-row-${c}`}>
+                <td style={{ ...cell, textAlign: 'left', fontWeight: 600 }}>{c}</td>
+                {HOUSES.map(h => <td key={h} style={cell} aria-label={byHouse(grid[c], lagnaSignIndex, h) ? 'point' : 'no point'}>{byHouse(grid[c], lagnaSignIndex, h) ? '●' : '·'}</td>)}
+              </tr>
+            ))}
+            <tr style={{ borderTop: `2px solid var(--line, ${brandVar.line})` }} data-testid="av-prastara-total">
+              <td style={{ ...cell, textAlign: 'left', fontWeight: 700 }}>Total</td>
+              {totals.map((t, i) => <td key={i} style={{ ...cell, fontWeight: 700 }}>{t}</td>)}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
 
 const SIGN_SHORT = ['Ar', 'Ta', 'Ge', 'Cn', 'Le', 'Vi', 'Li', 'Sc', 'Sg', 'Cp', 'Aq', 'Pi'];
@@ -27,7 +72,7 @@ export function rankHouses(sav: number[], lagnaSignIndex: number) {
   return { list, top, low };
 }
 
-export function AshtakavargaSection({ data }: { data: AshtakavargaData }) {
+export function AshtakavargaSection({ data, signs }: { data: AshtakavargaData; signs?: Record<AvContributor, number> }) {
   const { list, top, low } = rankHouses(data.sav, data.lagnaSignIndex);
   const strongCount = list.filter(x => x.points >= SAV_STRONG).length;
   const describe = (xs: typeof top) => xs.map(x => `${ord(x.house)} (${HOUSE_THEMES[x.house - 1]}, ${x.points})`).join(', ');
@@ -95,6 +140,7 @@ export function AshtakavargaSection({ data }: { data: AshtakavargaData }) {
         <li><strong>Transits:</strong> when a slow planet such as Saturn or Jupiter moves through a sign with a high total — or a sign where that planet’s own row shows 4 or more (bold) — that stretch tends to go smoother. Low-point signs are times to plan ahead and pace yourself.</li>
         <li>Every planet’s row always adds up to the same fixed total (Sun 48, Moon 49, Mars 39, Mercury 54, Jupiter 56, Venus 52, Saturn 39), so compare houses within your chart, not with someone else’s.</li>
       </ul>
+      {signs && <PrastaraTable signs={signs} lagnaSignIndex={data.lagnaSignIndex} />}
       <p className="text-xs text-muted-foreground" style={{ marginTop: 6 }}>
         Tables: Brihat Parashara Hora Shastra ch. 66. Some software (e.g. Jagannatha Hora by default) uses Varahamihira’s slightly
         different readings for a few of the Moon’s and Venus’s points, so those two rows can differ by a point in a few houses;

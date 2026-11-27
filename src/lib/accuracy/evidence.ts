@@ -117,6 +117,22 @@ export const COUNTS = {
   keralaSweepPairs: 223,
   keralaSweepChecks: 2230,
   keralaSweepAgree: 2230,
+  // B21 — Raman / KP / tropical positions vs Swiss (ayanamsaChoice.test.ts): 22 births × 3 × (8 + Lagna, Tromsø Lagna skipped).
+  ayanamsaChecks: 591,
+  ayanamsaMaxArcsec: 19, // worst 18.1″ (27 Nov 2026)
+  // B21 — Prastarashtakavarga vs PyJHora (prastara.test.ts): 10 charts × 7 × 8 × 12.
+  prastaraCells: 6720,
+  // B21 — Avkahada Chakra vs FuturePoint (avakahada.test.ts).
+  avakahadaCharts: 80,
+  avakahadaChecks: 1120,
+  avakahadaSame: 1115, // the 5 others: Vashya for a Moon in the 2nd half of Sagittarius or 1st half of Capricorn (we split those signs, as in Guna Milan; FuturePoint uses the whole sign)
+  avakahadaVashyaSplit: 5,
+  // Deep Vimshottari (levels 3–5) vs PyJHora (dashaDeepJHora.test.ts).
+  dashaDeepPeriods: 792,        // 22 births × 4 levels × 9 sub-periods, each within 1 s of PyJHora
+  dashaDeepSookshmaSame: 21,    // current Sookshma lord at the reference date, of 22
+  dashaDeepPranaSame: 15,       // current Prana lord, of 22 (Prana lasts hours to days)
+  dashaDeepChainSame: 15,       // all five levels the same
+  dashaDeepMaxHours: 14,        // worst start gap 13.8 h (G16, born 1943), inherited from the Mahadasha
   // B20 — Panchang 2027 (New Delhi) vs Swiss Ephemeris (panchangSwiss.test.ts).
   panchangSwissTimes: 2190,
   panchangSwissWithin1: 2190,
@@ -216,6 +232,38 @@ export const EVIDENCE: EvidenceRow[] = [
     howMany: `${COUNTS.panchangCityDays} city-days (${COUNTS.panchangCities} cities)`,
     result: `${COUNTS.panchangNames} of ${COUNTS.panchangNames} names; ${COUNTS.panchangTimes} times within 1 minute; ${COUNTS.panchangEndTimes} Tithi/Nakshatra end times within 2 minutes`,
     date: '25 Oct 2026',
+  },
+  {
+    id: 'dasha-deep',
+    what: 'Dasha to 5 levels: Pratyantardasha, Sookshma and Prana',
+    reference: 'PyJHora (open-source Jyotish library on Swiss Ephemeris, Lahiri)',
+    howMany: `${COUNTS.kundaliBirths} test births; ${COUNTS.dashaDeepPeriods} sub-periods`,
+    result: `${COUNTS.dashaDeepPeriods} of ${COUNTS.dashaDeepPeriods} sub-periods identical (same lord, same start and end within 1 second). Current period on the test date: Pratyantardasha ${COUNTS.kundaliBirths} of ${COUNTS.kundaliBirths}, Sookshma ${COUNTS.dashaDeepSookshmaSame} of ${COUNTS.kundaliBirths}, Prana ${COUNTS.dashaDeepPranaSame} of ${COUNTS.kundaliBirths} — start times within ${COUNTS.dashaDeepMaxHours} hours, because a Dasha year of 365.25 days vs the sidereal year shifts the whole timeline by a few hours, and a Prana lasts only hours to days`,
+    date: '27 Nov 2026',
+  },
+  {
+    id: 'avakahada',
+    what: 'Avkahada Chakra (birth summary): Nakshatra and pada, Yoga, Karana, Gana, Yoni, Nadi, Varna, Vashya, Varga, Yunja, Hansak, Paya',
+    reference: 'FuturePoint’s published Avkahada tables (Leostar software)',
+    howMany: `${COUNTS.avakahadaCharts} charts × 14 fields = ${COUNTS.avakahadaChecks} values`,
+    result: `${COUNTS.avakahadaSame} of ${COUNTS.avakahadaChecks} the same. The other ${COUNTS.avakahadaVashyaSplit} are all Vashya for a Moon in the second half of Sagittarius or the first half of Capricorn: we split those two signs, as in Guna Milan matching, while FuturePoint uses the whole sign`,
+    date: '27 Nov 2026',
+  },
+  {
+    id: 'prastara',
+    what: 'Prastarashtakavarga (which planet gives each Ashtakavarga point)',
+    reference: 'PyJHora (open-source Jyotish library), Parashara readings',
+    howMany: `10 charts × 7 planets × 8 givers × 12 signs = ${COUNTS.prastaraCells} cells`,
+    result: `${COUNTS.prastaraCells} of ${COUNTS.prastaraCells} identical`,
+    date: '27 Nov 2026',
+  },
+  {
+    id: 'ayanamsa-choice',
+    what: 'Kundli in Raman, Krishnamurti (KP) and Sayana (tropical) ayanamsa',
+    reference: 'Swiss Ephemeris (astronomical library), same ayanamsa definitions',
+    howMany: `${COUNTS.kundaliBirths} test births × 3 ayanamsas: Sun to Saturn, Rahu and the Lagna — ${COUNTS.ayanamsaChecks} positions`,
+    result: `All ${COUNTS.ayanamsaChecks} within 1 arc-minute (largest gap ${COUNTS.ayanamsaMaxArcsec}″)`,
+    date: '27 Nov 2026',
   },
   {
     id: 'panchang-swiss',

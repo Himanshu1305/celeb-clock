@@ -12,7 +12,7 @@ import { buildKundaliShareSvg, svgToPngBlob, type ShareCardData } from '@/lib/sh
 
 interface Props {
   data: ShareCardData;
-  chartStyle: 'north' | 'south';
+  chartStyle: 'north' | 'south' | 'east';
   birth: { name?: string; dob?: string; time?: string; place?: string };
   /** The page's existing WhatsApp message + link (same path as "Share on WhatsApp"). */
   shareText: string;

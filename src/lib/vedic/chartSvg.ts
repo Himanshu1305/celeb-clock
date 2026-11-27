@@ -6,7 +6,7 @@
  *
  * Sign indices are 1-based (1 = Aries … 12 = Pisces), as in the /api/kundali response.
  */
-import { abbr, SIGN_CELL, NORTH_HOUSE_POLY, layoutInPolygon, type Pt, type LabelRow, type ChartPlanet } from './chartGeometry';
+import { abbr, SIGN_CELL, NORTH_HOUSE_POLY, EAST_SIGN_POLY, EAST_SIGN_LABEL, layoutInPolygon, type Pt, type LabelRow, type ChartPlanet } from './chartGeometry';
 import { palette } from '../../theme/palette';
 
 const esc = (s: unknown) => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
@@ -22,7 +22,7 @@ function rowsSvg(rows: LabelRow[]): string {
 export interface ChartSvgOptions {
   lagnaSignIndex: number;
   planets: ChartPlanet[];
-  style?: 'north' | 'south';
+  style?: 'north' | 'south' | 'east';
   /** Accessible name, e.g. "Rashi chart (D1)". */
   label?: string;
   /** Rendered width/height in CSS units (default: fills its box). */
@@ -31,8 +31,28 @@ export interface ChartSvgOptions {
 
 export function kundaliChartSvg({ lagnaSignIndex, planets, style = 'north', label = 'Kundali chart', size }: ChartSvgOptions): string {
   const dims = size ? ` width="${size}" height="${size}"` : '';
-  const open = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"${dims} role="img" aria-label="${esc(`${style === 'south' ? 'South' : 'North'} Indian ${label}`)}" data-chart-style="${style}" ${FONT}>`;
+  const open = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"${dims} role="img" aria-label="${esc(`${style === 'south' ? 'South' : style === 'east' ? 'East' : 'North'} Indian ${label}`)}" data-chart-style="${style}" ${FONT}>`;
   const frame = `<rect x="2" y="2" width="296" height="296" fill="#fff" stroke="${INK}" stroke-width="2"/>`;
+
+  if (style === 'east') {
+    const bySign: Record<number, string[]> = {};
+    for (const p of planets) {
+      const si = p.signIndex ?? (((lagnaSignIndex - 1) + (p.house - 1)) % 12) + 1;
+      (bySign[si] ||= []).push(abbr(p.name));
+    }
+    let body = '';
+    for (let sign = 1; sign <= 12; sign++) {
+      const poly = EAST_SIGN_POLY[sign];
+      const isLagna = sign === lagnaSignIndex;
+      const [lx, ly] = EAST_SIGN_LABEL[sign];
+      body += `<g data-sign="${sign}">`
+        + `<polygon points="${poly.map(p => p.join(',')).join(' ')}" fill="${isLagna ? '#EEEBF6' : '#fff'}" stroke="${INK}" stroke-width="1"/>`
+        + `<text x="${lx}" y="${ly}" font-size="8" fill="#6b7280"${lx > 250 ? ' text-anchor="end"' : ''}>${sign}${isLagna ? ' La' : ''}</text>`
+        + rowsSvg(layoutInPolygon(poly, bySign[sign] || []))
+        + `</g>`;
+    }
+    return `${open}${frame}${body}</svg>`;
+  }
 
   if (style === 'south') {
     const bySign: Record<number, string[]> = {};
