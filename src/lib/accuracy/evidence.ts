@@ -117,6 +117,15 @@ export const COUNTS = {
   keralaSweepPairs: 223,
   keralaSweepChecks: 2230,
   keralaSweepAgree: 2230,
+  // B20 — Panchang 2027 (New Delhi) vs Swiss Ephemeris (panchangSwiss.test.ts).
+  panchangSwissTimes: 2190,
+  panchangSwissWithin1: 2190,
+  panchangSwissWithin2: 2190,
+  panchangSwissMaxMin: 1,
+  // B20 — Varshphal vs Swiss Ephemeris (varshphal.test.ts + fixtures/varshphalSwiss.json).
+  varshphalCharts: 24,
+  varshphalRows: 48,
+  varshphalMaxSeconds: 1, // worst 0.98 s (27 Nov 2026)
   ancientMoonMaxArcsec: 566, // Aryabhata, 476 CE (566.4″ ≈ 9.4 arc-minutes; B14 re-run vs Swiss true Lahiri)
 } as const;
 
@@ -209,6 +218,14 @@ export const EVIDENCE: EvidenceRow[] = [
     date: '25 Oct 2026',
   },
   {
+    id: 'panchang-swiss',
+    what: 'Panchang for a whole year: sunrise, sunset and when the Tithi, Nakshatra, Yoga and Karana end',
+    reference: 'Swiss Ephemeris (astronomical library)',
+    howMany: `New Delhi, every day of 2027 — ${COUNTS.panchangSwissTimes} times`,
+    result: `${COUNTS.panchangSwissWithin1} of ${COUNTS.panchangSwissTimes} within 1 minute`,
+    date: '27 Nov 2026',
+  },
+  {
     id: 'ingress',
     what: 'When planets change sign or Nakshatra',
     reference: 'Drik Panchang transit pages',
@@ -239,6 +256,14 @@ export const EVIDENCE: EvidenceRow[] = [
     howMany: `${COUNTS.celebrities.toLocaleString('en-IN')} people`,
     result: `${COUNTS.celebrities.toLocaleString('en-IN')} of ${COUNTS.celebrities.toLocaleString('en-IN')} same sign (or same two signs on change days)`,
     date: '17 Nov 2026',
+  },
+  {
+    id: 'varshphal',
+    what: 'Varshphal (yearly chart): the moment the year starts, the yearly Lagna and Muntha',
+    reference: 'Swiss Ephemeris (astronomical library)',
+    howMany: `${COUNTS.varshphalCharts} test births × 2026 and 2027 — ${COUNTS.varshphalRows} yearly charts`,
+    result: `${COUNTS.varshphalRows} of ${COUNTS.varshphalRows} same yearly Lagna and Muntha; the year’s start within ${COUNTS.varshphalMaxSeconds} second`,
+    date: '27 Nov 2026',
   },
   {
     id: 'sade-sati',

@@ -53,6 +53,13 @@ CHARTS = [
     ('SON', (1973, 7, 31, 14, 45), 28.65, 77.22),       # 20:15 IST Delhi (AIFAS example)
     ('PATNA_BLR', (1981, 7, 8, 23, 0), 25.5941, 85.1376, 12.9716, 77.5946),  # cast for Bengaluru
 ]
+# B20: also every golden test birth not already above (goldenCharts.json G11–G20, Swiss-made).
+import os
+_G = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'golden', 'goldenCharts.json')))
+for _c in _G['charts']:
+    if _c['id'].startswith('G'):
+        _u = _c['utc']
+        CHARTS.append((_c['id'], (int(_u[0:4]), int(_u[5:7]), int(_u[8:10]), int(_u[11:13]), int(_u[14:16])), _c['birth']['lat'], _c['birth']['lon']))
 YEARS = [2026, 2027]
 ORDER = ['Sun', 'Moon', 'Mars', 'Rahu', 'Jupiter', 'Saturn', 'Mercury', 'Ketu', 'Venus']
 DAYS = {'Sun': 18, 'Moon': 30, 'Mars': 21, 'Rahu': 54, 'Jupiter': 48, 'Saturn': 57, 'Mercury': 51, 'Ketu': 21, 'Venus': 60}
