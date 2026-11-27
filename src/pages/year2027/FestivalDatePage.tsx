@@ -74,6 +74,10 @@ export default function FestivalDatePage({ lang = 'en' }: { lang?: Lang }) {
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     location: { '@type': 'Place', name: 'India', address: { '@type': 'PostalAddress', addressCountry: 'IN' } },
     description: meta.description, url: `${SITE}${path}/`, inLanguage: en ? 'en-IN' : 'hi-IN',
+    image: [`${SITE}/og/vedic.png`],
+    // A public festival: free to observe, no ticket (Search Console asked for "offers").
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: 0, priceCurrency: 'INR', availability: 'https://schema.org/InStock', url: `${SITE}${path}/`, validFrom: `${f.dateISO.slice(0, 4)}-01-01` },
     organizer: { '@type': 'Organization', name: 'Hindu tradition (public observance)', url: `${SITE}/festivals/2027/` },
   };
   const crumbs = en

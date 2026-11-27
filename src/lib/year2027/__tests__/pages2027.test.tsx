@@ -111,6 +111,15 @@ describe('B14 — rendered pages', () => {
     for (const r of year2027Routes().filter(x => !x.startsWith('/hi/'))) expect(pageLangForPath(r)).toBe('en');
   });
 
+  it('festival Event schema carries image and a free offer, and the image file exists', () => {
+    const src = readFileSync(path.join(process.cwd(), 'src/pages/year2027/FestivalDatePage.tsx'), 'utf8');
+    expect(src).toMatch(/image: \[`\$\{SITE\}\/og\/vedic\.png`\]/);
+    expect(src).toMatch(/'@type': 'Offer', price: 0/);
+    expect(src).toMatch(/isAccessibleForFree: true/);
+    const png = readFileSync(path.join(process.cwd(), 'public/og/vedic.png'));
+    expect(png.subarray(1, 4).toString()).toBe('PNG');
+  });
+
   it('Hindi festival page renders in Hindi with the engine date', () => {
     const { container } = renderAt('/hi/festivals/2027/diwali', '/hi/festivals/2027/:slug', <FestivalDatePage lang="hi" />);
     expect(container.querySelector('section[lang="hi"]')).toBeTruthy();
