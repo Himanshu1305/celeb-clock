@@ -46,4 +46,17 @@ allCelebrities.filter(shouldPrerender).forEach((celeb) => {
 });
 
 writeFileSync(resolve(__dirname, 'celebrity-meta.json'), JSON.stringify(meta));
+
+// B21 (SEO, founder decision 27 Nov 2026): every celebrity page stays live and prerendered, but only
+// the strongest go in the sitemap until the site has more authority — curated Indian profiles,
+// people with a written bio, and people with 30+ Wikipedia language editions (sitelinks). Search
+// Console showed most pages "Discovered – currently not indexed"; this points Google's limited
+// crawling at the pages most likely to rank. Revisit when Ahrefs DR reaches 10.
+const bios = require('../src/data/celebrity-bios.json') as Record<string, unknown>;
+export const SITEMAP_MIN_SITELINKS = 30;
+const strong = allCelebrities.filter(shouldPrerender).filter(c =>
+  c.source === 'static' || !!bios[String(c.slug)] || Number(c.sitelinks ?? 0) >= SITEMAP_MIN_SITELINKS,
+).map(c => String(c.slug));
+writeFileSync(resolve(__dirname, 'celebrity-sitemap.json'), JSON.stringify(strong));
+console.log('Generated celebrity-sitemap.json:', strong.length, 'of', Object.keys(meta).length, 'celebrity pages listed in the sitemap');
 console.log('Generated celebrity-meta.json:', Object.keys(meta).length, 'celebrity slugs');
