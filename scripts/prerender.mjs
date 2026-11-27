@@ -257,7 +257,15 @@ async function prerenderRoute(page, baseUrl, route) {
     // ordered regex can't catch both. Strip every og:image / twitter:image tag
     // (the quote after :image spares og:image:width/:height and twitter:image:alt)
     // then inject exactly one branded, page-specific card. Absolute https URL.
-    const ogImage = ogImageForRoute(route);
+    // B20: a page that asks for its own card (<SEO ogImage>) keeps it when the route has
+    // no bespoke card — e.g. the vedic pages' /og/vedic.png — as long as the file exists.
+    let ogImage = ogImageForRoute(route);
+    if (ogImage.endsWith('/og/default.webp')) {
+      for (const tag of html.match(/<meta\b[^>]*property="og:image"[^>]*>/gi) || []) {
+        const own = (tag.match(/content="https:\/\/bornclock\.com\/og\/([^"]+)"/) || [])[1];
+        if (own && !own.startsWith('default.') && !own.includes('..') && existsSync(join(DIST, 'og', own))) { ogImage = `https://bornclock.com/og/${own}`; break; }
+      }
+    }
     html = html.replace(/<meta\b[^>]*\b(?:property="og:image(?::width|:height)?"|name="twitter:image(?::alt)?")[^>]*>\s*/gi, '');
     const cardMeta =
       `<meta property="og:image" content="${ogImage}" />` +
