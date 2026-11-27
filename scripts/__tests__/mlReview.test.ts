@@ -1,11 +1,14 @@
 /** B20 — Malayalam review sheet: M1 coverage, M2 completeness, M3 import round-trip. */
 import { describe, it, expect } from 'vitest';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { rows } from '../export-ml-review.mts';
 import { mlStrings } from '../lib-ml-strings.mts';
 import ml from '../../src/lib/lang/copy/ml';
 import vocab from '../../src/lib/lang/vocab/ml.js';
+
+// The workbook tools need Python's openpyxl; the deploy runner does not have it, so M3 runs where it is installed.
+const HAS_OPENPYXL = spawnSync('python3', ['-c', 'import openpyxl']).status === 0;
 
 const leafCount = (v: unknown): number => typeof v === 'string' ? (/[ഀ-ൿ]/.test(v) ? 1 : 0)
   : Array.isArray(v) ? v.reduce((s: number, x) => s + leafCount(x), 0)
@@ -23,7 +26,7 @@ describe('Malayalam review sheet', () => {
     expect(r.filter(x => !x.Malayalam.trim() || !x.English.trim()).map(x => x.ID)).toEqual([]);
     expect(new Set(r.map(x => x.ID)).size).toBe(r.length);
   });
-  it.skipIf(!existsSync('docs/review/malayalam-review.xlsx'))('M3 — importing the untouched workbook reports 0 changes', () => {
+  it.skipIf(!existsSync('docs/review/malayalam-review.xlsx') || !HAS_OPENPYXL)('M3 — importing the untouched workbook reports 0 changes', () => {
     const out = execFileSync('python3', ['scripts/import-ml-review.py', 'docs/review/malayalam-review.xlsx'], { encoding: 'utf8' });
     expect(out.trim().split('\n').pop()).toBe('0 change(s) suggested.');
   });
