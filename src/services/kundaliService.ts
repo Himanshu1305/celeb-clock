@@ -10,6 +10,14 @@ import type { BirthTimezone } from '@/lib/timezone/birthTimezone';
 import { buildChartBasis, type ChartBasis } from '@/lib/vedic/chartBasis';
 import type { BirthTimeEdge } from '@/lib/vedic/birthTimeEdgeNote';
 
+/** B21: ayanamsa choices offered on /kundali (the server default is Lahiri). */
+export type AyanamsaId = 'lahiri' | 'raman' | 'kp' | 'tropical';
+export const AYANAMSA_OPTIONS: Array<{ id: AyanamsaId; label: string }> = [
+  { id: 'lahiri', label: 'Lahiri (Chitrapaksha) — India’s standard' },
+  { id: 'raman', label: 'B.V. Raman' },
+  { id: 'kp', label: 'Krishnamurti (KP)' },
+  { id: 'tropical', label: 'Sayana (tropical, Western zodiac)' },
+];
 export interface KundaliPlanet { name: string; sign: string; signIndex: number; house: number; longitude: number; retrograde: boolean }
 export interface KundaliData {
   lagna: { sign: string; signIndex: number; degrees: number };
@@ -47,16 +55,19 @@ export interface KundaliData {
   } | null;
   /** Batch 10: Ashtakavarga — BAV per planet and SAV, both indexed by sign (0 = Aries). */
   ashtakavarga?: { bav: Record<string, number[]>; sav: number[]; lagnaSignIndex: number } | null;
+  /** B21: present when a non-Lahiri ayanamsa was asked for. */
+  ayanamsa?: { id: AyanamsaId; name: string; valueDeg: number };
 }
 
 export const hasProkeralaKey = (): boolean =>
   !!(import.meta as any)?.env?.VITE_PROKERALA_CLIENT_ID && !!(import.meta as any)?.env?.VITE_PROKERALA_CLIENT_SECRET;
 
 export async function fetchKundali(
-  dob: string, time: string, loc: BirthPlaceLike & { tz?: number }
+  dob: string, time: string, loc: BirthPlaceLike & { tz?: number }, ayanamsa: AyanamsaId = 'lahiri',
 ): Promise<KundaliData> {
   // fix-timezone-accuracy: shared birth params (zone from the birthplace, DST-correct).
   const params = new URLSearchParams(birthQuery(dob, time, loc));
+  if (ayanamsa !== 'lahiri') params.set('ayanamsa', ayanamsa); // B21
   const res = await fetch(`/api/kundali?${params.toString()}`);
   if (!res.ok) throw new Error('Kundali service unavailable');
   const data = await res.json();

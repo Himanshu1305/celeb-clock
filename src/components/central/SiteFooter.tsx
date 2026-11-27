@@ -1,5 +1,6 @@
 import { Link } from '@/components/seo/CanonicalLink';
 import { LANGS } from '@/lib/lang/langs.js';
+import { POPULAR_TOOLS } from './popularTools';
 
 export type FooterLink = { label: string; to: string };
 
@@ -40,6 +41,10 @@ export function SiteFooter({
           {nav.map((l) => <Link key={l.to + l.label} to={l.to}>{l.label}</Link>)}
         </nav>
       </div>
+      <nav className="footer-nav" aria-label="Popular free tools" data-testid="footer-popular" style={{ display: 'flex', padding: '0 0 12px', flexWrap: 'wrap', gap: '4px 14px' }}>
+        <span>Free tools:</span>
+        {POPULAR_TOOLS.map(l => <Link key={l.to} to={l.to}>{l.label}</Link>)}
+      </nav>
       {/* B18: "Read in" — the language landing pages (src/lib/lang/langs.js). */}
       <nav className="footer-nav" aria-label="Read in" data-testid="footer-read-in" style={{ display: 'flex', padding: '0 0 12px', flexWrap: 'wrap' }}>
         <span>Read in:</span>

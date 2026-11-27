@@ -238,6 +238,7 @@ const LoShuGridPage = lazyWithReload(() => import('@/pages/LoShuGridPage'));
 const KuaNumberPage = lazyWithReload(() => import('@/pages/KuaNumberPage'));
 const LoveCalculatorPage = lazyWithReload(() => import('@/pages/LoveCalculatorPage'));
 const JanmaTithiPage = lazyWithReload(() => import('@/pages/JanmaTithiPage'));
+const PrashnaPage = lazyWithReload(() => import('@/pages/PrashnaPage'));
 const MarriageBiodataPage = lazyWithReload(() => import('@/pages/MarriageBiodataPage'));
 const HouseNumberNumerologyPage = lazyWithReload(() => import('@/pages/HouseNumberNumerologyPage'));
 const DoshaCheckPage = lazyWithReload(() => import('@/pages/DoshaCheckPage'));
@@ -576,6 +577,7 @@ const App = () => (
               <Route path="/kua-number-calculator" element={<KuaNumberPage />} />
               <Route path="/love-calculator" element={<LoveCalculatorPage />} />
               <Route path="/janma-tithi-calculator" element={<JanmaTithiPage />} />
+              <Route path="/prashna" element={<PrashnaPage />} />
               <Route path="/marriage-biodata-maker" element={<MarriageBiodataPage />} />
               <Route path="/house-number-numerology" element={<HouseNumberNumerologyPage />} />
               <Route path="/pitra-dosha" element={<DoshaCheckPage kind="pitra" />} />

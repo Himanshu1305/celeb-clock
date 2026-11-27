@@ -69,7 +69,7 @@ export interface KundaliPdfMeta {
   time?: string;     // HH:MM (24-hour)
   place?: string;
   basis?: ChartBasis | null;
-  chartStyle?: 'north' | 'south';
+  chartStyle?: 'north' | 'south' | 'east';
   generatedAt?: Date;
 }
 
@@ -203,7 +203,7 @@ export function yoginiAvPageHtml(data: KundaliPdfData, now: Date = new Date()): 
 }
 
 export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta = {}): string {
-  const style = meta.chartStyle === 'south' ? 'south' : 'north';
+  const style = meta.chartStyle === 'south' || meta.chartStyle === 'east' ? meta.chartStyle : 'north';
   const generated = meta.generatedAt ?? new Date();
   const generatedLabel = `${generated.getDate()} ${MONTHS[generated.getMonth()]} ${generated.getFullYear()}`;
   const b = meta.basis;
@@ -230,7 +230,7 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta =
   ].map(c => `<div class="card" data-testid="${c.testid}"><span>${esc(c.label)}</span><strong>${esc(c.value)}</strong><p class="ex">${esc(explain(c.id))}</p></div>`).join('');
 
   // ── Charts (D1 + D9) ─────────────────────────────────────────────────────
-  const styleName = style === 'south' ? 'South Indian' : 'North Indian';
+  const styleName = style === 'south' ? 'South Indian' : style === 'east' ? 'East Indian' : 'North Indian';
   const d1 = data.lagna?.signIndex
     ? kundaliChartSvg({ lagnaSignIndex: data.lagna.signIndex, planets, style, label: 'Rashi chart (D1)' })
     : '';
@@ -242,7 +242,7 @@ export function buildKundaliPdfHtml(data: KundaliPdfData, meta: KundaliPdfMeta =
       ${d9 ? `<figure data-testid="pdf-chart-d9">${d9}<figcaption><strong>Navamsa chart (D9)</strong><br>${esc(explain('navamsa'))}</figcaption></figure>` : ''}
     </div>
     <p class="note">${styleName} style. Su Sun · Mo Moon · Ma Mars · Me Mercury · Ju Jupiter · Ve Venus · Sa Saturn · Ra Rahu · Ke Ketu.
-    ${style === 'south' ? 'Each box is a fixed sign (small number = sign, 1 Aries … 12 Pisces); "La" marks the Lagna.' : 'The top-centre diamond is the 1st house (Lagna); small numbers are signs (1 Aries … 12 Pisces).'}
+    ${style === 'east' ? 'Signs stay in fixed places: Aries is the top-centre box, then anticlockwise; each corner holds two signs split by the diagonal. "La" marks the Lagna.' : style === 'south' ? 'Each box is a fixed sign (small number = sign, 1 Aries … 12 Pisces); "La" marks the Lagna.' : 'The top-centre diamond is the 1st house (Lagna); small numbers are signs (1 Aries … 12 Pisces).'}
     ${esc(explain('northSouthChart'))}</p>`;
 
   // ── Planet table ─────────────────────────────────────────────────────────

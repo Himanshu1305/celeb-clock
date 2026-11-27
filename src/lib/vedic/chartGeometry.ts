@@ -111,3 +111,28 @@ export function layoutInPolygon(poly: Pt[], labels: string[], signLabel?: string
   return build(7, 1, 0, 0); // degenerate fallback (never reached for ≤9 planets)
 }
 
+
+/**
+ * B21 — East Indian (Bengali / Odia) chart: a 3×3 grid on the 300×300 frame with the centre
+ * left empty. Signs are FIXED: Aries top-centre, then anticlockwise; each corner square is split
+ * by a diagonal running from the outer corner to the inner corner into two signs.
+ * Keys are 1-based sign numbers (1 = Aries … 12 = Pisces).
+ */
+export const EAST_SIGN_POLY: Record<number, Pt[]> = {
+  1: [[100, 2], [200, 2], [200, 100], [100, 100]],
+  2: [[2, 2], [100, 2], [100, 100]],
+  3: [[2, 2], [100, 100], [2, 100]],
+  4: [[2, 100], [100, 100], [100, 200], [2, 200]],
+  5: [[2, 200], [100, 200], [2, 298]],
+  6: [[100, 200], [100, 298], [2, 298]],
+  7: [[100, 200], [200, 200], [200, 298], [100, 298]],
+  8: [[200, 200], [298, 298], [200, 298]],
+  9: [[200, 200], [298, 200], [298, 298]],
+  10: [[200, 100], [298, 100], [298, 200], [200, 200]],
+  11: [[200, 100], [298, 2], [298, 100]],
+  12: [[200, 2], [298, 2], [200, 100]],
+};
+/** Where the small sign number sits in each East Indian cell. */
+export const EAST_SIGN_LABEL: Record<number, Pt> = {
+  1: [106, 12], 2: [88, 12], 3: [6, 92], 4: [6, 110], 5: [6, 212], 6: [88, 292], 7: [106, 292], 8: [204, 292], 9: [286, 212], 10: [286, 110], 11: [286, 92], 12: [204, 12],
+};

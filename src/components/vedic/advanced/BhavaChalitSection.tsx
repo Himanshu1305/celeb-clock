@@ -13,7 +13,7 @@ const KundaliChart = lazy(() => import('@/components/KundaliChart').then(m => ({
 
 const pos = (lon: number) => `${SIGN_EN[Math.floor(lon / 30) % 12]} ${formatDegreeInSign(lon)}`;
 
-export function BhavaChalitSection({ chalit, chartStyle }: { chalit: BhavaChalit; chartStyle: 'north' | 'south' }) {
+export function BhavaChalitSection({ chalit, chartStyle }: { chalit: BhavaChalit; chartStyle: 'north' | 'south' | 'east' }) {
   const { headline, lines } = chalitSummary(chalit);
   const lagna1 = chalit.lagnaSignIndex + 1;
   const chartPlanets = chalit.planets.map(p => ({ name: p.name, house: p.bhava, signIndex: ((chalit.lagnaSignIndex + p.bhava - 1) % 12) + 1 }));

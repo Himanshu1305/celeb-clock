@@ -52,6 +52,7 @@ import { VRAT_SLUG_SET } from '../src/lib/vedic/vrats/meta.js';
 import { RASHI_SLUGS_2027, RASHI_SLUGS_HI_2027, SIGN_SLUGS_2027, FESTIVAL_SLUGS_2027, HI_FESTIVAL_SLUGS_2027 } from '../src/lib/year2027/meta.js';
 import { pageLangForPath, withHtmlLang } from '../src/lib/seo/pageLang.js';
 import { regionalLangOf, isLangRoute } from '../src/lib/lang/langs.js';
+import { isKnownRoute } from './knownRoutes';
 import { applyDailyContent } from './daily.js';
 
 type Env = {
@@ -345,6 +346,10 @@ const worker = {
       if ((m = pathname.match(/^\/angel-numbers\/([^/]+)\/?$/)))    return !ANG.has(m[1]);
       // B18: the Lal Kitab Kundli is two single pages (/lal-kitab, /hi/lal-kitab) — nothing lives below them.
       if (/^\/(?:hi\/)?lal-kitab\/[^/]+/.test(pathname))           return true;
+      // B21 (SEO): any other path that matches NO route in src/App.tsx was served as a 200 copy of
+      // the homepage (canonical → /), i.e. a soft-404 that wastes crawl budget. Real 404 now.
+      // Files with an extension (assets, /llms.txt, /og/…) are never judged here.
+      if (!/\.[a-z0-9]{2,5}$/i.test(pathname) && !isKnownRoute(pathname)) return true;
       return false;
     })();
 

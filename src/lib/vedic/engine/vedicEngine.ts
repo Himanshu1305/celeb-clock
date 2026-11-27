@@ -79,10 +79,37 @@ export function getDrikAyanamsa(date: Date): number {
   return LAHIRI_J2000_DEG + precessionArcsec / 3600;
 }
 
+/**
+ * B21 — ayanamsa choice for the natal chart. Lahiri stays the default everywhere. Raman and
+ * Krishnamurti (KP) differ from Lahiri by a CONSTANT angle in the Swiss Ephemeris (they share its
+ * precession model): Raman − Lahiri = −1.446301°, KP − Lahiri = −348.668″ (pyswisseph 2.10.03,
+ * checked at 1850, 1900, 1950, 2000 and 2050 — identical to 1e-6°). "tropical" = Sayana (no ayanamsa).
+ * The choice is applied with withAyanamsa(), which runs a SYNCHRONOUS computation and restores the
+ * default before returning, so concurrent requests in one Worker isolate can never see each other's
+ * choice (there is no await inside the window).
+ */
+export type AyanamsaChoice = 'lahiri' | 'raman' | 'kp' | 'tropical';
+export const AYANAMSA_CHOICES: Record<AyanamsaChoice, { name: string; shiftDeg: number }> = {
+  lahiri: { name: 'Lahiri (Chitrapaksha)', shiftDeg: 0 },
+  raman: { name: 'B.V. Raman', shiftDeg: -1.446301 },
+  kp: { name: 'Krishnamurti (KP)', shiftDeg: -348.668 / 3600 },
+  tropical: { name: 'Sayana (tropical, no ayanamsa)', shiftDeg: 0 },
+};
+let natalChoice: AyanamsaChoice = 'lahiri';
+export function isAyanamsaChoice(x: unknown): x is AyanamsaChoice {
+  return typeof x === 'string' && Object.prototype.hasOwnProperty.call(AYANAMSA_CHOICES, x);
+}
+export function withAyanamsa<T>(choice: AyanamsaChoice, fn: () => T): T {
+  const prev = natalChoice;
+  natalChoice = choice;
+  try { return fn(); } finally { natalChoice = prev; }
+}
+
 /** True Lahiri (Swiss SIDM_LAHIRI with nutation, as AstroSage). Everything natal. */
 export function getNatalAyanamsa(date: Date): number {
+  if (natalChoice === 'tropical') return 0;
   const dpsiArcsec = Astronomy.e_tilt(Astronomy.MakeTime(date)).dpsi;
-  return getDrikAyanamsa(date) + (dpsiArcsec - DRIK_OFFSET_ARCSEC) / 3600;
+  return getDrikAyanamsa(date) + (dpsiArcsec - DRIK_OFFSET_ARCSEC) / 3600 + AYANAMSA_CHOICES[natalChoice].shiftDeg;
 }
 
 export function getAyanamsa(date: Date, kind: AyanamsaKind): number {

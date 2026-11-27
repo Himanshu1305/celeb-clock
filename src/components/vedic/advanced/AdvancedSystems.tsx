@@ -10,7 +10,7 @@ import { KpSection } from './KpSection';
 import { JaiminiSection } from './JaiminiSection';
 
 export default function AdvancedSystems({ birthUtcISO, lat, lon, chartStyle, mahadasha }: {
-  birthUtcISO: string; lat: number; lon: number; chartStyle: 'north' | 'south'; mahadasha?: string | null;
+  birthUtcISO: string; lat: number; lon: number; chartStyle: 'north' | 'south' | 'east'; mahadasha?: string | null;
 }) {
   const sys = useMemo(() => {
     const t = new Date(birthUtcISO);

@@ -18,7 +18,7 @@ import { syncHistoryToAccount, isHistorySyncEligible } from '@/services/readingH
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { mergeProfile, maritalStatusOf, MARITAL_STATUS_OPTIONS, type MaritalStatusChoice } from '@/services/savedProfile';
-import { fetchKundali, buildInterpretationBlocks, kundaliBasis, type KundaliData } from '@/services/kundaliService';
+import { fetchKundali, buildInterpretationBlocks, kundaliBasis, AYANAMSA_OPTIONS, type KundaliData, type AyanamsaId } from '@/services/kundaliService';
 import { birthTimeEdgeNote } from '@/lib/vedic/birthTimeEdgeNote';
 import { BirthDataUsed } from '@/components/vedic/BirthDataUsed';
 import { DashaDeepDive } from '@/components/vedic/DashaDeepDive';
@@ -43,6 +43,14 @@ const ShodashvargaCharts = lazy(() => import('@/components/vedic/ShodashvargaCha
 // Batch 10: Yogini Dasha + Ashtakavarga — after a chart exists only, each in its own chunk.
 const YoginiDashaSection = lazy(() => import('@/components/vedic/YoginiDashaSection'));
 const AshtakavargaSection = lazy(() => import('@/components/vedic/AshtakavargaSection'));
+// B21: Avkahada + Ghatak Chakra (pure, client-side).
+/** B21: 0-based sidereal signs of the 7 planets + Lagna, for the Prastarashtakavarga grid. */
+function avSigns(d: { lagna: { signIndex: number }; planets: Array<{ name: string; signIndex: number }> }) {
+  const out: Record<string, number> = { Lagna: d.lagna.signIndex - 1 };
+  for (const p of d.planets) out[p.name] = p.signIndex - 1;
+  return ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'].every(n => n in out) ? out as Record<'Sun' | 'Moon' | 'Mars' | 'Mercury' | 'Jupiter' | 'Venus' | 'Saturn' | 'Lagna', number> : undefined;
+}
+const AvakahadaSection = lazy(() => import('@/components/vedic/AvakahadaSection'));
 // Batch 10: Bhava Chalit, KP and Jaimini — computed in the browser, own lazy chunk.
 const AdvancedSystems = lazy(() => import('@/components/vedic/advanced/AdvancedSystems'));
 import { findingsFromKundali, type KundaliLike } from '@/lib/vedic/remedies';
@@ -62,7 +70,17 @@ export default function KundaliPage() {
   const chartFunnelTracked = useRef(false);
   const [usingDifferent, setUsingDifferent] = useState(false);
   const [saveChecked, setSaveChecked] = useState(false);
-  const [chartStyle, setChartStyle] = useState<'north' | 'south'>('north');
+  const [chartStyle, setChartStyle] = useState<'north' | 'south' | 'east'>('north');
+  // B21: ayanamsa choice — re-fetches the chart only; readings stay on Lahiri.
+  const [ayanamsa, setAyanamsa] = useState<AyanamsaId>('lahiri');
+  const [ayLoading, setAyLoading] = useState(false);
+  const changeAyanamsa = async (next: AyanamsaId) => {
+    setAyanamsa(next);
+    const l = lastLoc.current;
+    if (!l) return;
+    setAyLoading(true);
+    try { setData(await fetchKundali(l.dob, l.time, l.loc, next)); } catch { setFailed(true); } finally { setAyLoading(false); }
+  };
 
   const [data, setData] = useState<KundaliData | null>(null);
   const [readingDob, setReadingDob] = useState('');
@@ -145,7 +163,7 @@ export default function KundaliPage() {
       setLalKitabHref(`/lal-kitab/?${q.toString()}`);
     }
     try {
-      const k = await fetchKundali(details.dob, details.time, loc);
+      const k = await fetchKundali(details.dob, details.time, loc, ayanamsa);
       setData(k);
       // Funnel step: "generate chart" — the core activation event between a
       // visit (page_view) and a purchase (checkout_opened/purchase_completed).
@@ -347,7 +365,24 @@ export default function KundaliPage() {
                 <button data-testid="chart-style-south" type="button" onClick={() => setChartStyle('south')}
                   className={`px-4 py-1.5 font-medium ${chartStyle === 'south' ? 'bg-primary text-primary-foreground' : 'bg-background text-foreground'}`}
                   aria-pressed={chartStyle === 'south'}>South Indian</button>
+                <button data-testid="chart-style-east" type="button" onClick={() => setChartStyle('east')}
+                  className={`px-4 py-1.5 font-medium ${chartStyle === 'east' ? 'bg-primary text-primary-foreground' : 'bg-background text-foreground'}`}
+                  aria-pressed={chartStyle === 'east'} title="Bengali / Odia style">East Indian</button>
               </div>
+              <div className="mb-3 text-sm" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+                <label htmlFor="kundali-ayanamsa"><TermTip id="ayanamsa">Ayanamsa</TermTip></label>
+                <select id="kundali-ayanamsa" data-testid="kundali-ayanamsa" value={ayanamsa} disabled={ayLoading}
+                  onChange={e => { void changeAyanamsa(e.target.value as AyanamsaId); }} className="border rounded px-2 py-1">
+                  {AYANAMSA_OPTIONS.map(o => <option key={o.id} value={o.id}>{o.label}</option>)}
+                </select>
+                {ayLoading && <span className="text-muted-foreground">Recalculating…</span>}
+              </div>
+              {data.ayanamsa && data.ayanamsa.id !== 'lahiri' && (
+                <p data-testid="kundali-ayanamsa-note" className="text-sm rounded-lg border border-amber-500/60 bg-amber-50 text-amber-900 p-2 mb-3">
+                  This chart uses the <strong>{data.ayanamsa.name}</strong> {data.ayanamsa.id === 'tropical' ? 'zodiac (no ayanamsa)' : `ayanamsa (${data.ayanamsa.valueDeg.toFixed(4)}° at your birth)`}.
+                  Signs, stars and Dasha below follow it; the written reading, KP tables and other pages stay on Lahiri, India’s standard.
+                </p>
+              )}
               <span className="ml-2 align-middle"><TermTip id="northSouthChart" iconOnly /></span>
               {(data.warnings || []).some(w => w.code === 'POLAR_LATITUDE') && (
                 <div data-testid="kundali-polar-warning" className="rounded-xl border-2 border-amber-500/60 bg-amber-50 text-amber-900 p-4 text-sm" style={{ marginBottom: 12 }}>
@@ -385,6 +420,16 @@ export default function KundaliPage() {
 
               {/* Batch 7 (W8): Nakshatra → baby-name letters. */}
               <NakshatraNameLetters nakshatra={data.nakshatra.nakshatra} pada={data.nakshatra.pada} />
+
+              {/* B21: Avkahada Chakra (birth summary) + Ghatak Chakra. */}
+              {(() => {
+                const sun = data.planets.find(p => p.name === 'Sun'), moon = data.planets.find(p => p.name === 'Moon');
+                return sun && moon ? (
+                  <Suspense fallback={null}>
+                    <AvakahadaSection sun={sun.longitude} moon={moon.longitude} lagnaSignIndex={data.lagna.signIndex - 1} />
+                  </Suspense>
+                ) : null;
+              })()}
 
               {/* Batch 7 W3: all sixteen vargas (D1…D60) with meaning, BPHS source and a ±5-minute
                   birth-time check — same drawing, same style toggle. */}
@@ -473,7 +518,7 @@ export default function KundaliPage() {
               {/* Batch 10: second timing system + points chart (collapsed on phones). */}
               <Suspense fallback={null}>
                 {data.yoginiDasha && data.yoginiDasha.mahadashas?.length > 0 && <YoginiDashaSection data={data.yoginiDasha} />}
-                {data.ashtakavarga && <AshtakavargaSection data={data.ashtakavarga} />}
+                {data.ashtakavarga && <AshtakavargaSection data={data.ashtakavarga} signs={avSigns(data)} />}
               </Suspense>
 
               <div className="inline-actions" style={{ marginTop: 18 }}>

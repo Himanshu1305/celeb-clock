@@ -377,6 +377,7 @@ export const STATIC_ROUTES = [
   '/kua-number-calculator',
   '/love-calculator',
   '/janma-tithi-calculator',
+  '/prashna',
   '/marriage-biodata-maker',
   '/house-number-numerology',
   '/pitra-dosha',
