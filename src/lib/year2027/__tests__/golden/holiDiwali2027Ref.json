@@ -1,0 +1,36 @@
+{
+  "fetched": "2026-11-27",
+  "holika": {
+    "source": "Drik Panchang — https://www.drikpanchang.com/festivals/holi/festivals-holika-dahan-timings.html?year=2027 (New Delhi)",
+    "date": "2027-03-21", "holi": "2027-03-22",
+    "muhurat": ["18:33", "20:55"], "alternative": ["05:14", "06:23"],
+    "bhadraPunchha": ["01:26", "02:31"], "bhadraMukha": ["02:31", "04:20"],
+    "purnima": ["18:21", "16:13"]
+  },
+  "holikaCities": {
+    "source": "hindutone.com/festivals/holi-2027/ — table attributed to Drik Panchang's per-city Holika Dahan 2027 pages (checked 21 Oct 2026)",
+    "rows": {
+      "new-delhi": [["18:33", "20:55"], ["05:14", "06:23"]],
+      "mumbai": [["18:50", "21:12"], ["05:14", "06:41"]],
+      "kolkata": [["18:21", "20:10"], ["05:14", "05:39"]],
+      "chennai": [["18:21", "20:42"], ["05:14", "06:12"]],
+      "bengaluru": [["18:30", "20:53"], ["05:14", "06:23"]],
+      "hyderabad": [["18:27", "20:50"], ["05:14", "06:19"]],
+      "ahmedabad": [["18:51", "21:13"], ["05:14", "06:42"]],
+      "jaipur": [["18:38", "21:00"], ["05:14", "06:29"]],
+      "lucknow": [["18:21", "20:40"], ["05:14", "06:09"]]
+    }
+  },
+  "dhanteras": {
+    "source": "Drik Panchang — https://www.drikpanchang.com/festivals/dhanteras/festivals-dhanteras-puja-timings.html?year=2027 (New Delhi)",
+    "date": "2027-10-27", "muhurat": ["18:42", "20:14"], "pradosh": ["17:40", "20:14"], "vrishabha": ["18:42", "20:38"],
+    "trayodashi": ["01:03", "22:49"]
+  },
+  "lakshmi": {
+    "source": "AstroSage — https://panchang.astrosage.com/festival/diwali/diwali-date-muhurat?date=2027 (New Delhi). Drik Panchang's 2027 Lakshmi Puja page could not be read on the fetch date.",
+    "date": "2027-10-29", "muhurat": ["18:36", "19:08"], "pradosh": ["17:39", "20:13"], "vrishabha": ["18:36", "20:32"],
+    "mahanishita": ["23:39", "00:31"], "simha": ["01:08", "03:26"],
+    "fiveDays": { "dhanteras": "2027-10-27", "narak-chaturdashi": "2027-10-28", "diwali": "2027-10-29", "govardhan-puja": "2027-10-30", "bhai-dooj": "2027-10-31" },
+    "knownConvention": "AstroSage's rising-sign windows run about 2–3 minutes later than ours; ours match Drik Panchang's Vrishabha kaal on Dhanteras to 1 minute, so the gap is the reference's convention."
+  }
+}
