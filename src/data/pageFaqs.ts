@@ -65,9 +65,9 @@ export const pageFaqs: Record<string, FAQ[]> = {
         'The best celebrity birthday match shows verified famous people who share your exact day and month, with photos, professions, and short bios. BornClock cross-references Wikipedia and public birthday databases so every match is sourced and current.',
     },
     {
-      question: 'Which celebrities share my birthday?',
+      question: 'Who do I share a birthday with?',
       answer:
-        'Enter your birth date and we instantly list celebrities — actors, musicians, athletes, scientists, world leaders — born on the same day and month as you, ranked by notability.',
+        'Enter your birth date and we instantly list the famous people you share a birthday with — actors, musicians, athletes, scientists, world leaders born on the same day and month as you — ranked by notability. Any year counts: a birthday twin only needs the same day and month.',
     },
     {
       question: 'How many celebrities are in your database?',

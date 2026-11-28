@@ -193,7 +193,7 @@ const STATIC = {
   '/celebrity/business':   { title: 'Indian Business Leader Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian business leaders.' },
   '/celebrity/music':      { title: 'Indian Music Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian musicians and singers.' },
   '/celebrity/sports':     { title: 'Indian Sports Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian sports personalities.' },
-  '/age-calculator':        { title: 'Age Calculator — Exact Age in Seconds (Free) | BornClock', desc: 'Free age calculator — find your exact age in years, months, days, hours and seconds. Plus celebrity birthday match, zodiac sign, and life expectancy. Instant, accurate, free.' },
+  '/age-calculator':        { title: 'Exact Age Calculator: Years, Months, Days | BornClock', desc: 'Free age calculator: enter your date of birth to get your exact age in years, months, days, hours and seconds, live. No sign-up, nothing stored.' },
   '/age-in-days':           { title: 'Age in Days Calculator — How Many Days Old? | BornClock', desc: 'Find out exactly how many days old you are — updated live, including leap years. Most people are surprised how large the number is. Free, instant, no sign-up.' },
   '/age-in-seconds':        { title: 'Age in Seconds Calculator — Seconds Alive | BornClock', desc: 'Calculate exactly how many seconds old you are — live, updating every second. Most 30-year-olds have passed 946 million seconds. Free, instant, no sign-up.' },
   '/birthday-countdown':    { title: 'Birthday Countdown — Days Until Your Birthday | BornClock', desc: 'Find out exactly how many days until your next birthday — down to the day. See what day of the week it falls on and who shares it. Free, no sign-up.' },
@@ -232,7 +232,7 @@ const STATIC = {
   '/longevity-calculator':  { title: 'Longevity Calculator — How Long Will You Live? | BornClock', desc: 'Free longevity calculator using WHO, Harvard and NIH research. 8-factor quiz gives your personalised life expectancy and 90-day action plan. Takes 3 minutes.' },
   '/how-long-will-i-live': { title: 'How Long Will I Live? Life Expectancy Quiz | BornClock', desc: 'Answer 8 questions to get your personalised life expectancy based on WHO, Harvard and NIH research. Free instant result with a 90-day action plan.' },
   // Batch 11 (GSC): the target page for "who do i share a birthday with" / "what famous person shares my birthday".
-  '/celebrity-birthday':    { title: 'Celebrity Birthday Twin Finder — Who Shares My Birthday? | BornClock', desc: "Who shares your birthday? Enter your date to see the famous people born on the same day — real profiles ranked by recognition — plus today's celebrity birthdays." },
+  '/celebrity-birthday':    { title: 'Who Do I Share a Birthday With? Famous People | BornClock', desc: "Find out who you share a birthday with. Enter your date to see famous people born on the same day, ranked by recognition, plus today's birthdays." },
   '/birthday':              { title: 'Birthday Personality by Date — All 365 Days | BornClock', desc: 'Explore birthday personality profiles for every day of the year. Zodiac sign, life path number, famous people, and personality traits for your exact birthday.' },
   '/blog':                  { title: 'Health & Longevity Blog — Science-Backed Articles | BornClock', desc: 'Science-backed articles on longevity, life expectancy, birthday science, zodiac, and healthy ageing. Written by BornClock editorial team with sourced references.' },
   '/about':                 { title: 'About BornClock — Built in India, Designed for the World | BornClock', desc: 'BornClock is a science-first birthday and longevity platform. Learn about our data sources, methodology, editorial standards, and the team behind the product.' },
@@ -386,14 +386,14 @@ function bornOnIndiaMeta(monthName, day, top, count) {
   const n2 = (top && top[1]) || '';
   const tail = 'Ranked by recognition, with ages and professions.';
   if (!count || !n1) {
-    return `Whose birthday is on ${dayNum} ${monthName}? Famous Indians born on ${monthName} ${dayNum} — actors, cricketers, leaders and more. ${tail}`;
+    return `${monthName} ${dayNum} famous birthdays in India: whose birthday is on ${dayNum} ${monthName}? Actors, cricketers, leaders and more. ${tail}`;
   }
-  const who = count === 1 ? 'famous Indian shares it' : 'famous Indians share it';
-  const build = (a, b) => `Whose birthday is on ${dayNum} ${monthName}? ${count} ${who}, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
+  const who = count === 1 ? 'Indian shares' : 'Indians share';
+  const build = (a, b) => `${monthName} ${dayNum} famous birthdays in India: ${count} ${who} ${dayNum} ${monthName}, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
   const full = build(n1, n2);
-  if (full.length <= 160) return full;
+  if (full.length <= 155) return full;
   const short = build(n1.split(' ')[0], n2 ? n2.split(' ')[0] : '');
-  return short.length <= 160 ? short : short.slice(0, 157) + '...';
+  return short.length <= 155 ? short : short.slice(0, 152) + '...';
 }
 
 /** Global /born-on/:slug title (mirrors generateBornOnTitle in src/utils/seoHelpers.ts). */

@@ -74,8 +74,8 @@ const AgeCalculatorPage = () => {
       seo={(
         <>
           <SEO
-            title="Best Age Calculator Online — Exact Age in Seconds (Free)"
-            description="You're not just 30 years old. You've lived 10,957 days. 946 million seconds. Find your exact age — live, free."
+            title="Exact Age Calculator: Years, Months, Days | BornClock"
+            description="Free age calculator: enter your date of birth to get your exact age in years, months, days, hours and seconds, live. No sign-up, nothing stored."
             keywords="best age calculator, age calculator online, exact age, age in days, age in seconds, free age calculator, birthday calculator"
             canonicalUrl="/age-calculator"
             ogImage="https://bornclock.com/og/calculator.png"

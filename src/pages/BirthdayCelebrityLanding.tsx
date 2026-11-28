@@ -203,8 +203,8 @@ export default function BirthdayCelebrityLanding() {
       seo={(
         <>
           <SEO
-            title="Celebrity Birthday Twin Finder — Who Shares My Birthday? | BornClock"
-            description="Who shares your birthday? Enter your date to see the famous people born on the same day — real profiles ranked by recognition — plus today's celebrity birthdays."
+            title="Who Do I Share a Birthday With? Famous People | BornClock"
+            description="Find out who you share a birthday with. Enter your date to see famous people born on the same day, ranked by recognition, plus today's birthdays."
             keywords="who shares my birthday, who do i share a birthday with, what famous person shares my birthday, celebrities who share my birthday, celebrity birthday twins"
             canonicalUrl="/celebrity-birthday"
             ogType="website"

@@ -97,7 +97,11 @@ export function generateBornOnIndiaTitle(
   return opts.find(t => t.length <= 70) || opts[opts.length - 1];
 }
 
-/** India meta description (≤160 chars). `total` overrides the list length when known. */
+/**
+ * India meta description (≤155 chars). `total` overrides the list length when known.
+ * GSC 2026-11-28: queries are month-first ("november 10 famous birthdays india", pos 4, 0 clicks),
+ * so the meta now opens with that phrase and keeps the day-first date for the B23 wording.
+ */
 export function generateBornOnIndiaMeta(
   month: string,
   day: number | string,
@@ -110,15 +114,15 @@ export function generateBornOnIndiaMeta(
   const n2 = celebrities?.[1]?.name || '';
   const tail = 'Ranked by recognition, with ages and professions.';
   if (!count || !n1) {
-    return `Whose birthday is on ${dayNum} ${month}? Famous Indians born on ${month} ${dayNum} — actors, cricketers, leaders and more. ${tail}`;
+    return `${month} ${dayNum} famous birthdays in India: whose birthday is on ${dayNum} ${month}? Actors, cricketers, leaders and more. ${tail}`;
   }
-  const who = count === 1 ? 'famous Indian shares it' : 'famous Indians share it';
+  const who = count === 1 ? 'Indian shares' : 'Indians share';
   const build = (a: string, b: string) =>
-    `Whose birthday is on ${dayNum} ${month}? ${count} ${who}, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
+    `${month} ${dayNum} famous birthdays in India: ${count} ${who} ${dayNum} ${month}, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
   const full = build(n1, n2);
-  if (full.length <= 160) return full;
+  if (full.length <= 155) return full;
   const short = build(n1.split(' ')[0], n2 ? n2.split(' ')[0] : '');
-  return short.length <= 160 ? short : short.slice(0, 157) + '...';
+  return short.length <= 155 ? short : short.slice(0, 152) + '...';
 }
 
 // ── Months lookup ────────────────────────────────────────────

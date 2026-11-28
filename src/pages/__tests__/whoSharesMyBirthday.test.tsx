@@ -31,8 +31,8 @@ const renderPage = () => {
 describe('/celebrity-birthday/ answers "who shares my birthday" first', () => {
   it('title, H1 and first paragraph use the query wording; prerender title matches', async () => {
     renderPage();
-    await waitFor(() => expect(document.title).toContain('Who Shares My Birthday?'));
-    expect(document.title).toBe('Celebrity Birthday Twin Finder — Who Shares My Birthday? | BornClock');
+    await waitFor(() => expect(document.title).toContain('Who Do I Share a Birthday With?'));
+    expect(document.title).toBe('Who Do I Share a Birthday With? Famous People | BornClock');
     expect(getTitleForRoute('/celebrity-birthday').title).toBe(document.title);
     const h1 = document.querySelector('h1')!;
     expect(h1.textContent).toBe('Who shares my birthday?');

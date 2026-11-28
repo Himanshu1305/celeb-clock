@@ -202,13 +202,13 @@ describe('generateBornOnIndiaTitle / generateBornOnIndiaMeta', () => {
   it('no celebrities → plain India title; "06" → 6', () => {
     expect(generateBornOnIndiaTitle('August', '06', EMPTY)).toBe('6 August Birthday: Indian Celebrities Born on August 6 | BornClock');
   });
-  it('meta names Indians, uses the known total, stays ≤160', () => {
+  it('meta leads with "<Month> <d> famous birthdays in India", uses the known total, stays ≤155', () => {
     const m = generateBornOnIndiaMeta('November', 5, TWO, 12);
-    expect(m.startsWith('Whose birthday is on 5 November? 12 famous Indians share it, including Virat Kohli and Kader Khan.')).toBe(true);
-    expect(m.length).toBeLessThanOrEqual(160);
+    expect(m.startsWith('November 5 famous birthdays in India: 12 Indians share 5 November, including Virat Kohli and Kader Khan.')).toBe(true);
+    expect(m.length).toBeLessThanOrEqual(155);
     expect(m).not.toBe(generateBornOnMeta('November', 5, TWO));
   });
   it('meta with no names is still India-specific', () => {
-    expect(generateBornOnIndiaMeta('August', 6, EMPTY)).toContain('Famous Indians born on August 6');
+    expect(generateBornOnIndiaMeta('August', 6, EMPTY)).toContain('August 6 famous birthdays in India');
   });
 });
