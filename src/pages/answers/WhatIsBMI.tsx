@@ -98,7 +98,7 @@ export default function WhatIsBMI() {
             <div className="space-y-2">
               <Link to="/answers/what-is-my-biological-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ What is my biological age?</Link>
               <Link to="/answers/how-to-live-longer/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How to live longer</Link>
-              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How long will I live?</Link>
+              <Link to="/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How long will I live?</Link>
               <Link to="/answers/how-does-stress-affect-life-expectancy/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-purple/30 hover:bg-brand-purple/10 transition-colors text-sm text-gray-700 hover:text-brand-purple">→ How stress affects life expectancy</Link>
             </div>
           </div>

@@ -80,6 +80,8 @@ export interface DailyEntry {
   faq: DailyFaq[];
   /** Optional block headings instead of the daily defaults ("Today in brief", "Why
    *  today", "Questions about today") — e.g. "This week in brief" on a weekly page. */
+  /** B24: optional absolute share-card URL; the Worker swaps it into og:image / twitter:image. */
+  ogImage?: string;
   labels?: { answer?: string; why?: string; faq?: string; good?: string; mixed?: string; care?: string };
 }
 

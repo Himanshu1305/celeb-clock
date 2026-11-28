@@ -56,6 +56,10 @@ export function injectDailyHtml(html: string, inp: DailyInjectInput): DailyInjec
   out = replaceMetaContent(out, /<meta\b[^>]*\bname="twitter:description"[^>]*>/gi, e.description).html;
   out = replaceMetaContent(out, /<meta\b[^>]*\bproperty="og:title"[^>]*>/gi, e.title).html;
   out = replaceMetaContent(out, /<meta\b[^>]*\bname="twitter:title"[^>]*>/gi, e.title).html;
+  if (e.ogImage) {
+    out = replaceMetaContent(out, /<meta\b[^>]*\bproperty="og:image"[^>]*>/gi, e.ogImage).html;
+    out = replaceMetaContent(out, /<meta\b[^>]*\bname="twitter:image"[^>]*>/gi, e.ogImage).html;
+  }
 
   // H1 + visible date(s).
   out = out.replace(/(<span\b[^>]*\bdata-daily="h1"[^>]*>)[\s\S]*?(<\/span>)/i, (_m, a, b) => { replaced.h1 = true; return `${a}${escapeHtml(e.h1)}${b}`; });

@@ -345,7 +345,7 @@ const worker = {
       if ((m = pathname.match(/^\/tarot\/cards\/([a-z-]+)\/?$/)))   return !(TAROT_MAJOR.has(m[1]) || /^(ace|two|three|four|five|six|seven|eight|nine|ten|page|knight|queen|king)-of-(wands|cups|swords|pentacles)$/.test(m[1]));
       if ((m = pathname.match(/^\/birthstone\/([a-z-]+)\/?$/)))      return !BM.has(m[1]);
       if ((m = pathname.match(/^\/numerology\/(\d+)\/?$/)))          return !NUM.has(parseInt(m[1], 10));
-      const ANG = new Set(['000','111','222','333','444','555','666','777','888','999','1010','1111','1212','1234','2222']); // = src/data/angelNumbersSeo.json keys
+      const ANG = new Set(['000','111','222','333','444','555','666','777','888','911','999','1010','1111','1122','1144','1212','1234','1313','1414','1717','2121','2222','3333','4444','5555']); // = src/data/angelNumbersSeo.json keys
       if ((m = pathname.match(/^\/angel-numbers\/([^/]+)\/?$/)))    return !ANG.has(m[1]);
       // B18: the Lal Kitab Kundli is two single pages (/lal-kitab, /hi/lal-kitab) — nothing lives below them.
       if (/^\/(?:hi\/)?lal-kitab\/[^/]+/.test(pathname))           return true;

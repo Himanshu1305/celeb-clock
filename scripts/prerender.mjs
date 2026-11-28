@@ -114,7 +114,10 @@ function ogImageForRoute(route) {
   const base = 'https://bornclock.com/og/';
   const candidates = [];
   let m;
-  if ((m = route.match(/^\/born-on\/([a-z]+-\d+)$/))) candidates.push(`born-on/${m[1]}.webp`);
+  if ((m = route.match(/^\/born-on\/([a-z]+-\d+)(?:\/india)?$/))) candidates.push(`born-on/${m[1]}.webp`);
+  // B24: celebrity share cards, and the date card for /birthday/:m/:d.
+  if ((m = route.match(/^\/celebrity\/([^/]+)$/))) candidates.push(`celebrity/${m[1]}.webp`);
+  if ((m = route.match(/^\/birthday\/(\d+)\/(\d+)$/))) candidates.push(`born-on/${['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'][+m[1]]}-${+m[2]}.webp`);
   if ((m = route.match(/^\/born-in-([a-z]+)$/)))       candidates.push(`month/${m[1]}.webp`);
   if ((m = route.match(/^\/zodiac\/([a-z]+)$/)))        candidates.push(`zodiac/${m[1]}.webp`);
   if ((m = route.match(/^\/blog\/([a-z0-9-]+)$/)))      candidates.push(`blog/${m[1]}.webp`);

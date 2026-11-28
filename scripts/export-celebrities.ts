@@ -12,6 +12,7 @@
  * Slugs are computed here (the DB slug column is optional). Run:
  *   npx tsx scripts/export-celebrities.ts
  */
+import { deriveCategory } from '../src/lib/celebrityCategory';
 import { createClient } from '@supabase/supabase-js';
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import * as dotenv from 'dotenv';
@@ -115,7 +116,8 @@ async function main() {
         birth_month_day: row.birth_month_day ?? monthDay(row.birth_date ?? null),
         birth_year: by, death_year: dy,
         death_date: row.death_date ? String(row.death_date).slice(0, 10) : null,
-        category: row.occupation || 'Celebrity',
+        // B24: a real category from the Wikidata description (src/lib/celebrityCategory.ts).
+        category: deriveCategory(row.known_for, row.occupation),
         known_for: row.known_for || '',
         occupation: row.occupation ?? null,
         nationality_code: row.nationality_code || 'IN',

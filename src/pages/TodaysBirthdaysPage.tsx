@@ -10,6 +10,7 @@ import { RelatedTools } from '@/components/RelatedTools';
 import { AuthorBio } from '@/components/AuthorBio';
 import { DailyBody, DailyDate, DailyH1, DailyJsonLd } from '@/lib/daily/DailyParts';
 import { useDailyEntry } from '@/lib/daily/useDailyEntry';
+import { BornTodayShare } from '@/components/BornTodayShare';
 import { BIRTHDAYS_STATIC } from '@/lib/daily/kinds/birthdaysTemplate';
 
 const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
@@ -70,6 +71,7 @@ const TodaysBirthdaysPage = () => {
 
         <section className="max-w-4xl mx-auto mb-10">
           <DailyBody entry={entry} testId="todays-birthdays-body" />
+          <BornTodayShare entry={entry} pageUrl="https://bornclock.com/todays-birthdays/" />
           <DailyJsonLd entry={entry} path="/todays-birthdays" />
           <p className="text-sm text-muted-foreground mt-2">Indian birthdays today: <Link to="/todays-birthdays/india/" className="text-primary underline">aaj kiska birthday hai →</Link></p>
         </section>

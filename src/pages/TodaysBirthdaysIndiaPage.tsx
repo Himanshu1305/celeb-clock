@@ -9,6 +9,7 @@ import { SEO } from '@/components/SEO';
 import { Link } from '@/components/seo/CanonicalLink';
 import { DailyBody, DailyDate, DailyH1, DailyJsonLd } from '@/lib/daily/DailyParts';
 import { useDailyEntry } from '@/lib/daily/useDailyEntry';
+import { BornTodayShare } from '@/components/BornTodayShare';
 import { BIRTHDAYS_STATIC } from '@/lib/daily/kinds/birthdaysTemplate';
 
 export default function TodaysBirthdaysIndiaPage() {
@@ -36,6 +37,7 @@ export default function TodaysBirthdaysIndiaPage() {
       <section className="section">
         <div className="container mx-auto px-4 max-w-4xl">
           <DailyBody entry={entry} testId="todays-birthdays-india-body" />
+          <BornTodayShare entry={entry} india pageUrl="https://bornclock.com/todays-birthdays/india/" />
           <DailyJsonLd entry={entry} path="/todays-birthdays/india" />
           <p className="text-sm text-muted-foreground mt-4">
             Looking for another date? <Link to="/born-on/india/" className="text-primary underline">Browse Indian celebrities by birth date</Link> ·{' '}

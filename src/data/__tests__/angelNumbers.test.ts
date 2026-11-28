@@ -10,10 +10,12 @@ const { getAllRoutes } = await import('../../../scripts/prerender-routes.mjs');
 const { getTitleForRoute } = await import('../../../scripts/prerender-titles.mjs');
 const routes: string[] = await getAllRoutes();
 
-const EXPECTED = ['000', '111', '222', '333', '444', '555', '666', '777', '888', '999', '1010', '1111', '1212', '1234', '2222'];
+const EXPECTED = ['000', '111', '222', '333', '444', '555', '666', '777', '888', '999', '1010', '1111', '1212', '1234', '2222',
+  // B24
+  '911', '1122', '1144', '1313', '1414', '1717', '2121', '3333', '4444', '5555'];
 
 describe('angel numbers — data', () => {
-  it('has exactly the 15 sequences in scope, once each', () => {
+  it('has exactly the 25 sequences in scope, once each', () => {
     expect([...ANGEL_SEQUENCES].sort()).toEqual([...EXPECTED].sort());
     expect(new Set(ANGEL_SEQUENCES).size).toBe(ANGEL_SEQUENCES.length);
   });

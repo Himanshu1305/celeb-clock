@@ -677,7 +677,7 @@ export default function Methodology() {
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { to: '/answers/how-long-will-i-live/', label: 'How long will I live?' },
+                { to: '/how-long-will-i-live/', label: 'How long will I live?' },
                 { to: '/answers/what-is-life-expectancy/', label: 'What is life expectancy and how is it calculated?' },
                 { to: '/answers/what-is-my-biological-age/', label: 'What is my biological age?' },
                 { to: '/answers/how-to-live-longer/', label: 'How to live longer — what science says' },

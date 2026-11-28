@@ -462,15 +462,15 @@ const App = () => (
               <Route path="/vedic-zodiac/:rashi" element={<VedicZodiacSign />} />
               <Route path="/western-birth-chart" element={<WesternBirthChart />} />
               <Route path="/answers" element={<AnswersIndex />} />
-              <Route path="/answers/how-long-will-i-live" element={<HowLongWillILive />} />
+              <Route path="/answers/how-long-will-i-live" element={<LegacyRedirect otherwise="/how-long-will-i-live/" />} />
               <Route path="/answers/what-is-my-biological-age" element={<WhatIsMyBiologicalAge />} />
               {/* Batch 11: retired duplicate of the finder — 301 in the Worker (duplicateRedirects). */}
               <Route path="/answers/who-shares-my-birthday" element={<LegacyRedirect otherwise="/celebrity-birthday/" />} />
-              <Route path="/answers/how-old-am-i-on-mars" element={<HowOldAmIOnMars />} />
+              <Route path="/answers/how-old-am-i-on-mars" element={<LegacyRedirect otherwise="/planetary-age/" />} />
               <Route path="/answers/what-is-my-zodiac-sign" element={<WhatIsMyZodiacSign />} />
               <Route path="/answers/what-is-my-life-path-number" element={<WhatIsMyLifePathNumber />} />
               <Route path="/answers/how-to-calculate-age" element={<HowToCalculateAge />} />
-              <Route path="/answers/what-generation-am-i" element={<WhatGenerationAmI />} />
+              <Route path="/answers/what-generation-am-i" element={<LegacyRedirect otherwise="/generation/" />} />
               <Route path="/answers/how-to-live-longer" element={<HowToLiveLonger />} />
               <Route path="/answers/what-is-bmi" element={<WhatIsBMI />} />
               <Route path="/answers/what-is-life-expectancy" element={<WhatIsLifeExpectancy />} />

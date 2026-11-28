@@ -59,6 +59,15 @@ const STATIC: Record<string, string> = {
   // /celebrity-birthday/ now answers the question first (date picker + results on top,
   // FAQ), so the article 301s there.
   '/answers/who-shares-my-birthday': '/celebrity-birthday/',
+  // B24: duplicate blog posts and answer pages that mirrored a tool — one page per intent.
+  '/blog/sleep-longevity-science': '/blog/how-sleep-affects-life-expectancy-complete-guide/',
+  '/blog/exercise-longevity-guide': '/blog/how-exercise-affects-life-expectancy-workout-guide/',
+  '/blog/longevity-diet-guide': '/blog/best-foods-to-eat-to-live-longer-longevity-diet/',
+  '/blog/stress-mental-health-longevity': '/blog/how-stress-affects-health-life-expectancy-management-tips/',
+  '/blog/zodiac-signs-complete-personality-guide-all-12': '/blog/zodiac-signs-complete-guide-personality-traits-compatibility/',
+  '/answers/how-long-will-i-live': '/how-long-will-i-live/',
+  '/answers/what-generation-am-i': '/generation/',
+  '/answers/how-old-am-i-on-mars': '/planetary-age/',
 };
 
 /** Month name (any case) → 1-12, or 0. */

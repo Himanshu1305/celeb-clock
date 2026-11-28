@@ -18,6 +18,11 @@ import { MONTH_HUB_DATA } from '../src/data/monthHubData';
 import { FITNESS_PAGES } from '../src/data/fitnessPages';
 import { blogPosts } from '../src/data/blogPosts';
 import { BORNCLOCK_LOGO_B64 } from '../src/lib/invoice-logo';
+import { createRequire } from 'node:module';
+import { celebrityProfileFacts } from '../src/lib/celebrityProfile';
+import { applyCelebRecordFixes } from '../src/lib/celebrityFacts';
+import { dedupeCelebrities } from '../src/lib/celebrityDedupe';
+import { formatDOBDisplay } from '../src/utils/celebrityUtils';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = resolve(ROOT, 'dist/og');
@@ -67,11 +72,39 @@ function svg({ eyebrow, title, accent = GOLD, sub, titleSize = 68 }: { eyebrow: 
     <circle cx="1080" cy="470" r="250" fill="none" stroke="${NAVY}" stroke-width="2" opacity="0.55"/>
     <circle cx="1080" cy="470" r="188" fill="none" stroke="${accent}" stroke-width="1.5" opacity="0.32"/>
     <circle cx="1080" cy="470" r="126" fill="none" stroke="${NAVY}" stroke-width="1.5" opacity="0.4"/>
-    <image href="data:image/png;base64,${logoB64}" x="86" y="66" height="54"/>
+    <image href="data:image/png;base64,${logoB64}" x="86" y="66" width="400" height="54" preserveAspectRatio="xMinYMid meet"/>
     <text x="90" y="212" fill="${accent}" font-family="Georgia, 'Times New Roman', serif" font-size="26" letter-spacing="7" font-weight="700">${esc(eyebrow.toUpperCase())}</text>
     <text x="90" y="${startY}" fill="${LIGHT}" font-family="Georgia, 'Times New Roman', serif" font-size="${titleSize}" font-weight="800">${tspans}</text>
     ${sub ? `<text x="90" y="548" fill="${MUTE}" font-family="Helvetica, Arial, sans-serif" font-size="30">${esc(sub)}</text>` : ''}
     <text x="90" y="596" fill="${MUTE}" font-family="Helvetica, Arial, sans-serif" font-size="23" font-style="italic">Know your time. Live it well. · bornclock.com</text>
+  </svg>`;
+}
+
+/**
+ * B24 — a celebrity's share card: name, birth date and the four signs, on the brand card. No photo
+ * (personality rights): the card is text the page itself computes (celebrityProfileFacts).
+ */
+function celebSvg(name: string, line: string, chips: Array<[string, string]>, accent = GOLD): string {
+  const nameSize = name.length > 26 ? 60 : name.length > 18 ? 74 : 88;
+  const nameLines = wrap(name, name.length > 26 ? 26 : 22, 2);
+  const lh = Math.round(nameSize * 1.1);
+  const tsp = nameLines.map((l, i) => `<tspan x="90" dy="${i === 0 ? 0 : lh}">${esc(l)}</tspan>`).join('');
+  const chipY = 300 + (nameLines.length - 1) * lh + 70;
+  const chipEls = chips.slice(0, 4).map(([k, v], i) => {
+    const x = 90 + (i % 2) * 520, y = chipY + Math.floor(i / 2) * 92;
+    return `<text x="${x}" y="${y}" fill="${MUTE}" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="2">${esc(k.toUpperCase())}</text>` +
+      `<text x="${x}" y="${y + 40}" fill="${LIGHT}" font-family="Georgia, 'Times New Roman', serif" font-size="36" font-weight="700">${esc(v)}</text>`;
+  }).join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <rect width="${W}" height="${H}" fill="${INK}"/>
+    <rect width="${W}" height="12" fill="${accent}"/>
+    <circle cx="1080" cy="470" r="250" fill="none" stroke="${NAVY}" stroke-width="2" opacity="0.55"/>
+    <circle cx="1080" cy="470" r="188" fill="none" stroke="${accent}" stroke-width="1.5" opacity="0.32"/>
+    <image href="data:image/png;base64,${logoB64}" x="86" y="56" width="400" height="50" preserveAspectRatio="xMinYMid meet"/>
+    <text x="90" y="176" fill="${accent}" font-family="Georgia, 'Times New Roman', serif" font-size="26" letter-spacing="6" font-weight="700">${esc(line.toUpperCase())}</text>
+    <text x="90" y="262" fill="${LIGHT}" font-family="Georgia, 'Times New Roman', serif" font-size="${nameSize}" font-weight="800">${tsp}</text>
+    ${chipEls}
+    <text x="90" y="604" fill="${MUTE}" font-family="Helvetica, Arial, sans-serif" font-size="23" font-style="italic">Who shares your birthday — and your Rashi? · bornclock.com</text>
   </svg>`;
 }
 
@@ -95,11 +128,36 @@ async function main() {
   // Default / homepage card (light, brand-forward)
   jobs.push({ rel: 'default.webp', markup: homeCardSvg() });
 
-  // Born-on date cards (366) — birthstone accent per month
+  // Born-on date cards (366) — birthstone accent per month. B24: the sub-line names who was born
+  // that day (static lists, src/data/celebsByDay), so the card itself is the "born today" share.
   for (let m = 1; m <= 12; m++) {
     const accent = BIRTHSTONE_DATA[m - 1]?.hexColor || GOLD;
+    const mm = String(m).padStart(2, '0');
+    const days = JSON.parse(readFileSync(resolve(ROOT, `src/data/celebsByDay/${mm}.json`), 'utf8')) as Record<string, { india: Array<{ n: string }>; world: Array<{ n: string }> }>;
     for (let d = 1; d <= MONTH_DAYS[m]; d++) {
-      jobs.push({ rel: `born-on/${MONTHS[m]}-${d}.webp`, markup: svg({ eyebrow: 'Born on', title: `${cap(MONTHS[m])} ${d}`, accent, sub: 'Famous birthdays · zodiac · birthstone', titleSize: 92 }) });
+      const day = days[`${mm}-${String(d).padStart(2, '0')}`];
+      const names = day ? [...day.world.slice(0, 2), ...day.india.slice(0, 2)].map(x => x.n) : [];
+      let sub = names.length ? names.join(' · ') : 'Famous birthdays · zodiac · birthstone';
+      while (sub.length > 62 && names.length > 1) { names.pop(); sub = names.join(' · '); }
+      jobs.push({ rel: `born-on/${MONTHS[m]}-${d}.webp`, markup: svg({ eyebrow: 'Born on', title: `${cap(MONTHS[m])} ${d}`, accent, sub, titleSize: 92 }) });
+    }
+  }
+  // B24 — one share card per celebrity profile (3,000+), same facts as the page.
+  {
+    const require = createRequire(import.meta.url);
+    const data = require('../src/data/celebrities.json') as { celebrities: Record<string, unknown>[] };
+    const list = dedupeCelebrities(data.celebrities).list.map(applyCelebRecordFixes);
+    for (const c of list) {
+      const slug = String(c.slug || ''); if (!slug || !c.name) continue;
+      const f = celebrityProfileFacts(c, slug);
+      const chips: Array<[string, string]> = [];
+      if (f.western) chips.push(['Zodiac (Sun) sign', f.western.sign]);
+      if (f.moon) chips.push(['Moon sign (Rashi)', f.moon.rashiShort]);
+      if (f.chinese) chips.push(['Chinese zodiac', `${f.chinese.element} ${f.chinese.animal}`]);
+      if (f.lifePath) chips.push(['Life Path', String(f.lifePath)]);
+      const line = f.dob ? (f.isFull ? `Born ${formatDOBDisplay(f.dob)}` : `Born ${f.dob.year}`) : 'Birthday profile';
+      const accent = f.isFull ? (BIRTHSTONE_DATA[f.dob!.month - 1]?.hexColor || GOLD) : GOLD;
+      jobs.push({ rel: `celebrity/${slug}.webp`, markup: celebSvg(String(c.name), line, chips, accent) });
     }
   }
   // Month hubs (12)

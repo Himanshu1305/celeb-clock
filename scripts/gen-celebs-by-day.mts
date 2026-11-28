@@ -10,7 +10,7 @@ import { writeFileSync, mkdirSync } from 'fs';
 import { createRequire } from 'module';
 import { dedupeCelebrities } from '../src/lib/celebrityDedupe';
 import { applyCelebRecordFixes } from '../src/lib/celebrityFacts';
-import { parseCelebrityDOB } from '../src/utils/celebrityUtils';
+import { parseCelebrityDOB, CATEGORY_CONFIG, HUB_SLUGS } from '../src/utils/celebrityUtils';
 
 const require = createRequire(import.meta.url);
 type Row = Record<string, unknown>;
@@ -74,7 +74,23 @@ export function buildCelebsBySignAndYear(chineseYearForYmd: (y: number, m: numbe
   return { bySign, byYear };
 }
 
+/** B24: Indian profiles per category hub (/celebrity/bollywood, /cricket …), A–Z — all sources. */
+export function buildCelebsByHub(): Record<string, Array<{ s: string; n: string; c: string }>> {
+  const data = require('../src/data/celebrities.json') as { celebrities: Row[] };
+  const list = dedupeCelebrities(data.celebrities).list.map(applyCelebRecordFixes) as Row[];
+  const out: Record<string, Array<{ s: string; n: string; c: string }>> = {};
+  for (const h of HUB_SLUGS) out[h] = [];
+  for (const c of list) {
+    if (c.nationality_code !== 'IN' || !c.slug || !c.name) continue;
+    const hub = CATEGORY_CONFIG[String(c.category)]?.hubSlug;
+    if (hub && out[hub]) out[hub].push({ s: String(c.slug), n: String(c.name), c: String(c.category) });
+  }
+  for (const v of Object.values(out)) v.sort((a, b) => a.n.localeCompare(b.n));
+  return out;
+}
+
 if (process.argv[1]?.endsWith('gen-celebs-by-day.mts')) {
+  writeFileSync('src/data/celebsByHub.json', JSON.stringify(buildCelebsByHub()));
   const { chineseYearForYmd } = await import('../src/lib/chineseCalendar.js');
   const { bySign, byYear } = buildCelebsBySignAndYear(chineseYearForYmd);
   writeFileSync('src/data/celebsBySign.json', JSON.stringify(bySign));

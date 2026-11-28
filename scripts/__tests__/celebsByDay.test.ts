@@ -39,3 +39,26 @@ describe('celebsBySign / celebsByChineseYear', () => {
     for (const v of Object.values(bySign)) for (const x of [...v.india, ...v.world]) expect(meta[x.s], x.s).toBeTruthy();
   });
 });
+
+// B24 — category hubs list every Indian profile whose (re-derived) category maps to the hub.
+import { buildCelebsByHub } from '../gen-celebs-by-day.mts';
+import { deriveCategory } from '../../src/lib/celebrityCategory';
+describe('celebsByHub / categories', () => {
+  it('C5 — committed hub file matches the generator; hubs are big enough', () => {
+    const hubs = buildCelebsByHub();
+    expect(JSON.parse(readFileSync('src/data/celebsByHub.json', 'utf8'))).toEqual(hubs);
+    expect(hubs.bollywood.length).toBeGreaterThan(800);
+    expect(hubs.sports.length).toBeGreaterThan(150);
+  });
+  it('C6 — derived categories follow the first role named', () => {
+    expect(deriveCategory('Indian sport shooter')).toBe('Athlete');
+    expect(deriveCategory('3rd President of India (1897-1969)')).toBe('Politician');
+    expect(deriveCategory('Indian actor and politician')).toBe('Actor');
+    expect(deriveCategory('Indian politician and actor')).toBe('Politician');
+    expect(deriveCategory('Indian playback singer')).toBe('Singer');
+    expect(deriveCategory('Indian television actress')).toBe('Actress');
+    expect(deriveCategory('')).toBe('Celebrity');
+    const data = JSON.parse(readFileSync('src/data/celebrities.json', 'utf8')) as { celebrities: Array<{ category: string }> };
+    expect(data.celebrities.filter(c => c.category === 'Celebrity').length).toBeLessThan(200);
+  });
+});

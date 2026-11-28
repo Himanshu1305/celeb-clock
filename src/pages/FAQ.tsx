@@ -367,7 +367,7 @@ export default function FAQ() {
           <p className="text-muted-foreground text-sm mb-6">In-depth science-backed answers to the questions we hear most</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { to: '/answers/how-long-will-i-live/', label: 'How long will I live?' },
+              { to: '/how-long-will-i-live/', label: 'How long will I live?' },
               { to: '/answers/what-is-my-biological-age/', label: 'What is my biological age?' },
               { to: '/answers/how-to-live-longer/', label: 'How to live longer' },
               { to: '/answers/what-is-life-expectancy/', label: 'What is life expectancy?' },
@@ -375,7 +375,7 @@ export default function FAQ() {
               { to: '/answers/what-is-bmi/', label: 'What is BMI?' },
               { to: '/answers/what-is-my-zodiac-sign/', label: 'What is my zodiac sign?' },
               { to: '/answers/how-to-calculate-age/', label: 'How old am I in days?' },
-              { to: '/answers/what-generation-am-i/', label: 'What generation am I?' },
+              { to: '/generation/', label: 'What generation am I?' },
               { to: '/birthstone/', label: 'What is my birthstone?' },
               { to: '/answers/what-is-my-life-path-number/', label: 'What is my numerology life path number?' },
               { to: '/answers/how-many-days-until-my-birthday/', label: 'How many days until my birthday?' },

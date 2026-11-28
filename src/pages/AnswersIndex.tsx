@@ -15,8 +15,8 @@ const GROUPS: Array<{ theme: string; items: Array<{ slug: string; q: string; to?
       { slug: 'how-to-calculate-age', q: 'How to calculate your exact age' },
       { slug: 'how-many-days-until-my-birthday', q: 'How many days until my birthday?' },
       { slug: 'who-shares-my-birthday', q: 'Who shares my birthday?', to: '/celebrity-birthday/' },
-      { slug: 'how-old-am-i-on-mars', q: 'How old am I on Mars and other planets?' },
-      { slug: 'what-generation-am-i', q: 'What generation am I?' },
+      { slug: 'how-old-am-i-on-mars', q: 'How old am I on Mars and other planets?', to: '/planetary-age/' },
+      { slug: 'what-generation-am-i', q: 'What generation am I?', to: '/generation/' },
     ],
   },
   {
@@ -29,7 +29,7 @@ const GROUPS: Array<{ theme: string; items: Array<{ slug: string; q: string; to?
   {
     theme: 'Longevity & health',
     items: [
-      { slug: 'how-long-will-i-live', q: 'How long will I live?' },
+      { slug: 'how-long-will-i-live', q: 'How long will I live?', to: '/how-long-will-i-live/' },
       { slug: 'what-is-life-expectancy', q: 'What is life expectancy?' },
       { slug: 'how-to-live-longer', q: 'How to live longer' },
       { slug: 'what-is-my-biological-age', q: 'What is biological age?' },
