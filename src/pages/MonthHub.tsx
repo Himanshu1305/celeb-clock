@@ -11,6 +11,7 @@ import { BIRTHSTONE_DATA, birthstoneAnswer } from '@/data/birthstoneData';
 import { useReportPrice } from '@/hooks/useCurrency';
 import { postsForTags } from '@/lib/mesh';
 import { SharePageBar } from '@/components/SharePageBar';
+import { celebsInMonth } from '@/lib/celebsByDay';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star, Flower2, Gem } from 'lucide-react';
 
 // Days per month (leap Feb → 29 so Feb-29 date page is linked)
@@ -180,7 +181,17 @@ export default function MonthHub() {
             </div>
           </>
         ) : (
-          <p className="text-muted-foreground mb-10">Explore the day-by-day pages below for people born on each date in {month}.</p>
+          // B23: static fallback — the day-by-day lists generated at build time, so the prerendered
+          // HTML always names (and links) the famous people born this month.
+          (() => {
+            const days = Object.entries(celebsInMonth(monthNumber)).sort(([a], [b]) => a.localeCompare(b));
+            const top = days.flatMap(([md, v]) => [...v.world.slice(0, 1), ...v.india.slice(0, 1)].map(c => ({ ...c, day: Number(md.slice(3)) })));
+            return top.length ? (
+              <ul data-testid="month-static-celebs" className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mb-10 text-sm">
+                {top.map(c => <li key={c.s}><Link to={`/celebrity/${c.s}/`} className="underline decoration-dotted">{c.n}</Link> <span className="text-muted-foreground">({month.slice(0, 3)} {c.day})</span></li>)}
+              </ul>
+            ) : <p className="text-muted-foreground mb-10">Explore the day-by-day pages below for people born on each date in {month}.</p>;
+          })()
         )}
 
         {/* Indian celebrities born this month (only when ≥3 exist — no thin shells).

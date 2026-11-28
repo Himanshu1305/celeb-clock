@@ -289,6 +289,7 @@ export const KNOWN_ROUTE_PATTERNS: string[] = [
  "^/tarot/cards/[^/]+/?$",
  "^/terms/?$",
  "^/todays-birthdays/?$",
+ "^/todays-birthdays/india/?$",
  "^/transit/?$",
  "^/transit/[^/]+/[^/]+/?$",
  "^/upgrade/?$",

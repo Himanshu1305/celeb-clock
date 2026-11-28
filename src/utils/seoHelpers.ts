@@ -9,28 +9,18 @@ export function generateBornOnTitle(
   day: number | string,
   celebrities: Array<{ name: string }> = []
 ): string {
-  const dayNum = Number(day); // Ensures no leading zero e.g. "06" → 6
-
-  if (!celebrities || celebrities.length === 0) {
-    return `Born on ${month} ${dayNum}? Discover Your Celebrity Birthday Twins · BornClock`;
-  }
-
-  const fullName = celebrities[0]?.name || '';
-  if (!fullName) {
-    return `Born on ${month} ${dayNum}? Discover Your Celebrity Birthday Twins · BornClock`;
-  }
-
-  // Try full name first
-  const titleFull = `Born on ${month} ${dayNum}? ${fullName} Shares Your Birthday · BornClock`;
-  if (titleFull.length <= 70) return titleFull;
-
-  // Try first name only
-  const firstName = fullName.split(' ')[0];
-  const titleShort = `Born on ${month} ${dayNum}? ${firstName} Shares Your Birthday · BornClock`;
-  if (titleShort.length <= 70) return titleShort;
-
-  // Final fallback
-  return `Born on ${month} ${dayNum}? Discover Your Celebrity Birthday Twins · BornClock`;
+  // B23: mirrors the searches ("august 15 birthday", "famous people born on august 15").
+  // Mirrored in scripts/prerender-titles.mjs (bornOnTitle) — keep the two in sync.
+  const d = Number(day); // "06" → 6
+  const full = celebrities?.[0]?.name || '';
+  const first = full.split(' ')[0];
+  const opts = [
+    ...(full ? [`${month} ${d} Birthdays: ${full} & More Famous People | BornClock`] : []),
+    ...(first && first !== full ? [`${month} ${d} Birthdays: ${first} & More Famous People | BornClock`] : []),
+    `${month} ${d} Birthdays: Famous People Born on ${month} ${d} | BornClock`,
+    `${month} ${d} Birthdays — Famous People | BornClock`,
+  ];
+  return opts.find(t => t.length <= 70) || opts[opts.length - 1];
 }
 
 /**
@@ -86,20 +76,25 @@ export function generateBornOnMeta(
 // up front. Mirrored in scripts/prerender-titles.mjs (bornOnIndiaTitle/Meta) — keep
 // the two in sync.
 
-/** e.g. "Indian Celebrities Born on August 6: Kajol & More | BornClock" (≤70 chars). */
+/**
+ * B23 (GSC): the India date pages sit at positions 5–9 but got 0.2–0.9% CTR — Indians search
+ * "6 august birthday indian celebrity" (day first, with "birthday"). The title now mirrors that:
+ * "6 August Birthday: Indian Celebrities Born on Aug 6 — Kajol | BornClock" (≤70 chars).
+ */
 export function generateBornOnIndiaTitle(
   month: string,
   day: number | string,
   celebrities: Array<{ name: string }> = []
 ): string {
-  const dayNum = Number(day);
-  const base = `Indian Celebrities Born on ${month} ${dayNum}`;
+  const d = Number(day);
+  const head = `${d} ${month} Birthday: Indian Celebrities`;
   const first = celebrities?.[0]?.name || '';
-  if (first) {
-    const full = `${base}: ${first} & More | BornClock`;
-    if (full.length <= 70) return full;
-  }
-  return `${base} | BornClock`;
+  const opts = [
+    ...(first ? [`${head} — ${first} & More | BornClock`, `${head} — ${first} & More`] : []),
+    `${head} Born on ${month} ${d} | BornClock`,
+    `${head} | BornClock`,
+  ];
+  return opts.find(t => t.length <= 70) || opts[opts.length - 1];
 }
 
 /** India meta description (≤160 chars). `total` overrides the list length when known. */
@@ -113,13 +108,13 @@ export function generateBornOnIndiaMeta(
   const count = total ?? celebrities?.length ?? 0;
   const n1 = celebrities?.[0]?.name || '';
   const n2 = celebrities?.[1]?.name || '';
-  const tail = 'Ranked by global recognition, with ages and professions.';
+  const tail = 'Ranked by recognition, with ages and professions.';
   if (!count || !n1) {
-    return `Famous Indians born on ${month} ${dayNum} — actors, cricketers, leaders and more who share this birthday. ${tail}`;
+    return `Whose birthday is on ${dayNum} ${month}? Famous Indians born on ${month} ${dayNum} — actors, cricketers, leaders and more. ${tail}`;
   }
-  const who = count === 1 ? 'famous Indian shares' : 'famous Indians share';
+  const who = count === 1 ? 'famous Indian shares it' : 'famous Indians share it';
   const build = (a: string, b: string) =>
-    `${count} ${who} the ${month} ${dayNum} birthday, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
+    `Whose birthday is on ${dayNum} ${month}? ${count} ${who}, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
   const full = build(n1, n2);
   if (full.length <= 160) return full;
   const short = build(n1.split(' ')[0], n2 ? n2.split(' ')[0] : '');

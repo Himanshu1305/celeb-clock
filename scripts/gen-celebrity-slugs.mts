@@ -39,10 +39,8 @@ allCelebrities.filter(shouldPrerender).forEach((celeb) => {
   const slug = String(celeb.slug || '');
   if (!slug) return;
   const name = String(celeb.name || '');
-  meta[slug] = {
-    title: generateCelebrityTitle(name),
-    desc: celebrityProfileFacts(celeb, slug).description,
-  };
+  const f = celebrityProfileFacts(celeb, slug);
+  meta[slug] = { title: generateCelebrityTitle(name, f.dob), desc: f.description };
 });
 
 writeFileSync(resolve(__dirname, 'celebrity-meta.json'), JSON.stringify(meta));

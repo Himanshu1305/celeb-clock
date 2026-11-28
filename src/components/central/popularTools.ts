@@ -19,4 +19,9 @@ export const POPULAR_TOOLS: Array<{ label: string; to: string }> = [
   { label: 'Prashna (horary)', to: '/prashna/' },
   { label: 'Numerology', to: '/numerology/' },
   { label: 'Astrology glossary', to: '/glossary/' },
+  // B23: the birthday / celebrity side — the biggest search pools outside Vedic.
+  { label: 'Birthdays today', to: '/todays-birthdays/' },
+  { label: 'Aaj kiska birthday hai', to: '/todays-birthdays/india/' },
+  { label: 'Celebrity birthday twin', to: '/celebrity-birthday/' },
+  { label: 'Celebrity profiles', to: '/celebrity/' },
 ];

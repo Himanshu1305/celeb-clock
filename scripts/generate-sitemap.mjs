@@ -43,7 +43,7 @@ function priority(route) {
   if (route.startsWith('/birthday/') && route.split('/').length === 4) return '0.6';
   if (route.startsWith('/birthday/') && route.split('/').length === 3) return '0.7';
   if (route.startsWith('/answers/')) return '0.7';
-  if (['/age-calculator','/life-expectancy','/celebrity-birthday','/todays-birthdays',
+  if (['/age-calculator','/life-expectancy','/celebrity-birthday','/todays-birthdays','/todays-birthdays/india',
        '/numerology','/zodiac','/chinese-zodiac','/vedic-zodiac','/birthday','/blog',
        '/birthstone','/planetary-age','/biological-age','/generation','/pricing',
        '/answers','/born-on/india'].includes(route)) return '0.9';
@@ -53,9 +53,9 @@ function priority(route) {
 // Batch 7: daily-changing pages (src/lib/daily/registry.ts) — content changes every
 // India day, so they are marked daily with the build date as lastmod.
 // W7 adds /panchang, /rahu-kaal, /choghadiya (+ 50 cities) and /hi/panchang (+ 10 cities).
-const DAILY_ROUTE = /^\/(?:rashifal\/[a-z]+\/(?:today|tomorrow)|hi\/rashifal\/[a-z]+|zodiac\/[a-z]+\/(?:today|tomorrow)|(?:hi\/)?(?:panchang|rahu-kaal|choghadiya|vrat)(?:\/[a-z-]+)?|panchang-calendar|planets-today|moon-phase|(?:ta|te|bn|mr|gu|kn|ml|pa)\/(?:(?:rasi-palan|rasi-phalalu|rashifal|rashi-bhavishya|rashiphalam)\/[a-z]+|(?:panchangam|panjika|panchang|panchanga)(?:\/[a-z-]+)?))$/;
+const DAILY_ROUTE = /^\/(?:rashifal\/[a-z]+\/(?:today|tomorrow)|hi\/rashifal\/[a-z]+|zodiac\/[a-z]+\/(?:today|tomorrow)|(?:hi\/)?(?:panchang|rahu-kaal|choghadiya|vrat)(?:\/[a-z-]+)?|panchang-calendar|planets-today|moon-phase|todays-birthdays(?:\/india)?|(?:ta|te|bn|mr|gu|kn|ml|pa)\/(?:(?:rasi-palan|rasi-phalalu|rashifal|rashi-bhavishya|rashiphalam)\/[a-z]+|(?:panchangam|panjika|panchang|panchanga)(?:\/[a-z-]+)?))$/;
 // Pages whose prerendered content is today's list (fresh every build) also count as daily.
-const DAILY_EXTRA = new Set(['/todays-birthdays']);
+const DAILY_EXTRA = new Set(['/todays-birthdays', '/todays-birthdays/india']);
 const isDaily = route => DAILY_ROUTE.test(route) || DAILY_EXTRA.has(route);
 
 const BUILD_DATE = /^\d{4}-\d{2}-\d{2}$/.test(process.env.BUILD_DATE || '')

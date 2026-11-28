@@ -8,10 +8,16 @@ import { EEATBadges } from '@/components/EEATBadges';
 import { PageFAQ } from '@/components/PageFAQ';
 import { RelatedTools } from '@/components/RelatedTools';
 import { AuthorBio } from '@/components/AuthorBio';
+import { DailyBody, DailyDate, DailyH1, DailyJsonLd } from '@/lib/daily/DailyParts';
+import { useDailyEntry } from '@/lib/daily/useDailyEntry';
+import { BIRTHDAYS_STATIC } from '@/lib/daily/kinds/birthdaysTemplate';
 
 const MONTH_SLUGS = ['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 
 const TodaysBirthdaysPage = () => {
+  // B23: today's list (India date) comes from the daily mechanism — injected by the Worker, so the
+  // HTML Google sees is today's, with links to the BornClock profiles (not the build day's).
+  const { entry } = useDailyEntry('birthdays-today', 'index');
   const today = new Date();
   const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
   const todaySlug = `${MONTH_SLUGS[today.getMonth() + 1]}-${today.getDate()}`;
@@ -23,8 +29,8 @@ const TodaysBirthdaysPage = () => {
       seo={(
         <>
           <SEO
-            title={`Famous Birthdays Today — ${formattedDate} | BornClock`}
-            description={`Best list of famous people born on ${formattedDate}. See which celebrities, scientists, athletes, and historical figures share today's birthday — sourced live from Wikipedia.`}
+            title={entry?.title ?? BIRTHDAYS_STATIC.index.title}
+            description={entry?.description ?? BIRTHDAYS_STATIC.index.description}
             keywords="famous birthdays today, celebrity birthdays today, born today, who was born today"
             canonicalUrl="/todays-birthdays"
           />
@@ -42,8 +48,8 @@ const TodaysBirthdaysPage = () => {
         note: '© 2026 BornClock · Birthdays.',
       }}
       eyebrow="Famous birthdays"
-      h1={<>Famous Birthdays Today — {formattedDate}</>}
-      lead={<>The best daily list of notable people born on {formattedDate} — celebrities, scientists, athletes and world leaders, refreshed live from Wikipedia.</>}
+      h1={<DailyH1 entry={entry} fallback={BIRTHDAYS_STATIC.index.h1} />}
+      lead={<DailyDate entry={entry} fallback={formattedDate} />}
     >
       <section className="section">
         <div className="container mx-auto px-4">
@@ -61,6 +67,14 @@ const TodaysBirthdaysPage = () => {
           </div>
           <EEATBadges sources={['Wikipedia']} />
         </section>
+
+        <section className="max-w-4xl mx-auto mb-10">
+          <DailyBody entry={entry} testId="todays-birthdays-body" />
+          <DailyJsonLd entry={entry} path="/todays-birthdays" />
+          <p className="text-sm text-muted-foreground mt-2">Indian birthdays today: <Link to="/todays-birthdays/india/" className="text-primary underline">aaj kiska birthday hai →</Link></p>
+        </section>
+
+        <h2 className="text-xl font-semibold text-foreground text-center mb-4">More people born today (live from Wikipedia)</h2>
 
         <section className="max-w-4xl mx-auto mb-16">
           <TodaysBirthdays />

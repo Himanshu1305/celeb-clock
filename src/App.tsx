@@ -64,6 +64,8 @@ const Widget = lazyWithReload(() => import("./pages/Widget"));
 const EmbedPage = lazyWithReload(() => import("./pages/EmbedPage"));
 const SunVsMoonSign = lazyWithReload(() => import("./pages/SunVsMoonSign"));
 const TodaysBirthdaysPage = lazyWithReload(() => import("./pages/TodaysBirthdaysPage"));
+const TodaysBirthdaysIndiaPage = lazyWithReload(() => import("./pages/TodaysBirthdaysIndiaPage"));
+const ZodiacCelebritiesPage = lazyWithReload(() => import("./pages/ZodiacCelebritiesPage"));
 const NumerologyPage = lazyWithReload(() => import("./pages/NumerologyPage"));
 const PlanetaryAgePage = lazyWithReload(() => import("./pages/PlanetaryAgePage"));
 const WeightOnPlanetsPage = lazyWithReload(() => import("./pages/WeightOnPlanetsPage"));
@@ -328,6 +330,7 @@ const App = () => (
               <Route path="/embed" element={<EmbedPage />} />
               <Route path="/sun-vs-moon-sign" element={<SunVsMoonSign />} />
               <Route path="/todays-birthdays" element={<TodaysBirthdaysPage />} />
+              <Route path="/todays-birthdays/india" element={<TodaysBirthdaysIndiaPage />} />
               <Route path="/numerology" element={<NumerologyPage />} />
               <Route path="/numerology/:number" element={<NumerologyNumber />} />
               <Route path="/generation" element={<GenerationPage />} />
@@ -344,6 +347,7 @@ const App = () => (
               <Route path="/zodiac/:sign" element={<ZodiacSign />} />
               <Route path="/zodiac/:sign/today" element={<ZodiacToday />} />
               <Route path="/zodiac/:sign/tomorrow" element={<ZodiacToday when="tomorrow" />} />
+              <Route path="/zodiac/:sign/celebrities" element={<ZodiacCelebritiesPage />} />
               <Route path="/birthstone" element={<Birthstone />} />
               <Route path="/birthstone/:month" element={<BirthstonePage />} />
               <Route path="/life-expectancy" element={<LifeExpectancy />} />

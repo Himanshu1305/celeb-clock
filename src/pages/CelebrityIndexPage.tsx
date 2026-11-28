@@ -46,8 +46,8 @@ export function CelebrityIndexPage() {
       seo={(
         <>
           <SEO
-            title={`Indian Celebrity Birthday Profiles — ${indianCelebrities.length} Profiles | BornClock`}
-            description={`Birthday, age, zodiac and numerology profiles for ${indianCelebrities.length} Indian celebrities — actors, cricketers, singers, leaders and more.`}
+            title="Indian Celebrity Birthdays: Zodiac Sign, Rashi & Age | BornClock"
+            description="Birthday, age, zodiac sign, Moon sign (Rashi) and numerology profiles for Indian celebrities — actors, cricketers, singers, leaders and more."
             canonicalUrl="/celebrity"
             ogType="website"
           />

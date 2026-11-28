@@ -13,6 +13,7 @@ import { getNumerologyByNumber } from '@/data/numerologyData';
 import { getNationalDays } from '@/data/nationalDays';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star, Sparkles } from 'lucide-react';
 import indiaDates from '@/data/indiaBornOnDates.json';
+import { celebsOn } from '@/lib/celebsByDay';
 import { postsForTags } from '@/lib/mesh';
 import { SharePageBar } from '@/components/SharePageBar';
 
@@ -149,7 +150,10 @@ export default function BornOnDay() {
   const nationalDays = getNationalDays(month, day);
   const primaryNationalDay = nationalDays[0] ?? null;
 
-  const topNames = celebrities.slice(0, 3).map(c => c.name);
+  // B23: static names first (always in the prerendered HTML), the live ranking when it loads.
+  const staticDay = celebsOn(month, day);
+  const staticTop = [...staticDay.world, ...staticDay.india].slice(0, 3).map(c => c.n);
+  const topNames = celebrities.length ? celebrities.slice(0, 3).map(c => c.name) : staticTop;
   const nationalDaySuffix = primaryNationalDay ? ` Also ${primaryNationalDay.country}'s ${primaryNationalDay.dayName}.` : '';
 
   // ── Birthday personality (SEO-MAGNET-3 Phase 2) ────────────────────────────
@@ -175,7 +179,12 @@ export default function BornOnDay() {
     const pair = [zodiacSlug, otherSlug].sort();
     return { sign: s, zodiac: `/zodiac/${otherSlug}`, compat: `/compatibility/${pair[0]}/${pair[1]}` };
   });
+  // B23: the page's own question first ("Who was born on …?"), then one personality question.
+  const indiaNames = staticDay.india.slice(0, 3).map(c => c.n);
   const personaFaqs = [
+    ...(topNames.length ? [{ question: `Who was born on ${monthName} ${day}?`, answer: `Famous people born on ${monthName} ${day} include ${topNames.join(', ')}. The full list, ranked by global recognition, is on this page.` }] : []),
+    ...(topNames.length ? [{ question: `Who is the most famous person born on ${monthName} ${day}?`, answer: `By global recognition (the number of Wikipedia language editions), ${topNames[0]} ranks first among people born on ${monthName} ${day}.` }] : []),
+    ...(indiaNames.length ? [{ question: `Which Indian celebrities were born on ${monthName} ${day}?`, answer: `Indian celebrities born on ${day} ${monthName} include ${indiaNames.join(', ')}.` }] : []),
     { question: `What is the personality of someone born on ${monthName} ${day}?`, answer: personaAnswer },
     { question: `What is the Birth Day Number for ${monthName} ${day}?`, answer: `${monthName} ${day} reduces to Birth Day Number ${bNum}${bNumData ? ` (${bNumData.name})` : ''}. This reflects the day of the month only — your full Life Path number, calculated from your complete birth date, is in the Birthday Blueprint.` },
     { question: `Which zodiac signs are most compatible with ${monthName} ${day} (${zodiac.sign})?`, answer: `As a ${zodiac.sign}, people born on ${monthName} ${day} are most compatible with ${persona.compatibleSigns.join(', ')}.` },
@@ -299,7 +308,14 @@ export default function BornOnDay() {
             <div className="mb-6" />
           </>
         ) : (
-          <p className="text-muted-foreground mb-10">No celebrities found in our database for this date.</p>
+          (() => {
+            const list = [...staticDay.world, ...staticDay.india].slice(0, 12);
+            return list.length ? (
+              <ul data-testid="born-on-static-list" className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-10">
+                {list.map(c => <li key={c.s}><Link to={`/celebrity/${c.s}/`} className="underline">{c.n}</Link></li>)}
+              </ul>
+            ) : <p className="text-muted-foreground mb-10">No celebrities found in our database for this date.</p>;
+          })()
         )}
 
         {/* Zodiac sign */}
@@ -421,7 +437,7 @@ export default function BornOnDay() {
             survive the prerender capture, so it is rendered here in the body). */}
         <div className="bg-card border border-border rounded-xl p-6 mb-6">
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-          <h2 className="font-semibold text-lg text-foreground mb-4">{monthName} {day} birthday personality FAQ</h2>
+          <h2 className="font-semibold text-lg text-foreground mb-4">{monthName} {day} birthday FAQ</h2>
           <div className="space-y-3">
             {personaFaqs.map(f => (
               <details key={f.question} className="border border-border rounded-xl p-4">

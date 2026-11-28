@@ -21,7 +21,7 @@ describe('generateBornOnTitle', () => {
   // Positive
   it('many celebrities — uses first celebrity name', () => {
     const t = generateBornOnTitle('August', 6, MANY);
-    expect(t).toBe('Born on August 6? Tom Hanks Shares Your Birthday · BornClock');
+    expect(t).toBe('August 6 Birthdays: Tom Hanks & More Famous People | BornClock');
   });
 
   it('two celebrities — uses first only', () => {
@@ -32,12 +32,12 @@ describe('generateBornOnTitle', () => {
 
   it('one celebrity — still works correctly', () => {
     const t = generateBornOnTitle('March', 3, ONE);
-    expect(t).toBe('Born on March 3? Mel Gibson Shares Your Birthday · BornClock');
+    expect(t).toBe('March 3 Birthdays: Mel Gibson & More Famous People | BornClock');
   });
 
   it('uses full month name not abbreviation', () => {
     const t = generateBornOnTitle('September', 23, MANY);
-    expect(t).toMatch(/^Born on September 23/);
+    expect(t).toMatch(/^September 23 Birthdays/);
   });
 
   it('day has no leading zero', () => {
@@ -46,9 +46,9 @@ describe('generateBornOnTitle', () => {
     expect(t).not.toContain('August 06');
   });
 
-  it('ends with · BornClock', () => {
+  it('ends with | BornClock', () => {
     const t = generateBornOnTitle('August', 6, MANY);
-    expect(t).toMatch(/· BornClock$/);
+    expect(t).toMatch(/\| BornClock$/);
   });
 
   it('length is under 70 characters', () => {
@@ -191,20 +191,20 @@ describe('generateBornOnMeta', () => {
 describe('generateBornOnIndiaTitle / generateBornOnIndiaMeta', () => {
   it('says "Indian" and differs from the global title for the same date', () => {
     const india = generateBornOnIndiaTitle('November', 5, TWO);
-    expect(india).toBe('Indian Celebrities Born on November 5: Virat Kohli & More | BornClock');
+    expect(india).toBe('5 November Birthday: Indian Celebrities — Virat Kohli & More');
     expect(india).not.toBe(generateBornOnTitle('November', 5, TWO));
   });
   it('falls back to the plain India title when a name would overflow 70 chars', () => {
     const t = generateBornOnIndiaTitle('September', 23, LONG);
-    expect(t).toBe('Indian Celebrities Born on September 23 | BornClock');
+    expect(t).toBe('23 September Birthday: Indian Celebrities | BornClock');
     expect(t.length).toBeLessThanOrEqual(70);
   });
   it('no celebrities → plain India title; "06" → 6', () => {
-    expect(generateBornOnIndiaTitle('August', '06', EMPTY)).toBe('Indian Celebrities Born on August 6 | BornClock');
+    expect(generateBornOnIndiaTitle('August', '06', EMPTY)).toBe('6 August Birthday: Indian Celebrities Born on August 6 | BornClock');
   });
   it('meta names Indians, uses the known total, stays ≤160', () => {
     const m = generateBornOnIndiaMeta('November', 5, TWO, 12);
-    expect(m.startsWith('12 famous Indians share the November 5 birthday, including Virat Kohli and Kader Khan.')).toBe(true);
+    expect(m.startsWith('Whose birthday is on 5 November? 12 famous Indians share it, including Virat Kohli and Kader Khan.')).toBe(true);
     expect(m.length).toBeLessThanOrEqual(160);
     expect(m).not.toBe(generateBornOnMeta('November', 5, TWO));
   });

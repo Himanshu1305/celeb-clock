@@ -158,12 +158,23 @@ export function getHubConfig(hubSlug: string) {
   return entry || { hubSlug, label: hubSlug, h1: `${hubSlug} Celebrities`, desc: '' };
 }
 
-export function generateCelebrityTitle(name: string): string {
+const MON_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/**
+ * B23 (GSC + keyword data): people search "<name> zodiac sign" / "<name> rashi" / "<name> birthday"
+ * (KD 0, page 1 held by DA 4–24 sites), so the title mirrors those words, with the date when known:
+ * "Virat Kohli Zodiac Sign, Rashi & Birthday (5 Nov 1988) | BornClock". ≤70 chars.
+ */
+export function generateCelebrityTitle(name: string, dob?: CelebrityDOB | null): string {
+  const date = dob?.isFullDate ? `${dob.day} ${MON_SHORT[dob.month - 1]} ${dob.year}` : '';
   const options = [
-    `${name} — Birthday, Age, Zodiac & Life Profile | BornClock`,
-    `${name} Birthday, Age & Zodiac | BornClock`,
+    ...(date ? [`${name} Zodiac Sign, Rashi & Birthday (${date}) | BornClock`] : []),
+    `${name} Zodiac Sign, Rashi & Birthday | BornClock`,
+    `${name} Zodiac Sign & Birthday | BornClock`,
+    `${name} Birthday & Zodiac | BornClock`,
     `${name} | BornClock`,
   ];
+  if (!dob?.isFullDate) options.splice(0, 2, `${name} Birthday, Age & Zodiac | BornClock`);
   return options.find(t => t.length <= 70) || options[2].slice(0, 70);
 }
 

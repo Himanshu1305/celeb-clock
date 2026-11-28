@@ -208,3 +208,20 @@ export function chineseSignDescription(cap) {
 /** Title + description for /articles/chinese-zodiac-by-year — shared by the page and the prerender. */
 export const CHINESE_BY_YEAR_TITLE = 'Chinese Zodiac by Year: 1924–2031 Table with Exact New Year Dates | BornClock';
 export const CHINESE_BY_YEAR_DESC = 'Chinese zodiac by year: every year from 1924 to 2031 with its start and end date, animal, element and yin/yang. Born in January or February? Check your date — the animal changes at Chinese New Year.';
+
+/**
+ * B23 — /chinese-zodiac/:year titles (shared by the page and the prerender).
+ * "1990 Chinese Zodiac: Year of the Metal Horse — Dates & Traits | BornClock"
+ * @param {number} chineseYear
+ */
+export function chineseYearTitle(chineseYear) {
+  const i = chineseYearInfo(chineseYear);
+  const t = `${chineseYear} Chinese Zodiac: Year of the ${i.element} ${i.animal} — Dates & Traits | BornClock`;
+  return t.length <= 70 ? t : `${chineseYear} Chinese Zodiac: Year of the ${i.element} ${i.animal} | BornClock`;
+}
+/** @param {number} chineseYear */
+export function chineseYearDescription(chineseYear) {
+  const i = chineseYearInfo(chineseYear);
+  const p = chineseYearInfo(chineseYear - 1);
+  return `${chineseYear} is the Year of the ${i.element} ${i.animal} (${i.yinYang}), ${i.rangeLabel}. Born before ${formatIsoDateShort(i.start)}? You are a ${p.element} ${p.animal}. Traits and famous people.`;
+}

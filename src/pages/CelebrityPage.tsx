@@ -34,6 +34,10 @@ import { CelebrityBirthTimeNote } from '@/components/CelebrityBirthTimeNote';
 import { BirthdayRarityCard } from '@/components/BirthdayRarityCard';
 import { OnThisDay } from '@/components/OnThisDay';
 import { bornOnIndiaPath } from '@/lib/seo/indiaBornOnSlugs';
+import { getBirthTimeReliability } from '@/data/celebrityBirthTimes';
+
+/** Life Path numbers that have their own /numerology/:n page. */
+const NUMEROLOGY_PAGES = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 33]);
 
 // Unified celebrity DB (static Indian + Supabase, slugs pre-assigned by
 // scripts/export-celebrities.ts). Build the slug → entry map ONCE at load.
@@ -53,7 +57,15 @@ function JsonLd({ data }: { data: object }) {
   );
 }
 
-function buildPersonalitySynthesis(
+/** The first complete sentence of a text (never cut mid-word). */
+export function firstSentence(t: string | null | undefined): string {
+  const x = String(t || '').trim();
+  if (!x) return '';
+  const m = x.match(/^.+?[.!?](?=\s|$)/);
+  return (m ? m[0] : x.replace(/[,;:\s]+$/, '') + '.').trim();
+}
+
+export function buildPersonalitySynthesis(
   name: string,
   zodiacProfile: WesternZodiacProfile | null,
   rashiProfile: VedicRashiProfile | null,
@@ -66,26 +78,29 @@ function buildPersonalitySynthesis(
 ): string {
   const parts: string[] = [];
 
+  // B23: whole sentences only — the old version cut strings mid-word ("ruled by plut.") and said
+  // "the archer" for every sign. firstSentence() never truncates; the test checks the output.
+  const an = (w: string) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
   if (zodiacProfile && rashiProfile && zodiacSign && rashiName) {
     // Two different things: the Western Sun sign and the Vedic Moon sign (Rashi).
     parts.push(
       `With the Sun in ${zodiacSign} (Western) and the Moon in ${rashiName} (Vedic Rashi), ${name} combines the ${zodiacProfile.element.toLowerCase()} energy of ${zodiacSign} with the ${rashiProfile.element.toLowerCase()} depth of ${rashiName}, ruled by ${rashiProfile.lord} (${rashiProfile.lord_devanagari}).`
     );
   } else if (zodiacProfile && zodiacSign) {
-    parts.push(
-      `As a ${zodiacSign}, ${name} carries the ${zodiacProfile.element.toLowerCase()} energy of the archer — ${zodiacProfile.personality_summary.slice(0, 80).toLowerCase()}.`
-    );
+    const lead = firstSentence(zodiacProfile.personality_summary);
+    parts.push(`${name} is ${an(zodiacSign)} ${zodiacSign}, ${an(zodiacProfile.element)} ${zodiacProfile.element.toLowerCase()} sign.${lead ? ` ${lead}` : ''}`);
   }
 
   if (lifePath && lpExtended) {
-    parts.push(
-      `Their Life Path ${lifePath} — the ${lpExtended.title} — guided by ${lpExtended.ruling_planet}, brings ${lpExtended.traits.slice(0, 60).toLowerCase()} to everything they do.`
-    );
+    const title = lpExtended.title.replace(/^The\s+/i, '');
+    const lead = firstSentence(lpExtended.traits);
+    parts.push(`Their Life Path number is ${lifePath} (“the ${title}”, ruled by ${lpExtended.ruling_planet}).${lead ? ` In numerology this path is described as ${lead.charAt(0).toLowerCase()}${lead.slice(1)}` : ''}`);
   }
 
   if (nakshatraProfile && nakshatraName) {
+    const st = nakshatraProfile.strengths.slice(0, 2).map(x => x.toLowerCase());
     parts.push(
-      `Born in the ${nakshatraName} Nakshatra (${nakshatraProfile.quality}), their ${nakshatraProfile.strengths.slice(0, 2).join(' and ').toLowerCase()} nature is a thread that runs through their entire life.`
+      `Born in the ${nakshatraName} Nakshatra (${nakshatraProfile.quality.toLowerCase()})${st.length ? `, a star traditionally linked with ${st.join(' and ')}` : ''}.`
     );
   }
 
@@ -118,11 +133,14 @@ export function CelebrityPage() {
   // description all come from ONE shared function (also used by the prerender
   // meta generator), so the page, <meta>, og/twitter and JSON-LD always agree.
   const facts = celebrityProfileFacts(celeb, slug ?? '');
+  // B23: "an Indian actor" — never "an Indian indian actor" when the category already says Indian.
+  const indianRole = /^indian\b/i.test(category) ? `an ${category.charAt(0).toUpperCase()}${category.slice(1).toLowerCase()}`.replace(/^an indian/i, 'an Indian') : `an Indian ${category.toLowerCase()}`;
   const { era, dob, isFull, deathYear, western, chinese, lifePath, moon } = facts;
   // Moon sign (Rashi) from the birth DATE: the sidereal Moon at 00:00 and 23:59
   // local time that day (chart engine, Lahiri). One sign = certain all day; if it
   // changed that day both are shown. Nakshatra follows the same rule.
   const moonCertain = !!moon && moon.isCertain;
+  const weekday = isFull ? new Date(Date.UTC(dob!.year, dob!.month - 1, dob!.day)).toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' }) : '';
   const planetary = dob ? calculatePlanetaryAges(dob) : [];
 
   // ── Day 8B: rich astrological profiles (all null-guarded) ──
@@ -187,7 +205,7 @@ export function CelebrityPage() {
     : '/birthday-report';
 
   // ── SEO ──
-  const title = generateCelebrityTitle(name);
+  const title = generateCelebrityTitle(name, dob);
   const description = facts.description;
   const canonical = `/celebrity/${slug}`;
 
@@ -204,7 +222,10 @@ export function CelebrityPage() {
   } else if (dob) {
     personSchema.birthDate = String(dob.year); // year only — ISO 8601 allows YYYY
   }
-  if (nationality !== 'Not recorded') personSchema.nationality = nationality;
+  // B23: entity hygiene — a stable @id, a real job title (never the generic "Celebrity"), Country type.
+  personSchema['@id'] = `https://bornclock.com/celebrity/${slug}/#person`;
+  if (category && !/^(celebrity|public figure)$/i.test(category)) personSchema.jobTitle = category;
+  if (nationality !== 'Not recorded') personSchema.nationality = { '@type': 'Country', name: isIndian ? 'India' : nationality };
   // JSON-LD: the full date only when the day is really known (not a 01-01 placeholder).
   if (deathYear) personSchema.deathDate = facts.deathDateKnown ?? String(deathYear);
 
@@ -244,8 +265,8 @@ export function CelebrityPage() {
     {
       q: `What is ${name} known for?`,
       a: knownFor
-        ? (isIndian ? `${name} is an Indian ${category.toLowerCase()} known for: ${knownFor}` : `${name} is known for: ${knownFor}`)
-        : (isIndian ? `${name} is an Indian ${category.toLowerCase()}.` : `${name}: ${category}.`),
+        ? (isIndian ? `${name} is ${indianRole} known for: ${knownFor}` : `${name} is known for: ${knownFor}`)
+        : (isIndian ? `${name} is ${indianRole}.` : `${name}: ${category}.`),
     },
   ];
 
@@ -265,7 +286,8 @@ export function CelebrityPage() {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com' },
       { '@type': 'ListItem', position: 2, name: 'Celebrity Profiles', item: 'https://bornclock.com/celebrity/' },
-      { '@type': 'ListItem', position: 3, name, item: `https://bornclock.com/celebrity/${slug}/` },
+      ...(CATEGORY_CONFIG[category] ? [{ '@type': 'ListItem', position: 3, name: `${hubLabel} celebrities`, item: `https://bornclock.com/celebrity/${hubSlug}/` }] : []),
+      { '@type': 'ListItem', position: CATEGORY_CONFIG[category] ? 4 : 3, name, item: `https://bornclock.com/celebrity/${slug}/` },
     ],
   };
 
@@ -281,7 +303,7 @@ export function CelebrityPage() {
           <JsonLd data={breadcrumbSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity/' }, { label: 'Celebrity Profiles', to: '/celebrity/' }], current: name }}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity/' }, ...(CATEGORY_CONFIG[category] ? [{ label: hubLabel, to: `/celebrity/${hubSlug}/` }] : [])], current: name }}
       footer={{
         tagline: `${name} — birthday, zodiac, numerology and life path, calculated from date of birth.`,
         nav: [
@@ -294,87 +316,37 @@ export function CelebrityPage() {
       }}
       eyebrow={`⭐ ${hubLabel} · ${isIndian ? 'Indian Celebrity' : 'Celebrity'}`}
       h1={name}
-      lead={<>{knownFor || (isIndian ? `Indian ${category.toLowerCase()}.` : category)}</>}
+      lead={<>{knownFor || (isIndian ? `${indianRole.replace(/^an? /, '').replace(/^./, c => c.toUpperCase())}.` : category)}</>}
     >
         <div className="max-w-4xl mx-auto px-4 pb-16">
-          {/* ── LUCKY ELEMENTS PANEL ── */}
-          <section
-            data-testid="lucky-elements-panel"
-            className="mt-8 mb-6 overflow-x-auto pb-1"
-            aria-label="Lucky elements"
-          >
-            <div className="flex gap-2 flex-wrap">
-              {rashiProfile ? (
-                <>
-                  <span data-testid="lucky-chip-color"
-                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                    🎨 Colour: {rashiProfile.lucky_colors[0]}
-                  </span>
-                  <span data-testid="lucky-chip-stone"
-                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                    💎 Stone: {rashiProfile.lucky_stone} ({rashiProfile.lucky_stone_hindi})
-                  </span>
-                  <span data-testid="lucky-chip-day"
-                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                    📅 Day: {rashiProfile.lucky_day}
-                  </span>
-                  <span data-testid="lucky-chip-number"
-                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                    🔢 Number: {rashiProfile.lucky_numbers.join(', ')}
-                  </span>
-                  <span data-testid="lucky-chip-direction"
-                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                    🧭 Direction: {rashiProfile.lucky_direction}
-                  </span>
-                  <span data-testid="lucky-chip-metal"
-                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                    ⚙️ Metal: {rashiProfile.lucky_metal}
-                  </span>
-                  {zodiacProfile && (
-                    <span data-testid="lucky-chip-tarot"
-                      className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                                 rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                      🃏 Tarot: {zodiacProfile.tarot_card}
-                    </span>
-                  )}
-                </>
-              ) : chineseProfile ? (
-                <>
-                  <span data-testid="lucky-chip-color"
-                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                    🎨 Lucky Colour: {chineseProfile.lucky_colors[0]}
-                  </span>
-                  <span data-testid="lucky-chip-number"
-                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                    🔢 Lucky Number: {chineseProfile.lucky_numbers.join(', ')}
-                  </span>
-                  {zodiacProfile && (
-                    <span data-testid="lucky-chip-tarot"
-                      className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
-                                 rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
-                      🃏 Tarot: {zodiacProfile.tarot_card}
-                    </span>
-                  )}
-                  <span className="flex-shrink-0 text-xs text-gray-600 italic self-center">
-                    {moon && !moonCertain
-                      ? `Rashi lucky elements need the birth time (the Moon changed sign on this date: ${moon.rashiShort})`
-                      : 'Full lucky profile requires exact date of birth'}
-                  </span>
-                </>
-              ) : (
-                <span className="text-xs text-gray-600 italic">
-                  Lucky elements require a full date of birth.
-                </span>
-              )}
-            </div>
+          {/* ── B23: ANSWER FIRST — the facts people search for, in the first screen ── */}
+          <section data-testid="celeb-answer" className="mt-6 mb-6 bg-white rounded-xl border border-gray-200 p-5" aria-label={`${name} at a glance`}>
+            <p className="text-gray-900 leading-relaxed">
+              {isFull
+                ? <><strong>{name}</strong> was born on <strong>{formatDOBDisplay(dob)}</strong>{weekday ? ` (a ${weekday})` : ''}{facts.age.snippet ? <> and {facts.age.snippet}</> : null}.</>
+                : dob ? <><strong>{name}</strong> was born in {dob.year}; the exact birth date is not on record.</> : <><strong>{name}</strong>’s birth date is not on record.</>}
+            </p>
+            {(western || moon || chinese || lifePath) && (
+              <dl data-testid="celeb-answer-facts" className="mt-3 grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                {western && <div><dt className="text-gray-600">Zodiac (Sun) sign</dt><dd className="font-bold text-gray-900"><Link to={`/zodiac/${western.sign.toLowerCase()}/`} className="underline decoration-dotted">{western.sign}</Link></dd></div>}
+                {moon && <div><dt className="text-gray-600">Moon sign (Rashi)</dt><dd className="font-bold text-gray-900">{moon.rashiShort}{moonCertain && rashiProfile ? ` (${rashiProfile.western_equivalent})` : ''}</dd></div>}
+                {chinese && <div><dt className="text-gray-600">Chinese zodiac</dt><dd className="font-bold text-gray-900"><Link to={`/chinese-zodiac/${chinese.animal.toLowerCase()}/`} className="underline decoration-dotted">{chinese.element} {chinese.animal}</Link></dd></div>}
+                {lifePath && <div><dt className="text-gray-600">Life Path number</dt><dd className="font-bold text-gray-900">{NUMEROLOGY_PAGES.has(lifePath) ? <Link to={`/numerology/${lifePath}/`} className="underline decoration-dotted">{lifePath}</Link> : lifePath}</dd></div>}
+              </dl>
+            )}
+            {isFull && (
+              <p className="mt-3 text-sm text-gray-700">
+                <strong>{name} Kundli:</strong> the birth time is {getBirthTimeReliability(slug ?? '') === 'unknown' ? 'not on public record, so the Lagna (Ascendant) and houses cannot be fixed' : 'on record (see the note below)'}; the Moon sign and Nakshatra above come from the date alone.{' '}
+                <Link to={`/kundali/?dob=${dob!.year}-${String(dob!.month).padStart(2, '0')}-${String(dob!.day).padStart(2, '0')}`} className="underline font-semibold text-brand-purple">Open a free Kundli for this date →</Link>
+              </p>
+            )}
+            {isFull && (
+              <p className="mt-2 text-xs text-gray-600">
+                More: <Link to={`/birthday/${dob!.month}/${dob!.day}/`} className="underline">{MONTH_NAMES[dob!.month - 1]} {dob!.day} birthday personality</Link>
+                {' · '}<Link to={`/born-on/${bornOnSlug}/`} className="underline">everyone born on {MONTH_NAMES[dob!.month - 1]} {dob!.day}</Link>
+                {isIndian && <>{' · '}<Link to={bornOnIndiaPath(bornOnSlug!)} className="underline">Indians born on {dob!.day} {MONTH_NAMES[dob!.month - 1]}</Link></>}
+              </p>
+            )}
           </section>
 
           {/* ── PERSONALITY SYNTHESIS ── */}
@@ -399,16 +371,7 @@ export function CelebrityPage() {
                 Based on publicly available information.
               </p>
             </section>
-          ) : (
-            <section data-testid="celebrity-bio-pending" className="mb-6">
-              <div className="bg-gray-50 border border-dashed border-gray-200
-                              rounded-xl p-4 text-center">
-                <p className="text-gray-600 text-sm">
-                  Detailed biography for {name} coming soon.
-                </p>
-              </div>
-            </section>
-          )}
+          ) : null}
 
           {/* ── FACTS TABLE ── */}
           <section className="mt-8 mb-10" aria-labelledby="facts-heading">
@@ -496,6 +459,86 @@ export function CelebrityPage() {
                 Only the birth year is documented for {name}. Zodiac sign, life path, and planetary ages require an exact birth date and are omitted to avoid guessing.
               </p>
             )}
+          </section>
+
+          {/* ── LUCKY ELEMENTS PANEL ── */}
+          <section
+            data-testid="lucky-elements-panel"
+            className="mt-2 mb-8 overflow-x-auto pb-1"
+            aria-label="Lucky elements"
+          >
+            <div className="flex gap-2 flex-wrap">
+              {rashiProfile ? (
+                <>
+                  <span data-testid="lucky-chip-color"
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                    🎨 Colour: {rashiProfile.lucky_colors[0]}
+                  </span>
+                  <span data-testid="lucky-chip-stone"
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                    💎 Stone: {rashiProfile.lucky_stone} ({rashiProfile.lucky_stone_hindi})
+                  </span>
+                  <span data-testid="lucky-chip-day"
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                    📅 Day: {rashiProfile.lucky_day}
+                  </span>
+                  <span data-testid="lucky-chip-number"
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                    🔢 Number: {rashiProfile.lucky_numbers.join(', ')}
+                  </span>
+                  <span data-testid="lucky-chip-direction"
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                    🧭 Direction: {rashiProfile.lucky_direction}
+                  </span>
+                  <span data-testid="lucky-chip-metal"
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                    ⚙️ Metal: {rashiProfile.lucky_metal}
+                  </span>
+                  {zodiacProfile && (
+                    <span data-testid="lucky-chip-tarot"
+                      className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                                 rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                      🃏 Tarot: {zodiacProfile.tarot_card}
+                    </span>
+                  )}
+                </>
+              ) : chineseProfile ? (
+                <>
+                  <span data-testid="lucky-chip-color"
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                    🎨 Lucky Colour: {chineseProfile.lucky_colors[0]}
+                  </span>
+                  <span data-testid="lucky-chip-number"
+                    className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                               rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                    🔢 Lucky Number: {chineseProfile.lucky_numbers.join(', ')}
+                  </span>
+                  {zodiacProfile && (
+                    <span data-testid="lucky-chip-tarot"
+                      className="flex-shrink-0 bg-brand-purple/10 border border-brand-purple/30
+                                 rounded-full px-3 py-1.5 text-xs font-medium text-brand-purple whitespace-nowrap">
+                      🃏 Tarot: {zodiacProfile.tarot_card}
+                    </span>
+                  )}
+                  <span className="flex-shrink-0 text-xs text-gray-600 italic self-center">
+                    {moon && !moonCertain
+                      ? `Rashi lucky elements need the birth time (the Moon changed sign on this date: ${moon.rashiShort})`
+                      : 'Full lucky profile requires exact date of birth'}
+                  </span>
+                </>
+              ) : (
+                <span className="text-xs text-gray-600 italic">
+                  Lucky elements require a full date of birth.
+                </span>
+              )}
+            </div>
           </section>
 
           {/* ── EXPANDED ASTROLOGICAL TABS ── */}
