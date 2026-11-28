@@ -195,8 +195,10 @@ export function CelebrityPage() {
     return idx >= 0 ? { rank: idx + 1, total: sameDay.length } : null;
   })();
 
+  // B24: the category hubs list Indian profiles only, so only Indian profiles point into them.
+  const inHub = isIndian && !!CATEGORY_CONFIG[category];
   const hubSlug = getCategoryHubSlug(category);
-  const hubLabel = CATEGORY_CONFIG[category]?.label || 'Celebrity';
+  const hubLabel = inHub ? CATEGORY_CONFIG[category].label : category;
   const bornOnSlug = isFull ? `${MONTH_NAMES[dob!.month - 1].toLowerCase()}-${dob!.day}` : null;
 
   // CTA — pre-fill DOB ONLY for full dates (never a placeholder Jan 1).
@@ -286,8 +288,8 @@ export function CelebrityPage() {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://bornclock.com' },
       { '@type': 'ListItem', position: 2, name: 'Celebrity Profiles', item: 'https://bornclock.com/celebrity/' },
-      ...(CATEGORY_CONFIG[category] ? [{ '@type': 'ListItem', position: 3, name: `${hubLabel} celebrities`, item: `https://bornclock.com/celebrity/${hubSlug}/` }] : []),
-      { '@type': 'ListItem', position: CATEGORY_CONFIG[category] ? 4 : 3, name, item: `https://bornclock.com/celebrity/${slug}/` },
+      ...(inHub ? [{ '@type': 'ListItem', position: 3, name: `${hubLabel} celebrities`, item: `https://bornclock.com/celebrity/${hubSlug}/` }] : []),
+      { '@type': 'ListItem', position: inHub ? 4 : 3, name, item: `https://bornclock.com/celebrity/${slug}/` },
     ],
   };
 
@@ -303,7 +305,7 @@ export function CelebrityPage() {
           <JsonLd data={breadcrumbSchema} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity/' }, ...(CATEGORY_CONFIG[category] ? [{ label: hubLabel, to: `/celebrity/${hubSlug}/` }] : [])], current: name }}
+      breadcrumb={{ trail: [{ label: 'Celebrities', to: '/celebrity/' }, ...(inHub ? [{ label: hubLabel, to: `/celebrity/${hubSlug}/` }] : [])], current: name }}
       footer={{
         tagline: `${name} — birthday, zodiac, numerology and life path, calculated from date of birth.`,
         nav: [
@@ -1057,7 +1059,7 @@ export function CelebrityPage() {
             <h2 id="related-heading" className="text-xl font-bold text-gray-900 mb-4">Explore More</h2>
             <div className="flex flex-wrap gap-3">
               <Link to="/celebrity/" className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-brand-purple/30 hover:text-brand-purple transition-colors">All Celebrity Profiles</Link>
-              {CATEGORY_CONFIG[category] && (
+              {inHub && (
                 <Link to={`/celebrity/${hubSlug}/`} className="text-sm px-4 py-2 rounded-full border border-gray-200 bg-white hover:border-brand-purple/30 hover:text-brand-purple transition-colors">More {hubLabel} celebrities</Link>
               )}
               {bornOnSlug && (

@@ -100,15 +100,10 @@ const BLOG_SLUGS = [
   '5-minute-morning-routine-add-years-to-life',
   'ultra-processed-foods-shortening-lifespan',
   'walking-vs-running-which-exercise-live-longer',
-  'sleep-longevity-science',
-  'exercise-longevity-guide',
-  'longevity-diet-guide',
-  'stress-mental-health-longevity',
   'preventive-health-screening-guide',
   'community-social-longevity',
   'how-long-does-it-take-to-form-a-habit-longevity',
   'life-expectancy-india-complete-guide-2026',
-  'zodiac-signs-complete-personality-guide-all-12',
   'what-happens-body-when-you-quit-smoking-timeline',
   'numerology-life-path-numbers-complete-guide',
   'blue-zones-diet-what-centenarians-actually-eat',
@@ -124,14 +119,14 @@ const BLOG_SLUGS = [
 ];
 
 const ANSWER_ROUTES = [
-  '/answers/how-long-will-i-live',
+  // '/answers/how-long-will-i-live' — B24: retired, 301 → /how-long-will-i-live/
   '/answers/what-is-my-biological-age',
   // '/answers/who-shares-my-birthday' — Batch 11: retired, 301 → /celebrity-birthday/
-  '/answers/how-old-am-i-on-mars',
+  // '/answers/how-old-am-i-on-mars' — B24: retired, 301 → /planetary-age/
   '/answers/what-is-my-zodiac-sign',
   '/answers/what-is-my-life-path-number',
   '/answers/how-to-calculate-age',
-  '/answers/what-generation-am-i',
+  // '/answers/what-generation-am-i' — B24: retired, 301 → /generation/
   '/answers/how-to-live-longer',
   '/answers/what-is-bmi',
   '/answers/what-is-life-expectancy',

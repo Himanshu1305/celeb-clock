@@ -155,7 +155,7 @@ const AgeCalculatorPage = () => {
           <div className="grid sm:grid-cols-2 gap-2">
             <Link to="/answers/how-many-days-until-my-birthday/" className="text-sm text-primary hover:underline">→ How many days until my birthday?</Link>
             <Link to="/answers/how-to-calculate-age/" className="text-sm text-primary hover:underline">→ How do I calculate my exact age?</Link>
-            <Link to="/answers/how-old-am-i-on-mars/" className="text-sm text-primary hover:underline">→ How old am I on Mars?</Link>
+            <Link to="/planetary-age/" className="text-sm text-primary hover:underline">→ How old am I on Mars?</Link>
             <Link to="/celebrity-birthday/" className="text-sm text-primary hover:underline">→ Who shares my birthday?</Link>
           </div>
         </section>

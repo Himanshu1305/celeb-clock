@@ -118,6 +118,8 @@ export function birthdaysTemplate(slug: 'index' | 'india') {
     return {
       date, lang: 'en', title, description, h1,
       dateLabel: formatLongDateEn(date),
+      // B24: today's "born on" card names who was born today — the share preview changes daily.
+      ogImage: `https://bornclock.com/og/born-on/${MONTH_SLUG[m - 1]}-${d}.webp`,
       answer,
       why: [],
       sections,

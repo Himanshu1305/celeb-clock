@@ -5,8 +5,8 @@ import { SEO } from '@/components/SEO';
 import { CollectionLayout } from '@/components/central';
 
 export default function WhatGenerationAmI() {
-  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What generation am I?", "item": "https://bornclock.com/answers/what-generation-am-i" } ] };
-  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Generation Am I? Gen Z, Millennial, Gen X, Boomer Explained", "description": "Find out which generation you belong to based on your birth year. Gen Z, Millennials, Gen X, Baby Boomers, Silent Generation and Gen Alpha — years and traits explained.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/what-generation-am-i" };
+  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "What generation am I?", "item": "https://bornclock.com/generation" } ] };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "What Generation Am I? Gen Z, Millennial, Gen X, Boomer Explained", "description": "Find out which generation you belong to based on your birth year. Gen Z, Millennials, Gen X, Baby Boomers, Silent Generation and Gen Alpha — years and traits explained.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/generation" };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -26,7 +26,7 @@ export default function WhatGenerationAmI() {
         <SEO
           title="What Generation Am I? Gen Z, Millennial, Gen X, Boomer Explained | BornClock"
           description="Find out which generation you belong to based on your birth year. Gen Z, Millennials, Gen X, Baby Boomers, Silent Generation and Gen Alpha — years and traits explained."
-          canonicalUrl="/answers/what-generation-am-i"
+          canonicalUrl="/generation"
           ogType="article"
           articleSchema={false}
         />
@@ -85,7 +85,7 @@ export default function WhatGenerationAmI() {
             <div className="space-y-2">
               <Link to="/answers/how-to-calculate-age/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How to calculate my exact age</Link>
               <Link to="/celebrity-birthday/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ Who shares my birthday?</Link>
-              <Link to="/answers/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How long will I live?</Link>
+              <Link to="/how-long-will-i-live/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ How long will I live?</Link>
               <Link to="/answers/what-is-my-zodiac-sign/" className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 hover:border-brand-blue/30 hover:bg-brand-blue/10 transition-colors text-sm text-gray-700 hover:text-brand-blue">→ What is my zodiac sign?</Link>
             </div>
           </div>

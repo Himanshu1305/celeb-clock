@@ -6,8 +6,8 @@ import { ArticleLayout } from '@/components/central';
 import { leYears, LE_CITATION } from '@/data/lifeExpectancyFacts';
 
 export default function HowLongWillILive() {
-  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How long will I live?", "item": "https://bornclock.com/answers/how-long-will-i-live" } ] };
-  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "How Long Will I Live? A Science-Based Answer", "description": "How long will I live? Science shows life expectancy depends on genetics (25%), lifestyle (75%), country, and habits. Calculate your personal forecast free.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/answers/how-long-will-i-live" };
+  const breadcrumbSchema = { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [ { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://bornclock.com" }, { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://bornclock.com/faq" }, { "@type": "ListItem", "position": 3, "name": "How long will I live?", "item": "https://bornclock.com/how-long-will-i-live" } ] };
+  const articleSchema = { "@context": "https://schema.org", "@type": "Article", "headline": "How Long Will I Live? A Science-Based Answer", "description": "How long will I live? Science shows life expectancy depends on genetics (25%), lifestyle (75%), country, and habits. Calculate your personal forecast free.", "author": { "@type": "Organization", "name": "BornClock" }, "publisher": { "@type": "Organization", "name": "BornClock", "logo": { "@type": "ImageObject", "url": "https://bornclock.com/bornclock-logo.png" } }, "datePublished": "2026-06-17", "dateModified": "2026-06-17", "mainEntityOfPage": "https://bornclock.com/how-long-will-i-live" };
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -27,7 +27,7 @@ export default function HowLongWillILive() {
         <SEO
           title="How Long Will I Live? A Science-Based Answer | BornClock"
           description="How long will I live? Science shows life expectancy depends on genetics (25%), lifestyle (75%), country, and habits. Calculate your personal forecast free."
-          canonicalUrl="/answers/how-long-will-i-live"
+          canonicalUrl="/how-long-will-i-live"
           ogType="article"
           articleSchema={false}
         />

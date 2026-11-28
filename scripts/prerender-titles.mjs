@@ -121,11 +121,11 @@ const VEDIC = {
 
 // ── Blog posts: slug → metaTitle ─────────────────────────────────────────────
 const BLOG = {
-  'calculate-exact-age-seconds-minutes-hours':                 'Calculate Your Exact Age in Seconds | Free Age Calculator 2025',
+  'calculate-exact-age-seconds-minutes-hours':                 'Calculate Your Exact Age in Seconds | Free Age Calculator',
   'celebrities-born-on-my-birthday-famous-birthday-twins':     'Celebrities Born on My Birthday | Find Famous Birthday Twins',
-  'zodiac-signs-complete-guide-personality-traits-compatibility': 'Zodiac Signs Guide 2025 | Personality Traits & Compatibility',
-  'birthstones-by-month-complete-guide-meaning-history':       'Birthstones by Month 2025 | Meanings, Colors & Healing Properties',
-  'how-to-increase-life-expectancy-science-backed-tips':       'Increase Life Expectancy | 10 Science-Backed Tips 2025',
+  'zodiac-signs-complete-guide-personality-traits-compatibility': 'Zodiac Signs Guide | Personality Traits & Compatibility',
+  'birthstones-by-month-complete-guide-meaning-history':       'Birthstones by Month | Meanings, Colors & Healing Properties',
+  'how-to-increase-life-expectancy-science-backed-tips':       'Increase Life Expectancy | 10 Science-Backed Tips',
   'birthday-traditions-around-the-world-unique-celebrations':  'Birthday Traditions Around the World: What Every Culture Celebrates',
   'why-knowing-exact-age-matters-practical-uses':              'Why Know Your Exact Age? 7 Practical Uses You Never Knew',
   'how-sleep-affects-life-expectancy-complete-guide':          'Sleep & Life Expectancy | How Rest Affects How Long You Live',
@@ -140,15 +140,10 @@ const BLOG = {
   '5-minute-morning-routine-add-years-to-life':                '5-Minute Morning Routine for Longevity | Science-Backed',
   'ultra-processed-foods-shortening-lifespan':                 'Ultra-Processed Foods & Lifespan | NIH Research Explained',
   'walking-vs-running-which-exercise-live-longer':             'Walking vs Running for Longevity | Research Compared',
-  'sleep-longevity-science':                                   'Sleep and Longevity — The Science of How Sleep Adds Years to Your Life | BornClock',
-  'exercise-longevity-guide':                                  'Exercise and Longevity — How Movement Adds Years to Your Life | BornClock',
-  'longevity-diet-guide':                                      'Longevity Diet Guide — What to Eat to Live Longer | BornClock',
-  'stress-mental-health-longevity':                            'Stress, Mental Health and Longevity — How Chronic Stress Accelerates Aging | BornClock',
   'preventive-health-screening-guide':                         'Preventive Health Screenings — The Tests That Could Save Your Life | BornClock',
   'community-social-longevity':                                'Community, Social Bonds and Longevity — Why Relationships Are Your Greatest Health Asset | BornClock',
   'how-long-does-it-take-to-form-a-habit-longevity':           'How Long Does It Take to Form a Habit? Science Says 66 Days',
   'life-expectancy-india-complete-guide-2026':                 'Life Expectancy India 2026: State Data, Gender Gap & How to Beat the Average',
-  'zodiac-signs-complete-personality-guide-all-12':            'All 12 Zodiac Signs: Personality, Strengths & Compatibility Guide',
   'what-happens-body-when-you-quit-smoking-timeline':          'What Happens When You Quit Smoking: 20-Minute to 15-Year Timeline',
   'numerology-life-path-numbers-complete-guide':               'Numerology Life Path Numbers 1–9: Meaning, Career & Love Guide',
   'blue-zones-diet-what-centenarians-actually-eat':            'The Blue Zones Diet: What Centenarians Actually Eat Every Day',
@@ -172,13 +167,10 @@ const ANSWER_DESC = {
 };
 
 const ANSWERS = {
-  'how-long-will-i-live':                  'How Long Will I Live? A Science-Based Answer | BornClock',
   'what-is-my-biological-age':             'What Is My Biological Age? The Short Answer + Free Test | BornClock',
-  'how-old-am-i-on-mars':                  'How Old Am I on Mars and Other Planets? | BornClock',
   'what-is-my-zodiac-sign':                'What Is My Zodiac Sign? Western, Vedic and Chinese Explained | BornClock',
   'what-is-my-life-path-number':           'What Is My Life Path Number and What Does It Mean? | BornClock',
   'how-to-calculate-age':                  'How to Calculate Your Exact Age in Years, Months, Days and Seconds | BornClock',
-  'what-generation-am-i':                  'What Generation Am I? Gen Z, Millennial, Gen X, Boomer Explained | BornClock',
   'how-to-live-longer':                    'How to Live Longer: What Science Actually Says | BornClock',
   'what-is-bmi':                           'What Is BMI and What Does Your Number Actually Mean? | BornClock',
   'what-is-life-expectancy':               'What Is Life Expectancy and How Is It Calculated? | BornClock',
