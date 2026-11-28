@@ -248,7 +248,7 @@ export default function ZodiacSign() {
           <p className="text-sm text-muted-foreground mb-3">Every date from {data.dateRange} has the Sun in {data.name}. Pick a birthday for its personality profile and the famous people born that day.</p>
           <ul className="flex flex-wrap gap-2">
             {signDates(data).map(([m, d]) => (
-              <li key={`${m}-${d}`}><Link to={`/birthday/${m}/${d}/`} className="inline-block text-xs px-2.5 py-1 rounded-lg border border-border hover:border-primary">{MONTH_NAMES[m - 1].slice(0, 3)} {d}</Link></li>
+              <li key={`${m}-${d}`}><Link to={`/born-on/${MONTH_NAMES[m - 1].toLowerCase()}-${d}/`} className="inline-block text-xs px-2.5 py-1 rounded-lg border border-border hover:border-primary">{MONTH_NAMES[m - 1].slice(0, 3)} {d}</Link></li>
             ))}
           </ul>
         </section>

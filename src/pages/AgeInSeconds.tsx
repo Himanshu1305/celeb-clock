@@ -43,7 +43,7 @@ const AgeInSeconds = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday/' }], current: 'Age in Seconds' }}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/born-on/' }], current: 'Age in Seconds' }}
       footer={{
         tagline: 'Exactly how many seconds you have been alive — ticking live.',
         nav: [

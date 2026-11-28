@@ -27,10 +27,9 @@ describe('prerender / sitemap route list after duplicate retirement', () => {
     }
   });
 
-  it('every redirect target date page is listed (366 /birthday/:m/:d incl. 2/29, 366 /born-on/:month-:day)', () => {
-    expect(routes.filter(r => /^\/birthday\/\d+\/\d+$/.test(r))).toHaveLength(366);
-    expect(routes).toContain('/birthday/2/29');
-    expect(routes).toContain('/birthday/12/31');
+  it('every redirect target date page is listed (366 /born-on/:month-:day; B25: no /birthday pages)', () => {
+    expect(routes.filter(r => /^\/birthday(\/|$)/.test(r))).toEqual([]);
+    expect(routes).toContain('/born-on/february-29');
     expect(routes.filter(r => /^\/born-on\/[a-z]+-\d+$/.test(r))).toHaveLength(366);
     expect(routes.filter(r => /^\/born-on\/[a-z]+-\d+\/india$/.test(r))).toHaveLength((indiaDates as unknown[]).length);
   });

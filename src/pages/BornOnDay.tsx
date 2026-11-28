@@ -14,6 +14,8 @@ import { getNationalDays } from '@/data/nationalDays';
 import { ArrowLeft, ArrowRight, ArrowRightCircle, Star, Sparkles } from 'lucide-react';
 import indiaDates from '@/data/indiaBornOnDates.json';
 import { celebsOn } from '@/lib/celebsByDay';
+import { generateBornOnTitle } from '@/utils/seoHelpers';
+import { birthdayDateFacts } from '@/data/birthdayDateFacts';
 import { postsForTags } from '@/lib/mesh';
 import { SharePageBar } from '@/components/SharePageBar';
 
@@ -219,10 +221,8 @@ export default function BornOnDay() {
     })),
   } : null;
 
-  const pageTitle = `Celebrities Born on ${monthName} ${day} — Zodiac & Birthday Facts | BornClock`;
-  const shortTitle = pageTitle.length > 60
-    ? `Born on ${monthName} ${day} — Famous Birthdays | BornClock`
-    : pageTitle;
+  // B25: one page per date (the /birthday/:m/:d pages 301 here) — mirrored in prerender-titles.mjs.
+  const shortTitle = generateBornOnTitle(monthName, day, [], zodiac.sign);
 
   return (
     <ToolLayout
@@ -256,7 +256,7 @@ export default function BornOnDay() {
         note: '© 2026 BornClock · Born-on dates.',
       }}
       eyebrow="Famous birthdays"
-      h1={<>Celebrities Born on {monthName} {day}</>}
+      h1={<>{monthName} {day} Birthday: {zodiac.sign} Zodiac Sign, Personality &amp; Famous People</>}
     >
       <section className="section">
         {/* Concise answer block (AEO) — question-shaped H2 + direct answer */}
@@ -332,20 +332,17 @@ export default function BornOnDay() {
           </Link>
         </div>
 
-        {/* Day-of-year + days until next */}
-        <div className="bg-card border border-border rounded-xl p-6 mb-6">
-          <h2 className="font-semibold text-lg text-foreground mb-3">Calendar Facts</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Day of the year</p>
-              <p className="text-2xl font-bold text-foreground">#{doy}</p>
-              <p className="text-xs text-muted-foreground mt-1">of 365 (non-leap)</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Days until next</p>
-              <p className="text-2xl font-bold text-foreground">{daysUntil}</p>
-              <p className="text-xs text-muted-foreground mt-1">days from today</p>
-            </div>
+        {/* B25: facts that belong to this one date — day of year, Sun degree and decan, cusp, stone,
+            flowers, national days (src/data/birthdayDateFacts.ts) */}
+        <div className="bg-card border border-border rounded-xl p-6 mb-6" data-testid="born-on-date-facts">
+          <h2 className="font-semibold text-lg text-foreground mb-3">{monthName} {day} at a glance</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm"><tbody>
+              {birthdayDateFacts(month, day, zodiac.sign, { india: staticDay.india.length, world: staticDay.world.length, top: topNames })
+                .filter(r => r.label !== 'Birthstone' && r.label !== 'National days').map(r => (
+                <tr key={r.label} className="border-b border-border/60"><th scope="row" className="text-left px-3 py-2 font-semibold text-foreground w-1/3 align-top">{r.label}</th><td className="px-3 py-2 text-muted-foreground">{r.value}</td></tr>
+              ))}
+            </tbody></table>
           </div>
         </div>
 
@@ -500,14 +497,14 @@ export default function BornOnDay() {
         <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 mb-10 text-center">
           <h2 className="font-bold text-xl text-foreground mb-2">Is {monthName} {day} YOUR birthday?</h2>
           <p className="text-muted-foreground mb-4">
-            Read the full {monthName} {day} birthday personality — zodiac, numerology, Vedic rashi and nakshatra.
+            Get your complete birthday report — celebrity twins, Vedic Moon sign and nakshatra, numerology and life insights.
           </p>
           <Link
-            to={`/birthday/${month}/${day}/`}
+            to={`/birthday-report/`}
             className="inline-flex items-center gap-2 bg-primary text-primary-foreground rounded-lg px-6 py-3 font-semibold hover:opacity-90 transition-opacity"
           >
             <ArrowRightCircle className="w-4 h-4" />
-            {monthName} {day} birthday personality
+            Generate my birthday report
           </Link>
         </div>
 

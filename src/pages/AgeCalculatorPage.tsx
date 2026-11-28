@@ -89,7 +89,7 @@ const AgeCalculatorPage = () => {
               on the page. The single FAQPage comes from the visible <PageFAQ> below. */}
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday/' }], current: 'Age Calculator' }}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/born-on/' }], current: 'Age Calculator' }}
       footer={{
         tagline: 'Your exact age in years, months, days, hours and seconds — live.',
         nav: [

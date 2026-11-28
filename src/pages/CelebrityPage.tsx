@@ -14,6 +14,7 @@ import {
   calculatePlanetaryAges,
 } from '@/utils/celebrityCalculations';
 import { celebrityProfileFacts } from '@/lib/celebrityProfile';
+import { isIndexableProfile } from '@/lib/celebrityStrength';
 import {
   WESTERN_ZODIAC_PROFILES, VEDIC_RASHI_PROFILES,
   CHINESE_ZODIAC_PROFILES, LIFE_PATH_EXTENDED,
@@ -299,7 +300,7 @@ export function CelebrityPage() {
       testId="celebrity-page"
       seo={(
         <>
-          <SEO title={title} description={description} canonicalUrl={canonical} ogType="profile" />
+          <SEO title={title} description={description} canonicalUrl={canonical} ogType="profile" noindexFollow={!isIndexableProfile(celeb)} />
           <JsonLd data={personSchema} />
           <JsonLd data={faqSchema} />
           <JsonLd data={breadcrumbSchema} />
@@ -344,8 +345,7 @@ export function CelebrityPage() {
             )}
             {isFull && (
               <p className="mt-2 text-xs text-gray-600">
-                More: <Link to={`/birthday/${dob!.month}/${dob!.day}/`} className="underline">{MONTH_NAMES[dob!.month - 1]} {dob!.day} birthday personality</Link>
-                {' · '}<Link to={`/born-on/${bornOnSlug}/`} className="underline">everyone born on {MONTH_NAMES[dob!.month - 1]} {dob!.day}</Link>
+                More: <Link to={`/born-on/${bornOnSlug}/`} className="underline">{MONTH_NAMES[dob!.month - 1]} {dob!.day} birthday — zodiac, personality and everyone born that day</Link>
                 {isIndian && <>{' · '}<Link to={bornOnIndiaPath(bornOnSlug!)} className="underline">Indians born on {dob!.day} {MONTH_NAMES[dob!.month - 1]}</Link></>}
               </p>
             )}

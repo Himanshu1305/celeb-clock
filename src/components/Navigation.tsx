@@ -47,7 +47,7 @@ const NAV_CATEGORIES: NavCategory[] = [
       { path: '/weight-on-planets/', label: 'Weight on Planets', emoji: '⚖️' },
       { path: '/gift/', label: 'Gift a Report', emoji: '🎁' },
       { path: '/birthstone/', label: 'Birthstone', emoji: '💠' },
-      { path: '/birthday/', label: 'Birthday Personalities', emoji: '🎈' },
+      { path: '/born-on/', label: 'Birthdays by Date', emoji: '🎈' },
     ],
   },
   {

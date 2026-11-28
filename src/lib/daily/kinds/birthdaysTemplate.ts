@@ -82,7 +82,7 @@ export function birthdaysTemplate(slug: 'index' | 'india') {
       if (world.length) sections.push(peopleSection('world', `Also born on ${dayLabel} around the world`, world.slice(0, 6), y));
       sections.push({ id: 'more', heading: 'More about this date', links: [
         { label: `Indians born on ${dayLabel} — full list`, href: `${bornOn}india/` },
-        { label: `${month} ${d} birthday personality and zodiac sign`, href: `/birthday/${m}/${d}/` },
+        { label: `${month} ${d} birthday: zodiac sign, personality and everyone born that day`, href: bornOn },
         { label: 'Famous birthdays today (global)', href: '/todays-birthdays/' },
       ] });
       faq.push(
@@ -104,9 +104,8 @@ export function birthdaysTemplate(slug: 'index' | 'india') {
       if (world.length) sections.push(peopleSection('world', `Famous people born on ${month} ${d}`, world, y));
       if (india.length) sections.push(peopleSection('india', `Indian celebrities born today`, india.slice(0, 8), y));
       sections.push({ id: 'more', heading: 'More about this date', links: [
-        { label: `Everyone born on ${month} ${d}`, href: bornOn },
+        { label: `${month} ${d} birthday: zodiac sign, personality and everyone born that day`, href: bornOn },
         { label: 'Aaj kiska birthday hai — Indian birthdays today', href: '/todays-birthdays/india/' },
-        { label: `${month} ${d} zodiac sign and birthday personality`, href: `/birthday/${m}/${d}/` },
       ] });
       faq.push(
         { q: `Who was born today, ${month} ${d}?`, a: all.length ? `${listText(top3(world.length ? world : india))} were born on ${month} ${d}.` : `See the list on this page.` },

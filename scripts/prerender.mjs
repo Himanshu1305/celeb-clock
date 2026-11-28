@@ -117,7 +117,6 @@ function ogImageForRoute(route) {
   if ((m = route.match(/^\/born-on\/([a-z]+-\d+)(?:\/india)?$/))) candidates.push(`born-on/${m[1]}.webp`);
   // B24: celebrity share cards, and the date card for /birthday/:m/:d.
   if ((m = route.match(/^\/celebrity\/([^/]+)$/))) candidates.push(`celebrity/${m[1]}.webp`);
-  if ((m = route.match(/^\/birthday\/(\d+)\/(\d+)$/))) candidates.push(`born-on/${['', 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'][+m[1]]}-${+m[2]}.webp`);
   if ((m = route.match(/^\/born-in-([a-z]+)$/)))       candidates.push(`month/${m[1]}.webp`);
   if ((m = route.match(/^\/zodiac\/([a-z]+)$/)))        candidates.push(`zodiac/${m[1]}.webp`);
   if ((m = route.match(/^\/blog\/([a-z0-9-]+)$/)))      candidates.push(`blog/${m[1]}.webp`);
@@ -213,7 +212,6 @@ async function prerenderRoute(page, baseUrl, route) {
 
     if (meta) {
       // B23: global born-on pages lead with the top celebrity once the DOM has the names.
-      if (meta._month && celebNames.length > 0) meta.title = bornOnTitle(meta._month, meta._day, celebNames[0]);
       // Inject title — replace whatever <title> the SPA default left in the HTML
       const escapedTitle = meta.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapedTitle}</title>`);

@@ -34,7 +34,7 @@ const HindiAgeCalculator = () => {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday/' }], current: 'मेरी उम्र कितनी है' }}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/born-on/' }], current: 'मेरी उम्र कितनी है' }}
       footer={{
         tagline: 'अपनी सटीक उम्र साल, महीने, दिन और सेकंड में जानें।',
         nav: [

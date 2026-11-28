@@ -37,11 +37,11 @@ const TodaysBirthdaysPage = () => {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday/' }], current: "Today's Birthdays" }}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/born-on/' }], current: "Today's Birthdays" }}
       footer={{
         tagline: 'The best daily list of notable people born today.',
         nav: [
-          { label: 'Birthdays', to: '/birthday/' },
+          { label: 'Birthdays', to: '/born-on/' },
           { label: "Today's Birthdays", to: '/todays-birthdays/' },
           { label: 'Celebrities', to: '/celebrity/' },
           { label: 'Privacy', to: '/privacy/' },
@@ -60,10 +60,6 @@ const TodaysBirthdaysPage = () => {
             Viewing all celebrities born on {formattedDate} ·{' '}
             <Link to={`/born-on/${todaySlug}/`} className="text-primary hover:underline">
               Born-on deep dive →
-            </Link>
-            {' · '}
-            <Link to={`/birthday/${today.getMonth() + 1}/${today.getDate()}/`} className="text-primary hover:underline">
-              Today's birthday personality →
             </Link>
           </div>
           <EEATBadges sources={['Wikipedia']} />

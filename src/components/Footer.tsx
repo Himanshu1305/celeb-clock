@@ -77,7 +77,7 @@ export const Footer = () => {
               <li><Link to="/celebrity/music/" className="text-muted-foreground hover:text-primary transition-colors">Music Celebrities</Link></li>
               <li><Link to="/celebrity/sports/" className="text-muted-foreground hover:text-primary transition-colors">Sports Celebrities</Link></li>
               <li><Link to="/born-in/" className="text-muted-foreground hover:text-primary transition-colors">Born in Each Month</Link></li>
-              <li><Link to="/birthday/" className="text-muted-foreground hover:text-primary transition-colors">Birthday Personalities</Link></li>
+              <li><Link to="/born-on/" className="text-muted-foreground hover:text-primary transition-colors">Birthdays by Date</Link></li>
               <li><Link to="/biorhythm-workout-calculator/" className="text-muted-foreground hover:text-primary transition-colors">Biorhythm Workout</Link></li>
               <li><Link to="/energy-forecast/" className="text-muted-foreground hover:text-primary transition-colors">Energy Forecast</Link></li>
               <li><Link to="/born-on/india/" className="text-muted-foreground hover:text-primary transition-colors">Indian Celebrities by Date</Link></li>

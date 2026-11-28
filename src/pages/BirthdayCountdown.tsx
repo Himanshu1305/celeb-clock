@@ -44,7 +44,7 @@ const BirthdayCountdown = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday/' }], current: 'Birthday Countdown' }}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/born-on/' }], current: 'Birthday Countdown' }}
       footer={{
         tagline: 'Exactly how many days until your next birthday — down to the day.',
         nav: [
