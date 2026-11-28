@@ -1,4 +1,5 @@
 import { useParams, Navigate } from 'react-router-dom';
+import ChineseZodiacYearPage, { isChineseYearSlug } from './ChineseZodiacYearPage';
 import { Link } from '@/components/seo/CanonicalLink';
 import { CollectionLayout } from '@/components/central';
 import { SEO, FAQSchema } from '@/components/SEO';
@@ -18,7 +19,13 @@ const ANIMAL_ELEMENT: Record<string, string> = {
   horse: 'Fire', goat: 'Earth', monkey: 'Metal', rooster: 'Metal', dog: 'Earth', pig: 'Water',
 };
 
-export default function ChineseZodiacSign() {
+/** B23: /chinese-zodiac/1990 → the year page; /chinese-zodiac/horse → the animal guide. */
+export default function ChineseZodiacRoute() {
+  const { animal } = useParams<{ animal: string }>();
+  return isChineseYearSlug(animal) ? <ChineseZodiacYearPage year={Number(animal)} /> : <ChineseZodiacSign />;
+}
+
+function ChineseZodiacSign() {
   const { animal } = useParams<{ animal: string }>();
   const slug = (animal || '').toLowerCase();
   const capitalised = slug.charAt(0).toUpperCase() + slug.slice(1);

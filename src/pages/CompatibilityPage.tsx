@@ -218,11 +218,14 @@ export default function CompatibilityPage() {
         note: '© 2026 BornClock · Calculated, not templated.',
       }}
       eyebrow="Compatibility"
-      h1={<>Zodiac Compatibility Calculator <span style={{ fontSize: 18, color: 'var(--muted)' }}>(Western Zodiac)</span></>}
+      h1={paramSign1 && paramSign2 && calcSigns
+        ? <>{calcSigns.s1} and {calcSigns.s2} Compatibility: {getCompatibility(calcSigns.s1, calcSigns.s2).overall}% Match</>
+        : <>Zodiac Compatibility Calculator <span style={{ fontSize: 18, color: 'var(--muted)' }}>(Western Zodiac)</span></>}
+      lead={paramSign1 && paramSign2 && calcSigns ? (() => { const r = getCompatibility(calcSigns.s1, calcSigns.s2); return <>{calcSigns.s1} and {calcSigns.s2} score {r.overall}% overall — {r.love}% for love, {r.friendship}% for friendship and {r.work}% at work (Western zodiac).</>; })() : undefined}
     >
       {/* Part AM: in-body JSON-LD (NOT Helmet) so it reliably lands in the prerendered HTML —
           verified via validator.schema.org. See src/components/JsonLd.tsx. */}
-      <JsonLd id="webapp" data={{
+      {!(paramSign1 && paramSign2) && <JsonLd id="webapp" data={{
         '@context': 'https://schema.org', '@type': 'WebApplication',
         name: 'Zodiac Compatibility Calculator',
         description: 'Free zodiac compatibility calculator for all 144 sign combinations — love, friendship, and work compatibility across every pairing.',
@@ -230,7 +233,7 @@ export default function CompatibilityPage() {
         applicationCategory: 'LifestyleApplication', operatingSystem: 'Web',
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
         provider: { '@type': 'Organization', name: 'BornClock', url: 'https://bornclock.com' },
-      }} />
+      }} />}
       {/* One FAQPage per page (validate-dist V9): pair pages carry the pair FAQ's block
           from <PageFAQ> below, so the general FAQ block is only emitted on the hub. */}
       {!(paramSign1 && paramSign2) && (

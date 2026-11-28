@@ -6,6 +6,22 @@ import { PageFAQ } from '@/components/PageFAQ';
 import { ZODIAC_DATA, getZodiacBySlug } from '@/data/zodiacData';
 import { monthsForZodiac } from '@/lib/mesh';
 import { SharePageBar } from '@/components/SharePageBar';
+import celebsBySign from '@/data/celebsBySign.json';
+
+type SignCelebs = Record<string, { india: Array<{ s: string; n: string; y: number }>; world: Array<{ s: string; n: string; y: number }> }>;
+const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const MONTH_LEN = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+/** Every calendar date in a sign (B23: links each "<date> zodiac sign" search to its date page). */
+function signDates(z: { startMonth: number; startDay: number; endMonth: number; endDay: number }): Array<[number, number]> {
+  const out: Array<[number, number]> = [];
+  let m = z.startMonth, d = z.startDay;
+  for (let i = 0; i < 40; i++) {
+    out.push([m, d]);
+    if (m === z.endMonth && d === z.endDay) break;
+    d++; if (d > MONTH_LEN[m - 1]) { d = 1; m = m === 12 ? 1 : m + 1; }
+  }
+  return out;
+}
 
 const ELEMENT_BG: Record<string, string> = {
   Fire: 'from-red-500/20 to-orange-500/20',
@@ -201,6 +217,9 @@ export default function ZodiacSign() {
         {/* Famous People */}
         <section className="mb-10">
           <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">Famous {data.name} Celebrities</h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            <Link to={`/zodiac/${data.slug}/celebrities/`} className="text-primary underline font-semibold">See all famous {data.name} celebrities — Indian and global →</Link>
+          </p>
           <div className="grid sm:grid-cols-2 gap-4">
             {data.famousPeople.map(p => (
               <div key={p.name} className="bg-card border border-border rounded-xl p-4">
@@ -209,7 +228,11 @@ export default function ZodiacSign() {
                     {data.unicode}
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground text-sm">{p.name}</p>
+                    <p className="font-semibold text-foreground text-sm">{(() => {
+                      const sc = (celebsBySign as SignCelebs)[data.slug];
+                      const hit = sc && [...sc.world, ...sc.india].find(c => c.n === p.name);
+                      return hit ? <Link to={`/celebrity/${hit.s}/`} className="underline decoration-dotted">{p.name}</Link> : p.name;
+                    })()}</p>
                     <p className="text-xs text-muted-foreground mb-1">Born {p.born}</p>
                     <p className="text-xs text-muted-foreground leading-relaxed">{p.why}</p>
                   </div>
@@ -217,6 +240,17 @@ export default function ZodiacSign() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* B23: every date in the sign → its date page (answers "<date> zodiac sign") */}
+        <section className="mb-10" data-testid="zodiac-date-grid">
+          <h2 className="text-2xl font-bold text-foreground mb-4 pb-2 border-b border-border">{data.name} birthdays by date</h2>
+          <p className="text-sm text-muted-foreground mb-3">Every date from {data.dateRange} has the Sun in {data.name}. Pick a birthday for its personality profile and the famous people born that day.</p>
+          <ul className="flex flex-wrap gap-2">
+            {signDates(data).map(([m, d]) => (
+              <li key={`${m}-${d}`}><Link to={`/birthday/${m}/${d}/`} className="inline-block text-xs px-2.5 py-1 rounded-lg border border-border hover:border-primary">{MONTH_NAMES[m - 1].slice(0, 3)} {d}</Link></li>
+            ))}
+          </ul>
         </section>
 
         {/* In Love */}

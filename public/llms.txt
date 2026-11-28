@@ -46,14 +46,20 @@ BornClock is a free Vedic astrology and birthday site, in English, Hindi and eig
 - https://bornclock.com/birthstone — Birthstone index by month (12 months)
 - https://bornclock.com/rashi-ratna — Vedic gemstone (Jyotish Ratna) finder
 
-## Celebrity Birthdays
+## Celebrity Birthdays, Zodiac and Rashi (3,043 profiles)
 
-- https://bornclock.com/todays-birthdays — Today's celebrity birthdays (ranked by global recognition)
-- https://bornclock.com/celebrity-birthday — Celebrity birthday search
-- https://bornclock.com/birthday — Birthday month index
-- https://bornclock.com/born-on — Born-on date index (366 dates, Jan 1 – Dec 31 + Feb 29)
-- https://bornclock.com/born-on/[month]-[day]/india — Indian celebrities born on a given date (nationality facet; 350 dates with 3+ Indian personalities, ranked by global recognition). Example: https://bornclock.com/born-on/september-3/india
-- https://bornclock.com/born-in-[month] — "Born in {Month}" hubs (12): zodiac signs, birthstone, birth flowers, famous births, and national days for the month. Example: https://bornclock.com/born-in-august
+- https://bornclock.com/celebrity/[slug] — One profile per famous person (3,043; Indian and global): date of birth, age, Western Sun sign, Vedic Moon sign (Rashi) and Nakshatra, Chinese zodiac, Life Path number. The Moon sign is computed from the birth DATE with the same sidereal engine as the Kundli; when the Moon changed sign that day both signs are shown, because the birth time is usually not on public record. Example: https://bornclock.com/celebrity/virat-kohli
+- https://bornclock.com/todays-birthdays — Famous birthdays today (the list changes every India day; each name links to a profile)
+- https://bornclock.com/todays-birthdays/india — "Aaj kiska birthday hai": Indian celebrity birthdays today
+- https://bornclock.com/celebrity-birthday — Celebrity birthday twin finder (who shares my birthday)
+- https://bornclock.com/born-on/[month]-[day] — Famous people born on any date (366). Example: https://bornclock.com/born-on/november-5
+- https://bornclock.com/born-on/[month]-[day]/india — Indian celebrities born on a date (350 dates). Example: https://bornclock.com/born-on/september-3/india
+- https://bornclock.com/birthday/[m]/[d] — Zodiac sign and birthday personality for any date, with the Sun's degree and decan, cusp notes and the famous people born that day. Example: https://bornclock.com/birthday/3/11
+- https://bornclock.com/zodiac/[sign]/celebrities — Famous people of each Sun sign, Indian and global (12). Example: https://bornclock.com/zodiac/leo/celebrities
+- https://bornclock.com/chinese-zodiac/[year] — Chinese zodiac for every year 1924–2031: animal, element, exact Chinese New Year start and end dates, famous people born that year. Example: https://bornclock.com/chinese-zodiac/1990
+- https://bornclock.com/born-in-[month] — "Born in {Month}" hubs (12): zodiac signs, birthstone, birth flowers, famous births. Example: https://bornclock.com/born-in-august
+- https://bornclock.com/angel-numbers/[n] — Angel number meanings (framed as modern spiritual belief, not science). Example: https://bornclock.com/angel-numbers/1111
+- https://bornclock.com/answers — Short sourced answers (zodiac sign, Moon sign, life path, generation, age on Mars, days until my birthday)
 
 ## Rhythm and Fitness (rhythm-awareness, NOT medical advice)
 
@@ -69,7 +75,7 @@ These pages use the classic biorhythm model as a daily reflection prompt. HONEST
 ## Blog (Longevity and Birthday Science)
 
 - https://bornclock.com/blog — Blog index
-- https://bornclock.com/blog/how-long-will-i-live — Life expectancy science explainer
+- https://bornclock.com/how-long-will-i-live — How long will I live: life expectancy calculator and explainer
 - https://bornclock.com/blog/celebrities-born-on-my-birthday-famous-birthday-twins — Celebrity birthday twins guide
 - https://bornclock.com/blog/zodiac-signs-complete-guide-personality-traits-compatibility — Zodiac complete guide
 - https://bornclock.com/blog/how-to-increase-life-expectancy-science-backed-tips — Longevity tips (evidence-based)

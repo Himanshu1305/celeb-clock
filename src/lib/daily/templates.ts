@@ -15,6 +15,7 @@ import { tomorrowOf } from './kinds/tomorrow';
 import { renderPanchangMonth, type PanchangMonthData } from './kinds/panchangMonthTemplate';
 import { renderPlanetsToday, renderMoonPhase, type PlanetDayData, type MoonDayData } from './kinds/skyTemplate';
 import { vratTemplate } from './kinds/vratTemplate';
+import { birthdaysTemplate } from './kinds/birthdaysTemplate';
 import { rashifalLangTemplate, panchangLangTemplate } from '../lang/daily';
 import { LANG_CODES } from '../lang/langs.js';
 
@@ -39,6 +40,9 @@ export const DAILY_TEMPLATES: Record<string, DailyTemplate> = {
   'moon-phase': (date, _slug, data) => renderMoonPhase(date, data as MoonDayData),
   'vrat': vratTemplate('en'),
   'vrat-hi': vratTemplate('hi'),
+  // B23 — famous birthdays today (global) and "aaj kiska birthday hai" (India).
+  'birthdays-today': birthdaysTemplate('index'),
+  'birthdays-today-india': birthdaysTemplate('india'),
   // B18 — regional languages.
   ...Object.fromEntries(LANG_CODES.flatMap(code => [
     [`rashifal-${code}`, rashifalLangTemplate(code)],

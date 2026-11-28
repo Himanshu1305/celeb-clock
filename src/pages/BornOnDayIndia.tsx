@@ -91,6 +91,8 @@ export default function BornOnDayIndia() {
   const { month, day } = parsed;
   const monthName = MONTH_NAMES[month];
   const dateLabel = `${monthName} ${day}`;
+  // B23: Indian searchers write the day first ("6 August birthday", "6 August ko kiska birthday hai").
+  const dmLabel = `${day} ${monthName}`;
   const display = celebs.map(toDisplay);
   const topNames = celebs.slice(0, 3).map(c => c.name);
 
@@ -105,15 +107,22 @@ export default function BornOnDayIndia() {
 
   const faqItems = [
     {
+      question: `${dmLabel} ko kiska birthday hai?`,
+      answer: topNames.length
+        ? `${dmLabel} ko ${topNames.join(', ')} ka birthday hai${celebs.length > 3 ? ` — aur ${celebs.length - 3} aur jaane-maane Indians ka bhi` : ''}. (${dmLabel} is the birthday of ${topNames.join(', ')}.) Poori list is page par hai.`
+        : `${dmLabel} ko janme Indian celebrities ki list is page par hai.`,
+    },
+    {
       question: `Which Indian celebrities were born on ${dateLabel}?`,
       answer: topNames.length
         ? `Notable Indians born on ${dateLabel} include ${topNames.join(', ')}${celebs.length > 3 ? `, and ${celebs.length - 3} more` : ''}. The full list, ranked by global recognition, is on this page.`
         : `See the ranked list of Indian personalities born on ${dateLabel} on this page.`,
     },
-    {
+    // B23: never print "0 well-known Indians" when the list failed to load.
+    ...(celebs.length ? [{
       question: `How many notable Indians share the ${dateLabel} birthday?`,
       answer: `Our database records ${celebs.length} well-known Indian personalities born on ${dateLabel}, spanning film, sport, politics, science and the arts.`,
-    },
+    }] : []),
     {
       question: `Who is the most famous Indian born on ${dateLabel}?`,
       answer: topNames.length
@@ -139,21 +148,6 @@ export default function BornOnDayIndia() {
     })),
   } : null;
 
-  const qaPageJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'QAPage',
-    mainEntity: {
-      '@type': 'Question',
-      name: `Which celebrities were born on ${dateLabel}?`,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: topNames.length > 0
-          ? `${topNames.join(', ')} were born on ${dateLabel}.`
-          : `See the ranked list of Indian celebrities born on ${dateLabel} on this page.`,
-      },
-    },
-  };
-
   return (
     <ToolLayout
       theme="birthday"
@@ -170,7 +164,6 @@ export default function BornOnDayIndia() {
           {itemListJsonLd && (
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
           )}
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(qaPageJsonLd) }} />
         </>
       )}
       breadcrumb={{ trail: [{ label: 'Born On', to: '/born-on/' }, { label: dateLabel, to: `/born-on/${slug}` }], current: 'India 🇮🇳' }}
@@ -185,7 +178,7 @@ export default function BornOnDayIndia() {
         note: '© 2026 BornClock · Born-on dates.',
       }}
       eyebrow="Born in India"
-      h1={<>Indian Celebrities Born on {dateLabel}</>}
+      h1={<>{dmLabel} Birthday: Indian Celebrities Born on {dateLabel}</>}
       lead={<>{answer}</>}
     >
       <section className="section">

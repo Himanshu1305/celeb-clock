@@ -26,7 +26,7 @@ const LifeExpectancyIndia = () => {
       seo={(
         <>
           <SEO
-            title="Life Expectancy in India — 2026 Data, Causes & How to Beat the Average"
+            title="Life Expectancy in India 2026: By State, Gender & Causes | BornClock"
             description={`India's life expectancy is ${leYears('India')} years (UN WPP 2024, 2023 estimate). Here's what drives it, how it compares globally, and what Indian adults can do to outlive the national average.`}
             keywords="life expectancy India, India life expectancy 2026, average lifespan India, how long do Indians live"
             canonicalUrl="/life-expectancy-india"

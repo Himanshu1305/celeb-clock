@@ -13,7 +13,7 @@ import { fileURLToPath } from 'url';
 // Batch 9: one shared Chinese-year helper (app + prerender) — the year rolls over at
 // Chinese New Year, computed at build time so a rebuild picks up the new year.
 import {
-  currentChineseYear, chineseHoroscopeIndexTitle, chineseHoroscopeAnimalTitle, chineseHoroscopeIndexDescription, chineseSignDescription,
+  currentChineseYear, chineseHoroscopeIndexTitle, chineseHoroscopeAnimalTitle, chineseHoroscopeIndexDescription, chineseSignDescription, chineseYearTitle, chineseYearDescription,
   CHINESE_BY_YEAR_TITLE, CHINESE_BY_YEAR_DESC,
 } from '../src/lib/chineseCalendar.js';
 // Batch 9b: year muhurat pages — titles/descriptions shared with MuhuratYearPage.
@@ -57,18 +57,18 @@ try {
 
 // ── Zodiac ───────────────────────────────────────────────────────────────────
 const ZODIAC = {
-  aries:       { title: 'Aries Zodiac Sign — Dates, Traits, Compatibility & History | BornClock', desc: 'Everything about Aries (March 21–April 19) — personality traits, strengths, love life, career, mythology, famous Aries celebrities, and compatibility. Humanized and fully sourced.' },
-  taurus:      { title: 'Taurus Zodiac — Traits, Dates & Compatibility | BornClock', desc: 'Complete guide to Taurus (April 20–May 20) — personality traits, love life, career, mythology, famous Taurus celebrities, and compatibility. Fully sourced.' },
-  gemini:      { title: 'Gemini Zodiac — Traits, Dates & Compatibility | BornClock', desc: 'Complete guide to Gemini (May 21–June 20) — personality traits, love life, career, mythology, famous Gemini celebrities, and compatibility. Fully sourced.' },
-  cancer:      { title: 'Cancer Zodiac — Traits, Dates & Compatibility | BornClock', desc: 'Complete guide to Cancer (June 21–July 22) — personality traits, love life, career, mythology, famous Cancer celebrities, and compatibility. Fully sourced.' },
-  leo:         { title: 'Leo Zodiac Sign — Dates, Traits, Compatibility & History | BornClock', desc: 'Complete guide to Leo (July 23–August 22) — personality traits, love life, career, mythology, famous Leo celebrities, and compatibility. Fully sourced.' },
-  virgo:       { title: 'Virgo Zodiac Sign — Dates, Traits, Compatibility & History | BornClock', desc: 'Complete guide to Virgo (August 23–September 22) — personality traits, love life, career, mythology, famous Virgo celebrities, and compatibility. Fully sourced.' },
-  libra:       { title: 'Libra Zodiac Sign — Dates, Traits, Compatibility & History | BornClock', desc: 'Complete guide to Libra (September 23–October 22) — personality traits, love life, career, mythology, famous Libra celebrities, and compatibility. Fully sourced.' },
-  scorpio:     { title: 'Scorpio Zodiac — Traits, Dates & Compatibility | BornClock', desc: 'Complete guide to Scorpio (October 23–November 21) — personality traits, love life, career, mythology, famous Scorpio celebrities, and compatibility. Fully sourced.' },
-  sagittarius: { title: 'Sagittarius Zodiac — Traits & Compatibility | BornClock', desc: 'Complete guide to Sagittarius (November 22–December 21) — personality traits, love life, career, mythology, famous Sagittarius celebrities, and compatibility. Fully sourced.' },
-  capricorn:   { title: 'Capricorn Zodiac — Traits & Compatibility | BornClock', desc: 'Complete guide to Capricorn (December 22–January 19) — personality traits, love life, career, mythology, famous Capricorn celebrities, and compatibility. Fully sourced.' },
-  aquarius:    { title: 'Aquarius Zodiac — Traits, Dates & Compatibility | BornClock', desc: 'Complete guide to Aquarius (January 20–February 18) — personality traits, love life, career, mythology, famous Aquarius celebrities, and compatibility. Fully sourced.' },
-  pisces:      { title: 'Pisces Zodiac — Traits, Dates & Compatibility | BornClock', desc: 'Complete guide to Pisces (February 19–March 20) — personality traits, love life, career, mythology, famous Pisces celebrities, and compatibility. Fully sourced.' },
+  aries:       { title: 'Aries Dates (Mar 21 – Apr 19): Traits & Compatibility | BornClock', desc: 'Everything about Aries (March 21–April 19) — personality traits, strengths, love life, career, mythology, famous Aries celebrities, and compatibility. Humanized and fully sourced.' },
+  taurus:      { title: 'Taurus Dates (Apr 20 – May 20): Traits & Compatibility | BornClock', desc: 'Complete guide to Taurus (April 20–May 20) — personality traits, love life, career, mythology, famous Taurus celebrities, and compatibility. Fully sourced.' },
+  gemini:      { title: 'Gemini Dates (May 21 – Jun 20): Traits & Compatibility | BornClock', desc: 'Complete guide to Gemini (May 21–June 20) — personality traits, love life, career, mythology, famous Gemini celebrities, and compatibility. Fully sourced.' },
+  cancer:      { title: 'Cancer Dates (Jun 21 – Jul 22): Traits & Compatibility | BornClock', desc: 'Complete guide to Cancer (June 21–July 22) — personality traits, love life, career, mythology, famous Cancer celebrities, and compatibility. Fully sourced.' },
+  leo:         { title: 'Leo Dates (Jul 23 – Aug 22): Traits & Compatibility | BornClock', desc: 'Complete guide to Leo (July 23–August 22) — personality traits, love life, career, mythology, famous Leo celebrities, and compatibility. Fully sourced.' },
+  virgo:       { title: 'Virgo Dates (Aug 23 – Sep 22): Traits & Compatibility | BornClock', desc: 'Complete guide to Virgo (August 23–September 22) — personality traits, love life, career, mythology, famous Virgo celebrities, and compatibility. Fully sourced.' },
+  libra:       { title: 'Libra Dates (Sep 23 – Oct 22): Traits & Compatibility | BornClock', desc: 'Complete guide to Libra (September 23–October 22) — personality traits, love life, career, mythology, famous Libra celebrities, and compatibility. Fully sourced.' },
+  scorpio:     { title: 'Scorpio Dates (Oct 23 – Nov 21): Traits & Compatibility | BornClock', desc: 'Complete guide to Scorpio (October 23–November 21) — personality traits, love life, career, mythology, famous Scorpio celebrities, and compatibility. Fully sourced.' },
+  sagittarius: { title: 'Sagittarius Dates (Nov 22–Dec 21): Traits & Compatibility | BornClock', desc: 'Complete guide to Sagittarius (November 22–December 21) — personality traits, love life, career, mythology, famous Sagittarius celebrities, and compatibility. Fully sourced.' },
+  capricorn:   { title: 'Capricorn Dates (Dec 22 – Jan 19): Traits & Compatibility | BornClock', desc: 'Complete guide to Capricorn (December 22–January 19) — personality traits, love life, career, mythology, famous Capricorn celebrities, and compatibility. Fully sourced.' },
+  aquarius:    { title: 'Aquarius Dates (Jan 20 – Feb 18): Traits & Compatibility | BornClock', desc: 'Complete guide to Aquarius (January 20–February 18) — personality traits, love life, career, mythology, famous Aquarius celebrities, and compatibility. Fully sourced.' },
+  pisces:      { title: 'Pisces Dates (Feb 19 – Mar 20): Traits & Compatibility | BornClock', desc: 'Complete guide to Pisces (February 19–March 20) — personality traits, love life, career, mythology, famous Pisces celebrities, and compatibility. Fully sourced.' },
 };
 
 // ── Numerology ────────────────────────────────────────────────────────────────
@@ -194,7 +194,7 @@ const ANSWERS = {
 const STATIC = {
   // (homepage '/' title is handled directly in getTitleForRoute above)
   // Day-8 celebrity index + hubs
-  '/celebrity':            { title: 'Indian Celebrity Birthday Profiles — 598 Celebrities | BornClock', desc: 'Birthday, zodiac, and numerology profiles for 598 Indian celebrities — actors, cricketers, singers, leaders and more.' },
+  '/celebrity':            { title: 'Indian Celebrity Birthdays: Zodiac Sign, Rashi & Age | BornClock', desc: 'Birthday, age, zodiac sign, Moon sign (Rashi) and numerology profiles for Indian celebrities — actors, cricketers, singers, leaders and more.' },
   '/celebrity/bollywood':  { title: 'Bollywood Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Bollywood actors and film personalities.' },
   '/celebrity/cricket':    { title: 'Indian Cricket Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian cricketers.' },
   '/celebrity/politics':   { title: 'Indian Political Celebrity Birthday Profiles | BornClock', desc: 'Birthday, age, zodiac and numerology profiles for Indian political leaders.' },
@@ -206,7 +206,7 @@ const STATIC = {
   '/age-in-seconds':        { title: 'Age in Seconds Calculator — Seconds Alive | BornClock', desc: 'Calculate exactly how many seconds old you are — live, updating every second. Most 30-year-olds have passed 946 million seconds. Free, instant, no sign-up.' },
   '/birthday-countdown':    { title: 'Birthday Countdown — Days Until Your Birthday | BornClock', desc: 'Find out exactly how many days until your next birthday — down to the day. See what day of the week it falls on and who shares it. Free, no sign-up.' },
   '/life-expectancy-india-vs-usa': { title: 'Life Expectancy India vs USA — The Gap | BornClock', desc: `India's life expectancy is ${LEY('India')} years; the USA's is ${LEY('United States')}. The gap has specific causes — and India is closing it faster than most people realize.` },
-  '/life-expectancy-india':     { title: 'Life Expectancy in India — 2026 Data & Causes | BornClock', desc: `India's life expectancy is ${LEY('India')} years (UN WPP 2024, 2023 estimate). Here's what drives it, how it compares globally, and what Indian adults can do to outlive the national average.` },
+  '/life-expectancy-india':     { title: 'Life Expectancy in India 2026: By State, Gender & Causes | BornClock', desc: `India's life expectancy is ${LEY('India')} years (UN WPP 2024, 2023 estimate). Here's what drives it, how it compares globally, and what Indian adults can do to outlive the national average.` },
   '/life-expectancy-usa':       { title: 'Life Expectancy in the USA — 2026 Data | BornClock', desc: `US life expectancy is ${LEY('United States')} years — after a sharp fall in 2020-21 and a recovery by 2023. Here's why, and what Americans can do about it.` },
   '/life-expectancy-japan':     { title: 'Life Expectancy in Japan — 2026 Data | BornClock', desc: `Japan's life expectancy is ${LEY('Japan')} years — the highest of any large nation. The reasons are specific, evidence-based, and partially replicable anywhere.` },
   '/life-expectancy-uk':        { title: 'Life Expectancy in the UK — 2026 Data | BornClock', desc: `UK life expectancy is ${LEY('United Kingdom')} years, but there's a 10-year gap between the healthiest and least healthy regions. Here's what the data shows.` },
@@ -223,7 +223,9 @@ const STATIC = {
   '/embed':                     { title: 'Free Age Calculator Widget for Your Website | BornClock', desc: "Embed BornClock's live age calculator on your website in 30 seconds. Copy one line of code — free forever, no API key, we handle hosting and accuracy." },
   '/widget/age-calculator':     { title: 'Age Calculator Widget | BornClock', desc: "Free embeddable age calculator widget by BornClock — shows exact age in years, months, days and seconds." },
   '/sun-vs-moon-sign':      { title: 'Sun Sign vs Moon Sign — What They Mean | BornClock', desc: "Your sun sign is your public face. Your moon sign is your 2am self. Most people find their moon sign more accurate once they discover it. Here's why." },
-  '/todays-birthdays':      { title: 'Famous Birthdays Today | BornClock', desc: "See which celebrities share today's birthday. Ranked by global recognition — athletes, actors, politicians, musicians. Updated daily at BornClock." },
+  // B23: the Worker replaces both with today's dated title and list (daily kinds birthdays-today*).
+  '/todays-birthdays':      { title: 'Famous Birthdays Today — Celebrities Born Today | BornClock', desc: 'Which celebrities were born today? The famous people — Indian and global — who share today’s birthday, with their ages, each with a full birthday and zodiac profile.' },
+  '/todays-birthdays/india': { title: 'Aaj Kiska Birthday Hai? Indian Celebrity Birthdays Today | BornClock', desc: 'Aaj kiska birthday hai? The Indian actors, cricketers, singers and leaders born today, with their ages — each with a birthday, zodiac and Rashi profile.' },
   '/numerology':            { title: 'Numerology Calculator — Mulank, Bhagyank & Name Number | BornClock', desc: 'Free numerology calculator: your Mulank and Bhagyank (Indian method), Chaldean name number and Western Life Path from your date of birth — with the working shown.' },
   '/generation':            { title: 'Which Generation Are You? — Complete Generational Guide | BornClock', desc: 'Find your generation — Baby Boomer, Gen X, Millennial, Gen Z, or Gen Alpha — from your birth year. Characteristics, defining events, and cultural context.' },
   '/planetary-age':         { title: 'Planetary Age Calculator — Your Age on Every Planet | BornClock', desc: 'Calculate your age on all 8 planets plus the Moon. See how planetary orbital periods compare to life on Earth. Free, instant, accurate.' },
@@ -238,7 +240,7 @@ const STATIC = {
   '/longevity-calculator':  { title: 'Longevity Calculator — How Long Will You Live? | BornClock', desc: 'Free longevity calculator using WHO, Harvard and NIH research. 8-factor quiz gives your personalised life expectancy and 90-day action plan. Takes 3 minutes.' },
   '/how-long-will-i-live': { title: 'How Long Will I Live? Life Expectancy Quiz | BornClock', desc: 'Answer 8 questions to get your personalised life expectancy based on WHO, Harvard and NIH research. Free instant result with a 90-day action plan.' },
   // Batch 11 (GSC): the target page for "who do i share a birthday with" / "what famous person shares my birthday".
-  '/celebrity-birthday':    { title: 'Who Shares My Birthday? Celebrities Born on Your Day | BornClock', desc: "Who shares your birthday? Enter your date to see the famous people born on the same day — real profiles ranked by recognition — plus today's celebrity birthdays." },
+  '/celebrity-birthday':    { title: 'Celebrity Birthday Twin Finder — Who Shares My Birthday? | BornClock', desc: "Who shares your birthday? Enter your date to see the famous people born on the same day — real profiles ranked by recognition — plus today's celebrity birthdays." },
   '/birthday':              { title: 'Birthday Personality by Date — All 365 Days | BornClock', desc: 'Explore birthday personality profiles for every day of the year. Zodiac sign, life path number, famous people, and personality traits for your exact birthday.' },
   '/blog':                  { title: 'Health & Longevity Blog — Science-Backed Articles | BornClock', desc: 'Science-backed articles on longevity, life expectancy, birthday science, zodiac, and healthy ageing. Written by BornClock editorial team with sourced references.' },
   '/about':                 { title: 'About BornClock — Built in India, Designed for the World | BornClock', desc: 'BornClock is a science-first birthday and longevity platform. Learn about our data sources, methodology, editorial standards, and the team behind the product.' },
@@ -375,30 +377,44 @@ function parseBornOnSlug(slug) {
 // Batch 6 SEO: India-specific wording ("Indian Celebrities Born on …") so the India
 // facet no longer shares the global date page's title/meta.
 function bornOnIndiaTitle(monthName, day, top) {
-  const dayNum = Number(day);
-  const base = `Indian Celebrities Born on ${monthName} ${dayNum}`;
+  const d = Number(day);
+  const head = `${d} ${monthName} Birthday: Indian Celebrities`;
   const first = (top && top[0]) || '';
-  if (first) {
-    const full = `${base}: ${first} & More | BornClock`;
-    if (full.length <= 70) return full;
-  }
-  return `${base} | BornClock`;
+  const opts = [
+    ...(first ? [`${head} — ${first} & More | BornClock`, `${head} — ${first} & More`] : []),
+    `${head} Born on ${monthName} ${d} | BornClock`,
+    `${head} | BornClock`,
+  ];
+  return opts.find(t => t.length <= 70) || opts[opts.length - 1];
 }
 
 function bornOnIndiaMeta(monthName, day, top, count) {
   const dayNum = Number(day);
   const n1 = (top && top[0]) || '';
   const n2 = (top && top[1]) || '';
-  const tail = 'Ranked by global recognition, with ages and professions.';
+  const tail = 'Ranked by recognition, with ages and professions.';
   if (!count || !n1) {
-    return `Famous Indians born on ${monthName} ${dayNum} — actors, cricketers, leaders and more who share this birthday. ${tail}`;
+    return `Whose birthday is on ${dayNum} ${monthName}? Famous Indians born on ${monthName} ${dayNum} — actors, cricketers, leaders and more. ${tail}`;
   }
-  const who = count === 1 ? 'famous Indian shares' : 'famous Indians share';
-  const build = (a, b) => `${count} ${who} the ${monthName} ${dayNum} birthday, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
+  const who = count === 1 ? 'famous Indian shares it' : 'famous Indians share it';
+  const build = (a, b) => `Whose birthday is on ${dayNum} ${monthName}? ${count} ${who}, including ${a}${b ? ` and ${b}` : ''}. ${tail}`;
   const full = build(n1, n2);
   if (full.length <= 160) return full;
   const short = build(n1.split(' ')[0], n2 ? n2.split(' ')[0] : '');
   return short.length <= 160 ? short : short.slice(0, 157) + '...';
+}
+
+/** Global /born-on/:slug title (mirrors generateBornOnTitle in src/utils/seoHelpers.ts). */
+export function bornOnTitle(monthName, day, fullName = '') {
+  const d = Number(day);
+  const first = fullName.split(' ')[0];
+  const opts = [
+    ...(fullName ? [`${monthName} ${d} Birthdays: ${fullName} & More Famous People | BornClock`] : []),
+    ...(first && first !== fullName ? [`${monthName} ${d} Birthdays: ${first} & More Famous People | BornClock`] : []),
+    `${monthName} ${d} Birthdays: Famous People Born on ${monthName} ${d} | BornClock`,
+    `${monthName} ${d} Birthdays — Famous People | BornClock`,
+  ];
+  return opts.find(t => t.length <= 70) || opts[opts.length - 1];
 }
 
 // ── Main export ───────────────────────────────────────────────────────────────
@@ -496,6 +512,15 @@ export function getTitleForRoute(route) {
     }
   }
 
+  // B23: /zodiac/:sign/celebrities (mirrors zodiacCelebritiesTitle in src/pages/ZodiacCelebritiesPage.tsx)
+  {
+    const zc = route.match(/^\/zodiac\/([a-z]+)\/celebrities$/);
+    if (zc && ZODIAC[zc[1]]) {
+      const n = zc[1].charAt(0).toUpperCase() + zc[1].slice(1);
+      const t = `${n} Celebrities: Famous Indian & Global ${n} Birthdays | BornClock`;
+      return { title: t.length <= 70 ? t : `${n} Celebrities — Indian & Global | BornClock`, description: `Famous ${n} celebrities — Indian and global — born under the Sun sign ${n}, each with a birthday, zodiac and Moon sign (Rashi) profile.` };
+    }
+  }
   // /zodiac/:sign
   if (route.startsWith('/zodiac/')) {
     const sign = route.slice(8);
@@ -529,6 +554,11 @@ export function getTitleForRoute(route) {
     };
   }
 
+  // B23: /chinese-zodiac/:year
+  {
+    const ym = route.match(/^\/chinese-zodiac\/(\d{4})$/);
+    if (ym) return { title: chineseYearTitle(Number(ym[1])), description: chineseYearDescription(Number(ym[1])) };
+  }
   // /chinese-zodiac/:animal
   if (route.startsWith('/chinese-zodiac/') && route !== '/chinese-zodiac') {
     const slug = route.slice(16);
@@ -1067,7 +1097,7 @@ export function getTitleForRoute(route) {
     const { month, day, monthName } = parsed;
     const zodiac = getZodiacSign(month, day);
     return {
-      title: `Born on ${monthName} ${day} — Famous Birthdays | BornClock`,
+      title: bornOnTitle(monthName, day),
       // description is a template; caller injects celeb names if available
       description: `Discover celebrities born on ${monthName} ${day} — ${zodiac} sign, birthstone, day-of-year facts, and birthday insights. Ranked by global recognition.`,
       // carry these for the caller to build a richer description
@@ -1103,7 +1133,7 @@ export function getTitleForRoute(route) {
     const d = parseInt(parts[2], 10);
     const monthName = MONTH_NAMES[m] || '';
     return {
-      title: `${monthName} ${d} Birthday Personality — Zodiac & Traits | BornClock`,
+      title: [`${monthName} ${d} Zodiac Sign: ${getZodiacSign(m, d)} — Birthday Personality | BornClock`, `${monthName} ${d} Zodiac Sign: ${getZodiacSign(m, d)} — Personality | BornClock`, `${monthName} ${d} Zodiac Sign: ${getZodiacSign(m, d)} | BornClock`].find(t => t.length <= 70),
       description: `Birthday personality for ${monthName} ${d} — zodiac sign, Birth Day Number, Vedic rashi and nakshatra, strengths, lucky day and compatible signs.`,
     };
   }

@@ -91,16 +91,18 @@ export const SEO = ({
     const baseData: any = {
       '@context': 'https://schema.org',
       '@type': ogType === 'article' ? 'Article' : 'WebPage',
-      headline: title,
+      headline: title.replace(/\s*[|·]\s*BornClock.*$/i, ''),
       description: description,
       url: fullCanonicalUrl || SITE_URL,
       image: ogImage,
       publisher: {
         '@type': 'Organization',
-        name: SITE_NAME,
+        // B23: same name as the site Organization; /logo.png never existed.
+        name: 'BornClock',
+        url: SITE_URL,
         logo: {
           '@type': 'ImageObject',
-          url: `${SITE_URL}/logo.png`
+          url: `${SITE_URL}/bornclock-logo.png`
         }
       },
       mainEntityOfPage: {
@@ -110,10 +112,9 @@ export const SEO = ({
     };
 
     if (ogType === 'article') {
-      baseData.author = {
-        '@type': 'Person',
-        name: author || 'BornClock Team'
-      };
+      baseData.author = author && !/bornclock/i.test(author)
+        ? { '@type': 'Person', name: author }
+        : { '@type': 'Organization', name: 'BornClock Editorial Team', url: `${SITE_URL}/editorial-policy/` };
       if (publishedTime) {
         baseData.datePublished = publishedTime;
       }

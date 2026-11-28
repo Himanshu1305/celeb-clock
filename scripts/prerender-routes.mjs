@@ -242,6 +242,10 @@ export const STATIC_ROUTES = [
   '/widget/age-calculator',
   '/sun-vs-moon-sign',
   '/todays-birthdays',
+  '/todays-birthdays/india',
+  // B23: Chinese zodiac year pages (sourced New Year table 1924–2031) and sign celebrity lists.
+  ...Array.from({ length: 2031 - 1924 + 1 }, (_, i) => `/chinese-zodiac/${1924 + i}`),
+  ...['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'].map(z => `/zodiac/${z}/celebrities`),
   '/numerology',
   ...NUMEROLOGY_NUMBERS.map(n => `/numerology/${n}`),
   '/generation',

@@ -101,6 +101,10 @@ export const DAILY_PAGES: DailyPageDef[] = [
   // per-day file (data kind 'vrat-next') computed by our festival engine. The title stays static.
   { kind: 'vrat', lang: 'en', slugs: VRAT_PAGE_SLUGS, path: s => vratPath(s, 'en'), data: { kind: 'vrat-next', slug: ALL } },
   { kind: 'vrat-hi', lang: 'hi', slugs: VRAT_PAGE_SLUGS, path: s => vratPath(s, 'hi'), data: { kind: 'vrat-next', slug: ALL } },
+  // B23 — today's celebrity birthdays (India date): the global page and the India page share one
+  // per-month data file ('birthdays-day'), so the list in the HTML is always today's.
+  { kind: 'birthdays-today', lang: 'en', slugs: ['index'], path: () => '/todays-birthdays', data: { kind: 'birthdays-day', slug: ALL } },
+  { kind: 'birthdays-today-india', lang: 'en', slugs: ['index'], path: () => '/todays-birthdays/india', data: { kind: 'birthdays-day', slug: ALL } },
   // B18 — regional languages (src/lib/lang): daily rashifal at /<code>/<seg>/<rashi> from the
   // SAME vedic-sky data, and the Panchang (Delhi index + the language's own cities) from the
   // same per-city panchang-day data as the English pages.

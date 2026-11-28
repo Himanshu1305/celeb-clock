@@ -284,6 +284,9 @@ const worker = {
       if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/today\/?$/)))   return !Z.has(m[1]);
       if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/tomorrow\/?$/))) return !Z.has(m[1]); // Batch 10
       if ((m = pathname.match(/^\/chinese-zodiac\/([a-z-]+)\/?$/)))  return !A.has(m[1]);
+      // B23: Chinese zodiac year pages exist for the sourced table's years only.
+      if ((m = pathname.match(/^\/chinese-zodiac\/(\d+)\/?$/)))      { const y = parseInt(m[1], 10); return !(m[1].length === 4 && y >= 1924 && y <= 2031); }
+      if ((m = pathname.match(/^\/zodiac\/([a-z-]+)\/celebrities\/?$/))) return !Z.has(m[1]); // B23
       if ((m = pathname.match(/^\/chinese-horoscope\/([a-z-]+)\/?$/)))  return !A.has(m[1]);
       if ((m = pathname.match(/^\/vedic-zodiac\/([a-z-]+)\/?$/)))    return !R.has(m[1]);
       const RP = new Set(['today','tomorrow','week','month','year']);

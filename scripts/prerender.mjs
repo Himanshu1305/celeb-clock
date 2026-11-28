@@ -15,7 +15,7 @@ import { createServer } from 'http';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, appendFileSync } from 'fs';
 import { resolve, dirname, join, extname } from 'path';
 import { fileURLToPath } from 'url';
-import { getTitleForRoute } from './prerender-titles.mjs';
+import { getTitleForRoute, bornOnTitle } from './prerender-titles.mjs';
 import { finalizeHead, pickCanonical, hasJsonLdType } from './lib/headDedupe.mjs';
 import { pageLangForPath, withHtmlLang } from '../src/lib/seo/pageLang.js';
 
@@ -209,6 +209,8 @@ async function prerenderRoute(page, baseUrl, route) {
     let html = rawHtml;
 
     if (meta) {
+      // B23: global born-on pages lead with the top celebrity once the DOM has the names.
+      if (meta._month && celebNames.length > 0) meta.title = bornOnTitle(meta._month, meta._day, celebNames[0]);
       // Inject title — replace whatever <title> the SPA default left in the HTML
       const escapedTitle = meta.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       html = html.replace(/<title>[^<]*<\/title>/i, `<title>${escapedTitle}</title>`);
