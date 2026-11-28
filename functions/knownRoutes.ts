@@ -309,6 +309,7 @@ export const KNOWN_ROUTE_PATTERNS: string[] = [
  "^/yoga/[^/]+/?$",
  "^/zodiac/?$",
  "^/zodiac/[^/]+/?$",
+ "^/zodiac/[^/]+/celebrities/?$",
  "^/zodiac/[^/]+/today/?$",
  "^/zodiac/[^/]+/tomorrow/?$"
 ];
