@@ -44,7 +44,7 @@ const AgeInDays = () => {
           <FAQSchema items={FAQ_ITEMS} />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/birthday/' }], current: 'Age in Days' }}
+      breadcrumb={{ trail: [{ label: 'Birthday & Age', to: '/born-on/' }], current: 'Age in Days' }}
       footer={{
         tagline: 'Exactly how many days old you are — recalculated every midnight.',
         nav: [

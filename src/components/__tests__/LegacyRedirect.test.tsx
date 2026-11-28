@@ -34,8 +34,10 @@ function renderAt(path: string) {
 
 describe('LegacyRedirect', () => {
   it.each([
-    ['/born-on/august/6/personality', '/birthday/8/6/'],
-    ['/born-on/february/29/personality', '/birthday/2/29/'],
+    ['/born-on/august/6/personality', '/born-on/august-6/'],
+    ['/born-on/february/29/personality', '/born-on/february-29/'],
+    ['/birthday/8/6', '/born-on/august-6/'],
+    ['/birthday/8', '/born-in-august/'],
     ['/born-on/may/13?ref=x', '/born-on/may-13/india/?ref=x'],
     ['/birthday/june-13', '/born-on/june-13/'],
     ['/biological-age-calculator', '/biological-age/'],
@@ -45,10 +47,6 @@ describe('LegacyRedirect', () => {
   });
 
   it('kept pages render their own component', () => {
-    expect(renderAt('/birthday/8/6').getByTestId('birthday-page')).toBeTruthy();
-    cleanup();
-    expect(renderAt('/birthday/8').getByTestId('month-page')).toBeTruthy();
-    cleanup();
     expect(renderAt('/born-on/august-6').getByTestId('born-on-page')).toBeTruthy();
   });
 

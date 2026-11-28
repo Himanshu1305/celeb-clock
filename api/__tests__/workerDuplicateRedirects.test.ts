@@ -21,10 +21,10 @@ describe('Worker 301s for retired duplicate pages', () => {
     ['/born-on/may/13/', 'https://bornclock.com/born-on/may-13/india/'],
     ['/born-on/february/16/', 'https://bornclock.com/born-on/february-16/'], // no India page for this date → global
     ['/born-on/february/29', 'https://bornclock.com/born-on/february-29/'],
-    ['/born-on/december/31/personality/', 'https://bornclock.com/birthday/12/31/'],
-    ['/born-on/february/29/personality', 'https://bornclock.com/birthday/2/29/'],
+    ['/born-on/december/31/personality/', 'https://bornclock.com/born-on/december-31/'],
+    ['/born-on/february/29/personality', 'https://bornclock.com/born-on/february-29/'],
     ['/birthday/june-13', 'https://bornclock.com/born-on/june-13/'],
-    ['/birthday/09/04/', 'https://bornclock.com/birthday/9/4/'],
+    ['/birthday/09/04/', 'https://bornclock.com/born-on/september-4/'],
     ['/biological-age-calculator/', 'https://bornclock.com/biological-age/'],
     ['/articles/biological-age-vs-chronological-age/', 'https://bornclock.com/biological-age-vs-chronological-age/'],
     ['/life-expectancy-calculator-uk/', 'https://bornclock.com/life-expectancy-uk/'],
@@ -51,7 +51,7 @@ describe('Worker 301s for retired duplicate pages', () => {
   });
 
   it('kept pages are served normally (no redirect)', async () => {
-    for (const p of ['/born-on/may-13/', '/birthday/5/13/', '/biological-age/', '/life-expectancy-uk/']) {
+    for (const p of ['/born-on/may-13/', '/biological-age/', '/life-expectancy-uk/']) {
       const res = await get(p);
       expect(res.status, p).toBe(200);
     }

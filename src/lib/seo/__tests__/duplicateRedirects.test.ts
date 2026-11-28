@@ -10,15 +10,15 @@ const NO_INDIA = ['january', 'february', 'march', 'april', 'may', 'june', 'july'
   .flatMap((m, i) => Array.from({ length: [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][i] }, (_, d) => `${m}-${d + 1}`))
   .filter(s => !INDIA.has(s));
 
-describe('duplicateRedirect — /born-on/:month/:day/personality → /birthday/:m/:d/', () => {
+describe('duplicateRedirect — /born-on/:month/:day/personality → /born-on/:month-:day/ (B25)', () => {
   it.each([
-    ['/born-on/august/6/personality', '/birthday/8/6/'],
-    ['/born-on/august/6/personality/', '/birthday/8/6/'],
-    ['/born-on/january/1/personality', '/birthday/1/1/'],
-    ['/born-on/february/29/personality', '/birthday/2/29/'],
-    ['/born-on/december/31/personality', '/birthday/12/31/'],
-    ['/born-on/september/04/personality', '/birthday/9/4/'],
-    ['/born-on/September/4/personality', '/birthday/9/4/'],
+    ['/born-on/august/6/personality', '/born-on/august-6/'],
+    ['/born-on/august/6/personality/', '/born-on/august-6/'],
+    ['/born-on/january/1/personality', '/born-on/january-1/'],
+    ['/born-on/february/29/personality', '/born-on/february-29/'],
+    ['/born-on/december/31/personality', '/born-on/december-31/'],
+    ['/born-on/september/04/personality', '/born-on/september-4/'],
+    ['/born-on/September/4/personality', '/born-on/september-4/'],
   ])('%s → %s', (from, to) => expect(duplicateRedirect(from)).toBe(to));
 
   it.each(['/born-on/february/30/personality', '/born-on/april/31/personality', '/born-on/smarch/1/personality', '/born-on/may/0/personality'])(
@@ -72,8 +72,6 @@ describe('duplicateRedirect — static retired pages', () => {
 
 describe('duplicateRedirect — kept URLs are left alone (no redirect loops)', () => {
   it.each([
-    '/birthday/8/6', '/birthday/8/6/', '/birthday/2/29/', '/birthday/12/31/', '/birthday/1/1',
-    '/birthday/8', '/birthday',
     '/born-on/august-6', '/born-on/august-6/', '/born-on/february-29/', '/born-on/december-31/',
     '/born-on/august-6/india/', '/born-on', '/born-on/india', '/born-on/india/',
     '/biological-age', '/biological-age/', '/biological-age-vs-chronological-age/', '/biological-age-hindi/',
@@ -86,9 +84,7 @@ describe('duplicateRedirect — kept URLs are left alone (no redirect loops)', (
 
 describe('duplicateRedirect — zero-padding / case normalisation of kept date URLs', () => {
   it.each([
-    ['/birthday/09/04', '/birthday/9/4/'],
-    ['/birthday/02/29/', '/birthday/2/29/'],
-    ['/birthday/12/01', '/birthday/12/1/'],
+    ['/born-on/august-06', '/born-on/august-6/'],
     ['/born-on/september-04', '/born-on/september-4/'],
     ['/born-on/December-31', '/born-on/december-31/'],
   ])('%s → %s', (from, to) => expect(duplicateRedirect(from)).toBe(to));
@@ -96,6 +92,11 @@ describe('duplicateRedirect — zero-padding / case normalisation of kept date U
     expect(duplicateRedirect('/born-on/august-06/india')).toBe('/born-on/august-6/india/');
     expect(duplicateRedirect('/born-on/august-06/india', { indiaSlugs: INDIA_BORNON_SLUGS })).toBe('/born-on/august-6/india/');
   });
+  it.each([
+    // B25: one page per date — /birthday/:m/:d and the month lists 301 to the born-on pages.
+    ['/birthday/8/6', '/born-on/august-6/'], ['/birthday/09/04/', '/born-on/september-4/'], ['/birthday/2/29', '/born-on/february-29/'],
+    ['/birthday/8', '/born-on/../born-in-august/'.replace('/born-on/../', '/')], ['/birthday', '/born-on/'],
+  ])('B25 %s → %s', (from, to) => expect(duplicateRedirect(from)).toBe(to));
   it.each(['/birthday/13/1', '/birthday/2/30', '/birthday/00/10'])('invalid %s → null', p => expect(duplicateRedirect(p)).toBeNull());
 });
 
@@ -127,7 +128,8 @@ describe('duplicateRedirect — every retired date URL (all 366 days) maps to th
     MONTHS.forEach((m, i) => {
       for (let d = 1; d <= DAYS[i]; d++) {
         expect(duplicateRedirect(`/born-on/${m}/${d}`)).toBe(`/born-on/${m}-${d}/`);
-        expect(duplicateRedirect(`/born-on/${m}/${d}/personality`)).toBe(`/birthday/${i + 1}/${d}/`);
+        expect(duplicateRedirect(`/born-on/${m}/${d}/personality`)).toBe(`/born-on/${m}-${d}/`);
+        expect(duplicateRedirect(`/birthday/${i + 1}/${d}`)).toBe(`/born-on/${m}-${d}/`);
         expect(duplicateRedirect(`/birthday/${m}-${d}`)).toBe(`/born-on/${m}-${d}/`);
         n++;
       }

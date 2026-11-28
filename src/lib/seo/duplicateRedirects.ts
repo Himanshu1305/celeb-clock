@@ -59,6 +59,8 @@ const STATIC: Record<string, string> = {
   // /celebrity-birthday/ now answers the question first (date picker + results on top,
   // FAQ), so the article 301s there.
   '/answers/who-shares-my-birthday': '/celebrity-birthday/',
+  // B25: the birthday-by-date index merged into the born-on index (same 366 dates).
+  '/birthday': '/born-on/',
   // B24: duplicate blog posts and answer pages that mirrored a tool — one page per intent.
   '/blog/sleep-longevity-science': '/blog/how-sleep-affects-life-expectancy-complete-guide/',
   '/blog/exercise-longevity-guide': '/blog/how-exercise-affects-life-expectancy-workout-guide/',
@@ -107,11 +109,11 @@ export function duplicateRedirect(pathname: string, opts: DuplicateRedirectOptio
     return kept ? `/celebrity/${kept}/` : null;
   }
 
-  // /born-on/:month/:day/personality → /birthday/:m/:d/
+  // /born-on/:month/:day/personality → the date page (B25: /birthday/:m/:d merged into it)
   if ((m = path.match(/^\/born-on\/([a-z]+)\/(\d+)\/personality$/i))) {
     const mo = monthIndex(m[1]);
     const d = validDay(mo, m[2]);
-    return d ? `/birthday/${mo}/${d}/` : null;
+    return d ? `/born-on/${bornOnSlug(mo, d)}/` : null;
   }
 
   // /born-on/:month/:day → /born-on/:month-:day/india/ when that India page exists
@@ -132,13 +134,18 @@ export function duplicateRedirect(pathname: string, opts: DuplicateRedirectOptio
     return d ? `/born-on/${bornOnSlug(mo, d)}/` : null;
   }
 
-  // Kept: /birthday/:m/:d — normalise zero-padded numbers only.
-  if ((m = path.match(/^\/birthday\/(\d{1,2})\/(\d{1,2})$/))) {
+  // B25 (spam-policy cleanup): /birthday/:m/:d carried the same personality, zodiac, numerology and
+  // famous-people content as /born-on/:month-:day — two near-identical pages per date. One page per
+  // date: /birthday/:m/:d 301s to /born-on/:month-:day/, and the month lists /birthday/:m to the
+  // month hubs /born-in-:month/.
+  if ((m = path.match(/^\/birthday\/(\d{1,2})\/(\d{1,2})(?:\/personality)?$/))) {
     const mo = parseInt(m[1], 10);
     const d = validDay(mo, m[2]);
-    if (!d) return null;
-    const canon = `/birthday/${mo}/${d}`;
-    return canon !== path ? `${canon}/` : null;
+    return d ? `/born-on/${bornOnSlug(mo, d)}/` : null;
+  }
+  if ((m = path.match(/^\/birthday\/(\d{1,2})$/))) {
+    const mo = parseInt(m[1], 10);
+    return mo >= 1 && mo <= 12 ? `/born-in-${MONTHS[mo]}/` : null;
   }
 
   // Kept: /born-on/:month-:day[/india] — normalise case / zero-padding, and send an

@@ -328,7 +328,7 @@ function FamilyDashboardInner() {
           nav: [
             { label: 'Answers', to: '/answers/' },
             { label: 'Age Calculator', to: '/age-calculator/' },
-            { label: 'Birthdays', to: '/birthday/' },
+            { label: 'Birthdays', to: '/born-on/' },
             { label: 'Privacy', to: '/privacy/' },
           ],
           note: '© 2026 BornClock.',
@@ -381,7 +381,7 @@ function FamilyDashboardInner() {
         nav: [
           { label: 'Answers', to: '/answers/' },
           { label: 'Age Calculator', to: '/age-calculator/' },
-          { label: 'Birthdays', to: '/birthday/' },
+          { label: 'Birthdays', to: '/born-on/' },
           { label: 'Privacy', to: '/privacy/' },
         ],
         note: '© 2026 BornClock.',

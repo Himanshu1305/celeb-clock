@@ -397,8 +397,16 @@ function bornOnIndiaMeta(monthName, day, top, count) {
 }
 
 /** Global /born-on/:slug title (mirrors generateBornOnTitle in src/utils/seoHelpers.ts). */
-export function bornOnTitle(monthName, day, fullName = '') {
+export function bornOnTitle(monthName, day, fullName = '', sign = '') {
   const d = Number(day);
+  if (sign) {
+    const z = [
+      `${monthName} ${d} Birthday: ${sign} Zodiac Sign & Famous People | BornClock`,
+      `${monthName} ${d} Birthday: ${sign} Zodiac Sign & Famous People`,
+      `${monthName} ${d} Birthday: ${sign} Zodiac Sign | BornClock`,
+    ];
+    return z.find(t => t.length <= 70) || z[2];
+  }
   const first = fullName.split(' ')[0];
   const opts = [
     ...(fullName ? [`${monthName} ${d} Birthdays: ${fullName} & More Famous People | BornClock`] : []),
@@ -1089,7 +1097,7 @@ export function getTitleForRoute(route) {
     const { month, day, monthName } = parsed;
     const zodiac = getZodiacSign(month, day);
     return {
-      title: bornOnTitle(monthName, day),
+      title: bornOnTitle(monthName, day, '', zodiac),
       // description is a template; caller injects celeb names if available
       description: `Discover celebrities born on ${monthName} ${day} — ${zodiac} sign, birthstone, day-of-year facts, and birthday insights. Ranked by global recognition.`,
       // carry these for the caller to build a richer description

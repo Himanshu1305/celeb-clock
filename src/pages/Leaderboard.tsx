@@ -137,11 +137,11 @@ export default function Leaderboard() {
           />
         </>
       )}
-      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/birthday/' }], current: 'Longevity Leaderboard' }}
+      breadcrumb={{ trail: [{ label: 'Birthdays', to: '/born-on/' }], current: 'Longevity Leaderboard' }}
       footer={{
         tagline: 'Anonymous rankings of the highest longevity forecasts from our community.',
         nav: [
-          { label: 'Birthdays', to: '/birthday/' },
+          { label: 'Birthdays', to: '/born-on/' },
           { label: "Today's Birthdays", to: '/todays-birthdays/' },
           { label: 'Celebrities', to: '/celebrity/' },
           { label: 'Privacy', to: '/privacy/' },

@@ -7,8 +7,19 @@
 export function generateBornOnTitle(
   month: string,
   day: number | string,
-  celebrities: Array<{ name: string }> = []
+  celebrities: Array<{ name: string }> = [],
+  sign?: string,
 ): string {
+  // B25: the ONE page per date — it answers both "<date> birthday" and "<date> zodiac sign".
+  if (sign) {
+    const d0 = Number(day);
+    const z = [
+      `${month} ${d0} Birthday: ${sign} Zodiac Sign & Famous People | BornClock`,
+      `${month} ${d0} Birthday: ${sign} Zodiac Sign & Famous People`,
+      `${month} ${d0} Birthday: ${sign} Zodiac Sign | BornClock`,
+    ];
+    return z.find(t => t.length <= 70) || z[2];
+  }
   // B23: mirrors the searches ("august 15 birthday", "famous people born on august 15").
   // Mirrored in scripts/prerender-titles.mjs (bornOnTitle) — keep the two in sync.
   const d = Number(day); // "06" → 6

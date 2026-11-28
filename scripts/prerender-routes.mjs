@@ -258,9 +258,8 @@ export const STATIC_ROUTES = [
   ...BIRTHSTONE_MONTHS.map(m => `/birthstone/${m}`),
   '/life-expectancy',
   '/celebrity-birthday',
-  '/birthday',
-  ...Array.from({length: 12}, (_, i) => `/birthday/${i + 1}`),
-  ...birthdayDateRoutes(),
+  // B25: /birthday, /birthday/:m and /birthday/:m/:d 301 to /born-on/, /born-in-:month/ and
+  // /born-on/:month-:day/ (one page per date) — no longer prerendered or in the sitemap.
   '/blog',
   ...BLOG_SLUGS.map(s => `/blog/${s}`),
   '/about',

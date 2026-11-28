@@ -368,7 +368,7 @@ const App = () => (
               {/* Part AF: /celebrity-birthday is now the enhanced Birthday & Celebrity category
                   landing page (was a redirect to /celebrity/). Keeps its indexed traffic. */}
               <Route path="/celebrity-birthday" element={<BirthdayCelebrityLanding />} />
-              <Route path="/birthday" element={<BirthdayHub />} />
+              <Route path="/birthday" element={<LegacyRedirect otherwise="/born-on/" />} />
               <Route path="/birthday/:month/:day" element={<LegacyRedirect fallback={<BirthdayDatePage />} />} />
               {/* /birthday/:month-:day (old celebrity list) is retired → /born-on/:month-:day/ (LegacyRedirect). */}
               <Route path="/birthday/:month" element={<LegacyRedirect fallback={<BirthdayMonthPage />} />} />
