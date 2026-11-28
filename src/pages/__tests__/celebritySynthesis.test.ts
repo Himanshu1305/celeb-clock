@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 /** B23 — the celebrity intro paragraph is whole sentences: no mid-word cuts, no "the The", no fixed "archer". */
 import { describe, it, expect } from 'vitest';
 import { buildPersonalitySynthesis, firstSentence } from '../CelebrityPage';
